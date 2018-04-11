@@ -2,7 +2,7 @@ moving the existing plugsins to oclif, and adding some more handy stuff.
 
 ### install
 
-sfdx plugins:install shane-sfdx-plugin
+sfdx plugins:install shane-sfdx-plugins
 
 ### docs
 
