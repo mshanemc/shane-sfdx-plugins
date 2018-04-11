@@ -74,4 +74,3 @@ sets the chatter banner photo for the user named User User using the local file
 
 `sfdx force:user:photo -f ~/Downloads/King.png -b ~/Downloads/OtherPhoto.jpg -g User -l User`
 sets the chatter banner photo AND user photo at the same time
-
