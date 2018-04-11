@@ -26,7 +26,7 @@ uploads and attaches it to the indicated record, but as a chatter file post
 uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same name as the local filesystem used
 
 
-## shane:iot.activation
+## shane:iot:activation
 `sfdx shane:iot:activate -n orchName -r`
 activates the orchestration, resetting all the instances
 
