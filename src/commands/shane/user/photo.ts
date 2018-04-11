@@ -17,15 +17,15 @@ export default class Photo extends SfdxCommand {
 	public static description = 'Set the photo for a user by first/last name';
 
 	public static examples = [
-		`sfdx force:user:photo -f ~/Downloads/King.png -g User -l User
-		// sets the chatter photo for the user named User User using the local file
-		`,
-		`sfdx force:user:photo -b ~/Downloads/King.png -g User -l User
-		// sets the chatter banner photo for the user named User User using the local file
-		`,
-		`sfdx force:user:photo -f ~/Downloads/King.png -b ~/Downloads/OtherPhoto.jpg -g User -l User
-		// sets the chatter banner photo AND user photo at the same time
-		`
+`sfdx force:user:photo -f ~/Downloads/King.png -g User -l User
+// sets the chatter photo for the user named User User using the local file
+`,
+`sfdx force:user:photo -b ~/Downloads/King.png -g User -l User
+// sets the chatter banner photo for the user named User User using the local file
+`,
+`sfdx force:user:photo -f ~/Downloads/King.png -b ~/Downloads/OtherPhoto.jpg -g User -l User
+// sets the chatter banner photo AND user photo at the same time
+`
 	];
 
 	public static args = [{ name: 'file' }];

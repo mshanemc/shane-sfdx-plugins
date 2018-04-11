@@ -13,12 +13,12 @@ export default class RemoteSite extends SfdxCommand {
 	public static description = 'create a remote site setting in the local source.  Push it when you\'re done';
 
 	public static examples = [
-		`sfdx force:remotesite:create -n Test -u https://www.google.com
-		// create a remote site setting in force-app/main/default
-		`,
-		`sfdx force:remotesite:create -n Test -u https://www.google.com -d "my description" -t myOtherDirectory/main/default
-		// create a remote site setting in myOtherDirectory/main/default with a description
-		`
+`sfdx force:remotesite:create -n Test -u https://www.google.com
+// create a remote site setting in force-app/main/default
+`,
+`sfdx force:remotesite:create -n Test -u https://www.google.com -d "my description" -t myOtherDirectory/main/default
+// create a remote site setting in myOtherDirectory/main/default with a description
+`
 	];
 
 	public static args = [{ name: 'file' }];

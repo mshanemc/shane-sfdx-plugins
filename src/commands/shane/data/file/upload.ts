@@ -11,16 +11,16 @@ export default class Upload extends SfdxCommand {
 	public static description = 'upload a file from local resources, optionally as a chatter post or attached file on a record';
 
 	public static examples = [
-		`sfdx msm:data:file:upload - f ~/Downloads/King.png
+		`sfdx shane:data:file:upload - f ~/Downloads/King.png
 		//uploads file from local filesystem as a file
 		`,
-		`sfdx msm:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF
-		//uploads file from local filesystem as a file and attached to a record
+		`sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF
+		//uploads file from local filesystem as a file and attaches to a record
 		`,
-		`sfdx msm:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -c
+		`sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -c
 		//uploads and attaches it to the indicated record, but as a chatter file post
 		`,
-		`sfdx msm:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -n CustomName -c
+		`sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -n CustomName -c
 		//uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same name as the local filesystem used
 		`
 	];
