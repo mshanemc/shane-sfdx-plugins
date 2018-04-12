@@ -1,7 +1,7 @@
 {
   "name": "shane-sfdx-plugins",
   "description": "sfdx plugins by Shane McLaughlin",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "@mshanemc",
   "bugs": "https://github.com/mshanemc/shane-sfdx-plugins/issues",
   "dependencies": {
@@ -51,10 +51,12 @@
   "license": "MIT",
   "oclif": {
     "commands": "./lib/commands",
-    "topics" : {
-      "shane:org" : {"description" : "create an org with a friendly username or delete an org without a username"}
+    "topics": {
+      "shane:org": {
+        "description": "create an org with a friendly username or delete an org without a username"
+      }
     },
-    "bin" : "sfdx",
+    "bin": "sfdx",
     "devPlugins": [
       "@oclif/plugin-help"
     ]
