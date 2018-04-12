@@ -18,7 +18,7 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1.4.4",
+    "@oclif/dev-cli": "^1.13.0",
     "@oclif/plugin-help": "^1.2.2",
     "@oclif/test": "^1.0.1",
     "@oclif/tslint": "^1.0.2",
@@ -51,6 +51,10 @@
   "license": "MIT",
   "oclif": {
     "commands": "./lib/commands",
+    "topics" : {
+      "shane:org" : {"description" : "create an org with a friendly username or delete an org without a username"}
+    },
+    "bin" : "sfdx",
     "devPlugins": [
       "@oclif/plugin-help"
     ]

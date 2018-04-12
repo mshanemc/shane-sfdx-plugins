@@ -12,6 +12,29 @@ install and run this `sfdx shane -h`
 
 but you like README, you say?
 
+# Usage
+<!-- usage -->
+```sh-session
+$ npm install -g shane-sfdx-plugins
+$ sfdx COMMAND
+running command...
+$ sfdx (-v|--version|version)
+shane-sfdx-plugins/0.0.1 darwin-x64 node-v9.11.1
+$ sfdx --help [COMMAND]
+USAGE
+  $ sfdx COMMAND
+...
+```
+<!-- usagestop -->
+# Commands
+<!-- commands -->
+# Command Topics
+
+* [sfdx shane](docs/shane.md) - Activate an iot orchestration by name
+
+<!-- commandsstop -->
+
+
 ## shane:data:file:upload
 `sfdx shane:data:file:upload - f ~/Downloads/King.png`
 uploads file from local filesystem as a file
