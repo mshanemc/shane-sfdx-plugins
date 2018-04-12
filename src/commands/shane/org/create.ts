@@ -15,10 +15,10 @@ export default class Delete extends SfdxCommand {
 	public static description = 'create an org with a friendly username.  wraps force:org:create';
 
 	public static examples = [
-`sfdx force:org:create -u shane -o org.test
+`sfdx shane:org:create -u shane -o org.test
 // creates an org from the default project config/project-scratch-def.json but with username shane[i]@org.test where i is a unique sequence number for that -u/-o combination
 `,
-`sfdx force:org:create -u shane -o org.test -a sydneyBristow -d 30 -v myOtherHub -f config/thatOtherFile.json
+`sfdx shane:org:create -u shane -o org.test -a sydneyBristow -d 30 -v myOtherHub -f config/thatOtherFile.json
 // above, but with an alias, a longer duration, and not the default hub, and not the default config file
 `,
 
