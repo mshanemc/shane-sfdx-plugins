@@ -19,7 +19,7 @@ $ npm install -g shane-sfdx-plugins
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-shane-sfdx-plugins/0.3.1 darwin-x64 node-v9.11.1
+shane-sfdx-plugins/0.4.0 darwin-x64 node-v9.11.1
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -28,25 +28,25 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [sfdx shane:data:file:upload [FILE]](#sfdx-shanedatafileupload-file)
+* [sfdx shane:data:file:upload](#sfdx-shanedatafileupload)
 * [sfdx shane:iot:activation](#sfdx-shaneiotactivation)
 * [sfdx shane:mdapi:package:get](#sfdx-shanemdapipackageget)
 * [sfdx shane:mdapi:pull](#sfdx-shanemdapipull)
 * [sfdx shane:org:create](#sfdx-shaneorgcreate)
 * [sfdx shane:org:delete](#sfdx-shaneorgdelete)
-* [sfdx shane:package2:version:bump [FILE]](#sfdx-shanepackage-2-versionbump-file)
+* [sfdx shane:package2:version:bump](#sfdx-shanepackage-2-versionbump)
 * [sfdx shane:permset:create](#sfdx-shanepermsetcreate)
-* [sfdx shane:remotesite:create [FILE]](#sfdx-shaneremotesitecreate-file)
+* [sfdx shane:remotesite:create](#sfdx-shaneremotesitecreate)
 * [sfdx shane:user:password:set](#sfdx-shaneuserpasswordset)
-* [sfdx shane:user:photo [FILE]](#sfdx-shaneuserphoto-file)
+* [sfdx shane:user:photo](#sfdx-shaneuserphoto)
 
-## sfdx shane:data:file:upload [FILE]
+## sfdx shane:data:file:upload
 
 upload a file from local resources, optionally as a chatter post or attached file on a record
 
 ```
 USAGE
-  $ sfdx shane:data:file:upload [FILE]
+  $ sfdx shane:data:file:upload
 
 OPTIONS
   -c, --chatter                                   attach as a chatter content post instead of just as a file
@@ -76,7 +76,7 @@ EXAMPLES
   the local filesystem used
 ```
 
-_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.1/src/commands/shane/data/file/upload.ts)_
+_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.4.0/src/commands/shane/data/file/upload.ts)_
 
 ## sfdx shane:iot:activation
 
@@ -104,7 +104,7 @@ EXAMPLES
   // deactivates the orchestration, without resetting all the instances
 ```
 
-_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.1/src/commands/shane/iot/activation.ts)_
+_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.4.0/src/commands/shane/iot/activation.ts)_
 
 ## sfdx shane:mdapi:package:get
 
@@ -137,7 +137,7 @@ EXAMPLES
   // pulls a package from the org and converts/merges it into /someDir
 ```
 
-_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.1/src/commands/shane/mdapi/package/get.ts)_
+_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.4.0/src/commands/shane/mdapi/package/get.ts)_
 
 ## sfdx shane:mdapi:pull
 
@@ -173,7 +173,7 @@ EXAMPLE
   		// pulls code kinda stuff from the org and converts/merges it into force-app
 ```
 
-_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.1/src/commands/shane/mdapi/pull.ts)_
+_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.4.0/src/commands/shane/mdapi/pull.ts)_
 
 ## sfdx shane:org:create
 
@@ -223,7 +223,7 @@ EXAMPLES
   // above, but with an alias, a longer duration, and not the default hub, and not the default config file
 ```
 
-_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.1/src/commands/shane/org/create.ts)_
+_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.4.0/src/commands/shane/org/create.ts)_
 
 ## sfdx shane:org:delete
 
@@ -244,15 +244,15 @@ EXAMPLE
   		// deletes the current default scratch org
 ```
 
-_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.1/src/commands/shane/org/delete.ts)_
+_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.4.0/src/commands/shane/org/delete.ts)_
 
-## sfdx shane:package2:version:bump [FILE]
+## sfdx shane:package2:version:bump
 
 bump the major/minor version number in the packageDirectory
 
 ```
 USAGE
-  $ sfdx shane:package2:version:bump [FILE]
+  $ sfdx shane:package2:version:bump
 
 OPTIONS
   -M, --major                                      Bump the major version by 1, sets minor,build to 0
@@ -294,7 +294,7 @@ EXAMPLES
   // bump the minor version up by one and create a new package2version, then set that as released
 ```
 
-_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.1/src/commands/shane/package2/version/bump.ts)_
+_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.4.0/src/commands/shane/package2/version/bump.ts)_
 
 ## sfdx shane:permset:create
 
@@ -325,15 +325,15 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
 ```
 
-_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.1/src/commands/shane/permset/create.ts)_
+_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.4.0/src/commands/shane/permset/create.ts)_
 
-## sfdx shane:remotesite:create [FILE]
+## sfdx shane:remotesite:create
 
 create a remote site setting in the local source.  Push it when you're done
 
 ```
 USAGE
-  $ sfdx shane:remotesite:create [FILE]
+  $ sfdx shane:remotesite:create
 
 OPTIONS
   -d, --description=description                   [default: added from sfdx plugin] optional description so you can
@@ -359,7 +359,7 @@ EXAMPLES
   // create a remote site setting in myOtherDirectory/main/default with a description
 ```
 
-_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.1/src/commands/shane/remotesite/create.ts)_
+_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.4.0/src/commands/shane/remotesite/create.ts)_
 
 ## sfdx shane:user:password:set
 
@@ -390,15 +390,15 @@ EXAMPLE
   // sets the password for User User to sfdx1234
 ```
 
-_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.1/src/commands/shane/user/password/set.ts)_
+_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.4.0/src/commands/shane/user/password/set.ts)_
 
-## sfdx shane:user:photo [FILE]
+## sfdx shane:user:photo
 
 Set the photo for a user by first/last name
 
 ```
 USAGE
-  $ sfdx shane:user:photo [FILE]
+  $ sfdx shane:user:photo
 
 OPTIONS
   -b, --banner=banner                             local path of the chatter banner photo to use
@@ -423,7 +423,7 @@ EXAMPLES
   // sets the chatter banner photo AND user photo at the same time
 ```
 
-_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.1/src/commands/shane/user/photo.ts)_
+_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.4.0/src/commands/shane/user/photo.ts)_
 <!-- commandsstop -->
 
 
