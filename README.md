@@ -10,7 +10,7 @@ what all is in here and how does it work?
 
 install and run this `sfdx shane -h`
 
-but you like README, you say?
+but you like README, you say?  Good thing oclif auto-generates all this for me.  :)
 
 # Usage
 <!-- usage -->
@@ -61,18 +61,18 @@ OPTIONS
 EXAMPLES
   sfdx shane:data:file:upload - f ~/Downloads/King.png
   		//uploads file from local filesystem as a file
-		
+
 
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF
   		//uploads file from local filesystem as a file and attaches to a record
-		
+
 
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -c
   		//uploads and attaches it to the indicated record, but as a chatter file post
-		
+
 
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -n CustomName -c
-  		//uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same name as 
+  		//uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same name as
   the local filesystem used
 ```
 
@@ -215,7 +215,7 @@ OPTIONS
 
 EXAMPLES
   sfdx shane:org:create -u shane -o org.test
-  // creates an org from the default project config/project-scratch-def.json but with username shane[i]@org.test where i 
+  // creates an org from the default project config/project-scratch-def.json but with username shane[i]@org.test where i
   is a unique sequence number for that -u/-o combination
 
 
