@@ -4,6 +4,7 @@ import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import request = require('request-promise-native');
 import localFile2CV = require('../../../shared/localFile2CV');
+import userIdLookup = require('../../../shared/userIdLookup');
 
 const chalk = require('chalk');
 
@@ -58,50 +59,28 @@ export default class Photo extends SfdxCommand {
 		const conn = this.org.getConnection();
 		// const query = 'Select Name, TrialExpirationDate from Organization';
 
-		interface ContentVersionCreateRequest {
-			VersionData: string;
-			PathOnClient: string;
-			Title?: string;
-		}
-
-		interface CreateResult {
-			id: string;
-			success: boolean;
-			errors: string[];
-			name: string;
-			message: string;
-		}
-
 		interface Record {
 			attributes: object;
 			Id: string;
 			ContentDocumentId?: string;
 		}
 
-		interface QueryResult {
-			totalSize: number;
-			done: boolean;
-			records: Record[];
+		let user;
+
+		try {
+			user = await userIdLookup.getUserId(conn, this.flags.lastName, this.flags.firstName);
+		} catch (e) {
+			this.ux.error(chalk.red(e));
+			return {
+				status: 1,
+				result: {
+					error: e
+				}
+			};
 		}
 
-		let query;
-		if (this.flags.firstName) {
-			query = `Select Id from User where LastName = '${this.flags.lastName}' and FirstName = '${this.flags.firstName}'`;
-		} else {
-			query = `Select Id from User where LastName = '${this.flags.lastName}'`;
-		}
-
-		let userid;
-		const users = <QueryResult>await conn.query(query);
-		if (users.totalSize > 1) {
-			this.ux.error(chalk.red('There are more than 1 result for that name.'));
-			return;
-		} else if (users.totalSize === 0) {
-			this.ux.error(chalk.red('User not found'));
-			return;
-		} else {
-			userid = users.records[0].Id;
-		}
+		this.ux.log(`found user with id ${user.Id}`);
+		const userid = user.Id;
 
 		// still here?  you must be doing an attachment
 		const options = {

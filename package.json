@@ -54,6 +54,9 @@
     "topics": {
       "shane:org": {
         "description": "create an org with a friendly username or delete an org without a username"
+      },
+      "shane:user": {
+        "description": "set a users password or their chatter profile/banner photo"
       }
     },
     "bin": "sfdx",
