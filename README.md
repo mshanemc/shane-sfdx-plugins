@@ -19,7 +19,7 @@ $ npm install -g shane-sfdx-plugins
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-shane-sfdx-plugins/0.1.1 darwin-x64 node-v9.11.1
+shane-sfdx-plugins/0.2.0 darwin-x64 node-v9.11.1
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -34,7 +34,9 @@ USAGE
 * [sfdx shane:org:create](#sfdx-shaneorgcreate)
 * [sfdx shane:org:delete](#sfdx-shaneorgdelete)
 * [sfdx shane:package2:version:bump [FILE]](#sfdx-shanepackage-2-versionbump-file)
+* [sfdx shane:permset:create](#sfdx-shanepermsetcreate)
 * [sfdx shane:remotesite:create [FILE]](#sfdx-shaneremotesitecreate-file)
+* [sfdx shane:user:password:set](#sfdx-shaneuserpasswordset)
 * [sfdx shane:user:photo [FILE]](#sfdx-shaneuserphoto-file)
 
 ## sfdx shane:data:file:upload [FILE]
@@ -73,7 +75,7 @@ EXAMPLES
   the local filesystem used
 ```
 
-_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.1.1/src/commands/shane/data/file/upload.ts)_
+_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/data/file/upload.ts)_
 
 ## sfdx shane:iot:activation
 
@@ -101,7 +103,7 @@ EXAMPLES
   // deactivates the orchestration, without resetting all the instances
 ```
 
-_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.1.1/src/commands/shane/iot/activation.ts)_
+_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/iot/activation.ts)_
 
 ## sfdx shane:mdapi:pull
 
@@ -137,7 +139,7 @@ EXAMPLE
   		// pulls code kinda stuff from the org and converts/merges it into force-app
 ```
 
-_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.1.1/src/commands/shane/mdapi/pull.ts)_
+_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/mdapi/pull.ts)_
 
 ## sfdx shane:org:create
 
@@ -178,16 +180,16 @@ OPTIONS
   --wait=wait                                     the streaming client socket timeout (in minutes) (default:6, min:2)
 
 EXAMPLES
-  sfdx force:org:create -u shane -o org.test
+  sfdx shane:org:create -u shane -o org.test
   // creates an org from the default project config/project-scratch-def.json but with username shane[i]@org.test where i 
   is a unique sequence number for that -u/-o combination
 
 
-  sfdx force:org:create -u shane -o org.test -a sydneyBristow -d 30 -v myOtherHub -f config/thatOtherFile.json
+  sfdx shane:org:create -u shane -o org.test -a sydneyBristow -d 30 -v myOtherHub -f config/thatOtherFile.json
   // above, but with an alias, a longer duration, and not the default hub, and not the default config file
 ```
 
-_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.1.1/src/commands/shane/org/create.ts)_
+_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/org/create.ts)_
 
 ## sfdx shane:org:delete
 
@@ -208,7 +210,7 @@ EXAMPLE
   		// deletes the current default scratch org
 ```
 
-_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.1.1/src/commands/shane/org/delete.ts)_
+_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/org/delete.ts)_
 
 ## sfdx shane:package2:version:bump [FILE]
 
@@ -258,7 +260,38 @@ EXAMPLES
   // bump the minor version up by one and create a new package2version, then set that as released
 ```
 
-_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.1.1/src/commands/shane/package2/version/bump.ts)_
+_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/package2/version/bump.ts)_
+
+## sfdx shane:permset:create
+
+create or add stuff to a permset with maximum access
+
+```
+USAGE
+  $ sfdx shane:permset:create
+
+OPTIONS
+  -d, --directory=directory                       [default: force-app/main/default] Where is all this metadata? defaults
+                                                  to force-app/main/default
+
+  -f, --field=field                               API name of an field to add perms for.  Required --object If blank,
+                                                  then you mean all the fields
+
+  -n, --name=name                                 (required) path to existing permset.  If it exists, new perms will be
+                                                  added to it.  If not, then it'll be created for you
+
+  -o, --object=object                             API name of an object to add perms for.  If blank, then you mean ALL
+                                                  the objects and ALL their fields and ALL their tabs
+
+  -t, --tab                                       also add the tab for the specified object (or all objects if there is
+                                                  no specified objects)
+
+  --json                                          format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+```
+
+_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/permset/create.ts)_
 
 ## sfdx shane:remotesite:create [FILE]
 
@@ -292,7 +325,38 @@ EXAMPLES
   // create a remote site setting in myOtherDirectory/main/default with a description
 ```
 
-_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.1.1/src/commands/shane/remotesite/create.ts)_
+_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/remotesite/create.ts)_
+
+## sfdx shane:user:password:set
+
+Set the password for a user by first/last name
+
+```
+USAGE
+  $ sfdx shane:user:password:set
+
+OPTIONS
+  -g, --firstName=firstName                       (required) first (given) name of the user--keeping -f for file for
+                                                  consistency
+
+  -l, --lastName=lastName                         (required) last name of the user
+
+  -p, --password=password                         (required) local path of the photo to use
+
+  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+
+  --apiversion=apiversion                         override the api version used for api requests made by this command
+
+  --json                                          format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+
+EXAMPLE
+  sfdx force:user:password:set -p sfdx1234 -g User -l User
+  // sets the password for User User to sfdx1234
+```
+
+_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/user/password/set.ts)_
 
 ## sfdx shane:user:photo [FILE]
 
@@ -325,7 +389,7 @@ EXAMPLES
   // sets the chatter banner photo AND user photo at the same time
 ```
 
-_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.1.1/src/commands/shane/user/photo.ts)_
+_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/user/photo.ts)_
 <!-- commandsstop -->
 
 
