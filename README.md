@@ -19,7 +19,7 @@ $ npm install -g shane-sfdx-plugins
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-shane-sfdx-plugins/0.2.0 darwin-x64 node-v9.11.1
+shane-sfdx-plugins/0.3.0 darwin-x64 node-v9.11.1
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -30,6 +30,7 @@ USAGE
 <!-- commands -->
 * [sfdx shane:data:file:upload [FILE]](#sfdx-shanedatafileupload-file)
 * [sfdx shane:iot:activation](#sfdx-shaneiotactivation)
+* [sfdx shane:mdapi:package:get](#sfdx-shanemdapipackageget)
 * [sfdx shane:mdapi:pull](#sfdx-shanemdapipull)
 * [sfdx shane:org:create](#sfdx-shaneorgcreate)
 * [sfdx shane:org:delete](#sfdx-shaneorgdelete)
@@ -75,7 +76,7 @@ EXAMPLES
   the local filesystem used
 ```
 
-_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/data/file/upload.ts)_
+_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.0/src/commands/shane/data/file/upload.ts)_
 
 ## sfdx shane:iot:activation
 
@@ -103,7 +104,40 @@ EXAMPLES
   // deactivates the orchestration, without resetting all the instances
 ```
 
-_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/iot/activation.ts)_
+_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.0/src/commands/shane/iot/activation.ts)_
+
+## sfdx shane:mdapi:package:get
+
+gets package from an org, converts, and merges it into the local source
+
+```
+USAGE
+  $ sfdx shane:mdapi:package:get
+
+OPTIONS
+  -p, --packageName=packageName                   (required) the name of the package you want to retrieve
+
+  -t, --target=target                             [default: force-app] where to convert the result to...defaults to
+                                                  force-app
+
+  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+
+  --apiversion=apiversion                         override the api version used for api requests made by this command
+
+  --json                                          format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+
+EXAMPLES
+  sfdx force:mdapi:package:get -p MyPkg -u someOrg
+  // pulls a package from the org and converts/merges it into force-app
+
+
+  sfdx force:mdapi:package:get -p MyPkg -u someOrg -t someDir
+  // pulls a package from the org and converts/merges it into /someDir
+```
+
+_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.0/src/commands/shane/mdapi/package/get.ts)_
 
 ## sfdx shane:mdapi:pull
 
@@ -139,7 +173,7 @@ EXAMPLE
   		// pulls code kinda stuff from the org and converts/merges it into force-app
 ```
 
-_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/mdapi/pull.ts)_
+_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.0/src/commands/shane/mdapi/pull.ts)_
 
 ## sfdx shane:org:create
 
@@ -189,7 +223,7 @@ EXAMPLES
   // above, but with an alias, a longer duration, and not the default hub, and not the default config file
 ```
 
-_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/org/create.ts)_
+_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.0/src/commands/shane/org/create.ts)_
 
 ## sfdx shane:org:delete
 
@@ -210,7 +244,7 @@ EXAMPLE
   		// deletes the current default scratch org
 ```
 
-_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/org/delete.ts)_
+_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.0/src/commands/shane/org/delete.ts)_
 
 ## sfdx shane:package2:version:bump [FILE]
 
@@ -260,7 +294,7 @@ EXAMPLES
   // bump the minor version up by one and create a new package2version, then set that as released
 ```
 
-_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/package2/version/bump.ts)_
+_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.0/src/commands/shane/package2/version/bump.ts)_
 
 ## sfdx shane:permset:create
 
@@ -291,7 +325,7 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
 ```
 
-_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/permset/create.ts)_
+_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.0/src/commands/shane/permset/create.ts)_
 
 ## sfdx shane:remotesite:create [FILE]
 
@@ -325,7 +359,7 @@ EXAMPLES
   // create a remote site setting in myOtherDirectory/main/default with a description
 ```
 
-_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/remotesite/create.ts)_
+_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.0/src/commands/shane/remotesite/create.ts)_
 
 ## sfdx shane:user:password:set
 
@@ -356,7 +390,7 @@ EXAMPLE
   // sets the password for User User to sfdx1234
 ```
 
-_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/user/password/set.ts)_
+_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.0/src/commands/shane/user/password/set.ts)_
 
 ## sfdx shane:user:photo [FILE]
 
@@ -389,7 +423,7 @@ EXAMPLES
   // sets the chatter banner photo AND user photo at the same time
 ```
 
-_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.2.0/src/commands/shane/user/photo.ts)_
+_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.3.0/src/commands/shane/user/photo.ts)_
 <!-- commandsstop -->
 
 
