@@ -57,6 +57,9 @@
       },
       "shane:user": {
         "description": "set a users password or their chatter profile/banner photo"
+      },
+      "shane:mdapi": {
+        "description": "pull unpackaged or packaged source from an org"
       }
     },
     "bin": "sfdx",
