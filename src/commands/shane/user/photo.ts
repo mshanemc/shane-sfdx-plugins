@@ -29,8 +29,6 @@ export default class Photo extends SfdxCommand {
 `
 	];
 
-	public static args = [{ name: 'file' }];
-
 	protected static flagsConfig = {
 		firstName: flags.string({ char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency' }),
 		lastName: flags.string({ char: 'l', required: true, description: 'last name of the user' }),

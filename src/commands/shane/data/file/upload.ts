@@ -25,8 +25,6 @@ export default class Upload extends SfdxCommand {
 		`
 	];
 
-	public static args = [{ name: 'file' }];
-
 	protected static flagsConfig = {
 		file: flags.string({ char: 'f', description: 'path to file on local filesystem', required: true }),
 		parentId: flags.string({ char: 'p', description: 'optional record ID that the file should be attached to' }),

@@ -21,8 +21,6 @@ export default class RemoteSite extends SfdxCommand {
 `
 	];
 
-	public static args = [{ name: 'file' }];
-
 	protected static flagsConfig = {
 		url: flags.string({ char: 'u', required: true, description: 'url that you want to allow callouts to' }),
 		name: flags.string({ char: 'n', required: true, description: 'name it (Salesforce API compliant name)' }),

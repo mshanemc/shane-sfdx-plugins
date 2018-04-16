@@ -36,8 +36,6 @@ export default class Bump extends SfdxCommand {
 `
 	];
 
-	public static args = [{ name: 'file' }];
-
 	protected static flagsConfig = {
 		major: flags.boolean({ char: 'M', description: 'Bump the major version by 1, sets minor,build to 0'}),
 		minor: flags.boolean({ char: 'm', description: 'Bump the minor version by 1' }),
