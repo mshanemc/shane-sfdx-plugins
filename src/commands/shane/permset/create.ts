@@ -15,12 +15,18 @@ export default class Create extends SfdxCommand {
 	public static description = 'create or add stuff to a permset with maximum access';
 
 	public static examples = [
-// 		`sfdx force:remotesite:create -n Test -u https://www.google.com
-// // create a remote site setting in force-app/main/default
-// `,
-// 		`sfdx force:remotesite:create -n Test -u https://www.google.com -d "my description" -t myOtherDirectory/main/default
-// // create a remote site setting in myOtherDirectory/main/default with a description
-// `
+`sfdx shane:permset:create -n MyPermSet1 -o Something__c -f Some_Field__c
+// create a permset in force-app/main/default for the object/field.  If MyPermSet1 doesn't exist, it will be created.
+`,
+`sfdx shane:permset:create -n MyPermSet1 -o Something__c
+// create a permset in force-app/main/default for every field on Something__c.
+`,
+`sfdx shane:permset:create -n MyPermSet1
+// create a permset in force-app/main/default for every field on every object!
+`,
+`sfdx shane:permset:create -n MyPermSet1 -t
+// create a permset in force-app/main/default for every field on every object.  If there's a tab for any of those objects, add that tab to the permset, too
+`,
 	];
 
 
