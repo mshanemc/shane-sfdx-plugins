@@ -4,4 +4,3 @@
 /lib
 /node_modules
 /tmp
-src/commands/shane/permset/create.ts
