@@ -21,9 +21,9 @@ export default class Pull extends SfdxCommand {
 	public static description = 'gets unpackaged metadata for you';
 
 	public static examples = [
-		`sfdx force:mdapi:pull -c -u someOrg
-		// pulls code kinda stuff from the org and converts/merges it into force-app
-		`
+`sfdx shane:mdapi:pull -c -u someOrg
+// pulls code kinda stuff from the org and converts/merges it into force-app
+`
 	];
 
 	protected static requiresUsername = true;

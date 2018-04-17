@@ -19,19 +19,19 @@ export default class Bump extends SfdxCommand {
 	public static description = 'bump the major/minor version number in the packageDirectory';
 
 	public static examples = [
-`sfdx force:package2:version:bump -m
+`sfdx shane:package2:version:bump -m
 // bump the minor version up by one
 `,
-`sfdx force:package2:version:bump -M
+`sfdx shane:package2:version:bump -M
 // bump the major version up by one (and set minor/patch to 0)
 `,
-`sfdx force:package2:version:bump -M -t myDir
+`sfdx shane:package2:version:bump -M -t myDir
 // bump the major version up by one for a particular directory that's not the default
 `,
-`sfdx force:package2:version:bump --minor --create
+`sfdx shane:package2:version:bump --minor --create
 // bump the minor version up by one and create a new package2version
 `,
-`sfdx force:package2:version:bump --minor --release
+`sfdx shane:package2:version:bump --minor --release
 // bump the minor version up by one and create a new package2version, then set that as released
 `
 	];

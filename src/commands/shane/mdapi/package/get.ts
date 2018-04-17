@@ -14,10 +14,10 @@ export default class Get extends SfdxCommand {
 	public static description = 'gets package from an org, converts, and merges it into the local source';
 
 	public static examples = [
-`sfdx force:mdapi:package:get -p MyPkg -u someOrg
+`sfdx shane:mdapi:package:get -p MyPkg -u someOrg
 // pulls a package from the org and converts/merges it into force-app
 `,
-`sfdx force:mdapi:package:get -p MyPkg -u someOrg -t someDir
+`sfdx shane:mdapi:package:get -p MyPkg -u someOrg -t someDir
 // pulls a package from the org and converts/merges it into /someDir
 `
 	];

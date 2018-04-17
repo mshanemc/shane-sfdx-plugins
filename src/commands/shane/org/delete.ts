@@ -12,9 +12,9 @@ export default class Delete extends SfdxCommand {
 	public static description = 'delete the default scratch org.  Won\'t prompt you for confirmation';
 
 	public static examples = [
-		`sfdx force:org:delete
-		// deletes the current default scratch org
-		`
+`sfdx shane:org:delete
+// deletes the current default scratch org
+`
 	];
 
 	protected static requiresUsername = true;

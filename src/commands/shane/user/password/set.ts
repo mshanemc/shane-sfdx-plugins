@@ -14,7 +14,7 @@ export default class Set extends SfdxCommand {
 	public static description = 'Set the password for a user by first/last name';
 
 	public static examples = [
-`sfdx force:user:password:set -p sfdx1234 -g User -l User
+`sfdx shane:user:password:set -p sfdx1234 -g User -l User
 // sets the password for User User to sfdx1234
 `
 	];
