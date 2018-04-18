@@ -19,7 +19,7 @@ $ npm install -g shane-sfdx-plugins
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-shane-sfdx-plugins/0.5.0 darwin-x64 node-v9.11.1
+shane-sfdx-plugins/0.6.0 darwin-x64 node-v9.11.1
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -37,6 +37,7 @@ USAGE
 * [sfdx shane:package2:version:bump](#sfdx-shanepackage-2-versionbump)
 * [sfdx shane:permset:create](#sfdx-shanepermsetcreate)
 * [sfdx shane:remotesite:create](#sfdx-shaneremotesitecreate)
+* [sfdx shane:static:create](#sfdx-shanestaticcreate)
 * [sfdx shane:user:password:set](#sfdx-shaneuserpasswordset)
 * [sfdx shane:user:photo](#sfdx-shaneuserphoto)
 
@@ -61,22 +62,22 @@ OPTIONS
 EXAMPLES
   sfdx shane:data:file:upload - f ~/Downloads/King.png
   		//uploads file from local filesystem as a file
-
+		
 
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF
   		//uploads file from local filesystem as a file and attaches to a record
-
+		
 
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -c
   		//uploads and attaches it to the indicated record, but as a chatter file post
-
+		
 
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -n CustomName -c
-  		//uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same name as
+  		//uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same name as 
   the local filesystem used
 ```
 
-_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.5.0/src/commands/shane/data/file/upload.ts)_
+_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.6.0/src/commands/shane/data/file/upload.ts)_
 
 ## sfdx shane:iot:activation
 
@@ -104,7 +105,7 @@ EXAMPLES
   // deactivates the orchestration, without resetting all the instances
 ```
 
-_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.5.0/src/commands/shane/iot/activation.ts)_
+_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.6.0/src/commands/shane/iot/activation.ts)_
 
 ## sfdx shane:mdapi:package:get
 
@@ -129,15 +130,15 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
 
 EXAMPLES
-  sfdx force:mdapi:package:get -p MyPkg -u someOrg
+  sfdx shane:mdapi:package:get -p MyPkg -u someOrg
   // pulls a package from the org and converts/merges it into force-app
 
 
-  sfdx force:mdapi:package:get -p MyPkg -u someOrg -t someDir
+  sfdx shane:mdapi:package:get -p MyPkg -u someOrg -t someDir
   // pulls a package from the org and converts/merges it into /someDir
 ```
 
-_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.5.0/src/commands/shane/mdapi/package/get.ts)_
+_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.6.0/src/commands/shane/mdapi/package/get.ts)_
 
 ## sfdx shane:mdapi:pull
 
@@ -169,11 +170,11 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
 
 EXAMPLE
-  sfdx force:mdapi:pull -c -u someOrg
-  		// pulls code kinda stuff from the org and converts/merges it into force-app
+  sfdx shane:mdapi:pull -c -u someOrg
+  // pulls code kinda stuff from the org and converts/merges it into force-app
 ```
 
-_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.5.0/src/commands/shane/mdapi/pull.ts)_
+_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.6.0/src/commands/shane/mdapi/pull.ts)_
 
 ## sfdx shane:org:create
 
@@ -215,7 +216,7 @@ OPTIONS
 
 EXAMPLES
   sfdx shane:org:create -u shane -o org.test
-  // creates an org from the default project config/project-scratch-def.json but with username shane[i]@org.test where i
+  // creates an org from the default project config/project-scratch-def.json but with username shane[i]@org.test where i 
   is a unique sequence number for that -u/-o combination
 
 
@@ -223,7 +224,7 @@ EXAMPLES
   // above, but with an alias, a longer duration, and not the default hub, and not the default config file
 ```
 
-_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.5.0/src/commands/shane/org/create.ts)_
+_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.6.0/src/commands/shane/org/create.ts)_
 
 ## sfdx shane:org:delete
 
@@ -240,11 +241,11 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
 
 EXAMPLE
-  sfdx force:org:delete
-  		// deletes the current default scratch org
+  sfdx shane:org:delete
+  // deletes the current default scratch org
 ```
 
-_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.5.0/src/commands/shane/org/delete.ts)_
+_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.6.0/src/commands/shane/org/delete.ts)_
 
 ## sfdx shane:package2:version:bump
 
@@ -274,27 +275,27 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal)   logging level for this command invocation
 
 EXAMPLES
-  sfdx force:package2:version:bump -m
+  sfdx shane:package2:version:bump -m
   // bump the minor version up by one
 
 
-  sfdx force:package2:version:bump -M
+  sfdx shane:package2:version:bump -M
   // bump the major version up by one (and set minor/patch to 0)
 
 
-  sfdx force:package2:version:bump -M -t myDir
+  sfdx shane:package2:version:bump -M -t myDir
   // bump the major version up by one for a particular directory that's not the default
 
 
-  sfdx force:package2:version:bump --minor --create
+  sfdx shane:package2:version:bump --minor --create
   // bump the minor version up by one and create a new package2version
 
 
-  sfdx force:package2:version:bump --minor --release
+  sfdx shane:package2:version:bump --minor --release
   // bump the minor version up by one and create a new package2version, then set that as released
 ```
 
-_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.5.0/src/commands/shane/package2/version/bump.ts)_
+_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.6.0/src/commands/shane/package2/version/bump.ts)_
 
 ## sfdx shane:permset:create
 
@@ -323,9 +324,26 @@ OPTIONS
   --json                                          format output as json
 
   --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+
+EXAMPLES
+  sfdx shane:permset:create -n MyPermSet1 -o Something__c -f Some_Field__c
+  // create a permset in force-app/main/default for the object/field.  If MyPermSet1 doesn't exist, it will be created.
+
+
+  sfdx shane:permset:create -n MyPermSet1 -o Something__c
+  // create a permset in force-app/main/default for every field on Something__c.
+
+
+  sfdx shane:permset:create -n MyPermSet1
+  // create a permset in force-app/main/default for every field on every object!
+
+
+  sfdx shane:permset:create -n MyPermSet1 -t
+  // create a permset in force-app/main/default for every field on every object.  If there's a tab for any of those 
+  objects, add that tab to the permset, too
 ```
 
-_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.5.0/src/commands/shane/permset/create.ts)_
+_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.6.0/src/commands/shane/permset/create.ts)_
 
 ## sfdx shane:remotesite:create
 
@@ -351,15 +369,51 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
 
 EXAMPLES
-  sfdx force:remotesite:create -n Test -u https://www.google.com
+  sfdx shane:remotesite:create -n Test -u https://www.google.com
   // create a remote site setting in force-app/main/default
 
 
-  sfdx force:remotesite:create -n Test -u https://www.google.com -d "my description" -t myOtherDirectory/main/default
+  sfdx shane:remotesite:create -n Test -u https://www.google.com -d "my description" -t myOtherDirectory/main/default
   // create a remote site setting in myOtherDirectory/main/default with a description
 ```
 
-_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.5.0/src/commands/shane/remotesite/create.ts)_
+_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.6.0/src/commands/shane/remotesite/create.ts)_
+
+## sfdx shane:static:create
+
+create a static resource locally
+
+```
+USAGE
+  $ sfdx shane:static:create
+
+OPTIONS
+  -d, --description=description                   [default: added from sfdx plugin] optional description so you can
+                                                  remember why you added this and what it's for
+
+  -n, --name=name                                 (required) name it (Salesforce API compliant name)
+
+  -p, --public                                    mark the cache control public
+
+  -t, --target=target                             [default: force-app/main/default] where to create the folder (if it
+                                                  doesn't exist already) and file...defaults to force-app/main/default
+
+  -y, --type=type                                 (required) choose one of the following: zip, css, js, text, xml
+
+  --json                                          format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+
+EXAMPLES
+  sfdx shane:remotesite:create -n Test -u https://www.google.com
+  // create a remote site setting in force-app/main/default
+
+
+  sfdx shane:remotesite:create -n Test -u https://www.google.com -d "my description" -t myOtherDirectory/main/default
+  // create a remote site setting in myOtherDirectory/main/default with a description
+```
+
+_See code: [src/commands/shane/static/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.6.0/src/commands/shane/static/create.ts)_
 
 ## sfdx shane:user:password:set
 
@@ -386,11 +440,11 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
 
 EXAMPLE
-  sfdx force:user:password:set -p sfdx1234 -g User -l User
+  sfdx shane:user:password:set -p sfdx1234 -g User -l User
   // sets the password for User User to sfdx1234
 ```
 
-_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.5.0/src/commands/shane/user/password/set.ts)_
+_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.6.0/src/commands/shane/user/password/set.ts)_
 
 ## sfdx shane:user:photo
 
@@ -411,17 +465,17 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
 
 EXAMPLES
-  sfdx force:user:photo -f ~/Downloads/King.png -g User -l User
+  sfdx shane:user:photo -f ~/Downloads/King.png -g User -l User
   // sets the chatter photo for the user named User User using the local file
 
 
-  sfdx force:user:photo -b ~/Downloads/King.png -g User -l User
+  sfdx shane:user:photo -b ~/Downloads/King.png -g User -l User
   // sets the chatter banner photo for the user named User User using the local file
 
 
-  sfdx force:user:photo -f ~/Downloads/King.png -b ~/Downloads/OtherPhoto.jpg -g User -l User
+  sfdx shane:user:photo -f ~/Downloads/King.png -b ~/Downloads/OtherPhoto.jpg -g User -l User
   // sets the chatter banner photo AND user photo at the same time
 ```
 
-_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.5.0/src/commands/shane/user/photo.ts)_
+_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.6.0/src/commands/shane/user/photo.ts)_
 <!-- commandsstop -->
