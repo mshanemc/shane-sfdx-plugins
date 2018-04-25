@@ -5,6 +5,8 @@ import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 import cli from 'cli-ux'
 
+const options = require('../../../shared/js2xmlStandardOptions');
+
 
 const chalk = require('chalk');
 
@@ -54,17 +56,6 @@ export default class RemoteSite extends SfdxCommand {
 			disableProtocolSecurity : false,
 			isActive : true,
 			description: this.flags.description
-		}
-
-		const options = {
-			declaration: {
-				include: true,
-				encoding: 'UTF-8',
-				version: '1.0'
-			},
-			format: {
-				doubleQuotes: true
-			}
 		}
 
 		const xml = jsToXml.parse('RemoteSiteSetting', settingJSON, options);

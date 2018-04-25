@@ -7,6 +7,7 @@ import jsToXml = require('js2xmlparser');
 import xml2js = require('xml2js');
 import util = require('util');
 
+const options = require('../../../shared/js2xmlStandardOptions');
 
 const chalk = require('chalk');
 
@@ -86,17 +87,6 @@ export default class Create extends SfdxCommand {
 				}
 			} else {
 				this.ux.error(chalk.red(`Couldn\'t find that object in ${targetLocationObjects}/${this.flags.object}`));
-			}
-		}
-
-		const options = {
-			declaration: {
-				include: true,
-				encoding: 'UTF-8',
-				version: '1.0'
-			},
-			format: {
-				doubleQuotes: true
 			}
 		}
 
