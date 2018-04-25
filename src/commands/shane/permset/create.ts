@@ -6,6 +6,7 @@ import cli from 'cli-ux'
 import jsToXml = require('js2xmlparser');
 import xml2js = require('xml2js');
 import util = require('util');
+import { existsSync } from 'fs-extra';
 
 const options = require('../../../shared/js2xmlStandardOptions');
 
@@ -49,6 +50,7 @@ export default class Create extends SfdxCommand {
 		if (this.flags.field && ! this.flags.object) {
 			this.ux.error(chalk.red('If you say a field, you have to say the object'));
 		}
+
 		const targetFilename = `${this.flags.directory}/permissionsets/${this.flags.name}.permissionset-meta.xml`
 		const targetLocationObjects = `${this.flags.directory}/objects`
 
@@ -96,6 +98,8 @@ export default class Create extends SfdxCommand {
 			delete existing['$'];
 			existing['@'] = temp;
 		}
+
+		fs.ensureDirSync(`${this.flags.directory}/permissionsets`);
 
 		// conver to xml and write out the file
 		const xml = jsToXml.parse('PermissionSet', existing, options);
@@ -167,6 +171,8 @@ export default class Create extends SfdxCommand {
 				const parser = new xml2js.Parser({ explicitArray: false });
 				const parseString = util.promisify(parser.parseString);
 				const fieldJSON = await parseString(fs.readFileSync(`${targetLocationObjects}/${objectName}/fields/${fieldName}.field-meta.xml`));
+
+				this.ux.logJson(fieldJSON);
 
 				// Is it required at the DB level?
 				if (fieldJSON.CustomField.required === "true" || fieldJSON.CustomField.type === 'MasterDetail' || !fieldJSON.CustomField.type || fieldJSON.CustomField.fullName === 'OwnerId'){
