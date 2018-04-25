@@ -22,10 +22,10 @@ export default class FieldCreate extends SfdxCommand {
 // without any params, the cli is going to ask you questions to generate your field interactively
 `,
 `sfdx shane:object:field --api My_Field__c -l 255 -n "My Field" -t Text -o  BigTest__b --noIndex
-// create new text field called My Field (My_Field__c) on BigTest__b
+// create new text field called My Field (My_Field__c) on BigObject BigTest__b
 `,
 `sfdx shane:object:field --api My_Index_Field__c -l 255 -n "My Index Field" -t Text -o  BigTest__b --indexDirection ASC --indexPosition 1
-// create new text field called My Field (My_Field__c) on BigTest__b, add it to the existing index as the second field
+// create new text field called My Field (My_Field__c) on BigObject BigTest__b, add it to the existing index as the second field
 `
 	];
 
