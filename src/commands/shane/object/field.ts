@@ -153,7 +153,7 @@ export default class FieldCreate extends SfdxCommand {
 			outputJSON.externalId = true;
 		}
 
-		const xml = jsToXml.parse(this.flags.api, outputJSON, options);
+		const xml = jsToXml.parse('CustomField', outputJSON, options);
 
 		fs.writeFileSync(fieldMetaPath, xml);
 
