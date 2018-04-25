@@ -85,9 +85,7 @@ export default class FieldCreate extends SfdxCommand {
 		const fieldsFolderPath = `${this.flags.directory}/objects/${this.flags.object}/fields`;
 		const fieldMetaPath = `${this.flags.directory}/objects/${this.flags.object}/fields/${this.flags.api}.field-meta.xml`;
 
-		if (!fs.existsSync(fieldsFolderPath)){
-			fs.mkdirSync(fieldsFolderPath);
-		}
+		fs.ensureDirSync(fieldsFolderPath);
 
 		if (fs.existsSync(fieldMetaPath)) {
 			this.ux.error(chalk.red(`field already exists ${fieldMetaPath}`));
