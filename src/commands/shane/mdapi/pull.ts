@@ -71,47 +71,31 @@ export default class Pull extends SfdxCommand {
 
 	public async run(): Promise<any> { // tslint:disable-line:no-any
 
-		if (!fs.existsSync(this.flags.target)) {
-			fs.mkdirSync(this.flags.target);
-		}
+		fs.ensureDirSync(this.flags.target);
+		fs.ensureDirSync(pkgDir);
 
 		if (this.flags.all){
-			if (!fs.existsSync(pkgDir)) {
-				fs.mkdirSync(pkgDir);
-			}
 			fs.writeFileSync(`./${pkgDir}/package.xml`, all.xml);
 			await this.pullUnzipConvert('all');
 		} else {
 			// it's individual subsets of metadata
 
 			if (this.flags.code) {
-				if (!fs.existsSync(pkgDir)) {
-					fs.mkdirSync(pkgDir);
-				}
 				fs.writeFileSync(`./${pkgDir}/package.xml`, code.xml);
 				await this.pullUnzipConvert('code');
 			}
 
 			if (this.flags.perms) {
-				if (!fs.existsSync(pkgDir)) {
-					fs.mkdirSync(pkgDir);
-				}
 				fs.writeFileSync(`./${pkgDir}/package.xml`, perms.xml);
 				await this.pullUnzipConvert('perms');
 			}
 
 			if (this.flags.schema) {
-				if (!fs.existsSync(pkgDir)) {
-					fs.mkdirSync(pkgDir);
-				}
 				fs.writeFileSync(`./${pkgDir}/package.xml`, schema.xml);
 				await this.pullUnzipConvert('schema');
 			}
 
 			if (this.flags.ui) {
-				if (!fs.existsSync(pkgDir)) {
-					fs.mkdirSync(pkgDir);
-				}
 				fs.writeFileSync(`./${pkgDir}/package.xml`, ui.xml);
 				await this.pullUnzipConvert('ui');
 			}

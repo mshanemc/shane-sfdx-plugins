@@ -91,9 +91,7 @@ export default class ObjectCreate extends SfdxCommand {
 		const thisObjectFolder = `${this.flags.directory}/objects/${this.flags.api}`;
 		const metaFileLocation = `${this.flags.directory}/objects/${this.flags.api}/${this.flags.api}.object-meta.xml`
 
-		if (!fs.existsSync(objectsPath)) {
-			fs.mkdirSync(objectsPath);
-		}
+		fs.ensureDirSync(objectsPath);
 
 		if (!fs.existsSync(thisObjectFolder)) {
 			fs.mkdirSync(thisObjectFolder);
@@ -102,9 +100,8 @@ export default class ObjectCreate extends SfdxCommand {
 			return;
 		}
 
-		if (!fs.existsSync(`${objectsPath}/${this.flags.api}/fields`)) {
-			fs.mkdirSync(`${objectsPath}/${this.flags.api}/fields`);
-		}
+		fs.ensureDirSync(`${objectsPath}/${this.flags.api}/fields`);
+
 
 		const xml = jsToXml.parse('CustomObject', outputJSON, options);
 

@@ -44,9 +44,7 @@ export default class RemoteSite extends SfdxCommand {
 			this.flags.target = this.flags.target.substring(0, this.flags.target.length -1);
 		}
 
-		if (!fs.existsSync(`${this.flags.target}/remoteSiteSettings`)) {
-			fs.mkdirSync(`${this.flags.target}/remoteSiteSettings`);
-		}
+		fs.ensureDirSync(`${this.flags.target}/remoteSiteSettings`)
 
 		const settingJSON = {
 			'@' : {
