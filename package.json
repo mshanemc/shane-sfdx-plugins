@@ -60,6 +60,9 @@
       },
       "shane:mdapi": {
         "description": "pull unpackaged or packaged source from an org"
+      },
+      "shane:object": {
+        "description": "create objects locally or add fields to them"
       }
     },
     "bin": "sfdx",
