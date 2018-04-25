@@ -18,6 +18,15 @@ export default class FieldCreate extends SfdxCommand {
 	public static description = 'create or add fields to an existing object';
 
 	public static examples = [
+`sfdx shane:object:field
+// without any params, the cli is going to ask you questions to generate your field interactively
+`,
+`sfdx shane:object:field --api My_Field__c -l 255 -n "My Field" -t Text -o  BigTest__b --noIndex
+// create new text field called My Field (My_Field__c) on BigTest__b
+`,
+`sfdx shane:object:field --api My_Index_Field__c -l 255 -n "My Index Field" -t Text -o  BigTest__b --indexDirection ASC --indexPosition 1
+// create new text field called My Field (My_Field__c) on BigTest__b, add it to the existing index as the second field
+`
 	];
 
 
@@ -36,7 +45,7 @@ export default class FieldCreate extends SfdxCommand {
 		relName: flags.string({ description: 'API name for the lookup relationship' }),
 		externalId: flags.boolean({ description: 'use as an external id' }),
 
-		indexPosition: flags.string({ description: 'put in a specific position in the big object index' }),
+		indexPosition: flags.string({ description: 'put in a specific position in the big object index (0 is the first element).  You\'re responsible for dealing with producing a sane array'}),
 		indexAppend: flags.boolean({ description: 'put next in the big object index' }),
 		indexDirection: flags.string({ description: 'sort direction for the big object index (ASC, DESC)' }),
 		noIndex: flags.boolean({description: 'do not add this field to the index'}),
