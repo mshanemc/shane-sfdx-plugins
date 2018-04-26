@@ -12,6 +12,7 @@ const options = require('../../../shared/js2xmlStandardOptions');
 
 const chalk = require('chalk');
 const	SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
+const SupportedTypes__e = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
 
 export default class FieldCreate extends SfdxCommand {
 
@@ -35,9 +36,11 @@ export default class FieldCreate extends SfdxCommand {
 		object: flags.string({ char: 'o', description: 'API name of an object to add a field to' }),
 		name: flags.string({ char: 'n', description: 'Label for the field' }),
 		api: flags.string({ char: 'a', description: 'API name for the field' }),
-		type: flags.string({ char: 't', description: `field type.  Big Objects: ${SupportedTypes__b.join(',')}`}),
+		type: flags.string({ char: 't', description: `field type.  Big Objects: ${SupportedTypes__b.join(',')}.  Events: ${SupportedTypes__e.join(',')}`}),
 		length: flags.string({ char: 'l', description: 'length (for text fields)' }),
+		description: flags.string({description: 'optional description for the field so you remember what it\'s for next year'}),
 		scale: flags.string({ char: 's', description: 'places right of the decimal' }),
+		default: flags.string({description: 'required for checkbox fields.  Express in Salesforce formula language (good luck with that!)'}),
 		precision: flags.string({description: 'maximum allowed digits of a number, including whole and decimal places' }),
 		required: flags.boolean({ char: 'r', description: 'field is required' }),
 		unique: flags.boolean({ char: 'u', description: 'field must be unique' }),
@@ -96,6 +99,8 @@ export default class FieldCreate extends SfdxCommand {
 			label: string;
 			type: string;
 			fullName: string;
+			defaultValue?: string;
+			description?: string;
 			required?: boolean;
 			unique?: boolean;
 			externalId?: boolean;
@@ -107,8 +112,12 @@ export default class FieldCreate extends SfdxCommand {
 			referenceTo?: string;
 		}
 
-		while (!SupportedTypes__b.includes(this.flags.type)){
+		while (this.flags.object.endsWith('__b') && !SupportedTypes__b.includes(this.flags.type)){
 			this.flags.type = await cli.prompt(`Type (${SupportedTypes__b.join(',')})?`);
+		}
+
+		while (this.flags.object.endsWith('__e') && !SupportedTypes__e.includes(this.flags.type)) {
+			this.flags.type = await cli.prompt(`Type (${SupportedTypes__e.join(',')})?`);
 		}
 
 		// we have at least these two fields now
@@ -121,6 +130,10 @@ export default class FieldCreate extends SfdxCommand {
 		// type specific values
 		if (this.flags.type === 'Text'){
 			outputJSON.length = this.flags.length || await cli.prompt('Length? (Max 255)');
+		}
+
+		if (this.flags.type === 'Checkbox') {
+			outputJSON.defaultValue = this.flags.default || await cli.prompt('Default value (required for checkboxes)? [type true or false]');
 		}
 
 		if (this.flags.type === 'LongTextArea') {
