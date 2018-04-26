@@ -12,7 +12,7 @@ const options = require('../../../shared/js2xmlStandardOptions');
 
 const chalk = require('chalk');
 
-export default class Create extends SfdxCommand {
+export default class PermSetCreate extends SfdxCommand {
 
 	public static description = 'create or add stuff to a permset with maximum access';
 
@@ -56,6 +56,7 @@ export default class Create extends SfdxCommand {
 
 		if (this.flags.field && !fs.existsSync(`${targetLocationObjects}/${this.flags.object}/fields/${this.flags.field}.field-meta.xml`)) {
 			this.ux.error(`Field does not exist: ${this.flags.fields}`);
+			return;
 		}
 
 		let existing = await this.getExisting(targetFilename, this.flags.name);
