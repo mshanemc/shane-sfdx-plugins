@@ -221,8 +221,6 @@ describe('shane:object:create', () => {
 
 		//verify all the fields so far.  Required fields, and fileds required because they're indexed, shouldn't be included
 
-		console.log(parsed.PermissionSet.fieldPermissions);
-
 		expect(parsed.PermissionSet.fieldPermissions).to.deep.include({ readable: 'true', editable: 'true', field: `${api}.Non_Indexed_Field__c` });
 		expect(parsed.PermissionSet.fieldPermissions).to.deep.include({ readable: 'true', editable: 'true', field: `${api}.Number_Field__c` });
 
@@ -240,8 +238,6 @@ describe('shane:object:create', () => {
 
 		// push source
 		const pushResult = await exec(`sfdx force:source:push --json`, { cwd: testProjectName });
-
-		console.log(pushResult);
 
 		expect(pushResult.stderr).to.equal('');
 		const result = JSON.parse(pushResult.stdout);
