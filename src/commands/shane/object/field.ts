@@ -27,7 +27,10 @@ export default class FieldCreate extends SfdxCommand {
 `,
 `sfdx shane:object:field --api My_Index_Field__c -l 255 -n "My Index Field" -t Text -o  BigTest__b --indexDirection ASC --indexPosition 1
 // create new text field called My Field (My_Field__c) on BigObject BigTest__b, add it to the existing index as the second field
-`
+`,
+`sfdx shane:object:field --api My_Field__c -l 255 -n "My Field" -t Text -o  EventTest__e
+// create new text field called My Field (My_Field__c) on Platform Event EventTest__e
+`,
 	];
 
 
@@ -37,20 +40,25 @@ export default class FieldCreate extends SfdxCommand {
 		name: flags.string({ char: 'n', description: 'Label for the field' }),
 		api: flags.string({ char: 'a', description: 'API name for the field' }),
 		type: flags.string({ char: 't', description: `field type.  Big Objects: ${SupportedTypes__b.join(',')}.  Events: ${SupportedTypes__e.join(',')}`}),
-		length: flags.string({ char: 'l', description: 'length (for text fields)' }),
 		description: flags.string({description: 'optional description for the field so you remember what it\'s for next year'}),
-		scale: flags.string({ char: 's', description: 'places right of the decimal' }),
 		default: flags.string({description: 'required for checkbox fields.  Express in Salesforce formula language (good luck with that!)'}),
-		precision: flags.string({description: 'maximum allowed digits of a number, including whole and decimal places' }),
 		required: flags.boolean({ char: 'r', description: 'field is required' }),
 		unique: flags.boolean({ char: 'u', description: 'field must be unique' }),
-		lookupObject: flags.string({description: 'API name of the object the lookup goes to'}),
-		relName: flags.string({ description: 'API name for the lookup relationship' }),
 		externalId: flags.boolean({ description: 'use as an external id' }),
 
+		//type specific flags
+		length: flags.string({ char: 'l', description: 'length (for text fields)' }),
+
+		scale: flags.string({ char: 's', description: 'places right of the decimal' }),
+		precision: flags.string({description: 'maximum allowed digits of a number, including whole and decimal places' }),
+
+		lookupObject: flags.string({description: 'API name of the object the lookup goes to'}),
+		relName: flags.string({ description: 'API name for the lookup relationship'}),
+
+		//big object index handling
 		indexPosition: flags.string({ description: 'put in a specific position in the big object index (0 is the first element).  You\'re responsible for dealing with producing a sane array'}),
 		indexAppend: flags.boolean({ description: 'put next in the big object index' }),
-		indexDirection: flags.string({ description: 'sort direction for the big object index (ASC, DESC)' }),
+		indexDirection: flags.string({ description: 'sort direction for the big object index', options: ['ASC', 'DESC']}),
 		noIndex: flags.boolean({description: 'do not add this field to the index'}),
 
 		directory: flags.string({ char: 'd', default: 'force-app/main/default', description: 'Where is this object metadata? defaults to force-app/main/default' }),
