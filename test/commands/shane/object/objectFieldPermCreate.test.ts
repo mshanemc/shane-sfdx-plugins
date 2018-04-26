@@ -61,7 +61,7 @@ describe('shane:object:create', () => {
 
 	}).timeout(60000);
 
-	it('creates a non indexed Text field on the Big Object', async () => {
+	it('creates a non indexed Number field (18,0) on the Big Object', async () => {
 
 		const fieldAPI = 'Number_Field__c';
 		const fieldLabel = 'Number Field';
