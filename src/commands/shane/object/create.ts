@@ -12,7 +12,7 @@ const chalk = require('chalk');
 
 export default class ObjectCreate extends SfdxCommand {
 
-	public static description = 'create an object in local source.  Only __b (big objects) are currently supported';
+	public static description = 'create an object in local source.  Only __b (big objects) and events __e are currently supported';
 
 	public static examples = [
 `sfdx shane:object:create
@@ -20,13 +20,20 @@ export default class ObjectCreate extends SfdxCommand {
 `,
 `sfdx shane:object:create --label "Platypus" --plural "Platypi" --api Platypus__b --directory /my/project/path
 // label, plural, api name specified so the tool doesn't have to ask you about them.  Creates in a non-default path
+`,
+`sfdx shane:object:create --label "Platypus" --plural "Platypi" --api Platypus__b --directory /my/project/path
+// label, plural, api name specified so the tool doesn't have to ask you about them.  Creates in a non-default path
+`,
+`sfdx shane:object:create --label "Signal" --plural "Signals" --api Signal__e
+// create a platform event
 `
 	];
 
 	protected static flagsConfig = {
 		label: flags.string({ char: 'l', description: 'label for the UI' }),
-		api: flags.string({ char: 'a', description: 'api name.  Ends with one of the supported types: [__b]' }),
+		api: flags.string({ char: 'a', description: 'api name.  Ends with one of the supported types: [__b, __e]' }),
 		plural: flags.string({ char: 'p', description: 'plural label for the UI' }),
+		highVolume: flags.boolean({ char: 'h', description: 'high volume, valid only for platform events (__e)'}),
 		// description: flags.string({ char: 'd', default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' }),
 		directory: flags.string({ char: 'd', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' })
 	};
@@ -42,6 +49,7 @@ export default class ObjectCreate extends SfdxCommand {
 			label: string;
 			pluralLabel: string;
 			indexes?: {};
+			eventType?: string;
 		}
 
 		const outputJSON = <objectConfig>{
@@ -70,18 +78,17 @@ export default class ObjectCreate extends SfdxCommand {
 			this.flags.api = await cli.prompt(`API name?`);
 		}
 
-		//validate that API name
-		if (!this.flags.api.endsWith('__b')){
-			this.ux.error('API names need to end with one of the supported options:  __b');
-			return;
-		}
-
 		if (this.flags.api.endsWith('__b')){
 			outputJSON.indexes = {
 				fullName : `${this.flags.api.replace('__b', '')}Index`,
 				label: `${this.flags.label} Index`,
 				fields : []
 			}
+		} else if (this.flags.api.endsWith('__e')){
+			outputJSON.eventType = this.flags.highVolume ? 'HighVolume' : 'StandardVolume' ;
+		} else {
+			this.ux.error('API names need to end with one of the supported options:  __b, __e');
+			return;
 		}
 
 		outputJSON.label = this.flags.label;
