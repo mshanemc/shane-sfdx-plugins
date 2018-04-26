@@ -16,7 +16,7 @@ before(async () => {
 	await exec(`sfdx force:project:create -n ${testProjectName}`);
 });
 
-describe('shane:object:create', () => {
+describe('shane:object:create (big object flavor)', () => {
 
 	it('creates a big object with all params supplied', async () => {
 

@@ -16,7 +16,7 @@ before(async () => {
 	await exec(`sfdx force:project:create -n ${testProjectName}`);
 });
 
-describe('shane:object:create', () => {
+describe('shane:object:create (platform event flavor)', () => {
 
 	it('creates a platform event with all params supplied', async () => {
 
