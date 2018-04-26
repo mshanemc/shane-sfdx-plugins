@@ -151,12 +151,6 @@ export default class FieldCreate extends SfdxCommand {
 			outputJSON.externalId = true;
 		}
 
-		const xml = jsToXml.parse('CustomField', outputJSON, options);
-
-		fs.writeFileSync(fieldMetaPath, xml);
-
-		this.ux.log(chalk.green(`Created ${fieldMetaPath}`));
-
 		// dealing with big object indexes
 		if (this.flags.object.includes('__b') && !this.flags.noIndex){
 			const parser = new xml2js.Parser({ explicitArray: true });
@@ -180,6 +174,7 @@ export default class FieldCreate extends SfdxCommand {
 				} if (response === 'LAST') {
 					this.flags.indexAppend = true;
 				} else {
+
 					if (this.flags.indexDirection >= 0) {
 						this.flags.indexPosition = response;
 					}
@@ -190,8 +185,12 @@ export default class FieldCreate extends SfdxCommand {
 				return; // we're done.  Just quit!
 			}
 
+			//make it required since we're going to index it
+			outputJSON.required = true;
+
 			// we were told what to do
 			while (this.flags.indexDirection !== 'ASC' && this.flags.indexDirection !== 'DESC'){
+				outputJSON.required = true;
 				this.flags.indexDirection = await cli.prompt('which direction should this index be sorted? (ASC, DESC)');
 			}
 
@@ -224,6 +223,12 @@ export default class FieldCreate extends SfdxCommand {
 
 		}
 
+		// write out the field xml
+		const xml = jsToXml.parse('CustomField', outputJSON, options);
+
+		fs.writeFileSync(fieldMetaPath, xml);
+
+		this.ux.log(chalk.green(`Created ${fieldMetaPath}`));
 	}
 
 }
