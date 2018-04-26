@@ -23,6 +23,9 @@ export default class ObjectCreate extends SfdxCommand {
 `,
 `sfdx shane:object:create --label "Platypus" --plural "Platypi" --api Platypus__b --directory /my/project/path
 // label, plural, api name specified so the tool doesn't have to ask you about them.  Creates in a non-default path
+`,
+`sfdx shane:object:create --label "Signal" --plural "Signals" --api Signal__e
+// create a platform event
 `
 	];
 
