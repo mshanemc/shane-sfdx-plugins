@@ -31,8 +31,8 @@ export default class Pull extends SfdxCommand {
 	protected static flagsConfig = {
 		code: flags.boolean({ char: 'c', description: 'Pull apex, VF, Lightning Components, triggers, static resources' }),
 		perms: flags.boolean({ char: 'p', description: 'Pull profiles, permsets, roles, groups, customPermissions' }),
-		schema: flags.boolean({ char: 's', description: 'Pull objects, fields, recordtypes, valueSets, custom Metadata' }),
-		ui: flags.boolean({ char: 'i', description: 'Pull page layouts, tabs, list views, compact layouts, apps, tabs, more' }),
+    schema: flags.boolean({ char: 's', description: 'Pull objects, fields, list views, recordtypes, valueSets, custom Metadata' }),
+		ui: flags.boolean({ char: 'i', description: 'Pull page layouts, tabs, compact layouts, apps, tabs, more' }),
 		// TODO: automation, security, reporting, i18n
 		all: flags.boolean({description: 'Pulls just about everything.  Don\'t use this flag with any other subset of metadata.  Not recommended for really large metatadat orgs because it\'ll overflow stdout' }),
 		target: flags.string({ char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' })
