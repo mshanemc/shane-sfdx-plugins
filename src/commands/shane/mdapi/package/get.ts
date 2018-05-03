@@ -3,8 +3,9 @@ import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import util = require('util');
+import child_process = require('child_process');
 
-const exec = util.promisify(require('child_process').exec);
+const exec = util.promisify(child_process.exec);
 
 const tmpDir = 'mdapiout';
 const pkgDir = 'pkgDirTemp';
@@ -31,6 +32,7 @@ export default class Get extends SfdxCommand {
 
   protected static requiresProject = true;
 
+  // tslint:disable-next-line:no-any
   public async run(): Promise<any> {
 
     process.stdout.write('starting package retrieval...');

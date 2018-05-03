@@ -7,6 +7,8 @@ import xml2js = require('xml2js');
 
 import child_process = require('child_process');
 
+import testutils = require('../../../helpers/testutils');
+
 const exec = util.promisify(child_process.exec);
 const testProjectName = 'testProject';
 
@@ -26,11 +28,7 @@ describe('shane:remotesite:create', () => {
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/remoteSiteSettings`)).to.be.true;
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/remoteSiteSettings/${testRemSite}.remoteSite-meta.xml`)).to.be.true;
 
-    const xml = await fs.readFile(`${testProjectName}/force-app/main/default/remoteSiteSettings/${testRemSite}.remoteSite-meta.xml`);
-
-    const parser = new xml2js.Parser({ explicitArray : false});
-    const parseString = util.promisify(parser.parseString);
-    const parsed = await parseString(xml);
+    const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/remoteSiteSettings/${testRemSite}.remoteSite-meta.xml`);
 
     expect(parsed.RemoteSiteSetting).to.be.an('object');
     expect(parsed.RemoteSiteSetting.url).to.equal(url);
@@ -46,25 +44,24 @@ describe('shane:remotesite:create', () => {
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/remoteSiteSettings`)).to.be.true;
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/remoteSiteSettings/${testRemSite}.remoteSite-meta.xml`)).to.be.true;
 
-    const parsed = await getParsedXML(`${testProjectName}/force-app/main/default/remoteSiteSettings/${testRemSite}.remoteSite-meta.xml`);
+    const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/remoteSiteSettings/${testRemSite}.remoteSite-meta.xml`);
 
     expect(parsed.RemoteSiteSetting).to.be.an('object');
     expect(parsed.RemoteSiteSetting.url).to.equal(url);
     expect(parsed.RemoteSiteSetting.description).to.equal(testDescription);
   });
 
+  it('deploys as valid code', async () => {
+    if (process.env.LOCALONLY === 'true') {
+      console.log('skipping online-only test');
+    } else {
+      const deploySuccess = await testutils.itDeploys(testProjectName);
+      expect(deploySuccess).to.be.true;
+    }
+  }).timeout(60000);
+
 });
 
 after( async () => {
   await exec(`rm -rf ${testProjectName}`);
 });
-
-async function getParsedXML(url: string) {
-  const xml = await fs.readFile(url);
-
-  const parser = new xml2js.Parser({ explicitArray: false });
-  const parseString = util.promisify(parser.parseString);
-  const parsed = await parseString(xml);
-
-  return parsed;
-}
