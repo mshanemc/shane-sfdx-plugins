@@ -63,10 +63,7 @@ export default class Set extends SfdxCommand {
 			this.ux.log(chalk.green(`Successfully set the password "${this.flags.password}" for user ${user.Username}.`));
 			this.ux.log(`You can see the password again by running "sfdx force:user:display -u ${user.Username}".`);
 			return {
-				status: 0,
-				result: {
-					password: this.flags.password
-				}
+        password: this.flags.password
 			};
 		}
 		else {
