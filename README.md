@@ -19,7 +19,7 @@ $ npm install -g shane-sfdx-plugins
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-shane-sfdx-plugins/0.9.0 darwin-x64 node-v9.11.1
+shane-sfdx-plugins/0.9.1 darwin-x64 node-v9.11.1
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -63,23 +63,23 @@ OPTIONS
 
 EXAMPLES
   sfdx shane:data:file:upload - f ~/Downloads/King.png
-  		//uploads file from local filesystem as a file
-		
+       //uploads file from local filesystem as a file
+    
 
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF
-  		//uploads file from local filesystem as a file and attaches to a record
-		
+       //uploads file from local filesystem as a file and attaches to a record
+    
 
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -c
-  		//uploads and attaches it to the indicated record, but as a chatter file post
-		
+       //uploads and attaches it to the indicated record, but as a chatter file post
+    
 
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -n CustomName -c
-  		//uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same name as 
-  the local filesystem used
+       //uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same 
+  name as the local filesystem used
 ```
 
-_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/data/file/upload.ts)_
+_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/data/file/upload.ts)_
 
 ## sfdx shane:iot:activation
 
@@ -107,7 +107,7 @@ EXAMPLES
   // deactivates the orchestration, without resetting all the instances
 ```
 
-_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/iot/activation.ts)_
+_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/iot/activation.ts)_
 
 ## sfdx shane:mdapi:package:get
 
@@ -140,7 +140,7 @@ EXAMPLES
   // pulls a package from the org and converts/merges it into /someDir
 ```
 
-_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/mdapi/package/get.ts)_
+_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/mdapi/package/get.ts)_
 
 ## sfdx shane:mdapi:pull
 
@@ -152,9 +152,11 @@ USAGE
 
 OPTIONS
   -c, --code                                      Pull apex, VF, Lightning Components, triggers, static resources
-  -i, --ui                                        Pull page layouts, tabs, list views, compact layouts, apps, tabs, more
+  -i, --ui                                        Pull page layouts, tabs, compact layouts, apps, tabs, more
   -p, --perms                                     Pull profiles, permsets, roles, groups, customPermissions
-  -s, --schema                                    Pull objects, fields, recordtypes, valueSets, custom Metadata
+
+  -s, --schema                                    Pull objects, fields, list views, recordtypes, valueSets, custom
+                                                  Metadata
 
   -t, --target=target                             [default: force-app] where to convert the result to...defaults to
                                                   force-app
@@ -176,21 +178,23 @@ EXAMPLE
   // pulls code kinda stuff from the org and converts/merges it into force-app
 ```
 
-_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/mdapi/pull.ts)_
+_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/mdapi/pull.ts)_
 
 ## sfdx shane:object:create
 
-create an object in local source.  Only __b (big objects) are currently supported
+create an object in local source.  Only __b (big objects) and events __e are currently supported
 
 ```
 USAGE
   $ sfdx shane:object:create
 
 OPTIONS
-  -a, --api=api                                   api name.  Ends with one of the supported types: [__b]
+  -a, --api=api                                   api name.  Ends with one of the supported types: [__b, __e]
 
   -d, --directory=directory                       [default: force-app/main/default] where to create the folder (if it
                                                   doesn't exist already) and file...defaults to force-app/main/default
+
+  -h, --highVolume                                high volume, valid only for platform events (__e)
 
   -l, --label=label                               label for the UI
 
@@ -207,9 +211,17 @@ EXAMPLES
 
   sfdx shane:object:create --label "Platypus" --plural "Platypi" --api Platypus__b --directory /my/project/path
   // label, plural, api name specified so the tool doesn't have to ask you about them.  Creates in a non-default path
+
+
+  sfdx shane:object:create --label "Platypus" --plural "Platypi" --api Platypus__b --directory /my/project/path
+  // label, plural, api name specified so the tool doesn't have to ask you about them.  Creates in a non-default path
+
+
+  sfdx shane:object:create --label "Signal" --plural "Signals" --api Signal__e
+  // create a platform event
 ```
 
-_See code: [src/commands/shane/object/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/object/create.ts)_
+_See code: [src/commands/shane/object/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/object/create.ts)_
 
 ## sfdx shane:object:field
 
@@ -235,15 +247,22 @@ OPTIONS
 
   -s, --scale=scale                               places right of the decimal
 
-  -t, --type=type                                 field type.  Big Objects: Text,Number,DateTime,Lookup,LongTextArea
+  -t, --type=type                                 field type.  Big Objects: Text,Number,DateTime,Lookup,LongTextArea.
+                                                  Events: Text,Number,DateTime,Date,LongTextArea,Checkbox
 
   -u, --unique                                    field must be unique
+
+  --default=default                               required for checkbox fields.  Express in Salesforce formula language
+                                                  (good luck with that!)
+
+  --description=description                       optional description for the field so you remember what it's for next
+                                                  year
 
   --externalId                                    use as an external id
 
   --indexAppend                                   put next in the big object index
 
-  --indexDirection=indexDirection                 sort direction for the big object index (ASC, DESC)
+  --indexDirection=ASC|DESC                       sort direction for the big object index
 
   --indexPosition=indexPosition                   put in a specific position in the big object index (0 is the first
                                                   element).  You're responsible for dealing with producing a sane array
@@ -273,9 +292,13 @@ EXAMPLES
   --indexPosition 1
   // create new text field called My Field (My_Field__c) on BigObject BigTest__b, add it to the existing index as the 
   second field
+
+
+  sfdx shane:object:field --api My_Field__c -l 255 -n "My Field" -t Text -o  EventTest__e
+  // create new text field called My Field (My_Field__c) on Platform Event EventTest__e
 ```
 
-_See code: [src/commands/shane/object/field.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/object/field.ts)_
+_See code: [src/commands/shane/object/field.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/object/field.ts)_
 
 ## sfdx shane:org:create
 
@@ -325,7 +348,7 @@ EXAMPLES
   // above, but with an alias, a longer duration, and not the default hub, and not the default config file
 ```
 
-_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/org/create.ts)_
+_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/org/create.ts)_
 
 ## sfdx shane:org:delete
 
@@ -346,7 +369,7 @@ EXAMPLE
   // deletes the current default scratch org
 ```
 
-_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/org/delete.ts)_
+_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/org/delete.ts)_
 
 ## sfdx shane:package2:version:bump
 
@@ -396,7 +419,7 @@ EXAMPLES
   // bump the minor version up by one and create a new package2version, then set that as released
 ```
 
-_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/package2/version/bump.ts)_
+_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/package2/version/bump.ts)_
 
 ## sfdx shane:permset:create
 
@@ -444,7 +467,7 @@ EXAMPLES
   objects, add that tab to the permset, too
 ```
 
-_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/permset/create.ts)_
+_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/permset/create.ts)_
 
 ## sfdx shane:remotesite:create
 
@@ -478,7 +501,7 @@ EXAMPLES
   // create a remote site setting in myOtherDirectory/main/default with a description
 ```
 
-_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/remotesite/create.ts)_
+_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/remotesite/create.ts)_
 
 ## sfdx shane:static:create
 
@@ -514,7 +537,7 @@ EXAMPLES
   // create an empty folder (zips when pushed), the meta.xml, with a description in a non-default directory.
 ```
 
-_See code: [src/commands/shane/static/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/static/create.ts)_
+_See code: [src/commands/shane/static/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/static/create.ts)_
 
 ## sfdx shane:user:password:set
 
@@ -545,7 +568,7 @@ EXAMPLE
   // sets the password for User User to sfdx1234
 ```
 
-_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/user/password/set.ts)_
+_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/user/password/set.ts)_
 
 ## sfdx shane:user:photo
 
@@ -578,5 +601,5 @@ EXAMPLES
   // sets the chatter banner photo AND user photo at the same time
 ```
 
-_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.0/src/commands/shane/user/photo.ts)_
+_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.9.1/src/commands/shane/user/photo.ts)_
 <!-- commandsstop -->
