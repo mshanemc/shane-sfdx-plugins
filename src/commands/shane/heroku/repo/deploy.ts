@@ -32,7 +32,8 @@ export default class GithubPackageInstall extends SfdxCommand {
     overrides: {char: 'o', description: 'an array of key-value pairs, like SOME_VAR="some Value" (use quotes where string have spaces!)'},
     envUser: {description: 'grab the default scratch org username and set it to this Heroku environment var'},
     envPassword: { description: 'grab the default scratch org password and set it to this Heroku environment var' },
-    team: {char: 't', description: 'assign this new app to an existing heroku team'}
+    team: {char: 't', description: 'assign this new app to an existing heroku team'},
+    days: {char: 'd', description: 'days you want the heroku app to live (does nothing locally)'}
     // branch: flags.string({ char: 'b', description: 'optional branch' })
   };
 
