@@ -23,13 +23,16 @@ export default class GithubPackageInstall extends SfdxCommand {
 `
   ];
 
-  // protected static requiresUsername = true;
+  protected static supportsUsername = true;
 
   protected static flagsConfig = {
     githubUser: flags.string({ required: true, char: 'g', description: 'github username where the app lives' }),
     repo: flags.string({ required: true, char: 'r', description: 'repo where the app lives' }),
-    name: flags.string({ char: 'n', description: 'what do you want to heroku app to be named' }),
-    overrides: {char: 'o', description: 'an array of key-value pairs, like SFDC_USERNAME=someuser@domain.com,SFDC_PASSWORD=5UP3R53CR3T!'}
+    name: flags.string({ char: 'n', description: 'what do you want to Heroku app to be named' }),
+    overrides: {char: 'o', description: 'an array of key-value pairs, like SOME_VAR="some Value" (use quotes where string have spaces!)'},
+    envUser: {description: 'grab the default scratch org username and set it to this Heroku environment var'},
+    envPassword: { description: 'grab the default scratch org password and set it to this Heroku environment var' },
+    team: {char: 't', description: 'assign this new app to an existing heroku team'}
     // branch: flags.string({ char: 'b', description: 'optional branch' })
   };
 
@@ -37,7 +40,22 @@ export default class GithubPackageInstall extends SfdxCommand {
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
 
-    const body = {
+    interface HerokuAppSetup {
+      source_blob: {
+        url: string
+      };
+      app?: {
+        name?: string;
+        organization?: string;
+      };
+      overrides?: {
+        env?: {
+
+        }
+      };
+    }
+
+    const body: HerokuAppSetup = {
       source_blob: {
         url: `https://github.com/${this.flags.githubUser}/${this.flags.repo}/tarball/master/`
       },
@@ -56,17 +74,32 @@ export default class GithubPackageInstall extends SfdxCommand {
       }
     }
 
-    console.log(body);
+    if (this.flags.envUser) {
+      body.overrides.env[this.flags.envUser] = this.org.getUsername();
+    }
+
+    if (this.flags.envPassword) {
+      const displayResult = await exec('sfdx force:org:display --json');
+      const displayResultJSON = JSON.parse(displayResult.stdout);
+      this.ux.logJson(displayResultJSON);
+      body.overrides.env[this.flags.envPassword] = displayResultJSON.result.password;
+    }
+
+    // this.ux.logJson(body);
 
     const headers = {
       Accept: 'application/vnd.heroku+json; version=3',
-      Authorization: `Bearer ${process.env.HEROKU_API_TOKEN}`
+      Authorization: `Bearer ${process.env.HEROKU_API_KEY}`
     };
 
     if (this.flags.name) {
       body.app = {
         name: this.flags.name
       };
+    }
+
+    if (this.flags.name) {
+      body.app.organization = this.flags.team;
     }
 
     const result = await request.post({
@@ -93,10 +126,10 @@ export default class GithubPackageInstall extends SfdxCommand {
       this.ux.log(chalk.red('Error deploying the app'));
       this.ux.logJson(statusResult);
     } else if (status === 'succeeded') {
-      this.ux.log(chalk.green(`App deployed, available at ${statusResult.resolved_success_url}`));
-      this.ux.logJson(statusResult);
-
+      this.ux.log(chalk.green(`App deployed, available at ${statusResult.resolved_success_url}. Delete by running heroku destroy -a ${statusResult.app.name} -c ${statusResult.app.name}`));
+      // this.ux.logJson(statusResult);
     }
+
     return result;
 
   }
