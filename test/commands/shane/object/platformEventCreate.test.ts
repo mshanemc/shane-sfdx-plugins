@@ -7,6 +7,8 @@ import xml2js = require('xml2js');
 
 import child_process = require('child_process');
 
+import testutils = require('../../../helpers/testutils');
+
 const exec = util.promisify(child_process.exec);
 
 const testProjectName = 'testProject';
@@ -30,7 +32,7 @@ describe('shane:object:create (platform event flavor)', () => {
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields`)).to.be.true;
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`)).to.be.true;
 
-    const parsed = await getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
     expect(parsed.CustomObject).to.be.an('object');
     expect(parsed.CustomObject.deploymentStatus).to.equal('Deployed');
@@ -47,7 +49,7 @@ describe('shane:object:create (platform event flavor)', () => {
     await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -n "${fieldLabel}" -t Number  --scale 0 --precision 18`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).to.be.true;
 
-    const parsed = await getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
+    const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
 
     expect(parsed.CustomField).to.be.an('object');
     expect(parsed.CustomField.type).to.equal('Number');
@@ -56,7 +58,7 @@ describe('shane:object:create (platform event flavor)', () => {
     expect(parsed.CustomField.precision).to.equal('18');
     expect(parsed.CustomField.scale).to.equal('0');
 
-    const parsedObj = await getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   }).timeout(60000);
 
@@ -68,7 +70,7 @@ describe('shane:object:create (platform event flavor)', () => {
     await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -l 255 -n "${fieldLabel}" -t Text`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).to.be.true;
 
-    const parsed = await getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
+    const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
 
     expect(parsed.CustomField).to.be.an('object');
     expect(parsed.CustomField.type).to.equal('Text');
@@ -76,7 +78,7 @@ describe('shane:object:create (platform event flavor)', () => {
     expect(parsed.CustomField.fullName).to.equal(fieldAPI);
     expect(parsed.CustomField.length).to.equal('255');
 
-    const parsedObj = await getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   }).timeout(60000);
 
@@ -88,7 +90,7 @@ describe('shane:object:create (platform event flavor)', () => {
     await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -l 255 -n "${fieldLabel}" -t Text --required`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).to.be.true;
 
-    const parsed = await getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
+    const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
 
     expect(parsed.CustomField).to.be.an('object');
     expect(parsed.CustomField.type).to.equal('Text');
@@ -97,7 +99,7 @@ describe('shane:object:create (platform event flavor)', () => {
     expect(parsed.CustomField.length).to.equal('255');
     expect(parsed.CustomField.required).to.equal('true');
 
-    const parsedObj = await getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   }).timeout(60000);
 
@@ -109,7 +111,7 @@ describe('shane:object:create (platform event flavor)', () => {
     await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -n "${fieldLabel}" -t Checkbox --default true`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).to.be.true;
 
-    const parsed = await getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
+    const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
 
     expect(parsed.CustomField).to.be.an('object');
     expect(parsed.CustomField.type).to.equal('Checkbox');
@@ -117,7 +119,7 @@ describe('shane:object:create (platform event flavor)', () => {
     expect(parsed.CustomField.fullName).to.equal(fieldAPI);
     expect(parsed.CustomField.defaultValue).to.equal('true');
 
-    const parsedObj = await getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   }).timeout(60000);
 
@@ -129,7 +131,7 @@ describe('shane:object:create (platform event flavor)', () => {
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/permissionsets/${permSetName}.permissionset-meta.xml`)).to.be.true;
 
     // parse the permset
-    const parsed = await getParsedXML(`${testProjectName}/force-app/main/default/permissionsets/${permSetName}.permissionset-meta.xml`);
+    const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/permissionsets/${permSetName}.permissionset-meta.xml`);
 
     // verify object
     expect(parsed.PermissionSet).to.be.an('object');
@@ -149,20 +151,13 @@ describe('shane:object:create (platform event flavor)', () => {
 
   }).timeout(60000);
 
-  it('all this actually deploys as valid code!', async () => {
-    // create org
-    await exec('sfdx force:org:create -f config/project-scratch-def.json -s -a PluginMochaTesting', { cwd: testProjectName });
-
-    // push source
-    const pushResult = await exec('sfdx force:source:push --json', { cwd: testProjectName });
-
-    expect(pushResult.stderr).to.equal('');
-    const result = JSON.parse(pushResult.stdout);
-
-    expect(result.status).to.equal(0);
-    // destroy org
-    await exec('sfdx shane:org:delete', { cwd: testProjectName });
-
+  it('deploys as valid code', async () => {
+    if (process.env.LOCALONLY === 'true') {
+      console.log('skipping online-only test');
+    } else {
+      const deploySuccess = await testutils.itDeploys(testProjectName);
+      expect(deploySuccess).to.be.true;
+    }
   }).timeout(60000);
 
 });
@@ -170,13 +165,3 @@ describe('shane:object:create (platform event flavor)', () => {
 after(async () => {
   await exec(`rm -rf ${testProjectName}`);
 });
-
-async function getParsedXML(url: string) {
-  const xml = await fs.readFile(url);
-
-  const parser = new xml2js.Parser({ explicitArray: false });
-  const parseString = util.promisify(parser.parseString);
-  const parsed = await parseString(xml);
-
-  return parsed;
-}
