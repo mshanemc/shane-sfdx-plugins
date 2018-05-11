@@ -82,7 +82,7 @@ export default class GithubPackageInstall extends SfdxCommand {
     if (this.flags.envPassword) {
       const displayResult = await exec('sfdx force:org:display --json');
       const displayResultJSON = JSON.parse(displayResult.stdout);
-      this.ux.logJson(displayResultJSON);
+      // this.ux.logJson(displayResultJSON);
       body.overrides.env[this.flags.envPassword] = displayResultJSON.result.password;
     }
 
