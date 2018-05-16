@@ -91,9 +91,10 @@ export default class Delete extends SfdxCommand {
       } else {
         this.ux.log(chalk.red(response.stderr));
       }
+      return success;
+    } else {
+      return JSON.parse(response.stdout);
     }
-
-    return response.stderr || response.stdout;
 
   }
 }
