@@ -20,16 +20,16 @@ export default class TSPUsernameUpdate extends SfdxCommand {
 `sfdx shane:tsp:username:update -n newusername@example.com
 // updates the username for executionUser and all notifications in all transaction security policies
 `,
-`sfdx shane:permset:create
+`sfdx shane:tsp:username:create
 // updates the username for executionUser and all notifications in all transaction security policies to the default org's username
 `,
-`sfdx shane:permset:create -u someAlias
+`sfdx shane:tsp:username:create -u someAlias
 // updates the username for executionUser and all notifications in all transaction security policies to the specified target org's username
 `
   ];
 
   protected static flagsConfig = {
-    newusername: { char: 'n', description: 'manually specify the username to use', type: 'email'},
+    newusername: { char: 'n', description: 'manually specify the username, ignoring your default or any -u', type: 'email'},
     directory: { char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default', type: 'string'}
   };
 
