@@ -19,7 +19,7 @@ $ npm install -g shane-sfdx-plugins
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-shane-sfdx-plugins/0.12.0 darwin-x64 node-v9.11.1
+shane-sfdx-plugins/0.12.1 darwin-x64 node-v9.11.1
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -83,7 +83,7 @@ EXAMPLES
   name as the local filesystem used
 ```
 
-_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/data/file/upload.ts)_
+_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/data/file/upload.ts)_
 
 ## sfdx shane:github:package:install
 
@@ -106,7 +106,7 @@ EXAMPLE
   // pulls SubscriberPackageVersionId from https://github.com/someUser/someRepo/latestVersion.json
 ```
 
-_See code: [src/commands/shane/github/package/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/github/package/install.ts)_
+_See code: [src/commands/shane/github/package/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/github/package/install.ts)_
 
 ## sfdx shane:github:src:install
 
@@ -134,7 +134,7 @@ EXAMPLES
   // pulls mdapi-formatted code from https://github.com/someUser/someRepo/my/folder/tree and deploys to the org
 ```
 
-_See code: [src/commands/shane/github/src/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/github/src/install.ts)_
+_See code: [src/commands/shane/github/src/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/github/src/install.ts)_
 
 ## sfdx shane:heroku:repo:deploy
 
@@ -175,7 +175,7 @@ EXAMPLE
   // deploys code from https://github.com/someUser/someRepo that has a valid app.json
 ```
 
-_See code: [src/commands/shane/heroku/repo/deploy.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/heroku/repo/deploy.ts)_
+_See code: [src/commands/shane/heroku/repo/deploy.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/heroku/repo/deploy.ts)_
 
 ## sfdx shane:iot:activation
 
@@ -203,7 +203,7 @@ EXAMPLES
   // deactivates the orchestration, without resetting all the instances
 ```
 
-_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/iot/activation.ts)_
+_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/iot/activation.ts)_
 
 ## sfdx shane:mdapi:package:get
 
@@ -236,7 +236,7 @@ EXAMPLES
   // pulls a package from the org and converts/merges it into /someDir
 ```
 
-_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/mdapi/package/get.ts)_
+_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/mdapi/package/get.ts)_
 
 ## sfdx shane:mdapi:pull
 
@@ -274,7 +274,7 @@ EXAMPLE
   // pulls code kinda stuff from the org and converts/merges it into force-app
 ```
 
-_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/mdapi/pull.ts)_
+_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/mdapi/pull.ts)_
 
 ## sfdx shane:object:create
 
@@ -317,7 +317,7 @@ EXAMPLES
   // create a platform event
 ```
 
-_See code: [src/commands/shane/object/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/object/create.ts)_
+_See code: [src/commands/shane/object/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/object/create.ts)_
 
 ## sfdx shane:object:field
 
@@ -394,7 +394,7 @@ EXAMPLES
   // create new text field called My Field (My_Field__c) on Platform Event EventTest__e
 ```
 
-_See code: [src/commands/shane/object/field.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/object/field.ts)_
+_See code: [src/commands/shane/object/field.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/object/field.ts)_
 
 ## sfdx shane:org:create
 
@@ -444,7 +444,7 @@ EXAMPLES
   // above, but with an alias, a longer duration, and not the default hub, and not the default config file
 ```
 
-_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/org/create.ts)_
+_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/org/create.ts)_
 
 ## sfdx shane:org:delete
 
@@ -465,7 +465,7 @@ EXAMPLE
   // deletes the current default scratch org
 ```
 
-_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/org/delete.ts)_
+_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/org/delete.ts)_
 
 ## sfdx shane:package2:version:bump
 
@@ -515,7 +515,7 @@ EXAMPLES
   // bump the minor version up by one and create a new package2version, then set that as released
 ```
 
-_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/package2/version/bump.ts)_
+_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/package2/version/bump.ts)_
 
 ## sfdx shane:permset:create
 
@@ -563,7 +563,7 @@ EXAMPLES
   objects, add that tab to the permset, too
 ```
 
-_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/permset/create.ts)_
+_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/permset/create.ts)_
 
 ## sfdx shane:remotesite:create
 
@@ -597,7 +597,7 @@ EXAMPLES
   // create a remote site setting in myOtherDirectory/main/default with a description
 ```
 
-_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/remotesite/create.ts)_
+_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/remotesite/create.ts)_
 
 ## sfdx shane:static:create
 
@@ -633,7 +633,7 @@ EXAMPLES
   // create an empty folder (zips when pushed), the meta.xml, with a description in a non-default directory.
 ```
 
-_See code: [src/commands/shane/static/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/static/create.ts)_
+_See code: [src/commands/shane/static/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/static/create.ts)_
 
 ## sfdx shane:tsp:username:update
 
@@ -647,7 +647,7 @@ OPTIONS
   -d, --directory=directory                       [default: force-app/main/default] Where is all this metadata? defaults
                                                   to force-app/main/default
 
-  -n, --newusername=newusername                   manually specify the username to use
+  -n, --newusername=newusername                   manually specify the username, ignoring your default or any -u
 
   -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
 
@@ -662,17 +662,17 @@ EXAMPLES
   // updates the username for executionUser and all notifications in all transaction security policies
 
 
-  sfdx shane:permset:create
+  sfdx shane:tsp:username:create
   // updates the username for executionUser and all notifications in all transaction security policies to the default 
   org's username
 
 
-  sfdx shane:permset:create -u someAlias
+  sfdx shane:tsp:username:create -u someAlias
   // updates the username for executionUser and all notifications in all transaction security policies to the specified 
   target org's username
 ```
 
-_See code: [src/commands/shane/tsp/username/update.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/tsp/username/update.ts)_
+_See code: [src/commands/shane/tsp/username/update.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/tsp/username/update.ts)_
 
 ## sfdx shane:user:password:set
 
@@ -703,7 +703,7 @@ EXAMPLE
   // sets the password for User User to sfdx1234
 ```
 
-_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/user/password/set.ts)_
+_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/user/password/set.ts)_
 
 ## sfdx shane:user:photo
 
@@ -736,5 +736,5 @@ EXAMPLES
   // sets the chatter banner photo AND user photo at the same time
 ```
 
-_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.0/src/commands/shane/user/photo.ts)_
+_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.12.1/src/commands/shane/user/photo.ts)_
 <!-- commandsstop -->
