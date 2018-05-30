@@ -5,7 +5,7 @@ import util = require('util');
 import request = require('request-promise-native');
 
 const exec = util.promisify(require('child_process').exec);
-const chalk = require('chalk');
+import chalk from 'chalk';
 
 const usernameURL = 'https://unique-username-generator.herokuapp.com/unique';
 

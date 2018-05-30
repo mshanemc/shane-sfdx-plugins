@@ -8,7 +8,8 @@ import xml2js = require('xml2js');
 import util = require('util');
 import { existsSync } from 'fs-extra';
 
-const options = require('../../../shared/js2xmlStandardOptions');
+import { getExisting } from '../../../shared/getExisting';
+import * as options from '../../../shared/js2xmlStandardOptions';
 
 import chalk from 'chalk';
 
@@ -58,7 +59,13 @@ export default class PermSetCreate extends SfdxCommand {
       return;
     }
 
-    let existing = await this.getExisting(targetFilename, this.flags.name);
+    let existing = await getExisting(targetFilename, 'PermissionSet', {
+      '@': {
+        xmlns: 'http://soap.sforce.com/2006/04/metadata'
+      },
+      'hasActivationRequired': 'false',
+      'label': this.flags.name
+    });
 
     let objectList = [];
 
@@ -102,31 +109,31 @@ export default class PermSetCreate extends SfdxCommand {
     fs.ensureDirSync(`${this.flags.directory}/permissionsets`);
 
     // conver to xml and write out the file
-    const xml = jsToXml.parse('PermissionSet', existing, options);
+    const xml = jsToXml.parse('PermissionSet', existing, options.js2xmlStandardOptions);
     fs.writeFileSync(targetFilename, xml);
 
     this.ux.log(chalk.green(`Permissions added in ${targetFilename}`));
     return existing; // for someone who wants the JSON?
   }
 
-  public async getExisting(targetFilename: string, name: string) {
-    // get or create permset
-    if (fs.existsSync(targetFilename)) {
-      const parser = new xml2js.Parser({ explicitArray: false });
-      const parseString = util.promisify(parser.parseString);
-      const existing = await parseString(fs.readFileSync(targetFilename));
-      return existing.PermissionSet;
-    } else {
-      const existing = {
-        '@': {
-          xmlns: 'http://soap.sforce.com/2006/04/metadata'
-        },
-        'hasActivationRequired': 'false',
-        'label': name
-      };
-      return existing;
-    }
-  }
+  // public async getExisting(targetFilename: string, name: string, ) {
+  //   // get or create permset
+  //   if (fs.existsSync(targetFilename)) {
+  //     const parser = new xml2js.Parser({ explicitArray: false });
+  //     const parseString = util.promisify(parser.parseString);
+  //     const existing = await parseString(fs.readFileSync(targetFilename));
+  //     return existing.PermissionSet;
+  //   } else {
+  //     const existing = {
+  //       '@': {
+  //         xmlns: 'http://soap.sforce.com/2006/04/metadata'
+  //       },
+  //       'hasActivationRequired': 'false',
+  //       'label': name
+  //     };
+  //     return existing;
+  //   }
+  // }
 
   public addObjectPerms(existing, objectName: string) { // tslint:disable-line:no-any
     // make sure it the parent level objectPermissions[] exists

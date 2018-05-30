@@ -6,6 +6,7 @@ import jsToXml = require('js2xmlparser');
 import cli from 'cli-ux';
 
 import chalk from 'chalk';
+import * as options from '../../../shared/js2xmlStandardOptions';
 
 export default class StaticCreate extends SfdxCommand {
 
@@ -92,18 +93,7 @@ export default class StaticCreate extends SfdxCommand {
       'fullName': this.flags.name
     };
 
-    const options = {
-      declaration: {
-        include: true,
-        encoding: 'UTF-8',
-        version: '1.0'
-      },
-      format: {
-        doubleQuotes: true
-      }
-    };
-
-    const xml = jsToXml.parse('StaticResource', metaJSON, options);
+    const xml = jsToXml.parse('StaticResource', metaJSON, options.js2xmlStandardOptions);
 
     fs.writeFileSync(metaPath, xml);
 

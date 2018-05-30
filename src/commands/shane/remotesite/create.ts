@@ -5,7 +5,7 @@ import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 import cli from 'cli-ux';
 
-const options = require('../../../shared/js2xmlStandardOptions');
+import * as options from '../../../shared/js2xmlStandardOptions';
 
 import chalk from 'chalk';
 
@@ -55,7 +55,7 @@ export default class RemoteSite extends SfdxCommand {
       'description': this.flags.description
     };
 
-    const xml = jsToXml.parse('RemoteSiteSetting', settingJSON, options);
+    const xml = jsToXml.parse('RemoteSiteSetting', settingJSON, options.js2xmlStandardOptions);
 
     fs.writeFileSync(`${this.flags.target}/remoteSiteSettings/${this.flags.name}.remoteSite-meta.xml`, xml);
 

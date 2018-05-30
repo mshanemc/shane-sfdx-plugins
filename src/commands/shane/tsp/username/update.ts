@@ -8,7 +8,8 @@ import xml2js = require('xml2js');
 import util = require('util');
 import { existsSync } from 'fs-extra';
 
-const options = require('../../../../shared/js2xmlStandardOptions');
+import { getExisting } from '../../../../shared/getExisting';
+import * as options from '../../../../shared/js2xmlStandardOptions';
 
 import chalk from 'chalk';
 
@@ -54,7 +55,7 @@ export default class TSPUsernameUpdate extends SfdxCommand {
     // loop through the TSPs
     for (const tsp of tsps) {
 
-      const existing = await this.getExisting(`${targetFolder}/${tsp}`);
+      const existing = await getExisting(`${targetFolder}/${tsp}`, 'TransactionSecurityPolicy');
 
       existing.executionUser = finalUsername;
 
@@ -74,7 +75,7 @@ export default class TSPUsernameUpdate extends SfdxCommand {
       }
 
       // convert to xml and write out the file
-      const xml = jsToXml.parse('TransactionSecurityPolicy', existing, options);
+      const xml = jsToXml.parse('TransactionSecurityPolicy', existing, options.js2xmlStandardOptions);
       fs.writeFileSync(`${targetFolder}/${tsp}`, xml);
 
       this.ux.log(chalk.green(`Updated ${tsp}`));
@@ -83,18 +84,6 @@ export default class TSPUsernameUpdate extends SfdxCommand {
 
     return output;
 
-  }
-
-  public async getExisting(targetFilename: string) {
-    // get or create permset
-    if (fs.existsSync(targetFilename)) {
-      const parser = new xml2js.Parser({ explicitArray: false });
-      const parseString = util.promisify(parser.parseString);
-      const existing = await parseString(fs.readFileSync(targetFilename));
-      return existing.TransactionSecurityPolicy;
-    } else {
-      throw new Error(`Not found: ${targetFilename}`);
-    }
   }
 
 }

@@ -6,7 +6,7 @@ import jsToXml = require('js2xmlparser');
 
 import cli from 'cli-ux';
 
-const options = require('../../../shared/js2xmlStandardOptions');
+import * as options from '../../../shared/js2xmlStandardOptions';
 
 import chalk from 'chalk';
 
@@ -109,7 +109,7 @@ export default class ObjectCreate extends SfdxCommand {
 
     fs.ensureDirSync(`${objectsPath}/${this.flags.api}/fields`);
 
-    const xml = jsToXml.parse('CustomObject', outputJSON, options);
+    const xml = jsToXml.parse('CustomObject', outputJSON, options.js2xmlStandardOptions);
 
     fs.writeFileSync(metaFileLocation, xml);
 

@@ -7,7 +7,8 @@ import jsToXml = require('js2xmlparser');
 import util = require('util');
 import xml2js = require('xml2js');
 
-const options = require('../../../shared/js2xmlStandardOptions');
+import * as options from '../../../shared/js2xmlStandardOptions';
+// import { getExisting } from '../../../shared/getExisting';
 
 import chalk from 'chalk';
 const	SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
@@ -173,13 +174,13 @@ export default class FieldCreate extends SfdxCommand {
 
     // dealing with big object indexes
     if (this.flags.object.includes('__b') && !this.flags.noIndex) {
+
       const parser = new xml2js.Parser({ explicitArray: true });
       const parseString = util.promisify(parser.parseString);
       const filePath = `${this.flags.directory}/objects/${this.flags.object}/${this.flags.object}.object-meta.xml`;
       const fileRead = await parseString(fs.readFileSync(filePath));
 
       const existing = fileRead.CustomObject;
-
       // this.ux.log(existing.indexes[0].fields);
 
       existing.indexes[0].fields = existing.indexes[0].fields || [];
@@ -233,7 +234,7 @@ export default class FieldCreate extends SfdxCommand {
       const position = this.flags.indexPosition || existing.indexes[0].fields.length - 1;
 
       // conver to xml and write out the file
-      const objXml = jsToXml.parse('CustomObject', existing, options);
+      const objXml = jsToXml.parse('CustomObject', existing, options.js2xmlStandardOptions);
       fs.writeFileSync(filePath, objXml);
 
       this.ux.log(chalk.green(`Index for ${this.flags.api} added as [${position}] of ${existing.indexes[0].fields.length}`));
@@ -241,7 +242,7 @@ export default class FieldCreate extends SfdxCommand {
     }
 
     // write out the field xml
-    const xml = jsToXml.parse('CustomField', outputJSON, options);
+    const xml = jsToXml.parse('CustomField', outputJSON, options.js2xmlStandardOptions);
 
     fs.writeFileSync(fieldMetaPath, xml);
 
