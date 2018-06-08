@@ -59,10 +59,13 @@
         "description": "set a users password or their chatter profile/banner photo"
       },
       "shane:mdapi": {
-        "description": "pull unpackaged or packaged source from an org"
+        "description": "pull unpackaged or packaged source from an org, or push dx-formatted source to an org"
       },
       "shane:object": {
-        "description": "create objects locally or add fields to them"
+        "description": "create objects locally or add fields or retention policies to them"
+      },
+      "shane:github": {
+        "description": "install a package that's on github, using either the source OR a packaged version"
       }
     },
     "bin": "sfdx",
