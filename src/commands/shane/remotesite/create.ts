@@ -1,9 +1,7 @@
 import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
-import cli from 'cli-ux';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
 

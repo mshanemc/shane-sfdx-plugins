@@ -1,5 +1,4 @@
 import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import util = require('util');
@@ -35,6 +34,7 @@ export default class Pull extends SfdxCommand {
     perms: flags.boolean({ char: 'p', description: 'Pull profiles, permsets, roles, groups, customPermissions' }),
     schema: flags.boolean({ char: 's', description: 'Pull objects, fields, list views, recordtypes, valueSets, custom Metadata' }),
     ui: flags.boolean({ char: 'i', description: 'Pull page layouts, tabs, compact layouts, apps, tabs, more' }),
+    object: flags.string({ char: 'o', description: 'pull metadata for a single object'}),
     // TODO: automation, security, reporting, i18n
     all: flags.boolean({description: 'Pulls just about everything.  Don\'t use this flag with any other subset of metadata.  Not recommended for really large metatadat orgs because it\'ll overflow stdout' }),
     target: flags.string({ char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' })
@@ -47,11 +47,29 @@ export default class Pull extends SfdxCommand {
     fs.ensureDirSync(this.flags.target);
     fs.ensureDirSync(pkgDir);
 
+    // validations
+    if (this.flags.schema && this.flags.object) {
+      this.ux.error('you can\'t choose a single object AND schema');
+    }
+
     if (this.flags.all) {
       fs.writeFileSync(`./${pkgDir}/package.xml`, all.xml);
       await this.pullUnzipConvert('all');
     } else {
       // it's individual subsets of metadata
+      if (this.flags.object) {
+        const singleObject = `<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+	<types>
+		<members>${this.flags.object}</members>
+		<name>CustomObject</name>
+	</types>
+	<version>41.0</version>
+</Package>`;
+
+        fs.writeFileSync(`./${pkgDir}/package.xml`, singleObject);
+        await this.pullUnzipConvert(this.flags.object);
+      }
 
       if (this.flags.code) {
         fs.writeFileSync(`./${pkgDir}/package.xml`, code.xml);
