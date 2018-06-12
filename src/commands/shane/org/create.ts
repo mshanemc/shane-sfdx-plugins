@@ -29,7 +29,7 @@ export default class Delete extends SfdxCommand {
     definitionfile: flags.string({ char: 'f', default: 'config/project-scratch-def.json', description: 'path to a scratch org definition file.  Default = config/project-scratch-def.json' }),
     setalias: flags.string({ char: 'a', description: 'set an alias for for the created scratch org' }),
     durationdays: flags.string({ char: 'd', default: '7', description: 'duration of the scratch org (in days) (default:7, min:1, max:30)' }),
-    wait: flags.string({description: 'the streaming client socket timeout (in minutes) (default:6, min:2)' }),
+    wait: flags.string({description: 'the streaming client socket timeout (in minutes) (default:20, min:2)' }),
     noancestors: flags.boolean({ char: 'c', description: 'do not include second-generation package ancestors in the scratch org' }),
     nonamespace: flags.boolean({ char: 'n', description: 'creates the scratch org with no namespace' }),
     setdefaultusername: flags.boolean({ char: 's', description: 'set the created org as the default username' }),
