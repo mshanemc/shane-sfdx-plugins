@@ -1,7 +1,5 @@
 import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
-import fs = require('fs-extra');
 import util = require('util');
 import request = require('request-promise-native');
 import child_process = require('child_process');
@@ -30,7 +28,10 @@ export default class GithubPackageInstall extends SfdxCommand {
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
     // get the SubscriberPackageVersionId from github
-    const url = `https://github.com/${this.flags.githubUser}/${this.flags.repo}/latestVersion.json`;
+    const url = `https://raw.githubusercontent.com/${this.flags.githubUser}/${this.flags.repo}/master/latestVersion.json`;
+
+    this.ux.log(`file at ${url} says:`);
+
     // if (this.flags.branch) {
     //   this.ux.error(chalk.red('branch handling is not implemented yet'));
     //   return false;
@@ -41,9 +42,11 @@ export default class GithubPackageInstall extends SfdxCommand {
       json: true
     });
 
+    this.ux.logJson(result);
+
     // install in the org
-    const installResult = await exec(`sfdx force:package:install -i ${result.SubscriberPackageVersionId} -r -u ${this.org.getUsername()} -w 20 -p 20 --json`);
-    console.log(installResult);
+    const installResult = await exec(`sfdx force:package:install --package ${result.SubscriberPackageVersionId} -r -u ${this.org.getUsername()} -w 20 -p 20 --json`);
+    this.ux.logJson(JSON.parse(installResult.stdout));
     return installResult;
   }
 
