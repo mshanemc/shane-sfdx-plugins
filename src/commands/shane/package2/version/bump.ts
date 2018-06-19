@@ -99,7 +99,7 @@ export default class Bump extends SfdxCommand {
       try {
         cli.action.start('Creating package version (this\'ll take a while)');
         // createResult = <CreateResultI>await exec(`sfdx force:package2:version:create -d ${this.flags.target} -w 20 -v ${this.hubOrg.getUsername()} --json`);
-        const createResult = <CreateResultI> await exec(`sfdx force:package2:version:create -d ${this.flags.target} -w 20 -v ${this.hubOrg.getUsername()} --json`);
+        const createResult = <CreateResultI> await exec(`sfdx force:package:version:create -x -d ${this.flags.target} -w 20 -v ${this.hubOrg.getUsername()} --json`);
         cli.action.stop();
         // this.ux.logJson(JSON.parse(createResult.stdout));
         const actualResult = JSON.parse(createResult.stdout).result;
@@ -110,8 +110,8 @@ export default class Bump extends SfdxCommand {
 
         // now, are we publishing
         if (this.flags.release) {
-            cli.action.start(`Releasing: sfdx force:package2:version:update -s -p -i ${actualResult.Package2VersionId} -v ${this.hubOrg.getUsername()} --json`);
-            const updateResult = await exec(`sfdx force:package2:version:update -s -p -i ${actualResult.Package2VersionId} -v ${this.hubOrg.getUsername()} --json`);
+            cli.action.start(`Releasing: sfdx force:package:version:promote -n -p ${actualResult.Package2VersionId} -v ${this.hubOrg.getUsername()} --json`);
+            const updateResult = await exec(`sfdx force:package:version:promote -n -p ${actualResult.Package2VersionId} -v ${this.hubOrg.getUsername()} --json`);
             cli.action.stop();
             this.ux.log(chalk.green(`Version released. May take several minutes to become available to destination org.  Install with sfdx force:package:install -r -p 20 -w 20 -i ${actualResult.SubscriberPackageVersionId} -u destinationOrgAlias`));
         } else {
