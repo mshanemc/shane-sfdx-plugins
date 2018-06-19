@@ -61,8 +61,15 @@ export default class Bump extends SfdxCommand {
     const project = JSON.parse(fs.readFileSync(projectFile.getPath(), 'UTF-8'));
 
     const targetDirIndex = project.packageDirectories.findIndex((i) => {
-      return i.path = this.flags.target;
+      return i.path === this.flags.target;
     });
+
+    this.ux.log(`targetDirIndex is ${targetDirIndex}`);
+
+    if ((targetDirIndex < 0 )) {
+      this.ux.error(`found nothing in packageDirectories matching path ${this.flags.path}`);
+    }
+
     const versionNumber = project.packageDirectories[targetDirIndex].versionNumber.split('.');
 
     if (this.flags.major) {
