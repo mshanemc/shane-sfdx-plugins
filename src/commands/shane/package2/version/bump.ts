@@ -64,8 +64,6 @@ export default class Bump extends SfdxCommand {
       return i.path === this.flags.target;
     });
 
-    this.ux.log(`targetDirIndex is ${targetDirIndex}`);
-
     if ((targetDirIndex < 0 )) {
       this.ux.error(`found nothing in packageDirectories matching path ${this.flags.path}`);
     }
