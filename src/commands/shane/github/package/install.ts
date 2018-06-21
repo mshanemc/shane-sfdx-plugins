@@ -27,25 +27,41 @@ export default class GithubPackageInstall extends SfdxCommand {
   protected static requiresProject = true;
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
-    // get the SubscriberPackageVersionId from github
-    const url = `https://raw.githubusercontent.com/${this.flags.githubUser}/${this.flags.repo}/master/latestVersion.json`;
 
-    this.ux.log(`file at ${url} says:`);
+    let packageVersionId;
 
-    // if (this.flags.branch) {
-    //   this.ux.error(chalk.red('branch handling is not implemented yet'));
-    //   return false;
-    // }
-
-    const result = await request.get({
+    // first, look in the sfdx-project.json file, using the packaging output from v43
+    let url = `https://raw.githubusercontent.com/${this.flags.githubUser}/${this.flags.repo}/master/sfdx-project.json`;
+    const primaryResult = await request.get({
       url,
       json: true
     });
 
-    this.ux.logJson(result);
+    this.ux.log(`file at ${url} says:`);
 
+    if (primaryResult.packageAliases) {
+      // grab the last package version unless a version is specified
+      const packages = Object.values(primaryResult.packageAliases);
+      this.ux.log(`packages are ${packages}`);
+      packageVersionId = packages[packages.length - 1 ];
+      this.ux.log(`found packageVersionId ${packageVersionId} in the sfdx-project.json file`);
+    } else {
+      // try the fallback option
+      // get the SubscriberPackageVersionId from github using Shane's original format
+      url = `https://raw.githubusercontent.com/${this.flags.githubUser}/${this.flags.repo}/master/latestVersion.json`;
+
+      this.ux.log(`file at ${url} says:`);
+
+      const result = await request.get({
+        url,
+        json: true
+      });
+
+      this.ux.logJson(result);
+      packageVersionId = result.SubscriberPackageVersionId;
     // install in the org
-    const installResult = await exec(`sfdx force:package:install --package ${result.SubscriberPackageVersionId} -r -u ${this.org.getUsername()} -w 20 -p 20 --json`);
+    }
+    const installResult = await exec(`sfdx force:package:install --package ${packageVersionId} -r -u ${this.org.getUsername()} -w 20 -p 20 --json`);
     this.ux.logJson(JSON.parse(installResult.stdout));
     return installResult;
   }
