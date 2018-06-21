@@ -8,11 +8,11 @@ const exec = util.promisify(child_process.exec);
 
 export default class GithubPackageInstall extends SfdxCommand {
 
-  public static description = 'installs a package from github using the latestVersion.json file convention';
+  public static description = 'installs a package from github using the sfdx-project.json file (v43+) OR the latestVersion.json file convention';
 
   public static examples = [
 `sfdx shane:github:package:install -g someUser -r someRepo -u someOrg
-// pulls SubscriberPackageVersionId from https://github.com/someUser/someRepo/latestVersion.json
+// installs packageVersion (04t) from https://github.com/someUser/someRepo/sfdx-project.json or https://github.com/someUser/someRepo/latestVersion.json
 `
   ];
 
