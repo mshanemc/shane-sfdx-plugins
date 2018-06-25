@@ -23,7 +23,7 @@ export default class StaticCreate extends SfdxCommand {
 
   protected static flagsConfig = {
     name: flags.string({ char: 'n', required: true, description: 'name it (Salesforce API compliant name)' }),
-    type: flags.string({ char: 'y', required: true, description: 'choose one of the following: zip, css, js, text, xml' }),
+    type: flags.string({ char: 'y', required: true, description: 'choose one of the following: zip, css, js, text, xml', options: ['zip', 'css', 'js', 'text', 'xml'] }),
     description: flags.string({ char: 'd', default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' }),
     target: flags.string({ char: 't', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' }),
     public: { type: 'boolean', char: 'p', default: false, description: 'mark the cache control public'	}
