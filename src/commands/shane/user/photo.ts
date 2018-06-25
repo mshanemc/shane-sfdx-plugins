@@ -1,14 +1,11 @@
 import { flags } from '@oclif/command';
 import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
-import fs = require('fs-extra');
 import request = require('request-promise-native');
 import localFile2CV = require('../../../shared/localFile2CV');
 import userIdLookup = require('../../../shared/userIdLookup');
 
-const chalk = require('chalk');
-
-// import jsf = require('jsforce');
+import chalk from 'chalk';
 
 core.Messages.importMessagesDirectory(join(__dirname, '..', '..', '..'));
 // const messages = core.Messages.loadMessages('shane-sfdx-plugins', 'org');
