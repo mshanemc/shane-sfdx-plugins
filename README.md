@@ -28,28 +28,28 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [sfdx shane:data:file:upload](#sfdx-shanedatafileupload)
-* [sfdx shane:github:package:install](#sfdx-shanegithubpackageinstall)
-* [sfdx shane:github:src:install](#sfdx-shanegithubsrcinstall)
-* [sfdx shane:heroku:repo:deploy](#sfdx-shaneherokurepodeploy)
-* [sfdx shane:iot:activation](#sfdx-shaneiotactivation)
-* [sfdx shane:mdapi:package:get](#sfdx-shanemdapipackageget)
-* [sfdx shane:mdapi:pull](#sfdx-shanemdapipull)
-* [sfdx shane:mdapi:push](#sfdx-shanemdapipush)
-* [sfdx shane:object:create](#sfdx-shaneobjectcreate)
-* [sfdx shane:object:fat](#sfdx-shaneobjectfat)
-* [sfdx shane:object:field](#sfdx-shaneobjectfield)
-* [sfdx shane:org:create](#sfdx-shaneorgcreate)
-* [sfdx shane:org:delete](#sfdx-shaneorgdelete)
-* [sfdx shane:package2:version:bump](#sfdx-shanepackage-2-versionbump)
-* [sfdx shane:permset:create](#sfdx-shanepermsetcreate)
-* [sfdx shane:remotesite:create](#sfdx-shaneremotesitecreate)
-* [sfdx shane:static:create](#sfdx-shanestaticcreate)
-* [sfdx shane:tsp:username:update](#sfdx-shanetspusernameupdate)
-* [sfdx shane:user:password:set](#sfdx-shaneuserpasswordset)
-* [sfdx shane:user:photo](#sfdx-shaneuserphoto)
+* [`sfdx shane:data:file:upload`](#sfdx-shanedatafileupload)
+* [`sfdx shane:github:package:install`](#sfdx-shanegithubpackageinstall)
+* [`sfdx shane:github:src:install`](#sfdx-shanegithubsrcinstall)
+* [`sfdx shane:heroku:repo:deploy`](#sfdx-shaneherokurepodeploy)
+* [`sfdx shane:iot:activation`](#sfdx-shaneiotactivation)
+* [`sfdx shane:mdapi:package:get`](#sfdx-shanemdapipackageget)
+* [`sfdx shane:mdapi:pull`](#sfdx-shanemdapipull)
+* [`sfdx shane:mdapi:push`](#sfdx-shanemdapipush)
+* [`sfdx shane:object:create`](#sfdx-shaneobjectcreate)
+* [`sfdx shane:object:fat`](#sfdx-shaneobjectfat)
+* [`sfdx shane:object:field`](#sfdx-shaneobjectfield)
+* [`sfdx shane:org:create`](#sfdx-shaneorgcreate)
+* [`sfdx shane:org:delete`](#sfdx-shaneorgdelete)
+* [`sfdx shane:package2:version:bump`](#sfdx-shanepackage-2-versionbump)
+* [`sfdx shane:permset:create`](#sfdx-shanepermsetcreate)
+* [`sfdx shane:remotesite:create`](#sfdx-shaneremotesitecreate)
+* [`sfdx shane:static:create`](#sfdx-shanestaticcreate)
+* [`sfdx shane:tsp:username:update`](#sfdx-shanetspusernameupdate)
+* [`sfdx shane:user:password:set`](#sfdx-shaneuserpasswordset)
+* [`sfdx shane:user:photo`](#sfdx-shaneuserphoto)
 
-## sfdx shane:data:file:upload
+## `sfdx shane:data:file:upload`
 
 upload a file from local resources, optionally as a chatter post or attached file on a record
 
@@ -71,15 +71,12 @@ EXAMPLES
   sfdx shane:data:file:upload - f ~/Downloads/King.png
        //uploads file from local filesystem as a file
     
-
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF
        //uploads file from local filesystem as a file and attaches to a record
     
-
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -c
        //uploads and attaches it to the indicated record, but as a chatter file post
     
-
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -n CustomName -c
        //uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same 
   name as the local filesystem used
@@ -87,7 +84,7 @@ EXAMPLES
 
 _See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/data/file/upload.ts)_
 
-## sfdx shane:github:package:install
+## `sfdx shane:github:package:install`
 
 installs a package from github using the sfdx-project.json file (v43+) OR the latestVersion.json file convention
 
@@ -111,7 +108,7 @@ EXAMPLE
 
 _See code: [src/commands/shane/github/package/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/github/package/install.ts)_
 
-## sfdx shane:github:src:install
+## `sfdx shane:github:src:install`
 
 installs a package from github from mdapi src
 
@@ -133,14 +130,13 @@ EXAMPLES
   sfdx shane:github:src:install -g someUser -r someRepo -u someOrg
   // pulls mdapi-formatted code from https://github.com/someUser/someRepo/src and deploys to the org
 
-
   sfdx shane:github:src:install -g someUser -r someRepo -u someOrg -p my/folder/tree
   // pulls mdapi-formatted code from https://github.com/someUser/someRepo/my/folder/tree and deploys to the org
 ```
 
 _See code: [src/commands/shane/github/src/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/github/src/install.ts)_
 
-## sfdx shane:heroku:repo:deploy
+## `sfdx shane:heroku:repo:deploy`
 
 installs a package from github from mdapi src
 
@@ -181,7 +177,7 @@ EXAMPLE
 
 _See code: [src/commands/shane/heroku/repo/deploy.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/heroku/repo/deploy.ts)_
 
-## sfdx shane:iot:activation
+## `sfdx shane:iot:activation`
 
 Activate an iot orchestration by name
 
@@ -202,14 +198,13 @@ EXAMPLES
   sfdx shane:iot:activate -n orchName -r
   // activates the orchestration, resetting all the instances
 
-
   sfdx shane:iot:activate -n orchName -d
   // deactivates the orchestration, without resetting all the instances
 ```
 
 _See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/iot/activation.ts)_
 
-## sfdx shane:mdapi:package:get
+## `sfdx shane:mdapi:package:get`
 
 gets package from an org, converts, and merges it into the local source
 
@@ -235,14 +230,13 @@ EXAMPLES
   sfdx shane:mdapi:package:get -p MyPkg -u someOrg
   // pulls a package from the org and converts/merges it into force-app
 
-
   sfdx shane:mdapi:package:get -p MyPkg -u someOrg -t someDir
   // pulls a package from the org and converts/merges it into /someDir
 ```
 
 _See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/mdapi/package/get.ts)_
 
-## sfdx shane:mdapi:pull
+## `sfdx shane:mdapi:pull`
 
 gets unpackaged metadata for you
 
@@ -281,7 +275,7 @@ EXAMPLE
 
 _See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/mdapi/pull.ts)_
 
-## sfdx shane:mdapi:push
+## `sfdx shane:mdapi:push`
 
 convert and deploy the packaged source
 
@@ -306,7 +300,7 @@ EXAMPLE
 
 _See code: [src/commands/shane/mdapi/push.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/mdapi/push.ts)_
 
-## sfdx shane:object:create
+## `sfdx shane:object:create`
 
 create an object in local source.  Only __b (big objects) and events __e are currently supported
 
@@ -334,14 +328,11 @@ EXAMPLES
   sfdx shane:object:create
   // without any params, the cli is going to ask you questions to generate your object interactively
 
-
   sfdx shane:object:create --label "Platypus" --plural "Platypi" --api Platypus__b --directory /my/project/path
   // label, plural, api name specified so the tool doesn't have to ask you about them.  Creates in a non-default path
 
-
   sfdx shane:object:create --label "Platypus" --plural "Platypi" --api Platypus__b --directory /my/project/path
   // label, plural, api name specified so the tool doesn't have to ask you about them.  Creates in a non-default path
-
 
   sfdx shane:object:create --label "Signal" --plural "Signals" --api Signal__e
   // create a platform event
@@ -349,7 +340,7 @@ EXAMPLES
 
 _See code: [src/commands/shane/object/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/object/create.ts)_
 
-## sfdx shane:object:fat
+## `sfdx shane:object:fat`
 
 add or update a field audit trail retention policy on an object.  Modifies local source--you still need to push/deploy
 
@@ -377,14 +368,11 @@ EXAMPLES
   sfdx shane:object:fat -o Account
   // set the retention policy on Account to the defaults (archive after 18 months, archive for 10 years)
 
-
   sfdx shane:object:fat -o Account -m 4 -y 5
   // archive history for 5 years, after being in regular history for 4 months
 
-
   sfdx shane:object:fat -o Account -m 4 -y 5 -d myDir
   // same as 2nd example, except metadata is in myDir instead of the default force-app/main/default
-
 
   sfdx shane:mdapi:pull -o Account -u realOrg && sfdx shane:object:fat -o Account -m 4 -y 5 -d myDir && sfdx 
   shane:mdapi:push -u realOrg
@@ -393,7 +381,7 @@ EXAMPLES
 
 _See code: [src/commands/shane/object/fat.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/object/fat.ts)_
 
-## sfdx shane:object:field
+## `sfdx shane:object:field`
 
 create or add fields to an existing object
 
@@ -453,16 +441,13 @@ EXAMPLES
   sfdx shane:object:field
   // without any params, the cli is going to ask you questions to generate your field interactively
 
-
   sfdx shane:object:field --api My_Field__c -l 255 -n "My Field" -t Text -o  BigTest__b --noIndex
   // create new text field called My Field (My_Field__c) on BigObject BigTest__b
-
 
   sfdx shane:object:field --api My_Index_Field__c -l 255 -n "My Index Field" -t Text -o  BigTest__b --indexDirection ASC 
   --indexPosition 1
   // create new text field called My Field (My_Field__c) on BigObject BigTest__b, add it to the existing index as the 
   second field
-
 
   sfdx shane:object:field --api My_Field__c -l 255 -n "My Field" -t Text -o  EventTest__e
   // create new text field called My Field (My_Field__c) on Platform Event EventTest__e
@@ -470,7 +455,7 @@ EXAMPLES
 
 _See code: [src/commands/shane/object/field.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/object/field.ts)_
 
-## sfdx shane:org:create
+## `sfdx shane:org:create`
 
 create an org with a friendly username.  wraps force:org:create
 
@@ -513,14 +498,13 @@ EXAMPLES
   // creates an org from the default project config/project-scratch-def.json but with username shane[i]@org.test where i 
   is a unique sequence number for that -u/-o combination
 
-
   sfdx shane:org:create -u shane -o org.test -a sydneyBristow -d 30 -v myOtherHub -f config/thatOtherFile.json
   // above, but with an alias, a longer duration, and not the default hub, and not the default config file
 ```
 
 _See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/org/create.ts)_
 
-## sfdx shane:org:delete
+## `sfdx shane:org:delete`
 
 delete the default scratch org.  Won't prompt you for confirmation
 
@@ -541,7 +525,7 @@ EXAMPLE
 
 _See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/org/delete.ts)_
 
-## sfdx shane:package2:version:bump
+## `sfdx shane:package2:version:bump`
 
 bump the major/minor version number in the packageDirectory
 
@@ -572,18 +556,14 @@ EXAMPLES
   sfdx shane:package2:version:bump -m
   // bump the minor version up by one
 
-
   sfdx shane:package2:version:bump -M
   // bump the major version up by one (and set minor/patch to 0)
-
 
   sfdx shane:package2:version:bump -M -t myDir
   // bump the major version up by one for a particular directory that's not the default
 
-
   sfdx shane:package2:version:bump --minor --create
   // bump the minor version up by one and create a new package2version
-
 
   sfdx shane:package2:version:bump --minor --release
   // bump the minor version up by one and create a new package2version, then set that as released
@@ -591,7 +571,7 @@ EXAMPLES
 
 _See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/package2/version/bump.ts)_
 
-## sfdx shane:permset:create
+## `sfdx shane:permset:create`
 
 create or add stuff to a permset with maximum access
 
@@ -623,14 +603,11 @@ EXAMPLES
   sfdx shane:permset:create -n MyPermSet1 -o Something__c -f Some_Field__c
   // create a permset in force-app/main/default for the object/field.  If MyPermSet1 doesn't exist, it will be created.
 
-
   sfdx shane:permset:create -n MyPermSet1 -o Something__c
   // create a permset in force-app/main/default for every field on Something__c.
 
-
   sfdx shane:permset:create -n MyPermSet1
   // create a permset in force-app/main/default for every field on every object!
-
 
   sfdx shane:permset:create -n MyPermSet1 -t
   // create a permset in force-app/main/default for every field on every object.  If there's a tab for any of those 
@@ -639,7 +616,7 @@ EXAMPLES
 
 _See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/permset/create.ts)_
 
-## sfdx shane:remotesite:create
+## `sfdx shane:remotesite:create`
 
 create a remote site setting in the local source.  Push it when you're done
 
@@ -666,14 +643,13 @@ EXAMPLES
   sfdx shane:remotesite:create -n Test -u https://www.google.com
   // create a remote site setting in force-app/main/default
 
-
   sfdx shane:remotesite:create -n Test -u https://www.google.com -d "my description" -t myOtherDirectory/main/default
   // create a remote site setting in myOtherDirectory/main/default with a description
 ```
 
 _See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/remotesite/create.ts)_
 
-## sfdx shane:static:create
+## `sfdx shane:static:create`
 
 create a static resource locally
 
@@ -702,14 +678,13 @@ EXAMPLES
   sfdx shane:static:create -n myJSResource -y js
   // creates /staticresources/myJSResource.js (empty file) and  /staticresources/myJSResource.resource-meta.xml
 
-
   sfdx shane:static:create -n myZipResource -y js -d "my description" -t myOtherDirectory/main/default
   // create an empty folder (zips when pushed), the meta.xml, with a description in a non-default directory.
 ```
 
 _See code: [src/commands/shane/static/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/static/create.ts)_
 
-## sfdx shane:tsp:username:update
+## `sfdx shane:tsp:username:update`
 
 change the username on all transaction security policies
 
@@ -735,11 +710,9 @@ EXAMPLES
   sfdx shane:tsp:username:update -n newusername@example.com
   // updates the username for executionUser and all notifications in all transaction security policies
 
-
   sfdx shane:tsp:username:create
   // updates the username for executionUser and all notifications in all transaction security policies to the default 
   org's username
-
 
   sfdx shane:tsp:username:create -u someAlias
   // updates the username for executionUser and all notifications in all transaction security policies to the specified 
@@ -748,7 +721,7 @@ EXAMPLES
 
 _See code: [src/commands/shane/tsp/username/update.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/tsp/username/update.ts)_
 
-## sfdx shane:user:password:set
+## `sfdx shane:user:password:set`
 
 Set the password for a user by first/last name
 
@@ -779,7 +752,7 @@ EXAMPLE
 
 _See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.16.2/src/commands/shane/user/password/set.ts)_
 
-## sfdx shane:user:photo
+## `sfdx shane:user:photo`
 
 Set the photo for a user by first/last name
 
@@ -801,10 +774,8 @@ EXAMPLES
   sfdx shane:user:photo -f ~/Downloads/King.png -g User -l User
   // sets the chatter photo for the user named User User using the local file
 
-
   sfdx shane:user:photo -b ~/Downloads/King.png -g User -l User
   // sets the chatter banner photo for the user named User User using the local file
-
 
   sfdx shane:user:photo -f ~/Downloads/King.png -b ~/Downloads/OtherPhoto.jpg -g User -l User
   // sets the chatter banner photo AND user photo at the same time
