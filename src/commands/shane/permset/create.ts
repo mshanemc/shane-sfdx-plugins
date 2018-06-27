@@ -9,6 +9,8 @@ import util = require('util');
 import { existsSync } from 'fs-extra';
 
 import { getExisting } from '../../../shared/getExisting';
+import { setupArray } from '../../../shared/setupArray';
+
 import * as options from '../../../shared/js2xmlStandardOptions';
 
 import chalk from 'chalk';
@@ -138,7 +140,7 @@ export default class PermSetCreate extends SfdxCommand {
   public addObjectPerms(existing, objectName: string) { // tslint:disable-line:no-any
     // make sure it the parent level objectPermissions[] exists
 
-    existing = this.setupArray(existing, 'objectPermissions');
+    existing = setupArray(existing, 'objectPermissions');
 
     if (existing.objectPermissions.find((e) => {
       return e.object === objectName;
@@ -164,7 +166,7 @@ export default class PermSetCreate extends SfdxCommand {
     // make sure it the parent level objectPermissions[] exists
     const targetLocationObjects = `${this.flags.directory}/objects`;
 
-    existing = this.setupArray(existing, 'fieldPermissions');
+    existing = setupArray(existing, 'fieldPermissions');
 
     if (existing.fieldPermissions.find((e) => {
       return e.field === `${objectName}.${fieldName}`;
@@ -244,7 +246,7 @@ export default class PermSetCreate extends SfdxCommand {
       return existing;
     }
 
-    existing = this.setupArray(existing, 'tabSettings');
+    existing = setupArray(existing, 'tabSettings');
 
     existing.tabSettings.push({
       tab: objectName,
@@ -258,21 +260,4 @@ export default class PermSetCreate extends SfdxCommand {
     return existing;
   }
 
-  public setupArray(existing, arrayName) {
-    if (!existing[arrayName]) {
-      existing[arrayName] = []; // doesn't exist
-    } else if (existing[arrayName] && !(existing[arrayName] instanceof Array)) {
-      // it's an object and we need to make it an array
-      const temp = existing[arrayName];
-      existing[arrayName] = [];
-      existing[arrayName].push(temp);
-    }
-
-    if (!(existing[arrayName] instanceof Array)) {
-      this.ux.logJson(existing);
-      this.ux.error(chalk.red(`${arrayName} is not an array even after I tried to correct it`));
-    }
-
-    return existing;
-  }
 }

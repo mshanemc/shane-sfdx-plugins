@@ -43,6 +43,8 @@ USAGE
 * [`sfdx shane:org:delete`](#sfdx-shaneorgdelete)
 * [`sfdx shane:package2:version:bump`](#sfdx-shanepackage-2-versionbump)
 * [`sfdx shane:permset:create`](#sfdx-shanepermsetcreate)
+* [`sfdx shane:profile:convert`](#sfdx-shaneprofileconvert)
+* [`sfdx shane:profile:whitelist`](#sfdx-shaneprofilewhitelist)
 * [`sfdx shane:remotesite:create`](#sfdx-shaneremotesitecreate)
 * [`sfdx shane:static:create`](#sfdx-shanestaticcreate)
 * [`sfdx shane:tsp:username:update`](#sfdx-shanetspusernameupdate)
@@ -615,6 +617,63 @@ EXAMPLES
 ```
 
 _See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.17.0/src/commands/shane/permset/create.ts)_
+
+## `sfdx shane:profile:convert`
+
+convert a profile into a permset
+
+```
+USAGE
+  $ sfdx shane:profile:convert
+
+OPTIONS
+  -d, --directory=directory                       [default: force-app/main/default] Where is all this metadata? defaults
+                                                  to force-app/main/default
+
+  -e, --editProfile                               remove metadata from profile
+
+  -n, --name=name                                 (required) path to existing permset.  If it exists, new perms will be
+                                                  added to it.  If not, then it'll be created for you
+
+  -p, --profile=profile                           (required) API name of an profile to convert.  If blank, then you mean
+                                                  ALL the objects and ALL their fields and ALL their tabs
+
+  --json                                          format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+
+EXAMPLE
+  sfdx shane:profile:convert -p Admin -n MyNewPermSet -e
+  // create a permset in force-app/main/default from the Admin profile (profiles/Admin).  If MyNewPermSet doesn't exist, 
+  it will be created.  Content is removed from Admin profile (-e)
+```
+
+_See code: [src/commands/shane/profile/convert.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.17.0/src/commands/shane/profile/convert.ts)_
+
+## `sfdx shane:profile:whitelist`
+
+whitelist the whole internet for a profile (no ip verification or 2FA/OTP challenges in dev)
+
+```
+USAGE
+  $ sfdx shane:profile:whitelist
+
+OPTIONS
+  -d, --directory=directory                       [default: force-app/main/default] Where is all this metadata? defaults
+                                                  to force-app/main/default
+
+  -n, --name=name                                 (required) profile name
+
+  --json                                          format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+
+EXAMPLE
+  sfdx shane:profile:whitelist -n Admin
+  // add loginIpRanges of 0.0.0.0 to 255.255.255.255 to an existing profile, or create one if it doesn't exist
+```
+
+_See code: [src/commands/shane/profile/whitelist.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v0.17.0/src/commands/shane/profile/whitelist.ts)_
 
 ## `sfdx shane:remotesite:create`
 
