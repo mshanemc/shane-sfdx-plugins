@@ -8,10 +8,12 @@ import * as options from '../../../shared/js2xmlStandardOptions';
 
 const code = ['ApexClass', 'ApexTrigger', 'ApexComponent', 'ApexPage', 'AuraDefinitionBundle', 'StaticResource'];
 const perms = ['PermissionSet', 'Profile', 'Role', 'CustomPermission', 'Group'];
-const schema = ['ExternalDataSource', 'CustomMetadata', 'RecordType', 'GlobalValueSet', 'CustomField', 'CustomObject'];
-const standardObjects = ['Account', 'AccountContactRelation', 'AccountContactRole', 'Activity', 'Asset', 'AssistantProgress', 'Campaign', 'CampaignMember', 'Case', 'CaseContactRole', 'Contact', 'ContentVersion', 'Contract', 'ContractContactRole', 'DuplicateRecordItem', 'DuplicateRecordSet', 'EmailMessage', 'Event', 'ExchangeUserMapping', 'FeedItem', 'Idea', 'Lead', 'LinkedArticle', 'Macro', 'MacroAction', 'MacroInstruction', 'Opportunity', 'OpportunityCompetitor', 'OpportunityContactRole', 'OpportunityLineItem', 'Order', 'OrderItem', 'PartnerRole', 'Pricebook2', 'PricebookEntry', 'Product2', 'ProfileSkill', 'ProfileSkillEndorsement', 'ProfileSkillUser', 'Quote', 'QuoteLineItem', 'Site', 'SocialPersona', 'Solution', 'StreamingChannel', 'Task', 'Territory', 'User', 'WorkBadge', 'WorkBadgeDefinition', 'WorkThanks'];
+const schema = ['ExternalDataSource', 'CustomMetadata', 'RecordType', 'GlobalValueSet', 'CustomField', 'CustomObject', 'StandardValueSet'];
 const ui = ['CompactLayout', 'Layout', 'ListView', 'CustomTab', 'AppMenu', 'CustomApplication', 'CustomPageWebLink', 'HomePageComponent', 'HomePageLayout', 'PathAssistant', 'WebLink', 'CustomLabels', 'FlexiPage'];
-const all = ['AccountCriteriaBasedSharingRule', 'AccountOwnerSharingRule', 'AnalyticSnapshot', 'ApexClass', 'ApexComponent', 'ApexPage', 'ApexTrigger', 'ApprovalProcess', 'AppMenu', 'AssignmentRules', 'AuraDefinitionBundle', 'AuthProvider', 'AutoResponseRules', 'Certificate', 'CleanDataService', 'Community', 'CompactLayout', 'CustomApplication', 'CustomApplicationComponent', 'CustomField', 'CustomLabels', 'CustomObject', 'CustomMetadata', 'CustomObjectTranslation', 'CustomPageWebLink', 'CustomPermission', 'CustomSite', 'CustomTab', 'DelegateGroup', 'DuplicateRule', 'EscalationRules', 'ExternalDataSource', 'FlexiPage', 'Flow', 'FlowDefinition', 'GlobalValueSet', 'GlobalValueSetTranslation', 'Group', 'HomePageComponent', 'HomePageLayout', 'Layout', 'Letterhead', 'ListView', 'ManagedTopics', 'MatchingRule', 'MatchingRules', 'Network', 'PathAssistant', 'PermissionSet', 'Profile', 'Queue', 'QuickAction', 'RecordType', 'RemoteSiteSetting', 'ReportType', 'Role', 'SharingRules', 'SharingCriteriaRule', 'SharingOwnerRule', 'SharingTerritoryRule', 'SiteDotCom', 'StandardValueSetTranslation', 'StaticResource', 'Territory', 'Translations', 'ValidationRule', 'WebLink', 'Workflow', 'WorkflowAlert', 'WorkflowFieldUpdate', 'WorkflowRule', 'Settings'];
+const all = ['AccountCriteriaBasedSharingRule', 'AccountOwnerSharingRule', 'AnalyticSnapshot', 'ApexClass', 'ApexComponent', 'ApexPage', 'ApexTrigger', 'ApprovalProcess', 'AppMenu', 'AssignmentRules', 'AuraDefinitionBundle', 'AuthProvider', 'AutoResponseRules', 'Certificate', 'CleanDataService', 'Community', 'CompactLayout', 'CustomApplication', 'CustomApplicationComponent', 'CustomField', 'CustomLabels', 'CustomObject', 'CustomMetadata', 'CustomObjectTranslation', 'CustomPageWebLink', 'CustomPermission', 'CustomSite', 'CustomTab', 'DelegateGroup', 'DuplicateRule', 'EscalationRules', 'ExternalDataSource', 'FlexiPage', 'Flow', 'FlowDefinition', 'GlobalValueSet', 'GlobalValueSetTranslation', 'Group', 'HomePageComponent', 'HomePageLayout', 'Layout', 'Letterhead', 'ListView', 'ManagedTopics', 'MatchingRule', 'MatchingRules', 'Network', 'PathAssistant', 'PermissionSet', 'Profile', 'Queue', 'QuickAction', 'RecordType', 'RemoteSiteSetting', 'ReportType', 'Role', 'SharingRules', 'SharingCriteriaRule', 'SharingOwnerRule', 'SharingTerritoryRule', 'SiteDotCom', 'StandardValueSet', 'StandardValueSetTranslation', 'StaticResource', 'Territory', 'Translations', 'ValidationRule', 'WebLink', 'Workflow', 'WorkflowAlert', 'WorkflowFieldUpdate', 'WorkflowRule', 'Settings'];
+
+const standardObjects = ['Account', 'AccountContactRelation', 'AccountContactRole', 'Activity', 'Asset', 'AssistantProgress', 'Campaign', 'CampaignMember', 'Case', 'CaseContactRole', 'Contact', 'ContentVersion', 'Contract', 'ContractContactRole', 'DuplicateRecordItem', 'DuplicateRecordSet', 'EmailMessage', 'Event', 'ExchangeUserMapping', 'FeedItem', 'Idea', 'Lead', 'LinkedArticle', 'Macro', 'MacroAction', 'MacroInstruction', 'Opportunity', 'OpportunityCompetitor', 'OpportunityContactRole', 'OpportunityLineItem', 'Order', 'OrderItem', 'PartnerRole', 'Pricebook2', 'PricebookEntry', 'Product2', 'ProfileSkill', 'ProfileSkillEndorsement', 'ProfileSkillUser', 'Quote', 'QuoteLineItem', 'Site', 'SocialPersona', 'Solution', 'StreamingChannel', 'Task', 'Territory', 'User', 'WorkBadge', 'WorkBadgeDefinition', 'WorkThanks'];
+const StandardValueSets = ['AccountContactMultiRoles', 'AccountContactRole', 'AccountOwnership', 'AccountRating', 'AccountType', 'AssetStatus', 'CampaignMemberStatus', 'CampaignStatus', 'CampaignType', 'CaseContactRole', 'CaseOrigin', 'CasePriority', 'CaseReason', 'CaseStatus', 'CaseType', 'ContactRole', 'ContractContactRole', 'ContractStatus', 'EntitlementType', 'EventSubject', 'EventType', 'FiscalYearPeriodName', 'FiscalYearPeriodPrefix', 'FiscalYearQuarterName', 'FiscalYearQuarterPrefix', 'IdeaCategory', 'IdeaMultiCategory', 'IdeaStatus', 'IdeaThemeStatus', 'Industry', 'LeadSource', 'LeadStatus', 'OpportunityCompetitor', 'OpportunityStage', 'OpportunityType', 'OrderType', 'PartnerRole', 'Product2Family', 'QuestionOrigin', 'QuickTextCategory', 'QuickTextChannel', 'QuoteStatus', 'RoleInTerritory2', 'SalesTeamRole', 'Salutation', 'ServiceContractApprovalStatus', 'SocialPostClassification', 'SocialPostEngagementLevel', 'SocialPostReviewedStatus', 'SolutionStatus', 'TaskPriority', 'TaskStatus', 'TaskSubject', 'TaskType', 'WorkOrderLineItemStatus', 'WorkOrderPriority', 'WorkOrderStatus'];
 
 import child_process = require('child_process');
 
@@ -90,6 +92,11 @@ export default class Pull extends SfdxCommand {
             members: standardObjects.concat(['*']),
             name: item
           });
+        } else if (item === 'StandardValueSet') {
+          packageJSON.types.push({
+            members: StandardValueSets,
+            name: item
+          });
         } else {
           packageJSON.types.push({
             members: '*',
@@ -108,10 +115,17 @@ export default class Pull extends SfdxCommand {
       }
 
       if (this.flags.type) {
-        packageJSON.types.push({
-          members: '*',
-          name: this.flags.type
-        });
+        if (this.flags.type === 'StandardValueSet') {
+          packageJSON.types.push({
+            members: StandardValueSets,
+            name: this.flags.type
+          });
+        } else {
+          packageJSON.types.push({
+            members: '*',
+            name: this.flags.type
+          });
+        }
       }
 
       if (this.flags.schema) {
