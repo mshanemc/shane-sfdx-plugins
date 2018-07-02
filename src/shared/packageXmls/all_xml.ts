@@ -175,6 +175,10 @@ export const xml = `<?xml version="1.0" encoding="UTF-8"?>
 	<types>
 		<members>*</members>
 		<name>EscalationRules</name>
+  </types>
+  <types>
+		<members>*</members>
+		<name>ExternalDataSources</name>
 	</types>
 	<types>
 		<members>*</members>
