@@ -71,5 +71,5 @@ export const xml = `<?xml version="1.0" encoding="UTF-8"?>
 		<members>WorkThanks</members>
 		<name>CustomObject</name>
 	</types>
-	<version>41.0</version>
+	<version>43.0</version>
 </Package>`;

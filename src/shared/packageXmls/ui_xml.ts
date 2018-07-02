@@ -48,5 +48,5 @@ export const xml = `<?xml version="1.0" encoding="UTF-8"?>
 		<members>*</members>
 		<name>CustomLabels</name>
 	</types>
-	<version>41.0</version>
+	<version>43.0</version>
 </Package>`;
