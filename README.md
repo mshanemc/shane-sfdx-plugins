@@ -73,18 +73,18 @@ OPTIONS
 EXAMPLES
   sfdx shane:data:file:upload - f ~/Downloads/King.png
        //uploads file from local filesystem as a file
-    
+
 
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF
        //uploads file from local filesystem as a file and attaches to a record
-    
+
 
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -c
        //uploads and attaches it to the indicated record, but as a chatter file post
-    
+
 
   sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -n CustomName -c
-       //uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same 
+       //uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same
   name as the local filesystem used
 ```
 
@@ -108,7 +108,7 @@ OPTIONS
 
 EXAMPLE
   sfdx shane:github:package:install -g someUser -r someRepo -u someOrg
-  // installs packageVersion (04t) from https://github.com/someUser/someRepo/sfdx-project.json or 
+  // installs packageVersion (04t) from https://github.com/someUser/someRepo/sfdx-project.json or
   https://github.com/someUser/someRepo/latestVersion.json
 ```
 
@@ -395,7 +395,7 @@ EXAMPLES
   // same as 2nd example, except metadata is in myDir instead of the default force-app/main/default
 
 
-  sfdx shane:mdapi:pull -o Account -u realOrg && sfdx shane:object:fat -o Account -m 4 -y 5 -d myDir && sfdx 
+  sfdx shane:mdapi:pull -o Account -u realOrg && sfdx shane:object:fat -o Account -m 4 -y 5 -d myDir && sfdx
   shane:mdapi:push -u realOrg
   // get some object you don't have locally, create the policy, and push that back up to where it came from
 ```
@@ -467,9 +467,9 @@ EXAMPLES
   // create new text field called My Field (My_Field__c) on BigObject BigTest__b
 
 
-  sfdx shane:object:field --api My_Index_Field__c -l 255 -n "My Index Field" -t Text -o  BigTest__b --indexDirection ASC 
+  sfdx shane:object:field --api My_Index_Field__c -l 255 -n "My Index Field" -t Text -o  BigTest__b --indexDirection ASC
   --indexPosition 1
-  // create new text field called My Field (My_Field__c) on BigObject BigTest__b, add it to the existing index as the 
+  // create new text field called My Field (My_Field__c) on BigObject BigTest__b, add it to the existing index as the
   second field
 
 
@@ -519,7 +519,7 @@ OPTIONS
 
 EXAMPLES
   sfdx shane:org:create -u shane -o org.test
-  // creates an org from the default project config/project-scratch-def.json but with username shane[i]@org.test where i 
+  // creates an org from the default project config/project-scratch-def.json but with username shane[i]@org.test where i
   is a unique sequence number for that -u/-o combination
 
 
@@ -642,7 +642,7 @@ EXAMPLES
 
 
   sfdx shane:permset:create -n MyPermSet1 -t
-  // create a permset in force-app/main/default for every field on every object.  If there's a tab for any of those 
+  // create a permset in force-app/main/default for every field on every object.  If there's a tab for any of those
   objects, add that tab to the permset, too
 ```
 
@@ -674,7 +674,7 @@ OPTIONS
 
 EXAMPLE
   sfdx shane:profile:convert -p Admin -n MyNewPermSet -e
-  // create a permset in force-app/main/default from the Admin profile (profiles/Admin).  If MyNewPermSet doesn't exist, 
+  // create a permset in force-app/main/default from the Admin profile (profiles/Admin).  If MyNewPermSet doesn't exist,
   it will be created.  Content is removed from Admin profile (-e)
 ```
 
@@ -803,12 +803,12 @@ EXAMPLES
 
 
   sfdx shane:tsp:username:create
-  // updates the username for executionUser and all notifications in all transaction security policies to the default 
+  // updates the username for executionUser and all notifications in all transaction security policies to the default
   org's username
 
 
   sfdx shane:tsp:username:create -u someAlias
-  // updates the username for executionUser and all notifications in all transaction security policies to the specified 
+  // updates the username for executionUser and all notifications in all transaction security policies to the specified
   target org's username
 ```
 
