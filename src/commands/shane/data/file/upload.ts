@@ -21,11 +21,10 @@ export default class Upload extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    file: { char: 'f', description: 'path to file on local filesystem', required: true, type: 'string' },
-    parentid: { char: 'p', description: 'optional record ID that the file should be attached to', type: 'string' },
+    file: { char: 'f', description: 'path to file on local filesystem', required: true, type: 'filepath' },
+    parentid: { char: 'p', description: 'optional record ID that the file should be attached to', type: 'id' },
     chatter: { char: 'c', description: 'attach as a chatter content post instead of just as a file', type: 'boolean' },
     name: { char: 'n', description: 'set the name of the uploaded file', type: 'string' }
-
   };
 
   // Comment this out if your command does not require an org username
