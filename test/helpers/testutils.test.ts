@@ -9,13 +9,13 @@ const exec = util.promisify(child_process.exec);
 
 const testProjectName = 'testProject';
 
-before(async function() {
-  this.timeout(600000);
-  await exec(`rm -rf ${testProjectName}`);
-  await exec(`sfdx force:project:create -n ${testProjectName}`);
-});
-
 describe('tests testUtils', () => {
+
+  before(async function() {
+    this.timeout(600000);
+    await exec(`rm -rf ${testProjectName}`);
+    await exec(`sfdx force:project:create -n ${testProjectName}`);
+  });
 
   it('creates an org', async () => {
     const createResult = await testutils.orgCreate(testProjectName);
@@ -28,9 +28,9 @@ describe('tests testUtils', () => {
     expect(JSON.parse(deleteResult.stdout).status).to.equal(0);
   }).timeout(600000);
 
-});
+  after(async function() {
+    this.timeout(600000);
+    await exec(`rm -rf ${testProjectName}`);
+  });
 
-after(async function() {
-  this.timeout(600000);
-  await exec(`rm -rf ${testProjectName}`);
 });

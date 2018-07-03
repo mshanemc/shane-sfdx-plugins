@@ -14,13 +14,13 @@ const api = 'Platypus__b';
 const label = 'Platypus';
 const plural = 'Platypi';
 
-before(async function() {
-  this.timeout(60000);
-  await exec(`rm -rf ${testProjectName}`);
-  await exec(`sfdx force:project:create -n ${testProjectName}`);
-});
-
 describe('shane:object:create (big object flavor)', () => {
+
+  before(async function() {
+    this.timeout(60000);
+    await exec(`rm -rf ${testProjectName}`);
+    await exec(`sfdx force:project:create -n ${testProjectName}`);
+  });
 
   it('creates a big object with all params supplied', async () => {
 
@@ -244,8 +244,7 @@ describe('shane:object:create (big object flavor)', () => {
     }
   }).timeout(120000);
 
-});
-
-after(async () => {
-  await exec(`rm -rf ${testProjectName}`);
+  after(async () => {
+    await exec(`rm -rf ${testProjectName}`);
+  });
 });

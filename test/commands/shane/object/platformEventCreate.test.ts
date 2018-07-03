@@ -16,13 +16,13 @@ const api = 'Hello__e';
 const label = 'Hello';
 const plural = 'Hellos';
 
-before(async function() {
-  this.timeout(60000);
-  await exec(`rm -rf ${testProjectName}`);
-  await exec(`sfdx force:project:create -n ${testProjectName}`);
-});
-
 describe('shane:object:create (platform event flavor)', () => {
+
+  before(async function() {
+    this.timeout(60000);
+    await exec(`rm -rf ${testProjectName}`);
+    await exec(`sfdx force:project:create -n ${testProjectName}`);
+  });
 
   it('creates a platform event with all params supplied', async () => {
 
@@ -161,8 +161,7 @@ describe('shane:object:create (platform event flavor)', () => {
     }
   }).timeout(60000);
 
-});
-
-after(async () => {
-  await exec(`rm -rf ${testProjectName}`);
+  after(async () => {
+    await exec(`rm -rf ${testProjectName}`);
+  });
 });
