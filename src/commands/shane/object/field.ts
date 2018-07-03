@@ -44,10 +44,10 @@ export default class FieldCreate extends SfdxCommand {
     externalid: { type: 'boolean',  description: 'use as an external id' },
 
     // type specific flags
-    length: { type: 'string',  char: 'l', description: 'length (for text fields)' },
+    length: { type: 'number',  char: 'l', description: 'length (for text fields)' },
 
-    scale: { type: 'string',  char: 's', description: 'places right of the decimal' },
-    precision: { type: 'string', description: 'maximum allowed digits of a number, including whole and decimal places' },
+    scale: { type: 'number',  char: 's', description: 'places right of the decimal' },
+    precision: { type: 'number', description: 'maximum allowed digits of a number, including whole and decimal places' },
 
     lookupobject: { type: 'string', description: 'API name of the object the lookup goes to'},
     relname: { type: 'string',  description: 'API name for the lookup relationship'},
@@ -192,7 +192,7 @@ export default class FieldCreate extends SfdxCommand {
         } else if (response === 'LAST') {
           this.flags.indexappend = true;
         } else {
-          if (this.flags.indexDirection >= 0) {
+          if (this.flags.indexdirection >= 0) {
             this.flags.indexposition = response;
           }
         }
@@ -206,9 +206,9 @@ export default class FieldCreate extends SfdxCommand {
       outputJSON.required = true;
 
       // we were told what to do
-      while (this.flags.indexDirection !== 'ASC' && this.flags.indexDirection !== 'DESC') {
+      while (this.flags.indexdirection !== 'ASC' && this.flags.indexdirection !== 'DESC') {
         outputJSON.required = true;
-        this.flags.indexDirection = await cli.prompt('which direction should this index be sorted? (ASC, DESC)');
+        this.flags.indexdirection = await cli.prompt('which direction should this index be sorted? (ASC, DESC)');
       }
 
       // correct @ => $ issue
@@ -220,7 +220,7 @@ export default class FieldCreate extends SfdxCommand {
 
       const newIndex = {
         name: this.flags.api,
-        sortDirection: this.flags.indexDirection
+        sortDirection: this.flags.indexdirection
       };
 
       if (this.flags.indexappend) {
