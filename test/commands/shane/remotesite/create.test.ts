@@ -12,7 +12,8 @@ import testutils = require('../../../helpers/testutils');
 const exec = util.promisify(child_process.exec);
 const testProjectName = 'testProject';
 
-before(async () => {
+before(async function() {
+  this.timeout(60000);
   await exec(`rm -rf ${testProjectName}`);
   await exec(`sfdx force:project:create -n ${testProjectName}`);
 });

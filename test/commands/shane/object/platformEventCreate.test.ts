@@ -16,7 +16,8 @@ const api = 'Hello__e';
 const label = 'Hello';
 const plural = 'Hellos';
 
-before(async () => {
+before(async function() {
+  this.timeout(60000);
   await exec(`rm -rf ${testProjectName}`);
   await exec(`sfdx force:project:create -n ${testProjectName}`);
 });

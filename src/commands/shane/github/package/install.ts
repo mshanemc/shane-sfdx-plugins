@@ -57,13 +57,14 @@ export default class GithubPackageInstall extends SfdxCommand {
         json: true
       });
 
-      this.ux.logJson(result);
+      // this.ux.log(result);
       packageVersionId = result.SubscriberPackageVersionId;
     // install in the org
     }
-    const installResult = await exec(`sfdx force:package:install --package ${packageVersionId} -r -u ${this.org.getUsername()} -w 20 -p 20 --json`);
-    this.ux.logJson(JSON.parse(installResult.stdout));
-    return installResult;
+
+    const installResult = await exec(`sfdx force:package:install --package ${packageVersionId} -r -u ${this.org.getUsername()} -w 20 --publishwait 20 --json`);
+    // this.ux.logJson(JSON.parse(installResult.stdout));
+    return JSON.parse(installResult.stdout);
   }
 
 }

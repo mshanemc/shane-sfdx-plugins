@@ -15,7 +15,7 @@ const label = 'Platypus';
 const plural = 'Platypi';
 
 before(async function() {
-  this.timeout(10000);
+  this.timeout(60000);
   await exec(`rm -rf ${testProjectName}`);
   await exec(`sfdx force:project:create -n ${testProjectName}`);
 });
