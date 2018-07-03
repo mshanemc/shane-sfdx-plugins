@@ -3,6 +3,7 @@ import fs = require('fs-extra');
 import util = require('util');
 
 import jsToXml = require('js2xmlparser');
+import ucc = require('../../../shared/unzipConvertClean');
 import * as options from '../../../shared/js2xmlStandardOptions';
 
 const code = ['ApexClass', 'ApexTrigger', 'ApexComponent', 'ApexPage', 'AuraDefinitionBundle', 'StaticResource'];
@@ -169,36 +170,16 @@ export default class Pull extends SfdxCommand {
       }
     }
 
-    // this.ux.logJson(packageJSON);
-
     const xml = jsToXml.parse('Package', packageJSON, options.js2xmlStandardOptions);
     fs.writeFileSync(`./${pkgDir}/package.xml`, xml);
 
-    process.stdout.write('Starting retrieval...');
+    // const retrieveResult = await exec(`sfdx force:mdapi:retrieve -s -k ${pkgDir}/package.xml -r ./${tmpDir} -w 30 -u ${this.org.getUsername()}`, { maxBuffer: 1000000 * 1024 });
+    const retrieveCommand = `sfdx force:mdapi:retrieve -s -k ${pkgDir}/package.xml -r ./${tmpDir} -w 30 -u ${this.org.getUsername()}`;
 
-    const retrieveResult = await exec(`sfdx force:mdapi:retrieve -s -k ${pkgDir}/package.xml -r ./${tmpDir} -w 30 -u ${this.org.getUsername()}`, { maxBuffer: 1000000 * 1024 });
+    await ucc.retrieveUnzipConvertClean(tmpDir, retrieveCommand, this.flags.target);
 
-    if (retrieveResult.stderr) {
-      this.ux.error(retrieveResult.stderr);
-      return;
-    }
-
+    // cleanup the temporary pkgDir
     await exec(`rm -rf ./${pkgDir}`);
-    process.stdout.write('done.  Unzipping...');
-
-    const unzipResult = await exec(`unzip -qqo ./${tmpDir}/unpackaged.zip -d ./${tmpDir}`);
-    process.stdout.write('done.  Converting...');
-
-    try {
-      const convertResult = await exec(`sfdx force:mdapi:convert -r ./${tmpDir} -d ${this.flags.target} --json`);
-      process.stdout.write(`done (converted ${JSON.parse(convertResult.stdout).result.length} items).  Cleaning up...`);
-    } catch (err) {
-      this.ux.errorJson(err);
-      this.ux.error('Error from conversion--it may have been too much metadata');
-    }
-
-    await exec(`rm -rf ./${tmpDir}`);
-    process.stdout.write('Done!\n');
 
   }
 }

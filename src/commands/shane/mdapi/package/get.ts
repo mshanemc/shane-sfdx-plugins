@@ -1,6 +1,7 @@
 import { SfdxCommand, core } from '@salesforce/command';
 import util = require('util');
 import child_process = require('child_process');
+import ucc = require('../../../../shared/unzipConvertClean');
 
 const exec = util.promisify(child_process.exec);
 
@@ -31,18 +32,8 @@ export default class Get extends SfdxCommand {
   // tslint:disable-next-line:no-any
   public async run(): Promise<any> {
 
-    process.stdout.write('starting package retrieval...');
+    const retrieveCommand = `sfdx force:mdapi:retrieve -s -p "${this.flags.packagename}" -u ${this.org.getUsername()}  -r ./${tmpDir} -w 30`;
+    await ucc.retrieveUnzipConvertClean(tmpDir, retrieveCommand, this.flags.target);
 
-    await exec(`sfdx force:mdapi:retrieve -s -p "${this.flags.packagename}" -u ${this.org.getUsername()}  -r ./${tmpDir} -w 30`);
-    process.stdout.write('Package Retrieved.  Unzipping...');
-
-    await exec(`unzip -o ./${tmpDir}/unpackaged.zip -d ./${tmpDir}`);
-    process.stdout.write('Package Unzipped.  Converting...');
-
-    await exec(`sfdx force:mdapi:convert -r ./${tmpDir} -d ${this.flags.target}`);
-    process.stdout.write('Package Converted.  Cleaning up...');
-
-    await exec(`rm -rf ./${tmpDir}`);
-    this.ux.log('Done!');
   }
 }
