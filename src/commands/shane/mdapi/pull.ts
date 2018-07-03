@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command';
-import { SfdxCommand, core } from '@salesforce/command';
+import { SfdxCommand, core} from '@salesforce/command';
 import fs = require('fs-extra');
 import util = require('util');
 
@@ -56,6 +56,8 @@ export default class Pull extends SfdxCommand {
     fs.ensureDirSync(this.flags.target);
     fs.ensureDirSync(pkgDir);
 
+    const conn = this.org.getConnection();
+
     // validations
     if (this.flags.schema && this.flags.object) {
       this.ux.error('you can\'t choose a single object AND schema');
@@ -86,7 +88,7 @@ export default class Pull extends SfdxCommand {
     };
 
     if (this.flags.all) {
-      all.forEach((item) => {
+      all.forEach( async (item) => {
         if (item === 'CustomObject') {
           packageJSON.types.push({
             members: standardObjects.concat(['*']),
@@ -120,6 +122,8 @@ export default class Pull extends SfdxCommand {
             members: StandardValueSets,
             name: this.flags.type
           });
+        } else if (this.flags.type === 'Document') {
+          // const metadata = await conn.metadata.list([{ type: 'Document' }], this.org.retrieveMaxApiVersion());
         } else {
           packageJSON.types.push({
             members: '*',
