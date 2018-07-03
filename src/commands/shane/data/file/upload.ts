@@ -38,7 +38,9 @@ export default class Upload extends SfdxCommand {
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
     // const name = this.flags.name || 'world';
-
+    if (!this.flags.parentid && this.flags.chatter) {
+      throw new Error('you must specify a parentid for chatter attachments');
+    }
     // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
     const conn = this.org.getConnection();
 
@@ -64,7 +66,10 @@ export default class Upload extends SfdxCommand {
 
     const CV = <Record> await localFile2CV.file2CV(conn, this.flags.file, this.flags.name);
 
-    if (!this.flags.chatter) {
+    if (!this.flags.parentid) {
+      this.ux.log(`created file with content document id ${CV.ContentDocumentId}`);
+      return CV;
+    } else if (!this.flags.chatter) {
       // regular file attachment
       this.ux.log(`will create a regular file attachment on record ${this.flags.parentid}`);
 
