@@ -24,10 +24,10 @@ export default class AllPhotos extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    // firstName: flags.string({ char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency' }),
-    // lastName: flags.string({ char: 'l', required: true, description: 'last name of the user' }),
-    // file: flags.string({ char: 'f', description: 'local path of the photo to use' }),
-    // banner: flags.string({ char: 'b', description: 'local path of the chatter banner photo to use' })
+    // firstName: { type: 'string',  char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency' }),
+    // lastName: { type: 'string',  char: 'l', required: true, description: 'last name of the user' }),
+    // file: { type: 'string',  char: 'f', description: 'local path of the photo to use' }),
+    // banner: { type: 'string',  char: 'b', description: 'local path of the chatter banner photo to use' })
   };
 
   // Comment this out if your command does not require an org username

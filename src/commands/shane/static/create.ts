@@ -1,9 +1,6 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
-import cli from 'cli-ux';
 
 import chalk from 'chalk';
 import * as options from '../../../shared/js2xmlStandardOptions';
@@ -22,13 +19,13 @@ export default class StaticCreate extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    name: flags.string({ char: 'n', required: true, description: 'name it (Salesforce API compliant name)' }),
-    type: flags.string({ char: 'y', required: true, description: 'choose one of the following: zip, css, js, text, xml', options: ['zip', 'css', 'js', 'text', 'xml'] }),
-    description: flags.string({ char: 'd', default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' }),
-    target: flags.string({ char: 't', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' }),
+    name: { type: 'string',  char: 'n', required: true, description: 'name it (Salesforce API compliant name)' },
+    type: { type: 'string',  char: 'y', required: true, description: 'choose one of the following: zip, css, js, text, xml', options: ['zip', 'css', 'js', 'text', 'xml'] },
+    description: { type: 'string',  char: 'd', default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' },
+    target: { type: 'string',  char: 't', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' },
     public: { type: 'boolean', char: 'p', default: false, description: 'mark the cache control public'	}
 
-    // public: flags.boolean({ char: 'p', default: false, description: 'mark the cache control public' })
+    // public: { type: 'boolean',  char: 'p', default: false, description: 'mark the cache control public' })
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

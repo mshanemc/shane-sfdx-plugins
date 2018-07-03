@@ -1,5 +1,3 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import cli from 'cli-ux';
@@ -34,33 +32,33 @@ export default class FieldCreate extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    // name: flags.string({ char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' }),
-    object: flags.string({ char: 'o', description: 'API name of an object to add a field to' }),
-    name: flags.string({ char: 'n', description: 'Label for the field' }),
-    api: flags.string({ char: 'a', description: 'API name for the field' }),
-    type: flags.string({ char: 't', description: `field type.  Big Objects: ${SupportedTypes__b.join(',')}.  Events: ${SupportedTypes__e.join(',')}`}),
-    description: flags.string({description: 'optional description for the field so you remember what it\'s for next year'}),
-    default: flags.string({description: 'required for checkbox fields.  Express in Salesforce formula language (good luck with that!)'}),
-    required: flags.boolean({ char: 'r', description: 'field is required' }),
-    unique: flags.boolean({ char: 'u', description: 'field must be unique' }),
-    externalId: flags.boolean({ description: 'use as an external id' }),
+    // name: { type: 'string',  char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' },
+    object: { type: 'string',  char: 'o', description: 'API name of an object to add a field to' },
+    name: { type: 'string',  char: 'n', description: 'Label for the field' },
+    api: { type: 'string',  char: 'a', description: 'API name for the field' },
+    type: { type: 'string',  char: 't', description: `field type.  Big Objects: ${SupportedTypes__b.join(',')}.  Events: ${SupportedTypes__e.join(',')}`},
+    description: { type: 'string', description: 'optional description for the field so you remember what it\'s for next year'},
+    default: { type: 'string', description: 'required for checkbox fields.  Express in Salesforce formula language (good luck with that!)'},
+    required: { type: 'boolean',  char: 'r', description: 'field is required' },
+    unique: { type: 'boolean',  char: 'u', description: 'field must be unique' },
+    externalId: { type: 'boolean',  description: 'use as an external id' },
 
     // type specific flags
-    length: flags.string({ char: 'l', description: 'length (for text fields)' }),
+    length: { type: 'string',  char: 'l', description: 'length (for text fields)' },
 
-    scale: flags.string({ char: 's', description: 'places right of the decimal' }),
-    precision: flags.string({description: 'maximum allowed digits of a number, including whole and decimal places' }),
+    scale: { type: 'string',  char: 's', description: 'places right of the decimal' },
+    precision: { type: 'string', description: 'maximum allowed digits of a number, including whole and decimal places' },
 
-    lookupObject: flags.string({description: 'API name of the object the lookup goes to'}),
-    relName: flags.string({ description: 'API name for the lookup relationship'}),
+    lookupObject: { type: 'string', description: 'API name of the object the lookup goes to'},
+    relName: { type: 'string',  description: 'API name for the lookup relationship'},
 
     // big object index handling
-    indexPosition: flags.string({ description: 'put in a specific position in the big object index (0 is the first element).  You\'re responsible for dealing with producing a sane array'}),
-    indexAppend: flags.boolean({ description: 'put next in the big object index' }),
-    indexDirection: flags.string({ description: 'sort direction for the big object index', options: ['ASC', 'DESC']}),
-    noIndex: flags.boolean({description: 'do not add this field to the index'}),
+    indexPosition: { type: 'string',  description: 'put in a specific position in the big object index (0 is the first element).  You\'re responsible for dealing with producing a sane array'},
+    indexAppend: { type: 'boolean',  description: 'put next in the big object index' },
+    indexDirection: { type: 'string',  description: 'sort direction for the big object index', options: ['ASC', 'DESC']},
+    noIndex: { type: 'boolean', description: 'do not add this field to the index'},
 
-    directory: flags.string({ char: 'd', default: 'force-app/main/default', description: 'Where is this object metadata? defaults to force-app/main/default' })
+    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is this object metadata? defaults to force-app/main/default' }
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

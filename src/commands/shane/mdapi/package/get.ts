@@ -1,14 +1,10 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
-import fs = require('fs-extra');
 import util = require('util');
 import child_process = require('child_process');
 
 const exec = util.promisify(child_process.exec);
 
 const tmpDir = 'mdapiout';
-const pkgDir = 'pkgDirTemp';
 
 export default class Get extends SfdxCommand {
 
@@ -26,8 +22,8 @@ export default class Get extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    packageName: flags.string({ required: true, char: 'p', description: 'the name of the package you want to retrieve	' }),
-    target: flags.string({ char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' })
+    packageName: {type: 'string', required: true, char: 'p', description: 'the name of the package you want to retrieve	' },
+    target: {type: 'string', char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' }
   };
 
   protected static requiresProject = true;

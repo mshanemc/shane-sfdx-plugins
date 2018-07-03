@@ -1,12 +1,8 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
-import cli from 'cli-ux';
 import jsToXml = require('js2xmlparser');
 import xml2js = require('xml2js');
 import util = require('util');
-import { existsSync } from 'fs-extra';
 
 import { getExisting } from '../../../shared/getExisting';
 import { setupArray } from '../../../shared/setupArray';
@@ -35,11 +31,11 @@ export default class PermSetCreate extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    name: flags.string({ char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you'}),
-    object: flags.string({ char: 'o', description: 'API name of an object to add perms for.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' }),
-    field: flags.string({ char: 'f', description: 'API name of an field to add perms for.  Required --object If blank, then you mean all the fields'}),
-    directory: flags.string({ char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' }),
-    tab: flags.boolean({ char: 't', description: 'also add the tab for the specified object (or all objects if there is no specified objects)' })
+    name: { type: 'string',  char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you'},
+    object: { type: 'string',  char: 'o', description: 'API name of an object to add perms for.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' },
+    field: { type: 'string',  char: 'f', description: 'API name of an field to add perms for.  Required --object If blank, then you mean all the fields'},
+    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' },
+    tab: { type: 'boolean',  char: 't', description: 'also add the tab for the specified object (or all objects if there is no specified objects)' }
 
   };
 

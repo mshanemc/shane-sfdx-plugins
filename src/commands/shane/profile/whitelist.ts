@@ -1,4 +1,3 @@
-import { flags } from '@oclif/command';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
@@ -21,8 +20,8 @@ export default class ProfileWhitelist extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    name: flags.string({ char: 'n', required: true, description: 'profile name' }),
-    directory: flags.string({ char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' })
+    name: { type: 'string',  char: 'n', required: true, description: 'profile name' },
+    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' }
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

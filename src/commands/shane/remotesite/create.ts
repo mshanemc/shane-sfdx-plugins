@@ -1,4 +1,3 @@
-import { flags } from '@oclif/command';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
@@ -21,10 +20,10 @@ export default class RemoteSite extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    url: flags.string({ char: 'u', required: true, description: 'url that you want to allow callouts to' }),
-    name: flags.string({ char: 'n', required: true, description: 'name it (Salesforce API compliant name)' }),
-    description: flags.string({ char: 'd', default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' }),
-    target: flags.string({ char: 't', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' })
+    url: { type: 'string',  char: 'u', required: true, description: 'url that you want to allow callouts to' },
+    name: { type: 'string',  char: 'n', required: true, description: 'name it (Salesforce API compliant name)' },
+    description: { type: 'string',  char: 'd', default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' },
+    target: { type: 'string',  char: 't', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' }
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

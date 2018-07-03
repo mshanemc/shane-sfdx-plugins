@@ -1,4 +1,3 @@
-import { flags } from '@oclif/command';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import util = require('util');
@@ -20,9 +19,9 @@ export default class Push extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    convertedFolder: flags.string({ char: 'd', description: 'where to store the mdapi-converted source', default: 'mdapiout' }),
-    keepConverted: flags.boolean({ char: 'k', description: 'Don\'t automatically delete the converted source'}),
-    source: flags.string({ char: 'r', default: 'force-app', description: 'deploy a specific folder that\'s not force-app'}),
+    convertedFolder: { type: 'string', char: 'd', description: 'where to store the mdapi-converted source', default: 'mdapiout' },
+    keepConverted: {type: 'boolean', char: 'k', description: 'Don\'t automatically delete the converted source'},
+    source: { type: 'string', char: 'r', default: 'force-app', description: 'deploy a specific folder that\'s not force-app'},
     deploymentTimeLimit: {char: 'w', type: 'number', description: 'How many minutes to wait for the deployment to finish', default: 200 }
   };
 

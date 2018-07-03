@@ -19,9 +19,9 @@ export default class GithubPackageInstall extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    githubUser: flags.string({ required: true, char: 'g', description: 'github username where the package lives' }),
-    repo: flags.string({ required: true, char: 'r', description: 'repo where the packages lives' })
-    // branch: flags.string({ char: 'b', description: 'optional branch' })
+    githubUser: {type: 'string', required: true, char: 'g', description: 'github username where the package lives' },
+    repo: {type: 'string', required: true, char: 'r', description: 'repo where the packages lives' }
+    // branch: { type: 'string',  char: 'b', description: 'optional branch' })
   };
 
   protected static requiresProject = true;

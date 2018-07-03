@@ -1,10 +1,5 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import localFile2CV = require('../../../../shared/localFile2CV');
-
-core.Messages.importMessagesDirectory(join(__dirname, '..', '..', '..'));
-// const messages = core.Messages.loadMessages('shane-sfdx-plugins', 'org');
 
 export default class Upload extends SfdxCommand {
 
@@ -26,10 +21,10 @@ export default class Upload extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    file: flags.string({ char: 'f', description: 'path to file on local filesystem', required: true }),
-    parentId: flags.string({ char: 'p', description: 'optional record ID that the file should be attached to' }),
-    chatter: flags.boolean({ char: 'c', description: 'attach as a chatter content post instead of just as a file' }),
-    name: flags.string({ char: 'n', description: 'set the name of the uploaded file' })
+    file: { char: 'f', description: 'path to file on local filesystem', required: true, type: 'string' },
+    parentId: { char: 'p', description: 'optional record ID that the file should be attached to', type: 'string' },
+    chatter: { char: 'c', description: 'attach as a chatter content post instead of just as a file', type: 'boolean' },
+    name: { char: 'n', description: 'set the name of the uploaded file', type: 'string' }
 
   };
 
@@ -52,13 +47,6 @@ export default class Upload extends SfdxCommand {
 
     // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
     const conn = this.org.getConnection();
-    // const query = 'Select Name, TrialExpirationDate from Organization';
-
-    interface ContentVersionCreateRequest {
-      VersionData: string;
-      PathOnClient: string;
-      Title?: string;
-    }
 
     interface CreateResult {
       id: string;
@@ -78,12 +66,6 @@ export default class Upload extends SfdxCommand {
       attributes: object;
       Id: string;
       ContentDocumentId?: string;
-    }
-
-    interface QueryResult {
-      totalSize: number;
-      done: boolean;
-      records: Record[];
     }
 
     const CV = <Record> await localFile2CV.file2CV(conn, this.flags.file, this.flags.name);

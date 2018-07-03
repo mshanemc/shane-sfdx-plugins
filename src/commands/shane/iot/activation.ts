@@ -1,10 +1,6 @@
 /* tslint:disable no-var-requires */
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
-import fs = require('fs-extra');
 import request = require('request-promise-native');
-import localFile2CV = require('../../../shared/localFile2CV');
 
 const chalk = require('chalk');
 
@@ -22,9 +18,9 @@ export default class Activation extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    name: flags.string({ char: 'n', required: true, description: 'API name of the orchestration' }),
-    reset: flags.boolean({ char: 'r', description: 'reset all instances of the orchestration' }),
-    deactivate: flags.boolean({ char: 'd', description: 'deactivate the orchestration' })
+    name: {type: 'string', char: 'n', required: true, description: 'API name of the orchestration' },
+    reset: { type: 'boolean',  char: 'r', description: 'reset all instances of the orchestration' },
+    deactivate: { type: 'boolean',  char: 'd', description: 'deactivate the orchestration' }
   };
 
   protected static requiresUsername = true;

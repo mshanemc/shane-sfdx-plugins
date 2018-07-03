@@ -1,4 +1,3 @@
-import { flags } from '@oclif/command';
 import { SfdxCommand, core } from '@salesforce/command';
 import * as _ from 'lodash';
 import fs = require('fs-extra');
@@ -57,10 +56,10 @@ export default class PermSetConvert extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    name: flags.string({ char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' }),
-    profile: flags.string({ char: 'p', required: true, description: 'API name of an profile to convert.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' }),
-    directory: flags.string({ char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' }),
-    editProfile: flags.boolean({ char: 'e', description: 'remove metadata from profile'})
+    name: { type: 'string',  char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' },
+    profile: { type: 'string',  char: 'p', required: true, description: 'API name of an profile to convert.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' },
+    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' },
+    editProfile: { type: 'boolean',  char: 'e', description: 'remove metadata from profile'}
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

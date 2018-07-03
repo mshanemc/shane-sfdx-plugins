@@ -1,4 +1,3 @@
-import { flags } from '@oclif/command';
 import { SfdxCommand, core} from '@salesforce/command';
 import fs = require('fs-extra');
 import util = require('util');
@@ -38,15 +37,15 @@ export default class Pull extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    code: flags.boolean({ char: 'c', description: 'Pull apex, VF, Lightning Components, triggers, static resources' }),
-    perms: flags.boolean({ char: 'p', description: 'Pull profiles, permsets, roles, groups, customPermissions' }),
-    schema: flags.boolean({ char: 's', description: 'Pull objects, fields, list views, recordtypes, valueSets, custom Metadata' }),
-    ui: flags.boolean({ char: 'i', description: 'Pull page layouts, tabs, compact layouts, apps, tabs, more' }),
-    object: flags.string({ char: 'o', description: 'pull metadata for a single object'}),
-    type: flags.string({char: 't', description: 'pull only a specific type.  See the metadata api docs for type names'}),
+    code: {type: 'boolean', char: 'c', description: 'Pull apex, VF, Lightning Components, triggers, static resources' },
+    perms: {type: 'boolean', char: 'p', description: 'Pull profiles, permsets, roles, groups, customPermissions' },
+    schema: {type: 'boolean', char: 's', description: 'Pull objects, fields, list views, recordtypes, valueSets, custom Metadata' },
+    ui: {type: 'boolean', char: 'i', description: 'Pull page layouts, tabs, compact layouts, apps, tabs, more' },
+    object: {type: 'string',  char: 'o', description: 'pull metadata for a single object'},
+    type: {type: 'string', char: 't', description: 'pull only a specific type.  See the metadata api docs for type names'},
     // TODO: automation, security, reporting, i18n
-    all: flags.boolean({ description: 'Pulls just about everything.  Don\'t use this flag with any other subset of metadata.  Not recommended for really large metatadat orgs because it\'ll overflow stdout'}),
-    target: flags.string({ char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' })
+    all: {type: 'boolean', description: 'Pulls just about everything.  Don\'t use this flag with any other subset of metadata.  Not recommended for really large metatadat orgs because it\'ll overflow stdout', exclusive: ['code']},
+    target: {type: 'string',  char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' }
   };
 
   protected static requiresProject = true;

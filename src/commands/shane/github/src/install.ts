@@ -1,4 +1,3 @@
-import { flags } from '@oclif/command';
 import { SfdxCommand, core } from '@salesforce/command';
 import util = require('util');
 import child_process = require('child_process');
@@ -21,11 +20,11 @@ export default class GithubPackageInstall extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    githubUser: flags.string({ required: true, char: 'g', description: 'github username where the package lives' }),
-    repo: flags.string({ required: true, char: 'r', description: 'repo where the packages lives' }),
-    path: flags.string({ default: 'src', char: 'p', description: 'folder where the source lives' }),
-    keepLocally: flags.boolean({char: 'k', description: 'keep the cloned repo in local source instead of deleting it'})
-    // branch: flags.string({ char: 'b', description: 'optional branch' })
+    githubUser: {type: 'string', required: true, char: 'g', description: 'github username where the package lives' },
+    repo: {type: 'string', required: true, char: 'r', description: 'repo where the packages lives' },
+    path: {type: 'string', default: 'src', char: 'p', description: 'folder where the source lives' },
+    keepLocally: {type: 'boolean', char: 'k', description: 'keep the cloned repo in local source instead of deleting it'}
+    // branch: {type: 'string', char: 'b', description: 'optional branch' })
   };
 
   protected static requiresProject = true;
