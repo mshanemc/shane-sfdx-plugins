@@ -1,12 +1,6 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
-import cli from 'cli-ux';
 import jsToXml = require('js2xmlparser');
-import xml2js = require('xml2js');
-import util = require('util');
-import { existsSync } from 'fs-extra';
 
 import { getExisting } from '../../../../shared/getExisting';
 import * as options from '../../../../shared/js2xmlStandardOptions';

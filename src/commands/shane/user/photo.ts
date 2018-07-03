@@ -21,7 +21,7 @@ export default class Photo extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    firstname: { type: 'string',  char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency' },
+    firstname: { type: 'string',  char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency'},
     lastname: { type: 'string',  char: 'l', required: true, description: 'last name of the user' },
     file: { type: 'string',  char: 'f', description: 'local path of the photo to use' },
     banner: { type: 'string',  char: 'b', description: 'local path of the chatter banner photo to use' }

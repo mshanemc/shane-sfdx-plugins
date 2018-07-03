@@ -14,7 +14,6 @@ const testProjectName = 'testProject';
 describe('shane:static:create', () => {
 
   before(async function() {
-    this.timeout(60000);
     await exec(`rm -rf ${testProjectName}`);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
   });
@@ -44,7 +43,7 @@ describe('shane:static:create', () => {
       const deploySuccess = await testutils.itDeploys(testProjectName);
       expect(deploySuccess).to.be.true;
     }
-  }).timeout(60000);
+  });
 
   after(async () => {
     await exec(`rm -rf ${testProjectName}`);

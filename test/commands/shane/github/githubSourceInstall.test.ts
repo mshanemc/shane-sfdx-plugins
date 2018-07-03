@@ -16,7 +16,6 @@ const username = 'mshanemc';
 describe('shane:github:src:install', () => {
 
   before(async function() {
-    this.timeout(600000);
     await exec(`rm -rf ${testProjectName}`);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
     await testutils.orgCreate(testProjectName);
@@ -36,10 +35,9 @@ describe('shane:github:src:install', () => {
     // console.log(stdout.status);
     expect(stdout.status).to.equal(0);
 
-  }).timeout(600000);
+  });
 
   after(async function() {
-    this.timeout(600000);
     await testutils.orgDelete(testProjectName);
     await exec(`rm -rf ${testProjectName}`);
   });
