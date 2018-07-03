@@ -31,7 +31,7 @@ export default class ObjectCreate extends SfdxCommand {
     label: { type: 'string',  char: 'l', description: 'label for the UI' },
     api: { type: 'string',  char: 'a', description: 'api name.  Ends with one of the supported types: [__b, __e]' },
     plural: { type: 'string',  char: 'p', description: 'plural label for the UI' },
-    highVolume: { type: 'boolean',  char: 'h', description: 'high volume, valid only for platform events (__e)'},
+    highvolume: { type: 'boolean',  char: 'h', description: 'high volume, valid only for platform events (__e)'},
     // description: { type: 'string',  char: 'd', default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' }),
     directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' }
   };
@@ -83,7 +83,7 @@ export default class ObjectCreate extends SfdxCommand {
         fields : []
       };
     } else if (this.flags.api.endsWith('__e')) {
-      outputJSON.eventType = this.flags.highVolume ? 'HighVolume' : 'StandardVolume' ;
+      outputJSON.eventType = this.flags.highvolume ? 'HighVolume' : 'StandardVolume' ;
     } else {
       this.ux.error('API names need to end with one of the supported options:  __b, __e');
       return;

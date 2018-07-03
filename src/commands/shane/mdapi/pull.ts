@@ -122,7 +122,8 @@ export default class Pull extends SfdxCommand {
             name: this.flags.type
           });
         } else if (this.flags.type === 'Document') {
-          // const metadata = await conn.metadata.list([{ type: 'Document' }], this.org.retrieveMaxApiVersion());
+          const metadata = await conn.metadata.list([{ type: 'Document' }], await this.org.retrieveMaxApiVersion());
+          this.ux.log(metadata);
         } else {
           packageJSON.types.push({
             members: '*',

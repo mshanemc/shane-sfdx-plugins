@@ -22,7 +22,7 @@ export default class Upload extends SfdxCommand {
 
   protected static flagsConfig = {
     file: { char: 'f', description: 'path to file on local filesystem', required: true, type: 'string' },
-    parentId: { char: 'p', description: 'optional record ID that the file should be attached to', type: 'string' },
+    parentid: { char: 'p', description: 'optional record ID that the file should be attached to', type: 'string' },
     chatter: { char: 'c', description: 'attach as a chatter content post instead of just as a file', type: 'boolean' },
     name: { char: 'n', description: 'set the name of the uploaded file', type: 'string' }
 
@@ -41,8 +41,8 @@ export default class Upload extends SfdxCommand {
     // const name = this.flags.name || 'world';
 
     // potential errors
-    if (this.flags.chatter && !this.flags.parentId) {
-      this.ux.error('you have to supply parentId if you use the --chatter flag');
+    if (this.flags.chatter && !this.flags.parentid) {
+      this.ux.error('you have to supply parentid if you use the --chatter flag');
     }
 
     // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
@@ -72,17 +72,17 @@ export default class Upload extends SfdxCommand {
 
     if (!this.flags.chatter) {
       // regular file attachment
-      this.ux.log(`will create a regular file attachment on record ${this.flags.parentId}`);
+      this.ux.log(`will create a regular file attachment on record ${this.flags.parentid}`);
 
       const CDLReq = {
         ContentDocumentId: CV.ContentDocumentId,
-        LinkedEntityId: this.flags.parentId,
+        LinkedEntityId: this.flags.parentid,
         ShareType: 'V'
       } as CDLCreateRequest;
 
       const CDLCreateResult = await conn.sobject('ContentDocumentLink').create(CDLReq) as CreateResult;
       if (CDLCreateResult.success) {
-        this.ux.log(`created regular file attachment on record ${this.flags.parentId}`);
+        this.ux.log(`created regular file attachment on record ${this.flags.parentid}`);
       } else {
         this.ux.error(CDLCreateResult.message);
       }
@@ -91,13 +91,13 @@ export default class Upload extends SfdxCommand {
       // chatter post
       const feedItemRequest = {
         RelatedRecordId: CV.Id,
-        ParentId: this.flags.parentId,
+        ParentId: this.flags.parentid,
         Type: 'ContentPost'
       };
 
       const feedItemCreateResult = await conn.sobject('FeedItem').create(feedItemRequest) as CreateResult;
       if (feedItemCreateResult.success) {
-        this.ux.log(`created chatter file attachment on record ${this.flags.parentId}`);
+        this.ux.log(`created chatter file attachment on record ${this.flags.parentid}`);
       } else {
         this.ux.error(feedItemCreateResult.message);
       }

@@ -59,7 +59,7 @@ export default class PermSetConvert extends SfdxCommand {
     name: { type: 'string',  char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' },
     profile: { type: 'string',  char: 'p', required: true, description: 'API name of an profile to convert.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' },
     directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' },
-    editProfile: { type: 'boolean',  char: 'e', description: 'remove metadata from profile'}
+    editprofile: { type: 'boolean',  char: 'e', description: 'remove metadata from profile'}
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
@@ -103,7 +103,7 @@ export default class PermSetConvert extends SfdxCommand {
           existing.applicationVisibilities = aVs;
         }
 
-        if (this.flags.editProfile) {
+        if (this.flags.editprofile) {
           delete profile[item.profileType];
         }
       } else {
@@ -125,7 +125,7 @@ export default class PermSetConvert extends SfdxCommand {
     const permSetXml = jsToXml.parse('PermissionSet', existing, options.js2xmlStandardOptions);
     fs.writeFileSync(targetFilename, permSetXml);
 
-    if (this.flags.editProfile) {
+    if (this.flags.editprofile) {
       // correct @ => $ issue
       if (profile['$']) {
         const temp = profile['$'];

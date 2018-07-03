@@ -22,7 +22,7 @@ export default class Get extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    packageName: {type: 'string', required: true, char: 'p', description: 'the name of the package you want to retrieve	' },
+    packagename: {type: 'string', required: true, char: 'p', description: 'the name of the package you want to retrieve	' },
     target: {type: 'string', char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' }
   };
 
@@ -33,7 +33,7 @@ export default class Get extends SfdxCommand {
 
     process.stdout.write('starting package retrieval...');
 
-    await exec(`sfdx force:mdapi:retrieve -s -p "${this.flags.packageName}" -u ${this.org.getUsername()}  -r ./${tmpDir} -w 30`);
+    await exec(`sfdx force:mdapi:retrieve -s -p "${this.flags.packagename}" -u ${this.org.getUsername()}  -r ./${tmpDir} -w 30`);
     process.stdout.write('Package Retrieved.  Unzipping...');
 
     await exec(`unzip -o ./${tmpDir}/unpackaged.zip -d ./${tmpDir}`);

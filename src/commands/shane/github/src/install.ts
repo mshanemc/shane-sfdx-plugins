@@ -20,10 +20,10 @@ export default class GithubPackageInstall extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    githubUser: {type: 'string', required: true, char: 'g', description: 'github username where the package lives' },
+    githubuser: {type: 'string', required: true, char: 'g', description: 'github username where the package lives' },
     repo: {type: 'string', required: true, char: 'r', description: 'repo where the packages lives' },
     path: {type: 'string', default: 'src', char: 'p', description: 'folder where the source lives' },
-    keepLocally: {type: 'boolean', char: 'k', description: 'keep the cloned repo in local source instead of deleting it'}
+    keeplocally: {type: 'boolean', char: 'k', description: 'keep the cloned repo in local source instead of deleting it'}
     // branch: {type: 'string', char: 'b', description: 'optional branch' })
   };
 
@@ -31,7 +31,7 @@ export default class GithubPackageInstall extends SfdxCommand {
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
 
-    const repoUrl = `https://github.com/${this.flags.githubUser}/${this.flags.repo}`;
+    const repoUrl = `https://github.com/${this.flags.githubuser}/${this.flags.repo}`;
 
     const gitResult = await exec(`git clone ${repoUrl}`);
     this.ux.log(gitResult.stderr);
@@ -40,7 +40,7 @@ export default class GithubPackageInstall extends SfdxCommand {
     const installResult = await exec(`sfdx force:mdapi:deploy -d ${this.flags.repo}/${this.flags.path} -u ${this.org.getUsername()} -w 20 --json`);
     this.ux.logJson(JSON.parse(installResult.stdout));
 
-    if (!this.flags.keepLocally) {
+    if (!this.flags.keeplocally) {
       await exec(`rm -rf ${this.flags.repo}`);
     }
 

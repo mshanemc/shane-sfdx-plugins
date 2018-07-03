@@ -30,8 +30,8 @@ export default class FATUpdate extends SfdxCommand {
 
   protected static flagsConfig = {
     object: {char: 'o', description: 'object to manage the policy for', type: 'string', required: true},
-    archiveAfterMonths: { char: 'm', description: 'archive after this number of months', type: 'number', default: 18 },
-    archiveRetentionYears: { char: 'y', default: 10, description: 'Archive for this many years', type: 'number' },
+    archiveaftermonths: { char: 'm', description: 'archive after this number of months', type: 'number', default: 18 },
+    archiveretentionyears: { char: 'y', default: 10, description: 'Archive for this many years', type: 'number' },
     description: {description: 'optional friendly description for the policy', type: 'string'},
     directory: { char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default', type: 'string' }
   };
@@ -58,11 +58,11 @@ export default class FATUpdate extends SfdxCommand {
 
     existing.historyRetentionPolicy = existing.historyRetentionPolicy || {};
 
-    if (this.flags.archiveAfterMonths) {
-      existing.historyRetentionPolicy.archiveAfterMonths = this.flags.archiveAfterMonths;
+    if (this.flags.archiveaftermonths) {
+      existing.historyRetentionPolicy.archiveAfterMonths = this.flags.archiveaftermonths;
     }
-    if (this.flags.archiveRetentionYears) {
-      existing.historyRetentionPolicy.archiveRetentionYears = this.flags.archiveRetentionYears;
+    if (this.flags.archiveretentionyears) {
+      existing.historyRetentionPolicy.archiveRetentionYears = this.flags.archiveretentionyears;
     }
     if (this.flags.description) {
       existing.historyRetentionPolicy.description = this.flags.description;

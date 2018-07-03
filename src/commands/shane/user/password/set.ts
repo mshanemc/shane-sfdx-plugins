@@ -15,8 +15,8 @@ export default class Set extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    firstName: { type: 'string',  char: 'g', required: true, description: 'first (given) name of the user--keeping -f for file for consistency' },
-    lastName: { type: 'string',  char: 'l', required: true, description: 'last name of the user' },
+    firstname: { type: 'string',  char: 'g', required: true, description: 'first (given) name of the user--keeping -f for file for consistency' },
+    lastname: { type: 'string',  char: 'l', required: true, description: 'last name of the user' },
     password: { type: 'string',  char: 'p', required: true, description: 'local path of the photo to use' }
   };
 
@@ -28,7 +28,7 @@ export default class Set extends SfdxCommand {
     let user;
 
     try {
-      user = await userIdLookup.getUserId(conn, this.flags.lastName, this.flags.firstName);
+      user = await userIdLookup.getUserId(conn, this.flags.lastname, this.flags.firstname);
     } catch (e) {
       this.ux.error(chalk.red(e));
       return {
