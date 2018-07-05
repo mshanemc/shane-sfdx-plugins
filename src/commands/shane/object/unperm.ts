@@ -54,7 +54,6 @@ export default class UnPerm extends SfdxCommand {
   }
 
   public async removePerms(targetFilename: string, metadataType: string): Promise<any> { // tslint:disable-line:no-any
-    // this.ux.log(chalk.blue(targetFilename));
 
     let existing = await getExisting(targetFilename, metadataType);
 
@@ -83,7 +82,7 @@ export default class UnPerm extends SfdxCommand {
 
     const outputXML = jsToXml.parse(metadataType, existing, options.js2xmlStandardOptions);
     fs.writeFileSync(targetFilename, outputXML);
-    this.ux.log(`removed ${objectBefore - existing.objectPermissions.length} object permissions, ${recordTypeBefore - existing.recordTypes.length} recordTypes, ${layoutBefore - existing.layoutAssignments.length} layouts assignments and ${fieldBefore - existing.fieldPermissions.length} field permissions from ${this.flags.object} in ${metadataType} ${chalk.blue(targetFilename)}`);
+    this.ux.log(`removed ${objectBefore - existing.objectPermissions.length} objects, ${recordTypeBefore - existing.recordTypes.length} recordTypes, ${layoutBefore - existing.layoutAssignments.length} layoutsAssignments and ${fieldBefore - existing.fieldPermissions.length} fields from ${this.flags.object} ${chalk.blue(targetFilename)}`);
 
   }
 }
