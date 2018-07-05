@@ -16,6 +16,7 @@ const standardObjects = ['Account', 'AccountContactRelation', 'AccountContactRol
 const StandardValueSets = ['AccountContactMultiRoles', 'AccountContactRole', 'AccountOwnership', 'AccountRating', 'AccountType', 'AssetStatus', 'CampaignMemberStatus', 'CampaignStatus', 'CampaignType', 'CaseContactRole', 'CaseOrigin', 'CasePriority', 'CaseReason', 'CaseStatus', 'CaseType', 'ContactRole', 'ContractContactRole', 'ContractStatus', 'EntitlementType', 'EventSubject', 'EventType', 'FiscalYearPeriodName', 'FiscalYearPeriodPrefix', 'FiscalYearQuarterName', 'FiscalYearQuarterPrefix', 'IdeaCategory', 'IdeaMultiCategory', 'IdeaStatus', 'IdeaThemeStatus', 'Industry', 'LeadSource', 'LeadStatus', 'OpportunityCompetitor', 'OpportunityStage', 'OpportunityType', 'OrderType', 'PartnerRole', 'Product2Family', 'QuestionOrigin', 'QuickTextCategory', 'QuickTextChannel', 'QuoteStatus', 'RoleInTerritory2', 'SalesTeamRole', 'Salutation', 'ServiceContractApprovalStatus', 'SocialPostClassification', 'SocialPostEngagementLevel', 'SocialPostReviewedStatus', 'SolutionStatus', 'TaskPriority', 'TaskStatus', 'TaskSubject', 'TaskType', 'WorkOrderLineItemStatus', 'WorkOrderPriority', 'WorkOrderStatus'];
 
 import child_process = require('child_process');
+import chalk from 'chalk';
 
 const exec = util.promisify(child_process.exec);
 
@@ -84,7 +85,7 @@ export default class Pull extends SfdxCommand {
         xmlns: 'http://soap.sforce.com/2006/04/metadata'
       },
       'types': [],
-      'version': this.org.retrieveMaxApiVersion()
+      'version': await this.org.retrieveMaxApiVersion()
     };
 
     if (this.flags.all) {
@@ -123,8 +124,32 @@ export default class Pull extends SfdxCommand {
             name: this.flags.type
           });
         } else if (this.flags.type === 'Document') {
-          const metadata = await conn.metadata.list([{ type: 'Document' }], await this.org.retrieveMaxApiVersion());
-          this.ux.log(metadata);
+          const apiVersion = await this.org.retrieveMaxApiVersion();
+          try {
+            const metadata = await conn.metadata.list([{ type: 'DocumentFolder', folder: null} ], apiVersion );
+            // this.ux.log(metadata);
+            const documentsList = [];
+            for (const folder of metadata) {
+              // this.ux.log(chalk.blue(folder.fullName));
+              documentsList.push(folder.fullName);
+              const documents = await conn.metadata.list([{ type: 'Document', folder: folder.fullName }], apiVersion);
+              if (documents) {
+                if (documents.length > 0) {
+                  for (const document of documents) {
+                    // this.ux.log(document.fullName);
+                    documentsList.push(document.fullName);
+                  }
+                }
+              }
+            }
+
+            packageJSON.types.push({
+              members: documentsList,
+              name: 'Document'
+            });
+          } catch (err) {
+            throw new Error(err);
+          }
         } else {
           packageJSON.types.push({
             members: '*',
@@ -170,6 +195,7 @@ export default class Pull extends SfdxCommand {
       }
     }
 
+    // this.ux.logJson(packageJSON);
     const xml = jsToXml.parse('Package', packageJSON, options.js2xmlStandardOptions);
     fs.writeFileSync(`./${pkgDir}/package.xml`, xml);
 
