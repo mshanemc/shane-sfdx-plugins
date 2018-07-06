@@ -45,7 +45,7 @@ export default class ProfileWhitelist extends SfdxCommand {
       endAddress: '255.255.255.255'
     });
 
-    existing = fixExistingDollarSign(existing);
+    existing = await fixExistingDollarSign(existing);
 
     // convert to xml and write out the file
     const xml = jsToXml.parse('Profile', existing, options.js2xmlStandardOptions);

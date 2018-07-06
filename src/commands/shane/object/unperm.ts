@@ -84,7 +84,7 @@ export default class UnPerm extends SfdxCommand {
     existing.tabSettings = _.filter(existing.tabSettings, (item) => item.tab !== this.flags.object && item.tab !== `standard-${this.flags.object}`);
     existing.tabVisibilities = _.filter(existing.tabVisibilities, (item) => item.tab !== this.flags.object && item.tab !== `standard-${this.flags.object}`);
 
-    existing = fixExistingDollarSign(existing);
+    existing = await fixExistingDollarSign(existing);
 
     const outputXML = jsToXml.parse(metadataType, existing, options.js2xmlStandardOptions);
     fs.writeFileSync(targetFilename, outputXML);

@@ -211,7 +211,7 @@ export default class FieldCreate extends SfdxCommand {
         this.flags.indexdirection = await cli.prompt('which direction should this index be sorted? (ASC, DESC)');
       }
 
-      existing = fixExistingDollarSign(existing);
+      existing = await fixExistingDollarSign(existing);
 
       const newIndex = {
         name: this.flags.api,

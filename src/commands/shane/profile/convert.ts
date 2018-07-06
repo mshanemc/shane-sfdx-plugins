@@ -112,7 +112,7 @@ export default class PermSetConvert extends SfdxCommand {
 
     });
 
-    existing = fixExistingDollarSign(existing);
+    existing = await fixExistingDollarSign(existing);
 
     fs.ensureDirSync(`${this.flags.directory}/permissionsets`);
 
@@ -122,7 +122,7 @@ export default class PermSetConvert extends SfdxCommand {
 
     if (this.flags.editprofile) {
       // correct @ => $ issue
-      profile = fixExistingDollarSign(profile);
+      profile = await fixExistingDollarSign(profile);
 
       const profileXml = jsToXml.parse('Profile', profile, options.js2xmlStandardOptions);
       fs.writeFileSync(targetProfile, profileXml);

@@ -68,7 +68,7 @@ export default class FATUpdate extends SfdxCommand {
       existing.historyRetentionPolicy.description = this.flags.description;
     }
 
-    existing = fixExistingDollarSign(existing);
+    existing = await fixExistingDollarSign(existing);
 
     // convert to xml and write out the file
     const xml = jsToXml.parse('CustomObject', existing, options.js2xmlStandardOptions);

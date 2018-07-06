@@ -1,10 +1,10 @@
-import { SfdxCommand, core } from '@salesforce/command';
+import { core, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
-import xml2js = require('xml2js');
 import util = require('util');
+import xml2js = require('xml2js');
 
-import { getExisting, fixExistingDollarSign } from '../../../shared/getExisting';
+import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
 import { setupArray } from '../../../shared/setupArray';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
@@ -61,8 +61,8 @@ export default class PermSetCreate extends SfdxCommand {
       '@': {
         xmlns: 'http://soap.sforce.com/2006/04/metadata'
       },
-      'hasActivationRequired': 'false',
-      'label': this.flags.name
+      hasActivationRequired: 'false',
+      label: this.flags.name
     });
 
     let objectList = [];
@@ -97,7 +97,7 @@ export default class PermSetCreate extends SfdxCommand {
       }
     }
 
-    existing = fixExistingDollarSign(existing);
+    existing = await fixExistingDollarSign(existing);
 
     fs.ensureDirSync(`${this.flags.directory}/permissionsets`);
 
@@ -133,13 +133,13 @@ export default class PermSetCreate extends SfdxCommand {
 
     existing = setupArray(existing, 'objectPermissions');
 
-    if (existing.objectPermissions.find((e) => {
+    if (existing.objectPermissions.find(e => {
       return e.object === objectName;
     })) {
       this.ux.log(`Object Permission already exists: ${objectName}.  Nothing to add.`);
       return existing;
-    } else {
-      this.ux.log(`Added object perms for ${objectName}`);
+    } else if (objectName.endsWith('__c')) {
+      this.ux.log(`Added regular object perms for ${objectName}`);
       existing.objectPermissions.push({
         allowCreate: 'true',
         allowDelete: 'true',
@@ -149,8 +149,16 @@ export default class PermSetCreate extends SfdxCommand {
         object: objectName,
         viewAllRecords: 'true'
       });
-      return existing;
+    } else if (objectName.endsWith('__e')) {
+      this.ux.log(`Added object perms for platform event ${objectName}`);
+      existing.objectPermissions.push({
+        allowCreate: 'true',
+        allowRead: 'true',
+        object: objectName
+      });
     }
+    return existing;
+
   }
 
   public async addFieldPerms(existing, objectName: string, fieldName: string) { // tslint:disable-line:no-any
@@ -159,7 +167,7 @@ export default class PermSetCreate extends SfdxCommand {
 
     existing = setupArray(existing, 'fieldPermissions');
 
-    if (existing.fieldPermissions.find((e) => {
+    if (existing.fieldPermissions.find(e => {
       return e.field === `${objectName}.${fieldName}`;
     })) {
       this.ux.log(`Field Permission already exists: ${objectName}.${fieldName}.  Nothing to add.`);

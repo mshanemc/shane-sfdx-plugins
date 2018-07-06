@@ -61,7 +61,7 @@ export default class TSPUsernameUpdate extends SfdxCommand {
         existing.action.notifications.user = finalUsername;
       }
 
-      existing = fixExistingDollarSign(existing);
+      existing = await fixExistingDollarSign(existing);
 
       // convert to xml and write out the file
       const xml = jsToXml.parse('TransactionSecurityPolicy', existing, options.js2xmlStandardOptions);
