@@ -6,7 +6,7 @@ import util = require('util');
 import xml2js = require('xml2js');
 
 import * as options from '../../../shared/js2xmlStandardOptions';
-// import { getExisting } from '../../../shared/getExisting';
+import { fixExistingDollarSign } from '../../../shared/getExisting';
 
 import chalk from 'chalk';
 const	SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
@@ -178,7 +178,7 @@ export default class FieldCreate extends SfdxCommand {
       const filePath = `${this.flags.directory}/objects/${this.flags.object}/${this.flags.object}.object-meta.xml`;
       const fileRead = await parseString(fs.readFileSync(filePath));
 
-      const existing = fileRead.CustomObject;
+      let existing = fileRead.CustomObject;
       // this.ux.log(existing.indexes[0].fields);
 
       existing.indexes[0].fields = existing.indexes[0].fields || [];
@@ -211,12 +211,7 @@ export default class FieldCreate extends SfdxCommand {
         this.flags.indexdirection = await cli.prompt('which direction should this index be sorted? (ASC, DESC)');
       }
 
-      // correct @ => $ issue
-      if (existing['$']) {
-        const temp = existing['$'];
-        delete existing['$'];
-        existing['@'] = temp;
-      }
+      existing = fixExistingDollarSign(existing);
 
       const newIndex = {
         name: this.flags.api,

@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 
-import { getExisting } from '../../../shared/getExisting';
+import { getExisting, fixExistingDollarSign } from '../../../shared/getExisting';
 import { setupArray } from '../../../shared/setupArray';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
@@ -112,12 +112,7 @@ export default class PermSetConvert extends SfdxCommand {
 
     });
 
-    // correct @ => $ issue
-    if (existing['$']) {
-      const temp = existing['$'];
-      delete existing['$'];
-      existing['@'] = temp;
-    }
+    existing = fixExistingDollarSign(existing);
 
     fs.ensureDirSync(`${this.flags.directory}/permissionsets`);
 
@@ -127,11 +122,8 @@ export default class PermSetConvert extends SfdxCommand {
 
     if (this.flags.editprofile) {
       // correct @ => $ issue
-      if (profile['$']) {
-        const temp = profile['$'];
-        delete profile['$'];
-        profile['@'] = temp;
-      }
+      profile = fixExistingDollarSign(profile);
+
       const profileXml = jsToXml.parse('Profile', profile, options.js2xmlStandardOptions);
       fs.writeFileSync(targetProfile, profileXml);
       this.ux.log(`Permissions removed from ${targetProfile}`);

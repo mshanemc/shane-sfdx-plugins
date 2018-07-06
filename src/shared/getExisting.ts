@@ -17,3 +17,12 @@ export async function getExisting(targetFilename: string, subType: string, defau
     throw new Error(`Not found: ${targetFilename}`);
   }
 }
+
+export async function fixExistingDollarSign(existing: object) {
+  if (existing['$']) {
+    const temp = existing['$'];
+    delete existing['$'];
+    existing['@'] = temp;
+  }
+  return existing;
+}

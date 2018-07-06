@@ -6,7 +6,7 @@ import cli from 'cli-ux';
 import jsToXml = require('js2xmlparser');
 
 import chalk from 'chalk';
-import { getExisting } from '../../../shared/getExisting';
+import { getExisting, fixExistingDollarSign } from '../../../shared/getExisting';
 import * as options from '../../../shared/js2xmlStandardOptions';
 
 export default class FATUpdate extends SfdxCommand {
@@ -53,7 +53,7 @@ export default class FATUpdate extends SfdxCommand {
       return;
     }
 
-    const existing = await getExisting(targetFilename, 'CustomObject');
+    let existing = await getExisting(targetFilename, 'CustomObject');
     existing.enableHistory = true;
 
     existing.historyRetentionPolicy = existing.historyRetentionPolicy || {};
@@ -68,12 +68,7 @@ export default class FATUpdate extends SfdxCommand {
       existing.historyRetentionPolicy.description = this.flags.description;
     }
 
-    // correct @ => $ issue
-    if (existing['$']) {
-      const temp = existing['$'];
-      delete existing['$'];
-      existing['@'] = temp;
-    }
+    existing = fixExistingDollarSign(existing);
 
     // convert to xml and write out the file
     const xml = jsToXml.parse('CustomObject', existing, options.js2xmlStandardOptions);

@@ -4,7 +4,7 @@ import jsToXml = require('js2xmlparser');
 import xml2js = require('xml2js');
 import util = require('util');
 
-import { getExisting } from '../../../shared/getExisting';
+import { getExisting, fixExistingDollarSign } from '../../../shared/getExisting';
 import { setupArray } from '../../../shared/setupArray';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
@@ -97,12 +97,7 @@ export default class PermSetCreate extends SfdxCommand {
       }
     }
 
-    // correct @ => $ issue
-    if (existing['$']) {
-      const temp = existing['$'];
-      delete existing['$'];
-      existing['@'] = temp;
-    }
+    existing = fixExistingDollarSign(existing);
 
     fs.ensureDirSync(`${this.flags.directory}/permissionsets`);
 

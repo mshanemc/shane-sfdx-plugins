@@ -2,7 +2,7 @@ import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 
-import { getExisting } from '../../../../shared/getExisting';
+import { getExisting, fixExistingDollarSign } from '../../../../shared/getExisting';
 import * as options from '../../../../shared/js2xmlStandardOptions';
 
 import chalk from 'chalk';
@@ -49,7 +49,7 @@ export default class TSPUsernameUpdate extends SfdxCommand {
     // loop through the TSPs
     for (const tsp of tsps) {
 
-      const existing = await getExisting(`${targetFolder}/${tsp}`, 'TransactionSecurityPolicy');
+      let existing = await getExisting(`${targetFolder}/${tsp}`, 'TransactionSecurityPolicy');
 
       existing.executionUser = finalUsername;
 
@@ -61,12 +61,7 @@ export default class TSPUsernameUpdate extends SfdxCommand {
         existing.action.notifications.user = finalUsername;
       }
 
-      // correct @ => $ issue
-      if (existing['$']) {
-        const temp = existing['$'];
-        delete existing['$'];
-        existing['@'] = temp;
-      }
+      existing = fixExistingDollarSign(existing);
 
       // convert to xml and write out the file
       const xml = jsToXml.parse('TransactionSecurityPolicy', existing, options.js2xmlStandardOptions);
