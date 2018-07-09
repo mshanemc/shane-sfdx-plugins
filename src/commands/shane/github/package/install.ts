@@ -1,8 +1,8 @@
 import { flags } from '@oclif/command';
-import { SfdxCommand, core } from '@salesforce/command';
-import util = require('util');
-import request = require('request-promise-native');
+import { SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
+import request = require('request-promise-native');
+import util = require('util');
 
 const exec = util.promisify(child_process.exec);
 
