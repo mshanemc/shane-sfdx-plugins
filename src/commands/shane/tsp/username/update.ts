@@ -1,8 +1,8 @@
-import { SfdxCommand, core } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 
-import { getExisting, fixExistingDollarSign } from '../../../../shared/getExisting';
+import { fixExistingDollarSign, getExisting} from '../../../../shared/getExisting';
 import * as options from '../../../../shared/js2xmlStandardOptions';
 
 import chalk from 'chalk';
