@@ -1,8 +1,8 @@
 import { flags } from '@oclif/command';
-import { SfdxCommand, core } from '@salesforce/command';
-import util = require('util');
-import request = require('request-promise-native');
+import { SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
+import request = require('request-promise-native');
+import util = require('util');
 
 const exec = util.promisify(child_process.exec);
 
@@ -19,9 +19,9 @@ export default class GithubPackageInstall extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    githubUser: flags.string({ required: true, char: 'g', description: 'github username where the package lives' }),
-    repo: flags.string({ required: true, char: 'r', description: 'repo where the packages lives' })
-    // branch: flags.string({ char: 'b', description: 'optional branch' })
+    githubuser: {type: 'string', required: true, char: 'g', description: 'github username where the package lives' },
+    repo: {type: 'string', required: true, char: 'r', description: 'repo where the packages lives' }
+    // branch: { type: 'string',  char: 'b', description: 'optional branch' })
   };
 
   protected static requiresProject = true;
@@ -31,7 +31,7 @@ export default class GithubPackageInstall extends SfdxCommand {
     let packageVersionId;
 
     // first, look in the sfdx-project.json file, using the packaging output from v43
-    let url = `https://raw.githubusercontent.com/${this.flags.githubUser}/${this.flags.repo}/master/sfdx-project.json`;
+    let url = `https://raw.githubusercontent.com/${this.flags.githubuser}/${this.flags.repo}/master/sfdx-project.json`;
     const primaryResult = await request.get({
       url,
       json: true
@@ -48,7 +48,7 @@ export default class GithubPackageInstall extends SfdxCommand {
     } else {
       // try the fallback option
       // get the SubscriberPackageVersionId from github using Shane's original format
-      url = `https://raw.githubusercontent.com/${this.flags.githubUser}/${this.flags.repo}/master/latestVersion.json`;
+      url = `https://raw.githubusercontent.com/${this.flags.githubuser}/${this.flags.repo}/master/latestVersion.json`;
 
       this.ux.log(`file at ${url} says:`);
 
@@ -57,13 +57,14 @@ export default class GithubPackageInstall extends SfdxCommand {
         json: true
       });
 
-      this.ux.logJson(result);
+      // this.ux.log(result);
       packageVersionId = result.SubscriberPackageVersionId;
     // install in the org
     }
-    const installResult = await exec(`sfdx force:package:install --package ${packageVersionId} -r -u ${this.org.getUsername()} -w 20 -p 20 --json`);
-    this.ux.logJson(JSON.parse(installResult.stdout));
-    return installResult;
+
+    const installResult = await exec(`sfdx force:package:install --package ${packageVersionId} -r -u ${this.org.getUsername()} -w 20 --publishwait 20 --json`);
+    // this.ux.logJson(JSON.parse(installResult.stdout));
+    return JSON.parse(installResult.stdout);
   }
 
 }

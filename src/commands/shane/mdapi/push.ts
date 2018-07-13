@@ -1,4 +1,3 @@
-import { flags } from '@oclif/command';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import util = require('util');
@@ -20,10 +19,10 @@ export default class Push extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    convertedFolder: flags.string({ char: 'd', description: 'where to store the mdapi-converted source', default: 'mdapiout' }),
-    keepConverted: flags.boolean({ char: 'k', description: 'Don\'t automatically delete the converted source'}),
-    source: flags.string({ char: 'r', default: 'force-app', description: 'deploy a specific folder that\'s not force-app'}),
-    deploymentTimeLimit: {char: 'w', type: 'number', description: 'How many minutes to wait for the deployment to finish', default: 200 }
+    convertedfolder: { type: 'string', char: 'd', description: 'where to store the mdapi-converted source', default: 'mdapiout' },
+    keepconverted: {type: 'boolean', char: 'k', description: 'Don\'t automatically delete the converted source'},
+    source: { type: 'string', char: 'r', default: 'force-app', description: 'deploy a specific folder that\'s not force-app'},
+    deploymenttimelimit: {char: 'w', type: 'number', description: 'How many minutes to wait for the deployment to finish', default: 200 }
   };
 
   protected static requiresProject = true;
@@ -34,16 +33,16 @@ export default class Push extends SfdxCommand {
       this.ux.error(`your source folder [${this.flags.source}] doesn't exist`);
     }
 
-    fs.ensureDirSync(this.flags.convertedFolder);
+    fs.ensureDirSync(this.flags.convertedfolder);
 
     process.stdout.write('Starting source conversion');
-    await exec(`sfdx force:source:convert -d ${this.flags.convertedFolder} -r ${this.flags.source}`);
+    await exec(`sfdx force:source:convert -d ${this.flags.convertedfolder} -r ${this.flags.source}`);
     process.stdout.write('done.  Deploying...');
-    await exec(`sfdx force:mdapi:deploy -w ${this.flags.deploymentTimeLimit} -d ${this.flags.convertedFolder} -u ${this.org.getUsername()}`);
+    await exec(`sfdx force:mdapi:deploy -w ${this.flags.deploymenttimelimit} -d ${this.flags.convertedfolder} -u ${this.org.getUsername()}`);
 
-    if (!this.flags.keepConverted) {
+    if (!this.flags.keepconverted) {
       process.stdout.write('done.  Cleaning up...');
-      await exec(`rm -rf ./${this.flags.convertedFolder}`);
+      await exec(`rm -rf ./${this.flags.convertedfolder}`);
     }
     process.stdout.write('Done!\n');
 

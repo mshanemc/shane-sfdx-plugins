@@ -1,16 +1,11 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import chalk from 'chalk';
 import { SfdxCommand, core } from '@salesforce/command';
-import fs = require('fs-extra');
 import util = require('util');
 import request = require('request-promise-native');
 import child_process = require('child_process');
-import { Options } from 'js2xmlparser/lib/options';
 
 const exec = util.promisify(child_process.exec);
 
-const tmpDir = 'githubHerokuTmp';
 const herokuAPIendpoint = 'https://api.heroku.com/app-setups';
 
 export default class GithubPackageInstall extends SfdxCommand {
@@ -26,15 +21,15 @@ export default class GithubPackageInstall extends SfdxCommand {
   protected static supportsUsername = true;
 
   protected static flagsConfig = {
-    githubUser: flags.string({ required: true, char: 'g', description: 'github username where the app lives' }),
-    repo: flags.string({ required: true, char: 'r', description: 'repo where the app lives' }),
-    name: flags.string({ char: 'n', description: 'what do you want to Heroku app to be named' }),
+    githubuser: {type: 'string', required: true, char: 'g', description: 'github username where the app lives' },
+    repo: {type: 'string', required: true, char: 'r', description: 'repo where the app lives' },
+    name: {type: 'string', char: 'n', description: 'what do you want to Heroku app to be named' },
     overrides: {char: 'o', description: 'an array of key-value pairs, like SOME_VAR="some Value" (use quotes where string have spaces!)'},
-    envUser: {description: 'grab the default scratch org username and set it to this Heroku environment var'},
-    envPassword: { description: 'grab the default scratch org password and set it to this Heroku environment var' },
-    team: {char: 't', description: 'assign this new app to an existing heroku team'},
-    days: {char: 'd', description: 'days you want the heroku app to live (does nothing locally)'}
-    // branch: flags.string({ char: 'b', description: 'optional branch' })
+    envuser: { type: 'string', description: 'grab the default scratch org username and set it to this Heroku environment var'},
+    envpassword: { type: 'string', description: 'grab the default scratch org password and set it to this Heroku environment var' },
+    team: {type: 'string', char: 't', description: 'assign this new app to an existing heroku team'},
+    days: {type: 'number', char: 'd', description: 'days you want the heroku app to live (does nothing locally)'}
+    // branch: {type: 'string', char: 'b', description: 'optional branch' }
   };
 
   // protected static requiresProject = true;
@@ -58,7 +53,7 @@ export default class GithubPackageInstall extends SfdxCommand {
 
     const body: HerokuAppSetup = {
       source_blob: {
-        url: `https://github.com/${this.flags.githubUser}/${this.flags.repo}/tarball/master/`
+        url: `https://github.com/${this.flags.githubuser}/${this.flags.repo}/tarball/master/`
       },
       app: {},
       overrides: {
@@ -75,15 +70,15 @@ export default class GithubPackageInstall extends SfdxCommand {
       }
     }
 
-    if (this.flags.envUser) {
-      body.overrides.env[this.flags.envUser] = this.org.getUsername();
+    if (this.flags.envuser) {
+      body.overrides.env[this.flags.envuser] = this.org.getUsername();
     }
 
-    if (this.flags.envPassword) {
+    if (this.flags.envpassword) {
       const displayResult = await exec('sfdx force:org:display --json');
       const displayResultJSON = JSON.parse(displayResult.stdout);
       // this.ux.logJson(displayResultJSON);
-      body.overrides.env[this.flags.envPassword] = displayResultJSON.result.password;
+      body.overrides.env[this.flags.envpassword] = displayResultJSON.result.password;
     }
 
     // this.ux.logJson(body);

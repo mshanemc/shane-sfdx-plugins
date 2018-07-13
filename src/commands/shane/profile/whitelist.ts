@@ -1,9 +1,8 @@
-import { flags } from '@oclif/command';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 
-import { getExisting } from '../../../shared/getExisting';
+import { getExisting, fixExistingDollarSign } from '../../../shared/getExisting';
 import { setupArray } from '../../../shared/setupArray';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
@@ -21,8 +20,8 @@ export default class ProfileWhitelist extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    name: flags.string({ char: 'n', required: true, description: 'profile name' }),
-    directory: flags.string({ char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' })
+    name: { type: 'string',  char: 'n', required: true, description: 'profile name' },
+    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' }
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
@@ -46,12 +45,7 @@ export default class ProfileWhitelist extends SfdxCommand {
       endAddress: '255.255.255.255'
     });
 
-    // correct @ => $ issue
-    if (existing['$']) {
-      const temp = existing['$'];
-      delete existing['$'];
-      existing['@'] = temp;
-    }
+    existing = await fixExistingDollarSign(existing);
 
     // convert to xml and write out the file
     const xml = jsToXml.parse('Profile', existing, options.js2xmlStandardOptions);

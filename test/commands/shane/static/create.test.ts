@@ -11,12 +11,12 @@ import testutils = require('../../../helpers/testutils');
 const exec = util.promisify(child_process.exec);
 const testProjectName = 'testProject';
 
-before(async () => {
-  await exec(`rm -rf ${testProjectName}`);
-  await exec(`sfdx force:project:create -n ${testProjectName}`);
-});
-
 describe('shane:static:create', () => {
+
+  before(async function() {
+    await exec(`rm -rf ${testProjectName}`);
+    await exec(`sfdx force:project:create -n ${testProjectName}`);
+  });
 
   it('creates a static css', async () => {
 
@@ -43,10 +43,10 @@ describe('shane:static:create', () => {
       const deploySuccess = await testutils.itDeploys(testProjectName);
       expect(deploySuccess).to.be.true;
     }
-  }).timeout(60000);
+  });
 
-});
+  after(async () => {
+    await exec(`rm -rf ${testProjectName}`);
+  });
 
-after(async () => {
-  await exec(`rm -rf ${testProjectName}`);
 });

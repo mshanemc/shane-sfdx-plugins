@@ -2,7 +2,6 @@
 import { expect, test } from '@salesforce/command/dist/test';
 import fs = require('fs-extra');
 import util = require('util');
-import xml2js = require('xml2js');
 
 import child_process = require('child_process');
 
@@ -15,12 +14,12 @@ const api = 'Platypus__b';
 const label = 'Platypus';
 const plural = 'Platypi';
 
-before(async () => {
-  await exec(`rm -rf ${testProjectName}`);
-  await exec(`sfdx force:project:create -n ${testProjectName}`);
-});
-
 describe('shane:object:create (big object flavor)', () => {
+
+  before(async function() {
+    await exec(`rm -rf ${testProjectName}`);
+    await exec(`sfdx force:project:create -n ${testProjectName}`);
+  });
 
   it('creates a big object with all params supplied', async () => {
 
@@ -40,14 +39,14 @@ describe('shane:object:create (big object flavor)', () => {
     expect(parsed.CustomObject.indexes).to.be.an('object');
     expect(parsed.CustomObject.indexes.fullName).to.equal(`${label}Index`);
     expect(parsed.CustomObject.indexes.label).to.equal(`${label} Index`);
-  }).timeout(60000);
+  });
 
   it('creates a non indexed Text field on the Big Object', async () => {
 
     const fieldAPI = 'Non_Indexed_Field__c';
     const fieldLabel = 'My Text Field';
 
-    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -l 255 -n "${fieldLabel}" -t Text  --noIndex`, { cwd: testProjectName });
+    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -l 255 -n "${fieldLabel}" -t Text  --noindex`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).to.be.true;
 
     const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
@@ -63,14 +62,14 @@ describe('shane:object:create (big object flavor)', () => {
     // verify indexing didn't happen
     expect(parsedObj.CustomObject.indexes.fields).to.be.undefined;
 
-  }).timeout(60000);
+  });
 
   it('creates a non indexed Number field (18,0) on the Big Object', async () => {
 
     const fieldAPI = 'Number_Field__c';
     const fieldLabel = 'Number Field';
 
-    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -n "${fieldLabel}" -t Number  --noIndex --scale 0 --precision 18`, { cwd: testProjectName });
+    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -n "${fieldLabel}" -t Number  --noindex --scale 0 --precision 18`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).to.be.true;
 
     const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
@@ -87,14 +86,14 @@ describe('shane:object:create (big object flavor)', () => {
     // verify indexing didn't happen
     expect(parsedObj.CustomObject.indexes.fields).to.be.undefined;
 
-  }).timeout(60000);
+  });
 
   it('creates a required non indexed Text field on the Big Object', async () => {
 
     const fieldAPI = 'Required_Non_Indexed_Field__c';
     const fieldLabel = 'My Required Text Field';
 
-    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -l 255 -n "${fieldLabel}" -t Text  --noIndex --required`, { cwd: testProjectName });
+    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -l 255 -n "${fieldLabel}" -t Text  --noindex --required`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).to.be.true;
 
     const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
@@ -111,14 +110,14 @@ describe('shane:object:create (big object flavor)', () => {
     // verify indexing didn't happen
     expect(parsedObj.CustomObject.indexes.fields).to.be.undefined;
 
-  }).timeout(60000);
+  });
 
   it('creates a indexed Text field on the Big Object', async () => {
 
     const fieldAPI = 'Indexed_Field__c';
     const fieldLabel = 'My Indexed Text Field';
 
-    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -l 10 -n "${fieldLabel}" -t Text  --indexAppend --indexDirection DESC`, { cwd: testProjectName });
+    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -l 10 -n "${fieldLabel}" -t Text  --indexappend --indexdirection DESC`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).to.be.true;
 
     const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
@@ -137,14 +136,14 @@ describe('shane:object:create (big object flavor)', () => {
     expect(parsedObj.CustomObject.indexes.fields.name).to.equal(fieldAPI);
     expect(parsedObj.CustomObject.indexes.fields.sortDirection).to.equal('DESC');
 
-  }).timeout(60000);
+  });
 
   it('appends a second indexed Text field on the Big Object', async () => {
 
     const fieldAPI = 'Indexed_Field2__c';
     const fieldLabel = 'My Indexed Text Field 2';
 
-    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -l 10 -n "${fieldLabel}" -t Text  --indexAppend --indexDirection ASC`, { cwd: testProjectName });
+    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -l 10 -n "${fieldLabel}" -t Text  --indexappend --indexdirection ASC`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).to.be.true;
 
     const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
@@ -163,14 +162,14 @@ describe('shane:object:create (big object flavor)', () => {
     expect(parsedObj.CustomObject.indexes.fields[1].name).to.equal(fieldAPI);
     expect(parsedObj.CustomObject.indexes.fields[1].sortDirection).to.equal('ASC');
 
-  }).timeout(60000);
+  });
 
   it('adds a third indexed Text field on the Big Object in position 1', async () => {
 
     const fieldAPI = 'Indexed_Field3__c';
     const fieldLabel = 'My Indexed Text Field 3';
 
-    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -l 10 -n "${fieldLabel}" -t Text  --indexPosition 1 --indexDirection ASC`, { cwd: testProjectName });
+    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -l 10 -n "${fieldLabel}" -t Text  --indexposition 1 --indexdirection ASC`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).to.be.true;
 
     const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
@@ -189,7 +188,7 @@ describe('shane:object:create (big object flavor)', () => {
     expect(parsedObj.CustomObject.indexes.fields[1].name).to.equal(fieldAPI);
     expect(parsedObj.CustomObject.indexes.fields[1].sortDirection).to.equal('ASC');
 
-  }).timeout(60000);
+  });
 
   it('creates a big object with all params supplied in separate dir', async () => {
 
@@ -203,7 +202,7 @@ describe('shane:object:create (big object flavor)', () => {
     expect(fs.existsSync(`${testProjectName}/${myDir}/objects/${api}/fields`)).to.be.true;
     expect(fs.existsSync(`${testProjectName}/${myDir}/objects/${api}/${api}.object-meta.xml`)).to.be.true;
 
-  }).timeout(60000);
+  });
 
   it('can build a permset', async () => {
     const permSetName = 'MyPermSet1';
@@ -233,7 +232,7 @@ describe('shane:object:create (big object flavor)', () => {
     expect(parsed.PermissionSet.fieldPermissions).to.not.include({ readable: 'true', editable: 'true', field: `${api}.Indexed_Field__c` });
     expect(parsed.PermissionSet.fieldPermissions).to.not.include({ readable: 'true', editable: 'true', field: `${api}.Required_Non_Indexed_Field__c` });
 
-  }).timeout(60000);
+  });
 
   it('deploys as valid code', async () => {
     if (process.env.LOCALONLY === 'true') {
@@ -242,10 +241,9 @@ describe('shane:object:create (big object flavor)', () => {
       const deploySuccess = await testutils.itDeploys(testProjectName);
       expect(deploySuccess).to.be.true;
     }
-  }).timeout(60000);
+  });
 
-});
-
-after(async () => {
-  await exec(`rm -rf ${testProjectName}`);
+  after(async () => {
+    await exec(`rm -rf ${testProjectName}`);
+  });
 });

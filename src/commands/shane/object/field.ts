@@ -1,5 +1,3 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import cli from 'cli-ux';
@@ -8,7 +6,7 @@ import util = require('util');
 import xml2js = require('xml2js');
 
 import * as options from '../../../shared/js2xmlStandardOptions';
-// import { getExisting } from '../../../shared/getExisting';
+import { fixExistingDollarSign } from '../../../shared/getExisting';
 
 import chalk from 'chalk';
 const	SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
@@ -22,10 +20,10 @@ export default class FieldCreate extends SfdxCommand {
 `sfdx shane:object:field
 // without any params, the cli is going to ask you questions to generate your field interactively
 `,
-`sfdx shane:object:field --api My_Field__c -l 255 -n "My Field" -t Text -o  BigTest__b --noIndex
+`sfdx shane:object:field --api My_Field__c -l 255 -n "My Field" -t Text -o  BigTest__b --noindex
 // create new text field called My Field (My_Field__c) on BigObject BigTest__b
 `,
-`sfdx shane:object:field --api My_Index_Field__c -l 255 -n "My Index Field" -t Text -o  BigTest__b --indexDirection ASC --indexPosition 1
+`sfdx shane:object:field --api My_Index_Field__c -l 255 -n "My Index Field" -t Text -o  BigTest__b --indexdirection ASC --indexposition 1
 // create new text field called My Field (My_Field__c) on BigObject BigTest__b, add it to the existing index as the second field
 `,
 `sfdx shane:object:field --api My_Field__c -l 255 -n "My Field" -t Text -o  EventTest__e
@@ -34,33 +32,33 @@ export default class FieldCreate extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    // name: flags.string({ char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' }),
-    object: flags.string({ char: 'o', description: 'API name of an object to add a field to' }),
-    name: flags.string({ char: 'n', description: 'Label for the field' }),
-    api: flags.string({ char: 'a', description: 'API name for the field' }),
-    type: flags.string({ char: 't', description: `field type.  Big Objects: ${SupportedTypes__b.join(',')}.  Events: ${SupportedTypes__e.join(',')}`}),
-    description: flags.string({description: 'optional description for the field so you remember what it\'s for next year'}),
-    default: flags.string({description: 'required for checkbox fields.  Express in Salesforce formula language (good luck with that!)'}),
-    required: flags.boolean({ char: 'r', description: 'field is required' }),
-    unique: flags.boolean({ char: 'u', description: 'field must be unique' }),
-    externalId: flags.boolean({ description: 'use as an external id' }),
+    // name: { type: 'string',  char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' },
+    object: { type: 'string',  char: 'o', description: 'API name of an object to add a field to' },
+    name: { type: 'string',  char: 'n', description: 'Label for the field' },
+    api: { type: 'string',  char: 'a', description: 'API name for the field' },
+    type: { type: 'string',  char: 't', description: `field type.  Big Objects: ${SupportedTypes__b.join(',')}.  Events: ${SupportedTypes__e.join(',')}`},
+    description: { type: 'string', description: 'optional description for the field so you remember what it\'s for next year'},
+    default: { type: 'string', description: 'required for checkbox fields.  Express in Salesforce formula language (good luck with that!)'},
+    required: { type: 'boolean',  char: 'r', description: 'field is required' },
+    unique: { type: 'boolean',  char: 'u', description: 'field must be unique' },
+    externalid: { type: 'boolean',  description: 'use as an external id' },
 
     // type specific flags
-    length: flags.string({ char: 'l', description: 'length (for text fields)' }),
+    length: { type: 'number',  char: 'l', description: 'length (for text fields)' },
 
-    scale: flags.string({ char: 's', description: 'places right of the decimal' }),
-    precision: flags.string({description: 'maximum allowed digits of a number, including whole and decimal places' }),
+    scale: { type: 'number',  char: 's', description: 'places right of the decimal' },
+    precision: { type: 'number', description: 'maximum allowed digits of a number, including whole and decimal places' },
 
-    lookupObject: flags.string({description: 'API name of the object the lookup goes to'}),
-    relName: flags.string({ description: 'API name for the lookup relationship'}),
+    lookupobject: { type: 'string', description: 'API name of the object the lookup goes to'},
+    relname: { type: 'string',  description: 'API name for the lookup relationship'},
 
     // big object index handling
-    indexPosition: flags.string({ description: 'put in a specific position in the big object index (0 is the first element).  You\'re responsible for dealing with producing a sane array'}),
-    indexAppend: flags.boolean({ description: 'put next in the big object index' }),
-    indexDirection: flags.string({ description: 'sort direction for the big object index', options: ['ASC', 'DESC']}),
-    noIndex: flags.boolean({description: 'do not add this field to the index'}),
+    indexposition: { type: 'string',  description: 'put in a specific position in the big object index (0 is the first element).  You\'re responsible for dealing with producing a sane array'},
+    indexappend: { type: 'boolean',  description: 'put next in the big object index' },
+    indexdirection: { type: 'string',  description: 'sort direction for the big object index', options: ['ASC', 'DESC']},
+    noindex: { type: 'boolean', description: 'do not add this field to the index'},
 
-    directory: flags.string({ char: 'd', default: 'force-app/main/default', description: 'Where is this object metadata? defaults to force-app/main/default' })
+    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is this object metadata? defaults to force-app/main/default' }
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
@@ -149,8 +147,8 @@ export default class FieldCreate extends SfdxCommand {
     }
 
     if (this.flags.type === 'Lookup') {
-      outputJSON.referenceTo = this.flags.lookupObject || await cli.prompt('What object for Lookup field? ex: Account, Something__c');
-      outputJSON.relationshipName = this.flags.relName || await cli.prompt('relationship api name?');
+      outputJSON.referenceTo = this.flags.lookupobject || await cli.prompt('What object for Lookup field? ex: Account, Something__c');
+      outputJSON.relationshipName = this.flags.relname || await cli.prompt('relationship api name?');
       outputJSON.relationshipLabel = outputJSON.relationshipName;
     }
 
@@ -168,39 +166,39 @@ export default class FieldCreate extends SfdxCommand {
       outputJSON.unique = true;
     }
 
-    if (this.flags.externalId) {
+    if (this.flags.externalid) {
       outputJSON.externalId = true;
     }
 
     // dealing with big object indexes
-    if (this.flags.object.includes('__b') && !this.flags.noIndex) {
+    if (this.flags.object.includes('__b') && !this.flags.noindex) {
 
       const parser = new xml2js.Parser({ explicitArray: true });
       const parseString = util.promisify(parser.parseString);
       const filePath = `${this.flags.directory}/objects/${this.flags.object}/${this.flags.object}.object-meta.xml`;
       const fileRead = await parseString(fs.readFileSync(filePath));
 
-      const existing = fileRead.CustomObject;
+      let existing = fileRead.CustomObject;
       // this.ux.log(existing.indexes[0].fields);
 
       existing.indexes[0].fields = existing.indexes[0].fields || [];
       // this.ux.log(existing.indexes[0].fields);
 
-      while (!this.flags.indexPosition && !this.flags.indexAppend && !this.flags.noIndex) {
+      while (!this.flags.indexposition && !this.flags.indexappend && !this.flags.noindex) {
         const response = await cli.prompt(`where in the big object index? Enter an array key (0 is first.  There are already ${existing.indexes[0].fields.length}) or the word LAST (add to the end) or NO (don't index this field)`);
         if (response === 'NONE') {
-          this.flags.noIndex = true;
-          // this.flags.indexAppend = true;
+          this.flags.noindex = true;
+          // this.flags.indexappend = true;
         } else if (response === 'LAST') {
-          this.flags.indexAppend = true;
+          this.flags.indexappend = true;
         } else {
-          if (this.flags.indexDirection >= 0) {
-            this.flags.indexPosition = response;
+          if (this.flags.indexdirection >= 0) {
+            this.flags.indexposition = response;
           }
         }
       }
 
-      if (this.flags.noIndex) {
+      if (this.flags.noindex) {
         return; // we're done.  Just quit!
       }
 
@@ -208,30 +206,25 @@ export default class FieldCreate extends SfdxCommand {
       outputJSON.required = true;
 
       // we were told what to do
-      while (this.flags.indexDirection !== 'ASC' && this.flags.indexDirection !== 'DESC') {
+      while (this.flags.indexdirection !== 'ASC' && this.flags.indexdirection !== 'DESC') {
         outputJSON.required = true;
-        this.flags.indexDirection = await cli.prompt('which direction should this index be sorted? (ASC, DESC)');
+        this.flags.indexdirection = await cli.prompt('which direction should this index be sorted? (ASC, DESC)');
       }
 
-      // correct @ => $ issue
-      if (existing['$']) {
-        const temp = existing['$'];
-        delete existing['$'];
-        existing['@'] = temp;
-      }
+      existing = await fixExistingDollarSign(existing);
 
       const newIndex = {
         name: this.flags.api,
-        sortDirection: this.flags.indexDirection
+        sortDirection: this.flags.indexdirection
       };
 
-      if (this.flags.indexAppend) {
+      if (this.flags.indexappend) {
         existing.indexes[0].fields.push(newIndex);
       } else {
-        existing.indexes[0].fields.splice(this.flags.indexPosition, 0, newIndex );
+        existing.indexes[0].fields.splice(this.flags.indexposition, 0, newIndex );
       }
 
-      const position = this.flags.indexPosition || existing.indexes[0].fields.length - 1;
+      const position = this.flags.indexposition || existing.indexes[0].fields.length - 1;
 
       // conver to xml and write out the file
       const objXml = jsToXml.parse('CustomObject', existing, options.js2xmlStandardOptions);

@@ -1,10 +1,9 @@
-import { flags } from '@oclif/command';
 import { SfdxCommand, core } from '@salesforce/command';
 import * as _ from 'lodash';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 
-import { getExisting } from '../../../shared/getExisting';
+import { getExisting, fixExistingDollarSign } from '../../../shared/getExisting';
 import { setupArray } from '../../../shared/setupArray';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
@@ -57,10 +56,10 @@ export default class PermSetConvert extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    name: flags.string({ char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' }),
-    profile: flags.string({ char: 'p', required: true, description: 'API name of an profile to convert.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' }),
-    directory: flags.string({ char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' }),
-    editProfile: flags.boolean({ char: 'e', description: 'remove metadata from profile'})
+    name: { type: 'string',  char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' },
+    profile: { type: 'string',  char: 'p', required: true, description: 'API name of an profile to convert.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' },
+    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' },
+    editprofile: { type: 'boolean',  char: 'e', description: 'remove metadata from profile'}
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
@@ -104,7 +103,7 @@ export default class PermSetConvert extends SfdxCommand {
           existing.applicationVisibilities = aVs;
         }
 
-        if (this.flags.editProfile) {
+        if (this.flags.editprofile) {
           delete profile[item.profileType];
         }
       } else {
@@ -113,12 +112,7 @@ export default class PermSetConvert extends SfdxCommand {
 
     });
 
-    // correct @ => $ issue
-    if (existing['$']) {
-      const temp = existing['$'];
-      delete existing['$'];
-      existing['@'] = temp;
-    }
+    existing = await fixExistingDollarSign(existing);
 
     fs.ensureDirSync(`${this.flags.directory}/permissionsets`);
 
@@ -126,13 +120,10 @@ export default class PermSetConvert extends SfdxCommand {
     const permSetXml = jsToXml.parse('PermissionSet', existing, options.js2xmlStandardOptions);
     fs.writeFileSync(targetFilename, permSetXml);
 
-    if (this.flags.editProfile) {
+    if (this.flags.editprofile) {
       // correct @ => $ issue
-      if (profile['$']) {
-        const temp = profile['$'];
-        delete profile['$'];
-        profile['@'] = temp;
-      }
+      profile = await fixExistingDollarSign(profile);
+
       const profileXml = jsToXml.parse('Profile', profile, options.js2xmlStandardOptions);
       fs.writeFileSync(targetProfile, profileXml);
       this.ux.log(`Permissions removed from ${targetProfile}`);

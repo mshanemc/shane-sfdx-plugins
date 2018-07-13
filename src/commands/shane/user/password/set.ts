@@ -1,9 +1,5 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
-import fs = require('fs-extra');
 import request = require('request-promise-native');
-// import localFile2CV = require('../../../shared/localFile2CV');
 import userIdLookup = require('../../../../shared/userIdLookup');
 
 import chalk from 'chalk';
@@ -19,9 +15,9 @@ export default class Set extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    firstName: flags.string({ char: 'g', required: true, description: 'first (given) name of the user--keeping -f for file for consistency' }),
-    lastName: flags.string({ char: 'l', required: true, description: 'last name of the user' }),
-    password: flags.string({ char: 'p', required: true, description: 'local path of the photo to use' })
+    firstname: { type: 'string',  char: 'g', required: true, description: 'first (given) name of the user--keeping -f for file for consistency' },
+    lastname: { type: 'string',  char: 'l', required: true, description: 'last name of the user' },
+    password: { type: 'string',  char: 'p', required: true, description: 'local path of the photo to use' }
   };
 
   // Comment this out if your command does not require an org username
@@ -32,7 +28,7 @@ export default class Set extends SfdxCommand {
     let user;
 
     try {
-      user = await userIdLookup.getUserId(conn, this.flags.lastName, this.flags.firstName);
+      user = await userIdLookup.getUserId(conn, this.flags.lastname, this.flags.firstname);
     } catch (e) {
       this.ux.error(chalk.red(e));
       return {

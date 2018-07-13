@@ -1,36 +1,30 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import localFile2CV = require('../../../../shared/localFile2CV');
-
-core.Messages.importMessagesDirectory(join(__dirname, '..', '..', '..'));
-// const messages = core.Messages.loadMessages('shane-sfdx-plugins', 'org');
 
 export default class Upload extends SfdxCommand {
 
   public static description = 'upload a file from local resources, optionally as a chatter post or attached file on a record';
 
   public static examples = [
-    `sfdx shane:data:file:upload - f ~/Downloads/King.png
+    `sfdx shane:data:file:upload -f ~/Downloads/King.png
     //uploads file from local filesystem as a file
     `,
-    `sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF
+    `sfdx shane:data:file:upload -f ~/Downloads/King.png -p 0011900000VkJgrAAF
     //uploads file from local filesystem as a file and attaches to a record
     `,
-    `sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -c
+    `sfdx shane:data:file:upload -f ~/Downloads/King.png -p 0011900000VkJgrAAF -c
     //uploads and attaches it to the indicated record, but as a chatter file post
     `,
-    `sfdx shane:data:file:upload - f ~/Downloads/King.png -p 0011900000VkJgrAAF -n CustomName -c
+    `sfdx shane:data:file:upload -f ~/Downloads/King.png -p 0011900000VkJgrAAF -n CustomName -c
     //uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same name as the local filesystem used
     `
   ];
 
   protected static flagsConfig = {
-    file: flags.string({ char: 'f', description: 'path to file on local filesystem', required: true }),
-    parentId: flags.string({ char: 'p', description: 'optional record ID that the file should be attached to' }),
-    chatter: flags.boolean({ char: 'c', description: 'attach as a chatter content post instead of just as a file' }),
-    name: flags.string({ char: 'n', description: 'set the name of the uploaded file' })
-
+    file: { char: 'f', description: 'path to file on local filesystem', required: true, type: 'filepath' },
+    parentid: { char: 'p', description: 'optional record ID that the file should be attached to', type: 'id' },
+    chatter: { char: 'c', description: 'attach as a chatter content post instead of just as a file', type: 'boolean', dependsOn: ['parentid'] },
+    name: { char: 'n', description: 'set the name of the uploaded file', type: 'string' }
   };
 
   // Comment this out if your command does not require an org username
@@ -44,21 +38,11 @@ export default class Upload extends SfdxCommand {
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
     // const name = this.flags.name || 'world';
-
-    // potential errors
-    if (this.flags.chatter && !this.flags.parentId) {
-      this.ux.error('you have to supply parentId if you use the --chatter flag');
+    if (!this.flags.parentid && this.flags.chatter) {
+      throw new Error('you must specify a parentid for chatter attachments');
     }
-
     // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
     const conn = this.org.getConnection();
-    // const query = 'Select Name, TrialExpirationDate from Organization';
-
-    interface ContentVersionCreateRequest {
-      VersionData: string;
-      PathOnClient: string;
-      Title?: string;
-    }
 
     interface CreateResult {
       id: string;
@@ -80,27 +64,24 @@ export default class Upload extends SfdxCommand {
       ContentDocumentId?: string;
     }
 
-    interface QueryResult {
-      totalSize: number;
-      done: boolean;
-      records: Record[];
-    }
-
     const CV = <Record> await localFile2CV.file2CV(conn, this.flags.file, this.flags.name);
 
-    if (!this.flags.chatter) {
+    if (!this.flags.parentid) {
+      this.ux.log(`created file with content document id ${CV.ContentDocumentId}`);
+      return CV;
+    } else if (!this.flags.chatter) {
       // regular file attachment
-      this.ux.log(`will create a regular file attachment on record ${this.flags.parentId}`);
+      this.ux.log(`will create a regular file attachment on record ${this.flags.parentid}`);
 
       const CDLReq = {
         ContentDocumentId: CV.ContentDocumentId,
-        LinkedEntityId: this.flags.parentId,
+        LinkedEntityId: this.flags.parentid,
         ShareType: 'V'
       } as CDLCreateRequest;
 
       const CDLCreateResult = await conn.sobject('ContentDocumentLink').create(CDLReq) as CreateResult;
       if (CDLCreateResult.success) {
-        this.ux.log(`created regular file attachment on record ${this.flags.parentId}`);
+        this.ux.log(`created regular file attachment on record ${this.flags.parentid}`);
       } else {
         this.ux.error(CDLCreateResult.message);
       }
@@ -109,13 +90,13 @@ export default class Upload extends SfdxCommand {
       // chatter post
       const feedItemRequest = {
         RelatedRecordId: CV.Id,
-        ParentId: this.flags.parentId,
+        ParentId: this.flags.parentid,
         Type: 'ContentPost'
       };
 
       const feedItemCreateResult = await conn.sobject('FeedItem').create(feedItemRequest) as CreateResult;
       if (feedItemCreateResult.success) {
-        this.ux.log(`created chatter file attachment on record ${this.flags.parentId}`);
+        this.ux.log(`created chatter file attachment on record ${this.flags.parentid}`);
       } else {
         this.ux.error(feedItemCreateResult.message);
       }

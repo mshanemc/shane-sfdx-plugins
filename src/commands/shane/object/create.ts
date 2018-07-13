@@ -1,5 +1,3 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
@@ -30,12 +28,12 @@ export default class ObjectCreate extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    label: flags.string({ char: 'l', description: 'label for the UI' }),
-    api: flags.string({ char: 'a', description: 'api name.  Ends with one of the supported types: [__b, __e]' }),
-    plural: flags.string({ char: 'p', description: 'plural label for the UI' }),
-    highVolume: flags.boolean({ char: 'h', description: 'high volume, valid only for platform events (__e)'}),
-    // description: flags.string({ char: 'd', default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' }),
-    directory: flags.string({ char: 'd', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' })
+    label: { type: 'string',  char: 'l', description: 'label for the UI' },
+    api: { type: 'string',  char: 'a', description: 'api name.  Ends with one of the supported types: [__b, __e]' },
+    plural: { type: 'string',  char: 'p', description: 'plural label for the UI' },
+    highvolume: { type: 'boolean',  char: 'h', description: 'high volume, valid only for platform events (__e)'},
+    // description: { type: 'string',  char: 'd', default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' }),
+    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' }
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
@@ -85,7 +83,7 @@ export default class ObjectCreate extends SfdxCommand {
         fields : []
       };
     } else if (this.flags.api.endsWith('__e')) {
-      outputJSON.eventType = this.flags.highVolume ? 'HighVolume' : 'StandardVolume' ;
+      outputJSON.eventType = this.flags.highvolume ? 'HighVolume' : 'StandardVolume' ;
     } else {
       this.ux.error('API names need to end with one of the supported options:  __b, __e');
       return;

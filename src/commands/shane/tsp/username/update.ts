@@ -1,14 +1,8 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
-import { SfdxCommand, core } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
-import cli from 'cli-ux';
 import jsToXml = require('js2xmlparser');
-import xml2js = require('xml2js');
-import util = require('util');
-import { existsSync } from 'fs-extra';
 
-import { getExisting } from '../../../../shared/getExisting';
+import { fixExistingDollarSign, getExisting} from '../../../../shared/getExisting';
 import * as options from '../../../../shared/js2xmlStandardOptions';
 
 import chalk from 'chalk';
@@ -55,7 +49,7 @@ export default class TSPUsernameUpdate extends SfdxCommand {
     // loop through the TSPs
     for (const tsp of tsps) {
 
-      const existing = await getExisting(`${targetFolder}/${tsp}`, 'TransactionSecurityPolicy');
+      let existing = await getExisting(`${targetFolder}/${tsp}`, 'TransactionSecurityPolicy');
 
       existing.executionUser = finalUsername;
 
@@ -67,12 +61,7 @@ export default class TSPUsernameUpdate extends SfdxCommand {
         existing.action.notifications.user = finalUsername;
       }
 
-      // correct @ => $ issue
-      if (existing['$']) {
-        const temp = existing['$'];
-        delete existing['$'];
-        existing['@'] = temp;
-      }
+      existing = await fixExistingDollarSign(existing);
 
       // convert to xml and write out the file
       const xml = jsToXml.parse('TransactionSecurityPolicy', existing, options.js2xmlStandardOptions);

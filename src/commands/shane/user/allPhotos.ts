@@ -1,9 +1,6 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import request = require('request-promise-native');
 import localFile2CV = require('../../../shared/localFile2CV');
-// import userIdLookup = require('../../../shared/userIdLookup');
 import fs = require('fs-extra');
 import util = require('util');
 import child_process = require('child_process');
@@ -23,12 +20,7 @@ export default class AllPhotos extends SfdxCommand {
 'sfdx shane:user:allPhotos -u someAlias'
   ];
 
-  protected static flagsConfig = {
-    // firstName: flags.string({ char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency' }),
-    // lastName: flags.string({ char: 'l', required: true, description: 'last name of the user' }),
-    // file: flags.string({ char: 'f', description: 'local path of the photo to use' }),
-    // banner: flags.string({ char: 'b', description: 'local path of the chatter banner photo to use' })
-  };
+  protected static flagsConfig = {};
 
   // Comment this out if your command does not require an org username
   protected static requiresUsername = true;

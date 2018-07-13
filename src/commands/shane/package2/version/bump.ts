@@ -1,10 +1,5 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
-import { ConfigFile } from '@salesforce/core';
-import { version } from '@oclif/command/lib/flags';
 import util = require('util');
 import cli from 'cli-ux';
 
@@ -38,11 +33,11 @@ export default class Bump extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    major: flags.boolean({ char: 'M', description: 'Bump the major version by 1, sets minor,build to 0'}),
-    minor: flags.boolean({ char: 'm', description: 'Bump the minor version by 1' }),
-    create: flags.boolean({ char: 'c', description: 'create a new packageVersion from the new versionNumber' }),
-    release: flags.boolean({ char: 'r', description: 'set the newly version as released (out of Beta).  Implies create whether you flag it or not :)'}),
-    target: flags.string({ char: 't', default: 'force-app', description: 'name of your package directory (defaults to force-app)' })
+    major: { type: 'boolean',  char: 'M', description: 'Bump the major version by 1, sets minor,build to 0'},
+    minor: { type: 'boolean',  char: 'm', description: 'Bump the minor version by 1' },
+    create: { type: 'boolean',  char: 'c', description: 'create a new packageVersion from the new versionNumber' },
+    release: { type: 'boolean',  char: 'r', description: 'set the newly version as released (out of Beta).  Implies create whether you flag it or not :)'},
+    target: { type: 'string',  char: 't', default: 'force-app', description: 'name of your package directory (defaults to force-app)' }
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

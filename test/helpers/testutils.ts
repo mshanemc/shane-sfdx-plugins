@@ -17,8 +17,18 @@ export async function getParsedXML(url: string) {
   return parsed;
 }
 
+export async function orgCreate(testProjectName: string) {
+  const createResult = await exec('sfdx force:org:create -f config/project-scratch-def.json -s -d 1 --json', { cwd: testProjectName });
+  return createResult;
+}
+
+export async function orgDelete(testProjectName: string) {
+  const deleteResult = await exec('sfdx shane:org:delete --json', { cwd: testProjectName });
+  return deleteResult;
+}
+
 export async function itDeploys(testProjectName: string) {
-  await exec('sfdx force:org:create -f config/project-scratch-def.json -s -a PluginMochaTesting', { cwd: testProjectName });
+  await this.orgCreate(testProjectName);
 
   // push source
   const pushResult = await exec('sfdx force:source:push --json', { cwd: testProjectName });
@@ -26,7 +36,7 @@ export async function itDeploys(testProjectName: string) {
   const result = JSON.parse(pushResult.stdout);
 
   // destroy org
-  await exec('sfdx shane:org:delete', { cwd: testProjectName });
+  await this.orgDelete(testProjectName);
 
   return result.status === 0;
 }

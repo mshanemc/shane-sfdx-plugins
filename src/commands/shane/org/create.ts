@@ -1,5 +1,3 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
 import { SfdxCommand, core } from '@salesforce/command';
 import util = require('util');
 import request = require('request-promise-native');
@@ -23,17 +21,17 @@ export default class Delete extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    userprefix: flags.string({ char: 'u', required: true, description: 'first part of the generated username.  Example: \'shane\' produces shane1@demo.org, shane2@demo.org' }),
-    userdomain: flags.string({ char: 'o', required: true, description: 'last part of the generated username (after the @ sign).  Example: \'demo.org\' produces shane1@demo.org, shane2@demo.org' }),
-    clientid: flags.string({ char: 'i', description: 'connected app consumer key' }),
-    definitionfile: flags.string({ char: 'f', default: 'config/project-scratch-def.json', description: 'path to a scratch org definition file.  Default = config/project-scratch-def.json' }),
-    setalias: flags.string({ char: 'a', description: 'set an alias for for the created scratch org' }),
-    durationdays: flags.string({ char: 'd', default: '7', description: 'duration of the scratch org (in days) (default:7, min:1, max:30)' }),
-    wait: flags.string({description: 'the streaming client socket timeout (in minutes) (default:20, min:2)' }),
-    noancestors: flags.boolean({ char: 'c', description: 'do not include second-generation package ancestors in the scratch org' }),
-    nonamespace: flags.boolean({ char: 'n', description: 'creates the scratch org with no namespace' }),
-    setdefaultusername: flags.boolean({ char: 's', description: 'set the created org as the default username' }),
-    targetdevhubusername: flags.boolean({ char: 'v', description: 'username or alias for the dev hub org; overrides default dev hub org' })
+    userprefix: { type: 'string',  char: 'u', required: true, description: 'first part of the generated username.  Example: \'shane\' produces shane1@demo.org, shane2@demo.org' },
+    userdomain: { type: 'string',  char: 'o', required: true, description: 'last part of the generated username (after the @ sign).  Example: \'demo.org\' produces shane1@demo.org, shane2@demo.org' },
+    clientid: { type: 'string',  char: 'i', description: 'connected app consumer key' },
+    definitionfile: { type: 'string',  char: 'f', default: 'config/project-scratch-def.json', description: 'path to a scratch org definition file.  Default = config/project-scratch-def.json' },
+    setalias: { type: 'string',  char: 'a', description: 'set an alias for for the created scratch org' },
+    durationdays: { type: 'number',  char: 'd', default: '7', description: 'duration of the scratch org (in days) (default:7, min:1, max:30)' },
+    wait: { type: 'number', description: 'the streaming client socket timeout (in minutes) (default:20, min:2)' },
+    noancestors: { type: 'boolean',  char: 'c', description: 'do not include second-generation package ancestors in the scratch org' },
+    nonamespace: { type: 'boolean',  char: 'n', description: 'creates the scratch org with no namespace' },
+    setdefaultusername: { type: 'boolean',  char: 's', description: 'set the created org as the default username' },
+    targetdevhubusername: { type: 'boolean',  char: 'v', description: 'username or alias for the dev hub org; overrides default dev hub org' }
   };
 
   protected static requiresProject = true;
