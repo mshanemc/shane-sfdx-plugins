@@ -1,16 +1,16 @@
-import { SfdxCommand, core } from '@salesforce/command';
-import fs = require('fs-extra');
+import { core, SfdxCommand } from '@salesforce/command';
+import chalk from 'chalk';
 import cli from 'cli-ux';
+import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 import util = require('util');
 import xml2js = require('xml2js');
-
-import * as options from '../../../shared/js2xmlStandardOptions';
 import { fixExistingDollarSign } from '../../../shared/getExisting';
+import * as options from '../../../shared/js2xmlStandardOptions';
 
-import chalk from 'chalk';
 const	SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
 const SupportedTypes__e = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
+const SupportedTypes__c = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
 
 export default class FieldCreate extends SfdxCommand {
 
@@ -32,17 +32,17 @@ export default class FieldCreate extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    // name: { type: 'string',  char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' },
+    // common flags for field types
     object: { type: 'string',  char: 'o', description: 'API name of an object to add a field to' },
     name: { type: 'string',  char: 'n', description: 'Label for the field' },
     api: { type: 'string',  char: 'a', description: 'API name for the field' },
-    type: { type: 'string',  char: 't', description: `field type.  Big Objects: ${SupportedTypes__b.join(',')}.  Events: ${SupportedTypes__e.join(',')}`},
+    type: { type: 'string',  char: 't', description: `field type.  Big Objects: ${SupportedTypes__b.join(',')}.  Events: ${SupportedTypes__e.join(',')}.  Regular Objects: ${SupportedTypes__c.join(',')}`},
     description: { type: 'string', description: 'optional description for the field so you remember what it\'s for next year'},
     default: { type: 'string', description: 'required for checkbox fields.  Express in Salesforce formula language (good luck with that!)'},
     required: { type: 'boolean',  char: 'r', description: 'field is required' },
     unique: { type: 'boolean',  char: 'u', description: 'field must be unique' },
     externalid: { type: 'boolean',  description: 'use as an external id' },
-
+    trackhistory: { type: 'boolean', description: 'enable history tracking on the field' },
     // type specific flags
     length: { type: 'number',  char: 'l', description: 'length (for text fields)' },
 
@@ -53,12 +53,14 @@ export default class FieldCreate extends SfdxCommand {
     relname: { type: 'string',  description: 'API name for the lookup relationship'},
 
     // big object index handling
-    indexposition: { type: 'string',  description: 'put in a specific position in the big object index (0 is the first element).  You\'re responsible for dealing with producing a sane array'},
+    indexposition: { type: 'number',  description: 'put in a specific position in the big object index (0 is the first element).  You\'re responsible for dealing with producing a sane array'},
     indexappend: { type: 'boolean',  description: 'put next in the big object index' },
     indexdirection: { type: 'string',  description: 'sort direction for the big object index', options: ['ASC', 'DESC']},
     noindex: { type: 'boolean', description: 'do not add this field to the index'},
 
-    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is this object metadata? defaults to force-app/main/default' }
+    // stuff about the command's behavior itself
+    interactive: { type: 'boolean', char: 'i', description: 'fully interactive--ask me every possible question.'},
+    directory: { type: 'directory',  char: 'd', default: 'force-app/main/default', description: 'Where is this object metadata? defaults to force-app/main/default' }
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
@@ -82,7 +84,7 @@ export default class FieldCreate extends SfdxCommand {
     }
 
     if (!this.flags.api) {
-      this.flags.api = await cli.prompt('API name for your new field?');
+      this.flags.api = await cli.prompt('API name for your new field?', { default: `${this.flags.name.replace(' ', '_')}__c` });
     }
 
     // be helpful
@@ -116,14 +118,19 @@ export default class FieldCreate extends SfdxCommand {
       relationshipLabel?: string;
       relationshipName?: string;
       referenceTo?: string;
+      trackHistory?: boolean;
     }
 
     while (this.flags.object.endsWith('__b') && !SupportedTypes__b.includes(this.flags.type)) {
-      this.flags.type = await cli.prompt(`Type (${SupportedTypes__b.join(',')})?`);
+      this.flags.type = await cli.prompt(`Type (${SupportedTypes__b.join(',')})?`, { default: 'Text' });
     }
 
     while (this.flags.object.endsWith('__e') && !SupportedTypes__e.includes(this.flags.type)) {
-      this.flags.type = await cli.prompt(`Type (${SupportedTypes__e.join(',')})?`);
+      this.flags.type = await cli.prompt(`Type (${SupportedTypes__e.join(',')})?`, { default: 'Text' });
+    }
+
+    while (this.flags.object.endsWith('__c') && !SupportedTypes__c.includes(this.flags.type)) {
+      this.flags.type = await cli.prompt(`Type (${SupportedTypes__c.join(',')})?`, { default: 'Text' });
     }
 
     // we have at least these two fields now
@@ -135,11 +142,11 @@ export default class FieldCreate extends SfdxCommand {
 
     // type specific values
     if (this.flags.type === 'Text') {
-      outputJSON.length = this.flags.length || await cli.prompt('Length? (Max 255)');
+      outputJSON.length = this.flags.length || await cli.prompt('Length? (Max 255)', { default: '255' });
     }
 
     if (this.flags.type === 'Checkbox') {
-      outputJSON.defaultValue = this.flags.default || await cli.prompt('Default value (required for checkboxes)? [type true or false]');
+      outputJSON.defaultValue = this.flags.default || await cli.prompt('Default value (required for checkboxes)?', { default: 'false' });
     }
 
     if (this.flags.type === 'LongTextArea') {
@@ -153,21 +160,39 @@ export default class FieldCreate extends SfdxCommand {
     }
 
     if (this.flags.type === 'Number') {
-      outputJSON.scale = this.flags.scale || await cli.prompt('how many decimal places (scale)?');
-      outputJSON.precision = this.flags.precision || await cli.prompt(`how many total digits, including those ${outputJSON.scale} decimal places? (precision, MAX 18)?`);
+      outputJSON.scale = this.flags.scale || await cli.prompt('how many decimal places (scale)?', {default: '0'});
+      outputJSON.precision = this.flags.precision || await cli.prompt(`how many total digits, including those ${outputJSON.scale} decimal places? (precision, MAX 18)?`, { default: '18' });
     }
 
     // optional stuff
     if (this.flags.required) {
       outputJSON.required = true;
+    } else if (this.flags.interactive) {
+      outputJSON.required = await cli.confirm('required?');
     }
 
     if (this.flags.unique) {
       outputJSON.unique = true;
+    } else if (this.flags.interactive) {
+      outputJSON.unique = await cli.confirm('unique?');
     }
 
     if (this.flags.externalid) {
       outputJSON.externalId = true;
+    } else if (this.flags.interactive) {
+      outputJSON.externalId = await cli.confirm('external ID?');
+    }
+
+    if (this.flags.description) {
+      outputJSON.description = this.flags.description;
+    } else if (this.flags.interactive) {
+      outputJSON.description = await cli.prompt('description?  Be nice to your future self!');
+    }
+
+    if (this.flags.trackhistory) {
+      outputJSON.trackHistory = this.flags.trackhistory;
+    } else if (this.flags.interactive) {
+      outputJSON.trackHistory = await cli.prompt('enable history tracking? (true or false)', { default: 'false' });
     }
 
     // dealing with big object indexes
@@ -185,7 +210,7 @@ export default class FieldCreate extends SfdxCommand {
       // this.ux.log(existing.indexes[0].fields);
 
       while (!this.flags.indexposition && !this.flags.indexappend && !this.flags.noindex) {
-        const response = await cli.prompt(`where in the big object index? Enter an array key (0 is first.  There are already ${existing.indexes[0].fields.length}) or the word LAST (add to the end) or NO (don't index this field)`);
+        const response = await cli.prompt(`where in the big object index? Enter an array key (0 is first.  There are already ${existing.indexes[0].fields.length}) or the word LAST (add to the end) or NO (don't index this field)`, { default: 'LAST' });
         if (response === 'NONE') {
           this.flags.noindex = true;
           // this.flags.indexappend = true;
@@ -208,7 +233,7 @@ export default class FieldCreate extends SfdxCommand {
       // we were told what to do
       while (this.flags.indexdirection !== 'ASC' && this.flags.indexdirection !== 'DESC') {
         outputJSON.required = true;
-        this.flags.indexdirection = await cli.prompt('which direction should this index be sorted? (ASC, DESC)');
+        this.flags.indexdirection = await cli.prompt('which direction should this index be sorted? (ASC, DESC)', { default: 'DESC' });
       }
 
       existing = await fixExistingDollarSign(existing);
