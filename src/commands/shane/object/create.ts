@@ -4,24 +4,24 @@ import cli from 'cli-ux';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 import * as options from '../../../shared/js2xmlStandardOptions';
-import { timingSafeEqual } from 'crypto';
 
 const typeDefinitions = [
   { type: 'custom',
     forbidden: ['highvolume'],
-    specific: ['activities', 'search', 'feeds'],
+    specificOptions: ['activities', 'search', 'feeds'],
+    specificRequired: ['nametype', 'namefieldlabel'],
     ending: '__c'
   },
   {
     type: 'big',
-    forbidden: ['highvolume', 'activities'],
-    specific: [],
+    forbidden: ['highvolume', 'activities', 'sharing', 'search', 'feeds'],
+    specificOptions: [],
     ending: '__b'
   },
   {
     type: 'event',
-    forbidden: ['activities'],
-    specific: [],
+    forbidden: ['activities', 'sharing', 'search', 'feeds'],
+    specificOptions: [],
     ending: '__e'
   }
 ];
@@ -56,9 +56,16 @@ export default class ObjectCreate extends SfdxCommand {
     description: { type: 'string',  default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' },
 
     // type specific attributes
+    enterprise: { type: 'boolean', description: 'enable bulk/sharing/streaming' },
+    sharingmodel: {type: 'string', description: 'sharing model', options: ['Read', 'ReadWrite', 'Private'], default: 'ReadWrite'},
     activities: { type: 'boolean', description: 'the enableActivities flag on an object (invalid for __b, __e)'},
     search: { type: 'boolean', description: 'the enableSearch flag on an object (invalid for __b, __e)' },
+    reports: { type: 'boolean', description: 'the enableReports flag on an object (invalid for __b, __e)' },
+    history: { type: 'boolean', description: 'the enableHistory flag on an object (invalid for __b, __e)' },
     feeds: { type: 'boolean', description: 'the enableFeeds flag on an object (invalid for __b, __e)' },
+    nametype: { type: 'string', description: 'name field type', options: ['Text', 'AutoNumber']},
+    namefieldlabel: { type: 'string', description: 'the label for the name field', default: 'Name'},
+    autonumberformat: { type: 'string', description: 'the display format for the autonumbering'},
 
     highvolume: { type: 'boolean',  char: 'h', description: 'high volume, valid only for platform events (__e)'},
 
@@ -80,15 +87,29 @@ export default class ObjectCreate extends SfdxCommand {
       indexes?: {};
       eventType?: string;
       description?: string;
+      nameField?: {
+        label: string;
+        type: string;
+        displayFormat?: string;
+      };
+      sharingModel?: string;
+      enableActivities?: boolean;
+      enableBulkApi?: boolean;
+      enableFeeds?: boolean;
+      enableHistory?: boolean;
+      enableReports?: boolean;
+      enableSearch?: boolean;
+      enableSharing?: boolean;
+      enableStreamingApi?: boolean;
     }
 
     const outputJSON = <ObjectConfig> {
       '@': {
         xmlns: 'http://soap.sforce.com/2006/04/metadata'
       },
-      'deploymentStatus': 'Deployed',
-      'label' : '',
-      'pluralLabel': ''
+      deploymentStatus: 'Deployed',
+      label : '',
+      pluralLabel: ''
     };
 
     // remove trailing slash if someone entered it
@@ -142,9 +163,81 @@ export default class ObjectCreate extends SfdxCommand {
     // type specific attributes
     if (this.flags.type === 'event') {
       if (this.flags.interactive && !this.flags.highvolume) {
-        this.flags.highvolume = await cli.confirm('High Volume (y/n');
+        this.flags.highvolume = await cli.confirm('High Volume (y/n)');
       }
       outputJSON.eventType = this.flags.highvolume ? 'HighVolume' : 'StandardVolume';
+    }
+
+    // type specific attributes
+    if (this.flags.type === 'custom') {
+      if (this.flags.interactive && !this.flags.nametype) {
+        this.flags.nametype = await cli.prompt('AutoNumber or Text?', { default: 'Name' });
+      }
+      if (this.flags.interactive && !this.flags.search) {
+        this.flags.search = await cli.confirm('enable Search? (y/n)');
+      }
+      if (this.flags.interactive && !this.flags.feeds) {
+        this.flags.feeds = await cli.confirm('enable feeds? (y/n)');
+      }
+      if (this.flags.interactive && !this.flags.reports) {
+        this.flags.feeds = await cli.confirm('enable reports? (y/n)');
+      }
+      if (this.flags.interactive && !this.flags.history) {
+        this.flags.feeds = await cli.confirm('enable history? (y/n)');
+      }
+      if (this.flags.interactive && !this.flags.activities) {
+        this.flags.activities = await cli.confirm('enable activities? (y/n)');
+      }
+      if (this.flags.interactive && !this.flags.namefieldlabel) {
+        this.flags.namefieldlabel = await cli.prompt('What do you want to call the name field?', {default: `${this.flags.label} Name`});
+      }
+      if (this.flags.interactive && !this.flags.sharing) {
+        this.flags.sharing = await cli.prompt('Sharing model? [ReadWrite, Read, Private]', { default: 'ReadWrite' });
+      }
+      if (this.flags.interactive && !this.flags.enterprise) {
+        this.flags.enterprise = await cli.confirm('Enable bulk API, sharing, and streaming API? (y/n)');
+      }
+      if (this.flags.nametype === 'AutoNumber' && !this.flags.autonumberformat) {
+        this.flags.autonumberformat = await cli.prompt('Display format', { default: `${this.flags.label}-{0}` });
+      }
+
+      outputJSON.nameField = {
+        type: this.flags.nametype,
+        label: this.flags.namefieldlabel
+      };
+
+      outputJSON.sharingModel = this.flags.sharingmodel;
+
+      if (this.flags.nametype === 'AutoNumber' && this.flags.autonumberformat) {
+        outputJSON.nameField.displayFormat = this.flags.autonumberformat;
+      }
+
+      if (this.flags.enterprise) {
+        outputJSON.enableSharing = true;
+        outputJSON.enableBulkApi = true;
+        outputJSON.enableStreamingApi = true;
+      }
+
+      if (this.flags.reports) {
+        outputJSON.enableReports = true;
+      }
+
+      if (this.flags.history) {
+        outputJSON.enableHistory = true;
+      }
+
+      if (this.flags.activities) {
+        outputJSON.enableActivities = true;
+      }
+
+      if (this.flags.feeds) {
+        outputJSON.enableFeeds = true;
+      }
+
+      if (this.flags.search) {
+        outputJSON.enableSearch = true;
+      }
+
     }
 
     const objectsPath = `${this.flags.directory}/objects`;
