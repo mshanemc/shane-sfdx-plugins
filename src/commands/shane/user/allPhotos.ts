@@ -1,9 +1,9 @@
-import { SfdxCommand, core } from '@salesforce/command';
-import request = require('request-promise-native');
-import localFile2CV = require('../../../shared/localFile2CV');
-import fs = require('fs-extra');
-import util = require('util');
+import { SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
+import fs = require('fs-extra');
+import request = require('request-promise-native');
+import util = require('util');
+import localFile2CV = require('../../../shared/localFile2CV');
 
 const exec = util.promisify(child_process.exec);
 
@@ -20,15 +20,12 @@ export default class AllPhotos extends SfdxCommand {
 'sfdx shane:user:allPhotos -u someAlias'
   ];
 
-  protected static flagsConfig = {};
+  protected static flagsConfig = {
+    repo: { type: 'url', char: 'r', default: photoRepo, description: 'optional alternate repo of photos, which contains a folder of photos named /img' },
+    folder: { type: 'directory', char: 'f', description: 'optional local folder of photos.  Overrides --repo' }
+  };
 
-  // Comment this out if your command does not require an org username
   protected static requiresUsername = true;
-
-  // Comment this out if your command does not support a hub org username
-  // protected static supportsDevhubUsername = true;
-
-  // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
   protected static requiresProject = false;
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
@@ -57,9 +54,14 @@ export default class AllPhotos extends SfdxCommand {
       throw new Error(e);
     }
 
+    let photos;
     // get our bad profile photos
-    await exec(`git clone ${photoRepo} ${tempRepo}`);
-    const photos = await fs.readdir(`${tempRepo}/img`);
+    if (this.flags.folder) {
+      photos = await fs.readdir(this.flags.folder);
+    } else {
+      await exec(`git clone ${this.flags.repo} ${tempRepo}`);
+      photos = await fs.readdir(`${tempRepo}/img`);
+    }
 
     const options = {
       method: 'POST',
