@@ -1,9 +1,9 @@
-import { SfdxCommand, core } from '@salesforce/command';
-import * as _ from 'lodash';
+import { SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
+import * as _ from 'lodash';
 
-import { getExisting, fixExistingDollarSign } from '../../../../shared/getExisting';
+import { fixExistingDollarSign, getExisting } from '../../../../shared/getExisting';
 import { setupArray } from '../../../../shared/setupArray';
 
 import * as options from '../../../../shared/js2xmlStandardOptions';
@@ -90,7 +90,7 @@ export default class PermAlign extends SfdxCommand {
     }
 
     // objects exist as folders, so they don't have file extensions, just the object name
-    existing.objectPermissions = _.filter(existing.objectPermissions, (item) => {
+    existing.objectPermissions = _.filter(existing.objectPermissions, item => {
       if (objects.includes(item.object)) {
         return true;
       } else {
@@ -100,7 +100,7 @@ export default class PermAlign extends SfdxCommand {
     });
 
     // the object exists locally, and if so, the field does, too.
-    existing.fieldPermissions = _.filter(existing.fieldPermissions, (item) => {
+    existing.fieldPermissions = _.filter(existing.fieldPermissions, item => {
       const objectName = item.field.split('.')[0];
       const fieldName = item.field.split('.')[1] + '.field-meta.xml';
       if  (objects.includes(objectName) && fs.readdirSync(`${objDir}/${objectName}/fields`).includes(fieldName)) {
@@ -112,7 +112,7 @@ export default class PermAlign extends SfdxCommand {
     });
 
     // the object exists AND so does the specified layout
-    existing.layoutAssignments = _.filter(existing.layoutAssignments, (item) => {
+    existing.layoutAssignments = _.filter(existing.layoutAssignments, item => {
       const objectName = item.layout.split('-')[0];
       if (objects.includes(objectName) && layouts.includes(item.layout + '.layout-meta.xml')) {
         return true;
@@ -122,7 +122,7 @@ export default class PermAlign extends SfdxCommand {
       }
     });
 
-    existing.recordTypeVisibilities = _.filter(existing.recordTypeVisibilities, (item) => {
+    existing.recordTypeVisibilities = _.filter(existing.recordTypeVisibilities, item => {
       const objectName = item.recordType.split('.')[0];
       const recordTypeName = item.recordType.split('.')[1] + '.recordType-meta.xml';
       if (objects.includes(objectName) && fs.readdirSync(`${objDir}/${objectName}/recordTypes`).includes(recordTypeName)) {
@@ -133,7 +133,7 @@ export default class PermAlign extends SfdxCommand {
       }
     });
 
-    existing.tabSettings = _.filter(existing.tabSettings, (item) => {
+    existing.tabSettings = _.filter(existing.tabSettings, item => {
       const tabName = item.tab + '.tab-meta.xml';
       if (tabs.includes(tabName)) {
         return true; // the tab is there locally, so include it in the profile
@@ -145,10 +145,10 @@ export default class PermAlign extends SfdxCommand {
       }
     });
 
-    existing.tabVisibilities = _.filter(existing.tabVisibilities, (item) => this.checkTab(item.tab, tabs, objects));
-    existing.tabVisibilities = _.filter(existing.tabVisibilities, (item) => this.checkTab(item.tab, tabs, objects));
+    existing.tabVisibilities = _.filter(existing.tabVisibilities, item => this.checkTab(item.tab, tabs, objects));
+    existing.tabVisibilities = _.filter(existing.tabVisibilities, item => this.checkTab(item.tab, tabs, objects));
 
-    existing.externalDataSourceAccesses = _.filter(existing.externalDataSourceAccesses, (item) => {
+    existing.externalDataSourceAccesses = _.filter(existing.externalDataSourceAccesses, item => {
       if ( dataSources.includes(item.externalDataSource + '.dataSource-meta.xml') ) {
         return true;
       } else {
@@ -157,7 +157,7 @@ export default class PermAlign extends SfdxCommand {
       }
     });
 
-    existing.applicationVisibilities = _.filter(existing.applicationVisibilities, (item) => {
+    existing.applicationVisibilities = _.filter(existing.applicationVisibilities, item => {
       if (applications.includes(item.application + '.app-meta.xml')) {
         return true;
       } else {
