@@ -94,7 +94,7 @@ export default class PermAlign extends SfdxCommand {
       if (objects.includes(item.object)) {
         return true;
       } else {
-        this.ux.log(`${chalk.blue(targetFilename)}: removing object perm for ${item.object}`);
+        this.ux.log(`${chalk.cyan(targetFilename)}: removing object perm for ${item.object}`);
         return false;
       }
     });
@@ -106,7 +106,7 @@ export default class PermAlign extends SfdxCommand {
       if  (objects.includes(objectName) && fs.readdirSync(`${objDir}/${objectName}/fields`).includes(fieldName)) {
         return true;
       } else {
-        this.ux.log(`${chalk.blue(targetFilename)}: removing field perm for ${item.field}`);
+        this.ux.log(`${chalk.cyan(targetFilename)}: removing field perm for ${item.field}`);
         return false;
       }
     });
@@ -117,7 +117,7 @@ export default class PermAlign extends SfdxCommand {
       if (objects.includes(objectName) && layouts.includes(item.layout + '.layout-meta.xml')) {
         return true;
       } else {
-        this.ux.log(`${chalk.blue(targetFilename)}: removing layout assignment for ${item.layout}`);
+        this.ux.log(`${chalk.cyan(targetFilename)}: removing layout assignment for ${item.layout}`);
         return false;
       }
     });
@@ -128,7 +128,7 @@ export default class PermAlign extends SfdxCommand {
       if (objects.includes(objectName) && fs.readdirSync(`${objDir}/${objectName}/recordTypes`).includes(recordTypeName)) {
         return true;
       } else {
-        this.ux.log(`${chalk.blue(targetFilename)}: removing recordTypeVisibility for ${item.recordType}`);
+        this.ux.log(`${chalk.cyan(targetFilename)}: removing recordTypeVisibility for ${item.recordType}`);
         return false;
       }
     });
@@ -140,7 +140,7 @@ export default class PermAlign extends SfdxCommand {
       } else if (objects.includes(item.tab.replace('standard-', ''))) {
         return true; // the object is there locally, so include the tab
       } else {
-        this.ux.log(`${chalk.blue(targetFilename)}: removing tab ${item.tab}`);
+        this.ux.log(`${chalk.cyan(targetFilename)}: removing tab ${item.tab}`);
         return false;
       }
     });
@@ -152,7 +152,7 @@ export default class PermAlign extends SfdxCommand {
       if ( dataSources.includes(item.externalDataSource + '.dataSource-meta.xml') ) {
         return true;
       } else {
-        this.ux.log(`${chalk.blue(targetFilename)}: removing external data source ${item.externalDataSource}`);
+        this.ux.log(`${chalk.cyan(targetFilename)}: removing external data source ${item.externalDataSource}`);
         return false;
       }
     });
@@ -161,7 +161,7 @@ export default class PermAlign extends SfdxCommand {
       if (applications.includes(item.application + '.app-meta.xml')) {
         return true;
       } else {
-        this.ux.log(`${chalk.blue(targetFilename)}: removing app ${item.application}`);
+        this.ux.log(`${chalk.cyan(targetFilename)}: removing app ${item.application}`);
         return false;
       }
     });
@@ -178,6 +178,6 @@ export default class PermAlign extends SfdxCommand {
 
     const outputXML = jsToXml.parse(metadataType, existing, options.js2xmlStandardOptions);
     fs.writeFileSync(targetFilename, outputXML);
-    // this.ux.log(`removed ${objectBefore - existing.objectPermissions.length} objects, ${recordTypeBefore - existing.recordTypeVisibilities.length} recordTypes, ${layoutBefore - existing.layoutAssignments.length} layout, ${fieldBefore - existing.fieldPermissions.length} fields from ${this.flags.object} ${chalk.blue(targetFilename)}`);
+    // this.ux.log(`removed ${objectBefore - existing.objectPermissions.length} objects, ${recordTypeBefore - existing.recordTypeVisibilities.length} recordTypes, ${layoutBefore - existing.layoutAssignments.length} layout, ${fieldBefore - existing.fieldPermissions.length} fields from ${this.flags.object} ${chalk.cyan(targetFilename)}`);
   }
 }
