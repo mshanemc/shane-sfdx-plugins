@@ -3,10 +3,9 @@ import chalk from 'chalk';
 import cli from 'cli-ux';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
-import util = require('util');
-import xml2js = require('xml2js');
-import { fixExistingDollarSign } from '../../../shared/getExisting';
+import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
 import * as options from '../../../shared/js2xmlStandardOptions';
+import { setupArray } from '../../../shared/setupArray';
 
 const	SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
 const SupportedTypes__e = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
@@ -43,6 +42,7 @@ export default class FieldCreate extends SfdxCommand {
     unique: { type: 'boolean',  char: 'u', description: 'field must be unique' },
     externalid: { type: 'boolean',  description: 'use as an external id' },
     trackhistory: { type: 'boolean', description: 'enable history tracking on the field' },
+    helptext: { type: 'string', description: 'optional inline help text'},
     // type specific flags
     length: { type: 'number',  char: 'l', description: 'length (for text fields)' },
 
@@ -109,6 +109,7 @@ export default class FieldCreate extends SfdxCommand {
       fullName: string;
       defaultValue?: string;
       description?: string;
+      inlineHelpText?: string;
       required?: boolean;
       unique?: boolean;
       externalId?: boolean;
@@ -186,7 +187,13 @@ export default class FieldCreate extends SfdxCommand {
     if (this.flags.description) {
       outputJSON.description = this.flags.description;
     } else if (this.flags.interactive) {
-      outputJSON.description = await cli.prompt('description?  Be nice to your future self!');
+      outputJSON.description = await cli.prompt('description?  Be nice to your future self!', { required: false });
+    }
+
+    if (this.flags.helptext) {
+      outputJSON.inlineHelpText = this.flags.helptext;
+    } else if (this.flags.interactive) {
+      outputJSON.inlineHelpText = await cli.prompt('inline help text?  Be nice to your users!', {required: false});
     }
 
     if (this.flags.trackhistory) {
@@ -198,13 +205,12 @@ export default class FieldCreate extends SfdxCommand {
     // dealing with big object indexes
     if (this.flags.object.includes('__b') && !this.flags.noindex) {
 
-      const parser = new xml2js.Parser({ explicitArray: true });
-      const parseString = util.promisify(parser.parseString);
       const filePath = `${this.flags.directory}/objects/${this.flags.object}/${this.flags.object}.object-meta.xml`;
-      const fileRead = await parseString(fs.readFileSync(filePath));
 
-      let existing = fileRead.CustomObject;
+      let existing = await getExisting(filePath, 'CustomObject');
       // this.ux.log(existing.indexes[0].fields);
+      existing = setupArray(existing, 'indexes');
+      // existing = setupArray(existing, 'fields');
 
       existing.indexes[0].fields = existing.indexes[0].fields || [];
       // this.ux.log(existing.indexes[0].fields);
