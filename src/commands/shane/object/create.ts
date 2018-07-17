@@ -33,7 +33,7 @@ export default class ObjectCreate extends SfdxCommand {
     plural: { type: 'string',  char: 'p', description: 'plural label for the UI' },
     highvolume: { type: 'boolean',  char: 'h', description: 'high volume, valid only for platform events (__e)'},
     // description: { type: 'string',  char: 'd', default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' }),
-    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' }
+    directory: { type: 'directory',  char: 'd', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' }
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
