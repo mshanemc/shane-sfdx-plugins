@@ -1,4 +1,4 @@
-# shane-sfdx-plugin
+# shane-sfdx-plugins
 
 ## install
 
