@@ -156,6 +156,13 @@ export default class PermSetCreate extends SfdxCommand {
         allowRead: 'true',
         object: objectName
       });
+    } else if (objectName.endsWith('__b')) {
+      this.ux.log(`Added object perms for big object ${objectName}`);
+      existing.objectPermissions.push({
+        allowCreate: 'true',
+        allowRead: 'true',
+        object: objectName
+      });
     }
     return existing;
 
