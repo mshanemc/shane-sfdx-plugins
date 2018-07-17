@@ -197,7 +197,7 @@ describe('shane:object:create (big object flavor)', () => {
 
     fs.ensureDirSync(`${testProjectName}/${myDir}`);
 
-    await exec(`sfdx shane:object:create --label "${label}" --plural "${plural}" --api ${api} --directory ${myDir}`, { cwd: testProjectName });
+    await exec(`sfdx shane:object:create --type big --label "${label}" --plural "${plural}" --api ${api} --directory ${myDir}`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/${myDir}/objects/${api}`)).to.be.true;
     expect(fs.existsSync(`${testProjectName}/${myDir}/objects/${api}/fields`)).to.be.true;
     expect(fs.existsSync(`${testProjectName}/${myDir}/objects/${api}/${api}.object-meta.xml`)).to.be.true;

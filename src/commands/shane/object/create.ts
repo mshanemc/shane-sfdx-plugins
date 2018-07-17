@@ -4,6 +4,7 @@ import cli from 'cli-ux';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 import * as options from '../../../shared/js2xmlStandardOptions';
+import { timingSafeEqual } from 'crypto';
 
 const typeDefinitions = [
   { type: 'custom',
@@ -165,7 +166,7 @@ export default class ObjectCreate extends SfdxCommand {
 
     fs.writeFileSync(metaFileLocation, xml);
 
-    this.ux.log(chalk.green(`Created ${thisObjectFolder}.  Add fields with TBD command`));
+    this.ux.log(`Created ${chalk.green(thisObjectFolder)}.  Add fields with ${chalk.cyan(`sfdx shane:object:field -o ${this.flags.api}`)}.`);
   }
 
   private validate = typename => {
