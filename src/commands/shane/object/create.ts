@@ -1,4 +1,4 @@
-import { SfdxCommand, core } from '@salesforce/command';
+import { core, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 
