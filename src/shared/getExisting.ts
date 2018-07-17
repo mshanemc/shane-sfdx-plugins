@@ -4,10 +4,10 @@ import xml2js = require('xml2js');
 
 // const options = require('../../../../shared/js2xmlStandardOptions');
 
-export async function getExisting(targetFilename: string, subType: string, defaults?: object, explicitArray?: boolean) {
+export async function getExisting(targetFilename: string, subType: string, defaults?: object) {
   // get or create permset
   if (fs.existsSync(targetFilename)) {
-    const parser = new xml2js.Parser({ explicitArray: explicitArray || false });
+    const parser = new xml2js.Parser({ explicitArray: false });
     const parseString = util.promisify(parser.parseString);
     const existing = await parseString(fs.readFileSync(targetFilename));
     return existing[subType];
