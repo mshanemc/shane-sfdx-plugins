@@ -3,13 +3,15 @@ import chalk from 'chalk';
 import cli from 'cli-ux';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
+import util = require('util');
+import xml2js = require('xml2js');
 import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
 import * as options from '../../../shared/js2xmlStandardOptions';
 import { setupArray } from '../../../shared/setupArray';
 
 const	SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
 const SupportedTypes__e = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
-const SupportedTypes__c = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
+const SupportedTypes__c = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox', 'Url'];
 
 export default class FieldCreate extends SfdxCommand {
 
@@ -169,19 +171,19 @@ export default class FieldCreate extends SfdxCommand {
     if (this.flags.required) {
       outputJSON.required = true;
     } else if (this.flags.interactive) {
-      outputJSON.required = await cli.confirm('required?');
+      outputJSON.required = await cli.confirm('required? (y/n)');
     }
 
     if (this.flags.unique) {
       outputJSON.unique = true;
     } else if (this.flags.interactive) {
-      outputJSON.unique = await cli.confirm('unique?');
+      outputJSON.unique = await cli.confirm('unique? (y/n)');
     }
 
     if (this.flags.externalid) {
       outputJSON.externalId = true;
     } else if (this.flags.interactive) {
-      outputJSON.externalId = await cli.confirm('external ID?');
+      outputJSON.externalId = await cli.confirm('external ID?  (y/n)');
     }
 
     if (this.flags.description) {
@@ -199,19 +201,19 @@ export default class FieldCreate extends SfdxCommand {
     if (this.flags.trackhistory) {
       outputJSON.trackHistory = this.flags.trackhistory;
     } else if (this.flags.interactive) {
-      outputJSON.trackHistory = await cli.prompt('enable history tracking? (true or false)', { default: 'false' });
+      outputJSON.trackHistory = await cli.confirm('enable history tracking?  (y/n)');
     }
 
     // dealing with big object indexes
     if (this.flags.object.includes('__b') && !this.flags.noindex) {
 
+      const parser = new xml2js.Parser({ explicitArray: true });
+      const parseString = util.promisify(parser.parseString);
       const filePath = `${this.flags.directory}/objects/${this.flags.object}/${this.flags.object}.object-meta.xml`;
+      const fileRead = await parseString(fs.readFileSync(filePath));
 
-      let existing = await getExisting(filePath, 'CustomObject');
+      let existing = fileRead.CustomObject;
       // this.ux.log(existing.indexes[0].fields);
-      existing = setupArray(existing, 'indexes');
-      // existing = setupArray(existing, 'fields');
-
       existing.indexes[0].fields = existing.indexes[0].fields || [];
       // this.ux.log(existing.indexes[0].fields);
 

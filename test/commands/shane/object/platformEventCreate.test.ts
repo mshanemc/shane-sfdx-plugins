@@ -27,7 +27,7 @@ describe('shane:object:create (platform event flavor)', () => {
 
     // `sfdx shane:object:create --label "Platypus" --plural "${plural}" --api Platypus__b --directory /my / project / path
 
-    await exec(`sfdx shane:object:create --label "${label}" --plural "${plural}" --api ${api}`, { cwd: testProjectName });
+    await exec(`sfdx shane:object:create --type event --label "${label}" --plural "${plural}" --api ${api}`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}`)).to.be.true;
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields`)).to.be.true;
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`)).to.be.true;
