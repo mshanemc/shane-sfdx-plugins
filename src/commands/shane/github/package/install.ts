@@ -44,7 +44,11 @@ export default class GithubPackageInstall extends SfdxCommand {
       const packages = Object.values(primaryResult.packageAliases);
       this.ux.log(`packages are ${packages}`);
       packageVersionId = packages[packages.length - 1 ];
-      this.ux.log(`found packageVersionId ${packageVersionId} in the sfdx-project.json file`);
+      if ( packageVersionId.startsWith('04t')) {
+        this.ux.log(`found packageVersionId ${packageVersionId} in the sfdx-project.json file`);
+      } else {
+        throw new Error('no package version id found');
+      }
     } else {
       // try the fallback option
       // get the SubscriberPackageVersionId from github using Shane's original format
