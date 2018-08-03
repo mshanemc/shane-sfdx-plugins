@@ -1,11 +1,11 @@
+import { UX } from '@salesforce/command';
 import child_process = require('child_process');
 import util = require('util');
-import { core } from '@salesforce/command';
 
 const exec = util.promisify(child_process.exec);
 
 export async function retrieveUnzipConvertClean(tmpDir, retrieveCommand, target) {
-  const ux = await core.UX.create();
+  const ux = await UX.create();
 
   process.stdout.write('Starting retrieval...');
 
