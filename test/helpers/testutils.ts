@@ -1,6 +1,6 @@
 import fs = require('fs-extra');
-import xml2js = require('xml2js');
 import util = require('util');
+import xml2js = require('xml2js');
 
 import child_process = require('child_process');
 
