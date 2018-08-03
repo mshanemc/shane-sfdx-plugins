@@ -1,4 +1,4 @@
-import { SfdxCommand, core } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
 import localFile2CV = require('../../../../shared/localFile2CV');
 
 export default class Upload extends SfdxCommand {
@@ -37,10 +37,7 @@ export default class Upload extends SfdxCommand {
   protected static requiresProject = false;
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
-    // const name = this.flags.name || 'world';
-    if (!this.flags.parentid && this.flags.chatter) {
-      throw new Error('you must specify a parentid for chatter attachments');
-    }
+
     // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
     const conn = this.org.getConnection();
 

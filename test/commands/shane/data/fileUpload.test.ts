@@ -1,15 +1,11 @@
 /* tslint:disable:no-unused-expression */
 
-import { expect, test } from '@salesforce/command/dist/test';
-import { core, SfdxCommand } from '@salesforce/command';
+import { expect } from '@salesforce/command/dist/test';
 
-import fs = require('fs-extra');
 import util = require('util');
-import xml2js = require('xml2js');
 
 import child_process = require('child_process');
 
-import localFile2CV = require('../../../../lib/shared/localFile2CV');
 import testutils = require('../../../helpers/testutils');
 
 const exec = util.promisify(child_process.exec);
@@ -57,9 +53,9 @@ describe('shane:data:file:upload', () => {
   it('fails chatter without a parentid', async () => {
 
     try {
-      const results = await exec('sfdx shane:data:file:upload -f sfdx-project.json -n "sfdx project json file" -c --json', { cwd: testProjectName });
+      await exec('sfdx shane:data:file:upload -f sfdx-project.json -n "sfdx project json file" -c --json', { cwd: testProjectName });
     } catch (err) {
-      expect(err.message).to.include('you must specify a parentid for chatter attachments');
+      expect(err.message).to.include('--parentid= must also be provided when using --chatter=');
     }
   });
 
