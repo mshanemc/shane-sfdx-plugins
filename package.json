@@ -16,7 +16,6 @@
     "js2xmlparser": "^3.0.0",
     "lodash": "^4.17.10",
     "npm": "^6.3.0",
-    "replaceall": "^0.1.6",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
     "xml2js": "^0.4.19"

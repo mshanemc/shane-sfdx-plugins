@@ -3,7 +3,6 @@ import chalk from 'chalk';
 import cli from 'cli-ux';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
-import replaceall from 'replaceall';
 import util = require('util');
 import xml2js = require('xml2js');
 import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
@@ -88,7 +87,7 @@ export default class FieldCreate extends SfdxCommand {
     }
 
     if (!this.flags.api) {
-      this.flags.api = await cli.prompt('API name for your new field?', { default: `${replaceall(' ', '_', this.flags.label)}__c` });
+      this.flags.api = await cli.prompt('API name for your new field?', { default: `${this.flags.label.replace(/ /g, '_')}__c` });
     }
 
     // be helpful

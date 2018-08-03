@@ -3,7 +3,6 @@ import chalk from 'chalk';
 import cli from 'cli-ux';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
-import replaceall from 'replaceall';
 import * as options from '../../../shared/js2xmlStandardOptions';
 
 const typeDefinitions = [
@@ -137,7 +136,7 @@ export default class ObjectCreate extends SfdxCommand {
       } else if (this.flags.type === 'event') {
         suffix = '__e';
       }
-      this.flags.api = await cli.prompt(`API name (ends with ${suffix}) ?`, { default: `${replaceall(' ', '_', this.flags.label)}${suffix}` });
+      this.flags.api = await cli.prompt(`API name (ends with ${suffix}) ?`, { default: `${this.flags.label.replace(/ /g, '_')}${suffix}` });
     }
 
     // checks and throws an error if types and params don't mix
