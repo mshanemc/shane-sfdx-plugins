@@ -3,10 +3,12 @@ import chalk from 'chalk';
 import cli from 'cli-ux';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
+import replaceall from 'replaceall';
 import util = require('util');
 import xml2js = require('xml2js');
 import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
 import * as options from '../../../shared/js2xmlStandardOptions';
+
 import { setupArray } from '../../../shared/setupArray';
 
 const	SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
@@ -86,7 +88,7 @@ export default class FieldCreate extends SfdxCommand {
     }
 
     if (!this.flags.api) {
-      this.flags.api = await cli.prompt('API name for your new field?', { default: `${this.flags.name.replace(' ', '_')}__c` });
+      this.flags.api = await cli.prompt('API name for your new field?', { default: `${replaceall(' ', '_', this.flags.label)}__c` });
     }
 
     // be helpful
