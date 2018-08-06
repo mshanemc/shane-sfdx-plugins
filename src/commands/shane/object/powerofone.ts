@@ -8,7 +8,7 @@ import chalk from 'chalk';
 
 export default class PowerOfOne extends SfdxCommand {
 
-  public static description = 'create a remote site setting in the local source.  Push it when you\'re done';
+  public static description = 'add a "power of one" formula field to any object';
 
   public static examples = [
 `sfdx shane:object:powerofone -a Poo -l "Power of One" -o User
