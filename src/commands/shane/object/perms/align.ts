@@ -34,17 +34,25 @@ export default class PermAlign extends SfdxCommand {
 
     if (!this.flags.specific) {
       // just do all of them
-      const profiles = fs.readdirSync(profileDirectory);
-      const permsets = fs.readdirSync(permsetDirectory);
 
-      for (const p of profiles) {
-        const targetFilename = `${profileDirectory}/${p}`;
-        await this.removePerms(targetFilename, 'Profile');
+      if (fs.existsSync(profileDirectory)) {
+        const profiles = fs.readdirSync(profileDirectory);
+        for (const p of profiles) {
+          const targetFilename = `${profileDirectory}/${p}`;
+          await this.removePerms(targetFilename, 'Profile');
+        }
+      } else {
+        this.ux.warn('no profiles found');
       }
 
-      for (const p of permsets) {
-        const targetFilename = `${permsetDirectory}/${p}`;
-        await this.removePerms(targetFilename, 'PermissionSet');
+      if (fs.existsSync(permsetDirectory)) {
+        const permsets = fs.readdirSync(permsetDirectory);
+        for (const p of permsets) {
+          const targetFilename = `${permsetDirectory}/${p}`;
+          await this.removePerms(targetFilename, 'PermissionSet');
+        }
+      } else {
+        this.ux.warn('no perm sets found');
       }
 
     } else if (this.flags.specific) {
@@ -79,11 +87,11 @@ export default class PermAlign extends SfdxCommand {
     const thingsToAlign = ['objectPermissions', 'fieldPermissions', 'layoutAssignments', 'recordTypes', 'tabSettings', 'tabVisibilities', 'profileActionOverrides', 'applicationVisibilities', 'externalDataSourceAccesses'];
 
     const objDir = `${this.flags.directory}/objects`;
-    const objects = fs.readdirSync(objDir);
-    const layouts = fs.readdirSync(`${this.flags.directory}/layouts`);
-    const tabs = fs.readdirSync(`${this.flags.directory}/tabs`);
-    const dataSources = fs.readdirSync(`${this.flags.directory}/dataSources`);
-    const applications = fs.readdirSync(`${this.flags.directory}/applications`);
+    const objects = fs.existsSync(objDir) ? fs.readdirSync(objDir) : [];
+    const layouts = fs.existsSync(`${this.flags.directory}/layouts`) ? fs.readdirSync(`${this.flags.directory}/layouts`) : [];
+    const tabs = fs.existsSync(`${this.flags.directory}/tabs`) ? fs.readdirSync(`${this.flags.directory}/tabs`) : [];
+    const dataSources = fs.existsSync(`${this.flags.directory}/dataSources`) ? fs.readdirSync(`${this.flags.directory}/dataSources`) : [];
+    const applications = fs.existsSync(`${this.flags.directory}/applications`) ? fs.readdirSync(`${this.flags.directory}/applications`) : [];
 
     for (const mdType of thingsToAlign) {
       existing = setupArray(existing, mdType);
