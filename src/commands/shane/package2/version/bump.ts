@@ -1,10 +1,9 @@
-import { SfdxCommand, core } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
+import chalk from 'chalk';
+import child_process = require('child_process');
+import cli from 'cli-ux';
 import fs = require('fs-extra');
 import util = require('util');
-import cli from 'cli-ux';
-
-import child_process = require('child_process');
-import chalk from 'chalk';
 
 const exec = util.promisify(child_process.exec);
 
@@ -16,10 +15,13 @@ export default class Bump extends SfdxCommand {
 
   public static examples = [
 `sfdx shane:package2:version:bump -m
-// bump the minor version up by one
+// bump the minor version up by one (and set patch to 0)
 `,
 `sfdx shane:package2:version:bump -M
 // bump the major version up by one (and set minor/patch to 0)
+`,
+`sfdx shane:package2:version:bump -p
+// bump the patch version up by one
 `,
 `sfdx shane:package2:version:bump -M -t myDir
 // bump the major version up by one for a particular directory that's not the default
@@ -33,8 +35,9 @@ export default class Bump extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    major: { type: 'boolean',  char: 'M', description: 'Bump the major version by 1, sets minor,build to 0'},
-    minor: { type: 'boolean',  char: 'm', description: 'Bump the minor version by 1' },
+    major: { type: 'boolean', char: 'M', description: 'Bump the major version by 1, sets minor,build to 0', exclusive: ['minor', 'patch']},
+    minor: { type: 'boolean', char: 'm', description: 'Bump the minor version by 1', exclusive: ['major', 'patch'] },
+    patch: { type: 'boolean', char: 'p', description: 'Bump the patch version by 1', exclusive: ['major', 'minor'] },
     create: { type: 'boolean',  char: 'c', description: 'create a new packageVersion from the new versionNumber' },
     release: { type: 'boolean',  char: 'r', description: 'set the newly version as released (out of Beta).  Implies create whether you flag it or not :)'},
     target: { type: 'string',  char: 't', default: 'force-app', description: 'name of your package directory (defaults to force-app)' }
@@ -55,7 +58,7 @@ export default class Bump extends SfdxCommand {
 
     const project = JSON.parse(fs.readFileSync(projectFile.getPath(), 'UTF-8'));
 
-    const targetDirIndex = project.packageDirectories.findIndex((i) => {
+    const targetDirIndex = project.packageDirectories.findIndex( i => {
       return i.path === this.flags.target;
     });
 
@@ -66,11 +69,14 @@ export default class Bump extends SfdxCommand {
     const versionNumber = project.packageDirectories[targetDirIndex].versionNumber.split('.');
 
     if (this.flags.major) {
-      versionNumber[0] = parseInt(versionNumber[0]) + 1;
+      versionNumber[0] = parseInt(versionNumber[0], 10) + 1;
       versionNumber[1] = 0;
       versionNumber[2] = 0;
     } else if (this.flags.minor) {
-      versionNumber[1] = parseInt(versionNumber[1]) + 1;
+      versionNumber[1] = parseInt(versionNumber[1], 10) + 1;
+      versionNumber[2] = 0;
+    } else if (this.flags.patch) {
+      versionNumber[2] = parseInt(versionNumber[2], 10) + 1;
     }
 
     project.packageDirectories[targetDirIndex].versionNumber = versionNumber.join('.');
