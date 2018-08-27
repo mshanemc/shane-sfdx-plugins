@@ -165,7 +165,7 @@ export default class FieldCreate extends SfdxCommand {
 
     if (this.flags.type === 'Number') {
       outputJSON.scale = this.flags.scale || await cli.prompt('how many decimal places (scale)?', {default: '0'});
-      outputJSON.precision = this.flags.precision || await cli.prompt(`how many total digits, including those ${outputJSON.scale} decimal places? (precision, MAX 18)?`, { default: '18' });
+      outputJSON.precision = this.flags.precision || await cli.prompt(`how many total digits, including those ${outputJSON.scale} decimal places? (precision, MAX ${18 - outputJSON.scale})?`, { default: `${18 - outputJSON.scale}` });
     }
 
     // optional stuff
