@@ -30,7 +30,6 @@ export default class Enable extends SfdxCommand {
 
     const openOutput = await exec(`sfdx force:org:open -u ${this.org.getUsername()} -r -p /lightning/setup/IoTGettingStarted/home --json`);
     const url = JSON.parse(openOutput.stdout).result.url;
-    this.ux.log(url);
 
     const nightmare = new Nightmare({ show: this.flags.show || false, waitTimeOut });
     this.ux.startSpinner('opening Salesforce setup');
