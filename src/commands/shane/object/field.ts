@@ -87,7 +87,7 @@ export default class FieldCreate extends SfdxCommand {
     }
 
     if (!this.flags.api) {
-      this.flags.api = await cli.prompt('API name for your new field?', { default: `${this.flags.label.replace(/ /g, '_')}__c` });
+      this.flags.api = await cli.prompt('API name for your new field?', { default: `${this.flags.name.replace(/ /g, '_')}__c` });
     }
 
     // be helpful
