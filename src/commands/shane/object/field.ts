@@ -1,14 +1,12 @@
-import { core, SfdxCommand } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import cli from 'cli-ux';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 import util = require('util');
 import xml2js = require('xml2js');
-import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
+import { fixExistingDollarSign } from '../../../shared/getExisting';
 import * as options from '../../../shared/js2xmlStandardOptions';
-
-import { setupArray } from '../../../shared/setupArray';
 
 const	SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
 const SupportedTypes__e = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
@@ -171,19 +169,19 @@ export default class FieldCreate extends SfdxCommand {
     // optional stuff
     if (this.flags.required) {
       outputJSON.required = true;
-    } else if (this.flags.interactive) {
+    } else if (this.flags.interactive && outputJSON.type !== 'Checkbox') {
       outputJSON.required = await cli.confirm('required? (y/n)');
     }
 
     if (this.flags.unique) {
       outputJSON.unique = true;
-    } else if (this.flags.interactive) {
+    } else if (this.flags.interactive && ['Number', 'Text'].includes(outputJSON.type)) {
       outputJSON.unique = await cli.confirm('unique? (y/n)');
     }
 
     if (this.flags.externalid) {
       outputJSON.externalId = true;
-    } else if (this.flags.interactive) {
+    } else if (this.flags.interactive && ['Number', 'Text'].includes(outputJSON.type)) {
       outputJSON.externalId = await cli.confirm('external ID?  (y/n)');
     }
 
@@ -196,7 +194,7 @@ export default class FieldCreate extends SfdxCommand {
     if (this.flags.helptext) {
       outputJSON.inlineHelpText = this.flags.helptext;
     } else if (this.flags.interactive) {
-      outputJSON.inlineHelpText = await cli.prompt('inline help text?  Be nice to your users!', {required: false});
+      outputJSON.inlineHelpText = await cli.prompt('inline help text?  Be nice to your users!', {required: false, default: outputJSON.description});
     }
 
     if (this.flags.trackhistory) {
