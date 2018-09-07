@@ -10,7 +10,7 @@ const herokuAPIendpoint = 'https://api.heroku.com/app-setups';
 
 export default class HerokuRepoDeploy extends SfdxCommand {
 
-  public static description = 'deploy a heroku app that has a valid app.json';
+  public static description = 'deploy a heroku app that has a valid app.json.  ';
 
   public static examples = [
 `sfdx shane:heroku:repo:deploy -g someUser -r someRepo -u
