@@ -1,16 +1,16 @@
+import { SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import { SfdxCommand, core } from '@salesforce/command';
-import util = require('util');
-import request = require('request-promise-native');
 import child_process = require('child_process');
+import request = require('request-promise-native');
+import util = require('util');
 
 const exec = util.promisify(child_process.exec);
 
 const herokuAPIendpoint = 'https://api.heroku.com/app-setups';
 
-export default class GithubPackageInstall extends SfdxCommand {
+export default class HerokuRepoDeploy extends SfdxCommand {
 
-  public static description = 'installs a package from github from mdapi src';
+  public static description = 'deploy a heroku app that has a valid app.json';
 
   public static examples = [
 `sfdx shane:heroku:repo:deploy -g someUser -r someRepo -u
