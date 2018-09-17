@@ -37,12 +37,12 @@ export default class GithubPackageInstall extends SfdxCommand {
       json: true
     });
 
-    this.ux.log(`file at ${url} says:`);
+    // this.ux.log(`file at ${url} says:`);
 
     if (primaryResult.packageAliases) {
       // grab the last package version unless a version is specified
       const packages = Object.values(primaryResult.packageAliases);
-      this.ux.log(`packages are ${packages}`);
+      // this.ux.log(`packages are ${packages}`);
       packageVersionId = packages[packages.length - 1 ];
       if ( packageVersionId.startsWith('04t')) {
         this.ux.log(`found packageVersionId ${packageVersionId} in the sfdx-project.json file`);
@@ -54,7 +54,7 @@ export default class GithubPackageInstall extends SfdxCommand {
       // get the SubscriberPackageVersionId from github using Shane's original format
       url = `https://raw.githubusercontent.com/${this.flags.githubuser}/${this.flags.repo}/master/latestVersion.json`;
 
-      this.ux.log(`file at ${url} says:`);
+      // this.ux.log(`file at ${url} says:`);
 
       const result = await request.get({
         url,

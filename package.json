@@ -9,7 +9,7 @@
     "@oclif/config": "^1.7.0",
     "@oclif/errors": "^1.2.0",
     "@oclif/parser": "^3.6.0",
-    "@salesforce/command": "0.2.1",
+    "@salesforce/command": "^0.2.4",
     "chalk": "^2.4.1",
     "cli-ux": "^4.8.0",
     "fs-extra": "^7.0.0",
