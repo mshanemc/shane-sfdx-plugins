@@ -18,34 +18,12 @@
     reflect-metadata "^0.1.12"
     tslib "^1.8.1"
 
-"@heroku/linewrap@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@heroku/linewrap/-/linewrap-1.0.0.tgz#a9d4e99f0a3e423a899b775f5f3d6747a1ff15c6"
-
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
   dependencies:
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
-
-"@oclif/command@^1.4.2":
-  version "1.4.36"
-  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.4.36.tgz#cca1e02d8264f34be9c2d692a3c81efc0de15fdf"
-  dependencies:
-    "@oclif/errors" "^1.1.2"
-    "@oclif/parser" "^3.5.2"
-    debug "^3.1.0"
-    semver "^5.5.0"
-
-"@oclif/command@^1.4.29":
-  version "1.4.34"
-  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.4.34.tgz#05a8798740e9a01209732cba6557f21629043b30"
-  dependencies:
-    "@oclif/errors" "^1.1.2"
-    "@oclif/parser" "^3.5.2"
-    debug "^3.1.0"
-    semver "^5.5.0"
 
 "@oclif/command@^1.5.0":
   version "1.5.0"
@@ -79,16 +57,6 @@
     qqjs "^0.3.10"
     tslib "^1.9.3"
 
-"@oclif/errors@^1.0.2":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@oclif/errors/-/errors-1.0.3.tgz#f23c024075855c7d116d041ee158f99bd51175af"
-  dependencies:
-    clean-stack "^1.3.0"
-    fs-extra "^5.0.0"
-    indent-string "^3.2.0"
-    strip-ansi "^4.0.0"
-    wrap-ansi "^3.0.1"
-
 "@oclif/errors@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@oclif/errors/-/errors-1.1.2.tgz#2a54aae07a7655cc4523cae270d0a50cbc5dbef3"
@@ -113,20 +81,6 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@oclif/linewrap/-/linewrap-1.0.0.tgz#aedcb64b479d4db7be24196384897b5000901d91"
 
-"@oclif/parser@^3.2.9":
-  version "3.2.9"
-  resolved "https://registry.yarnpkg.com/@oclif/parser/-/parser-3.2.9.tgz#76d01106971e20dfcfec5be276c4e6e9edfee9ec"
-  dependencies:
-    "@heroku/linewrap" "^1.0.0"
-
-"@oclif/parser@^3.5.2":
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/@oclif/parser/-/parser-3.5.3.tgz#fa5d0cc616a18240bcaefab02c7b7c9cb322656c"
-  dependencies:
-    "@oclif/linewrap" "^1.0.0"
-    chalk "^2.4.1"
-    tslib "^1.9.3"
-
 "@oclif/parser@^3.6.0":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@oclif/parser/-/parser-3.6.0.tgz#8d0b4c3e012aa1f0d59a6936b3dedec318b11a6d"
@@ -134,18 +88,6 @@
     "@oclif/linewrap" "^1.0.0"
     chalk "^2.4.1"
     tslib "^1.9.3"
-
-"@oclif/plugin-help@^1.2.7":
-  version "1.2.11"
-  resolved "https://registry.yarnpkg.com/@oclif/plugin-help/-/plugin-help-1.2.11.tgz#e6413a6009519230bc4c7e7fe45d8e139939e657"
-  dependencies:
-    "@oclif/command" "^1.4.29"
-    chalk "^2.4.1"
-    indent-string "^3.2.0"
-    lodash.template "^4.4.0"
-    string-width "^2.1.1"
-    widest-line "^2.0.0"
-    wrap-ansi "^3.0.1"
 
 "@oclif/plugin-help@^2.1.0":
   version "2.1.0"
@@ -163,12 +105,6 @@
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@oclif/screen/-/screen-1.0.2.tgz#c9d7c84b0ea60ecec8dd7a9b22c012ba9967aed8"
 
-"@oclif/test@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@oclif/test/-/test-1.0.1.tgz#042c6e47319c739b34c54bf12aaff996f4e055fe"
-  dependencies:
-    fancy-test "^1.0.1"
-
 "@oclif/test@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@oclif/test/-/test-1.2.0.tgz#764ca66215f5bd36c0b5cbcbfc5963f0271825b8"
@@ -181,25 +117,27 @@
   dependencies:
     tslint-xo "^0.8.0"
 
-"@salesforce/command@0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@salesforce/command/-/command-0.2.1.tgz#29af4992cb6050df6d9242009aa2232959a3b1c8"
+"@salesforce/command@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@salesforce/command/-/command-0.2.4.tgz#9f24cd70b19582d876909c0781c2d666484a4ebf"
   dependencies:
-    "@oclif/command" "^1.4.2"
-    "@oclif/errors" "^1.0.2"
-    "@oclif/parser" "^3.2.9"
-    "@oclif/plugin-help" "^1.2.7"
-    "@oclif/test" "^1.0.1"
-    "@salesforce/core" "0.18.1"
+    "@oclif/command" "^1.5.0"
+    "@oclif/errors" "^1.2.0"
+    "@oclif/parser" "^3.6.0"
+    "@oclif/plugin-help" "^2.1.0"
+    "@oclif/test" "^1.2.0"
+    "@salesforce/core" "0.20.0"
+    "@salesforce/kit" "0.0.8"
+    "@salesforce/ts-types" "0.5.0"
     chalk "^2.4.0"
-    cli-ux "^4.7.3"
-    lodash "^4.17.4"
+    cli-ux "^4.8.0"
 
-"@salesforce/core@0.18.1":
-  version "0.18.1"
-  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-0.18.1.tgz#fc78c68e4851dcea11f847526858d427a5644bef"
+"@salesforce/core@0.20.0":
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-0.20.0.tgz#fe07add0074557577764f547017dc1bf73429995"
   dependencies:
-    "@salesforce/ts-json" "0.0.2"
+    "@salesforce/kit" "0.0.7"
+    "@salesforce/ts-types" "0.4.0"
     "@types/jsforce" "1.8.12"
     bunyan-sfdx-no-dtrace "1.8.2"
     debug "^3.1.0"
@@ -216,9 +154,25 @@
     tslint "5.9.1"
     tslint-microsoft-contrib "5.0.2"
 
-"@salesforce/ts-json@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@salesforce/ts-json/-/ts-json-0.0.2.tgz#b5d838adcbab20249c3f8d4ac2a36bf9749de6c8"
+"@salesforce/kit@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@salesforce/kit/-/kit-0.0.7.tgz#ba6141a9b769969267f196dade9518a15bb748c8"
+  dependencies:
+    "@salesforce/ts-types" "0.4.0"
+
+"@salesforce/kit@0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@salesforce/kit/-/kit-0.0.8.tgz#a3f881fc7df19f659c700125323c47a9d1db6a93"
+  dependencies:
+    "@salesforce/ts-types" "0.5.0"
+
+"@salesforce/ts-types@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@salesforce/ts-types/-/ts-types-0.4.0.tgz#35f23e44765fac459acd8b03a8158cba6fc8dae6"
+
+"@salesforce/ts-types@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@salesforce/ts-types/-/ts-types-0.5.0.tgz#6b36c6ec37230dab53540e2dcdfc862592d6ffc1"
 
 "@sinonjs/commons@^1.0.1":
   version "1.0.2"
@@ -834,28 +788,6 @@ cli-table3@^0.5.0:
   optionalDependencies:
     colors "^1.1.2"
 
-cli-ux@^4.7.3:
-  version "4.7.3"
-  resolved "https://registry.yarnpkg.com/cli-ux/-/cli-ux-4.7.3.tgz#5b7f5e70105fde53883c5307a88e2f29f64236c4"
-  dependencies:
-    "@oclif/linewrap" "^1.0.0"
-    "@oclif/screen" "^1.0.2"
-    ansi-styles "^3.2.1"
-    cardinal "^2.1.1"
-    chalk "^2.4.1"
-    clean-stack "^1.3.0"
-    extract-stack "^1.0.0"
-    fs-extra "^6.0.1"
-    hyperlinker "^1.0.0"
-    indent-string "^3.2.0"
-    is-wsl "^1.1.0"
-    lodash "^4.17.10"
-    password-prompt "^1.0.6"
-    semver "^5.5.0"
-    strip-ansi "^4.0.0"
-    supports-color "^5.4.0"
-    supports-hyperlinks "^1.0.1"
-
 cli-ux@^4.8.0:
   version "4.8.0"
   resolved "https://registry.yarnpkg.com/cli-ux/-/cli-ux-4.8.0.tgz#4013e177bfb6a2138565c071ef99f4a13e1cab20"
@@ -1422,13 +1354,6 @@ extsprintf@^1.2.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
 
-fancy-test@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/fancy-test/-/fancy-test-1.0.1.tgz#28eb801dffc341d7202ed90b6944019922b08b5b"
-  dependencies:
-    lodash "^4.17.4"
-    stdout-stderr "^0.1.6"
-
 fancy-test@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/fancy-test/-/fancy-test-1.3.0.tgz#014b63b5be0dd2dde602ec677cec443f34578f37"
@@ -1569,14 +1494,6 @@ fs-extra@^0.30.0:
     klaw "^1.0.0"
     path-is-absolute "^1.0.0"
     rimraf "^2.2.8"
-
-fs-extra@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-5.0.0.tgz#414d0110cdd06705734d055652c5411260c31abd"
-  dependencies:
-    graceful-fs "^4.1.2"
-    jsonfile "^4.0.0"
-    universalify "^0.1.0"
 
 fs-extra@^6.0.1:
   version "6.0.1"
@@ -3388,13 +3305,6 @@ pascalcase@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
 
-password-prompt@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/password-prompt/-/password-prompt-1.0.6.tgz#d657a16c80ae3932f55f38a51fee9f872a8e9b17"
-  dependencies:
-    ansi-escapes "^3.1.0"
-    cross-spawn "^6.0.5"
-
 password-prompt@^1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/password-prompt/-/password-prompt-1.0.7.tgz#8e27748d3400bc9c9140d5ade705dfb7aeb7d91a"
@@ -4250,12 +4160,6 @@ static-extend@^0.1.1:
   dependencies:
     define-property "^0.2.5"
     object-copy "^0.1.0"
-
-stdout-stderr@^0.1.6:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/stdout-stderr/-/stdout-stderr-0.1.7.tgz#f3f69391f3e721c2c52aa92fbfa18b8a6e9ce3df"
-  dependencies:
-    strip-ansi "^4.0.0"
 
 stdout-stderr@^0.1.9:
   version "0.1.9"

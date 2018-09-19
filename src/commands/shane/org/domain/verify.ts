@@ -15,7 +15,7 @@ export default class DomainVerify extends SfdxCommand {
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
     const authInfo = this.org.getConnection().getAuthInfoFields();
-    // this.ux.logJson(authInfo);
+    this.ux.logJson(authInfo);
 
     if (authInfo.instanceUrl.match(/(.my.salesforce.com)/g)) {
       this.ux.log('Domain is good');
