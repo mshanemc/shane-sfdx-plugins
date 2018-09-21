@@ -66,7 +66,7 @@ export default class FieldDescribe extends SfdxCommand {
         return `${field.type} (${field.precision}, ${field.scale})`;
       } else if (field.type === 'reference') {
         return `${field.type} (${field.referenceTo})`;
-      } else if (field.type === 'picklist' || field.type === 'multipicklist') {
+      } else if (field.type === 'picklist' || field.type === 'multipicklist ') {
         return `${field.type}(${field.picklistValues.map(pLV => pLV.value)})`;
       } else {
         return field.type;
