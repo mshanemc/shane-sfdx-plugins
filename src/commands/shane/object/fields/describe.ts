@@ -1,5 +1,5 @@
 import { SfdxCommand, UX } from '@salesforce/command';
-// import child_process = require('child_process');
+import { DescribeSObjectResult} from 'jsforce';
 
 export default class FieldDescribe extends SfdxCommand {
 
@@ -22,10 +22,63 @@ export default class FieldDescribe extends SfdxCommand {
   public async run(): Promise<any> { // tslint:disable-line:no-any
 
     const conn = await this.org.getConnection();
-    const metadata = await conn.sobject(this.flags.object).describe();
+    const metadata = <BetterDescribe> await conn.sobject(this.flags.object).describe();
+    // this.ux.logJson(metadata.fields);
+
+    const output = [];
+
+    interface FieldDescribeResult {
+      name: string;
+      label: string;
+      aggregatable: boolean;
+      type: string;
+      nillable: boolean;
+      precision: number;
+      scale: number;
+      referenceTo: string;
+      picklistValue: object[];
+    }
+
+    interface BetterDescribe {
+      label: string;
+      fields: FieldDescribeResult[];
+    }
+
+    for (const field of metadata.fields) {
+      const rewritten = {
+        name: field.name,
+        label: field.label,
+        type: typeTransform(field),
+        required: requiredTransform(field)
+      };
+      output.push(rewritten);
+    }
+
     this.ux.table(
-      metadata.fields,
-      ['name', 'label', 'type']
+      output,
+      ['name', 'label', 'required', 'type']
     );
+
+    function typeTransform(field) {
+      if (field.calculated) {
+        return `formula/${field.type}`;
+      } else if (field.type === 'double') {
+        return `${field.type} (${field.precision}, ${field.scale})`;
+      } else if (field.type === 'reference') {
+        return `${field.type} (${field.referenceTo})`;
+      } else if (field.type === 'picklist' || field.type === 'multipicklist') {
+        return `${field.type}(${field.picklistValues.map(pLV => pLV.value)})`;
+      } else {
+        return field.type;
+      }
+    }
+
+    function requiredTransform(field) {
+      if (field.type === 'boolean') {
+        return false;
+      } else {
+        return !field.nillable;
+      }
+    }
   }
 }
