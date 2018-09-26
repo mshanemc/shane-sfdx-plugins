@@ -1,4 +1,4 @@
-import { SfdxCommand, core } from '@salesforce/command';
+import { core, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 
@@ -84,10 +84,10 @@ export default class StaticCreate extends SfdxCommand {
       '@': {
         xmlns: 'http://soap.sforce.com/2006/04/metadata'
       },
-      'cacheControl': this.flags.public ? 'Public' : 'Private',
-      'contentType': contentType,
-      'description': this.flags.description,
-      'fullName': this.flags.name
+      cacheControl: this.flags.public ? 'Public' : 'Private',
+      contentType,
+      description: this.flags.description,
+      fullName: this.flags.name
     };
 
     const xml = jsToXml.parse('StaticResource', metaJSON, options.js2xmlStandardOptions);
