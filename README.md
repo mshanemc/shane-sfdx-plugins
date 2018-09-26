@@ -62,7 +62,7 @@ USAGE
 * [`sfdx shane:remotesite:create`](#sfdx-shaneremotesitecreate)
 * [`sfdx shane:static:create`](#sfdx-shanestaticcreate)
 * [`sfdx shane:tsp:username:update`](#sfdx-shanetspusernameupdate)
-* [`sfdx shane:user:allPhotos`](#sfdx-shaneuserall-photos)
+* [`sfdx shane:user:allPhotos`](##sfdx-shaneuserallphotos)
 * [`sfdx shane:user:password:set`](#sfdx-shaneuserpasswordset)
 * [`sfdx shane:user:photo`](#sfdx-shaneuserphoto)
 
