@@ -59,12 +59,10 @@ export default class ProjectCreate extends SfdxCommand {
   // everything below is the content of files I want to create
 
   public orgInit(): string {
-    let output = '';
-    output = output + 'sfdx force:org:create -f config/project-scratch-def.json -d 1 -s ' + '\r\n';
-    output = output + 'sfdx force:source:push' + '\r\n';
-    output = output + 'sfdx force:org:open';
-
-    return output;
+    return `sfdx force:org:create -f config/project-scratch-def.json -d 1 -s
+    sfdx force:source:push
+    sfdx force:org:open
+    `;
   }
 
   public gitIgnore(): string {
