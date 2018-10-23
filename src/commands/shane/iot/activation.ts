@@ -1,8 +1,7 @@
 /* tslint:disable no-var-requires */
-import { SfdxCommand, core } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
+import chalk from 'chalk';
 import request = require('request-promise-native');
-
-const chalk = require('chalk');
 
 export default class Activation extends SfdxCommand {
 
@@ -44,13 +43,13 @@ export default class Activation extends SfdxCommand {
     // console.log(orchestrations);
 
     // find the matching orchestration by name
-    const thisOrch = orchestrations.find((i) => {
+    const thisOrch = orchestrations.find( i => {
       return i.name === this.flags.name;
     });
 
     // didn't find a match.  Tell the user what's in there.
     if (!thisOrch) {
-      const orchNames = orchestrations.map( (x) => x.name);
+      const orchNames = orchestrations.map( x => x.name);
       this.ux.error(chalk.red(`No orchestration found matching that name.  Orchestrations found: ${orchNames.join(', ')}`));
       return;
     } else {
