@@ -9,7 +9,7 @@ export default class Activation extends SfdxCommand {
 
   public static examples = [
 `sfdx shane:iot:activate -n orchName -r
-// activates the orchestration, resetting all the instances
+// activates the orchestration, including the context if necessary, optionally resetting all the instances
 `,
 `sfdx shane:iot:activate -n orchName -d
 // deactivates the orchestration, without resetting all the instances
