@@ -183,6 +183,26 @@ describe('shane:object:create (regular object flavor)', () => {
 
   });
 
+  it('creates a textArea field on the Object', async () => {
+
+    const fieldAPI = 'Text_Area_Field__c';
+    const fieldLabel = 'My Text Area Field';
+
+    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -n "${fieldLabel}" -t LongTextArea`, { cwd: testProjectName });
+    expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).to.be.true;
+
+    const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
+
+    expect(parsed.CustomField).to.be.an('object');
+    expect(parsed.CustomField.type).to.equal('LongTextArea');
+    expect(parsed.CustomField.label).to.equal(fieldLabel);
+    expect(parsed.CustomField.fullName).to.equal(fieldAPI);
+    expect(parsed.CustomField.visibleLines).to.equal('3');
+
+    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+
+  });
+
   // it('can build a permset', async () => {
   //   const permSetName = 'MyEventPerm';
   //   const permResult = await exec(`sfdx shane:permset:create -n ${permSetName} -o ${api}`, { cwd: testProjectName });

@@ -121,6 +121,7 @@ export default class FieldCreate extends SfdxCommand {
       relationshipName?: string;
       referenceTo?: string;
       trackHistory?: boolean;
+      visibleLines?: number;
     }
 
     while (this.flags.object.endsWith('__b') && !SupportedTypes__b.includes(this.flags.type)) {
@@ -153,6 +154,7 @@ export default class FieldCreate extends SfdxCommand {
 
     if (this.flags.type === 'LongTextArea') {
       outputJSON.length = this.flags.length || await cli.prompt('Length? (Max 131072)');
+      outputJSON.visibleLines = 3;
     }
 
     if (this.flags.type === 'Lookup') {
