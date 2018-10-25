@@ -171,7 +171,7 @@ export default class ObjectCreate extends SfdxCommand {
     // type specific attributes
     if (this.flags.type === 'custom') {
       if (this.flags.interactive && !this.flags.nametype) {
-        this.flags.nametype = await cli.prompt('AutoNumber or Text?', { default: 'Name' });
+        this.flags.nametype = await cli.prompt('AutoNumber or Text?', { default: 'Text' });
       }
       if (this.flags.interactive && !this.flags.search) {
         this.flags.search = await cli.confirm('enable Search? (y/n)');
