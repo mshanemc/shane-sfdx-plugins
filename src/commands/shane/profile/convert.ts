@@ -49,6 +49,9 @@ export default class PermSetConvert extends SfdxCommand {
   public static examples = [
 `sfdx shane:profile:convert -p Admin -n MyNewPermSet -e
 // create a permset in force-app/main/default from the Admin profile (profiles/Admin).  If MyNewPermSet doesn't exist, it will be created.  Content is removed from Admin profile (-e)
+`,
+`sfdx shane:profile:convert -p Admin -n MyNewPermSet -c
+// create a permset in force-app/main/default from the Admin profile (profiles/Admin).  If MyNewPermSet doesn't exist, it will be created.  Leaves the original Admin profile and creates an Admin_Skinny profile that has everything in the permset removed (-c)
 `
   ];
 
@@ -56,7 +59,8 @@ export default class PermSetConvert extends SfdxCommand {
     name: { type: 'string',  char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' },
     profile: { type: 'string',  char: 'p', required: true, description: 'API name of an profile to convert.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' },
     directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' },
-    editprofile: { type: 'boolean',  char: 'e', description: 'remove metadata from profile'}
+    editprofile: { type: 'boolean', char: 'e', description: 'remove metadata from original profile', exclusive: ['skinnyclone']},
+    skinnyclone: { type: 'boolean', char: 'c', description: 'create a new profile that\'s the original profile less permset (does not modify original profile)', exclusive: ['editprofile']}
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
@@ -117,13 +121,22 @@ export default class PermSetConvert extends SfdxCommand {
     const permSetXml = jsToXml.parse('PermissionSet', existing, options.js2xmlStandardOptions);
     fs.writeFileSync(targetFilename, permSetXml);
 
-    if (this.flags.editprofile) {
+    // we either write this file over existing profile, or to a new one.
+    if (this.flags.editprofile || this.flags.skinnyclone) {
       // correct @ => $ issue
       profile = await fixExistingDollarSign(profile);
 
       const profileXml = jsToXml.parse('Profile', profile, options.js2xmlStandardOptions);
-      fs.writeFileSync(targetProfile, profileXml);
-      this.ux.log(`Permissions removed from ${targetProfile}`);
+      if (this.flags.editprofile) {
+        // edit the existing profile
+        fs.writeFileSync(targetProfile, profileXml);
+        this.ux.log(`Permissions removed from ${targetProfile}`);
+      } else {
+        // save it as a new profile
+        const skinnyTarget = `${this.flags.directory}/profiles/${this.flags.profile}_Skinny.profile-meta.xml`;
+        fs.writeFileSync(skinnyTarget, profile);
+        this.ux.log(`Skinny version saved at ${skinnyTarget}`);
+      }
     }
 
     this.ux.log(chalk.green(`Permissions added in ${targetFilename}`));
