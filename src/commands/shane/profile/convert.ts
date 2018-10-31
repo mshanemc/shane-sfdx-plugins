@@ -1,14 +1,11 @@
-import { SfdxCommand, core } from '@salesforce/command';
-import * as _ from 'lodash';
+import { SfdxCommand } from '@salesforce/command';
+import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
-
-import { getExisting, fixExistingDollarSign } from '../../../shared/getExisting';
-import { setupArray } from '../../../shared/setupArray';
-
+import * as _ from 'lodash';
+import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
 import * as options from '../../../shared/js2xmlStandardOptions';
-
-import chalk from 'chalk';
+import { setupArray } from '../../../shared/setupArray';
 
 const thingsThatMigrate = [
   { profileType : 'applicationVisibilities',
@@ -79,13 +76,13 @@ export default class PermSetConvert extends SfdxCommand {
       '@': {
         xmlns: 'http://soap.sforce.com/2006/04/metadata'
       },
-      'hasActivationRequired': 'false',
-      'label': this.flags.name
+      hasActivationRequired: 'false',
+      label: this.flags.name
     });
 
     let profile = await getExisting(targetProfile, 'Profile');
 
-    thingsThatMigrate.forEach( (item) => {
+    thingsThatMigrate.forEach( item => {
       if (profile[item.profileType]) {
 
         profile = setupArray(profile, item.profileType);
@@ -97,7 +94,7 @@ export default class PermSetConvert extends SfdxCommand {
         // special handling for applicationVisibility (default not allowed in permset)
         if (item.permSetType === 'applicationVisibilities') {
           const aVs = existing.applicationVisibilities;
-          aVs.forEach((aV) => {
+          aVs.forEach( aV => {
             delete aV.default;
           });
           existing.applicationVisibilities = aVs;
