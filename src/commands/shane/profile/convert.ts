@@ -127,15 +127,16 @@ export default class PermSetConvert extends SfdxCommand {
       profile = await fixExistingDollarSign(profile);
 
       const profileXml = jsToXml.parse('Profile', profile, options.js2xmlStandardOptions);
+
       if (this.flags.editprofile) {
         // edit the existing profile
         fs.writeFileSync(targetProfile, profileXml);
         this.ux.log(`Permissions removed from ${targetProfile}`);
-      } else {
+      } else if (this.flags.skinnyclone) {
         // save it as a new profile
         const skinnyTarget = `${this.flags.directory}/profiles/${this.flags.profile}_Skinny.profile-meta.xml`;
-        fs.writeFileSync(skinnyTarget, profile);
-        this.ux.log(`Skinny version saved at ${skinnyTarget}`);
+        fs.writeFileSync(skinnyTarget, profileXml);
+        this.ux.log(chalk.green(`Skinny version saved at ${skinnyTarget}`));
       }
     }
 
