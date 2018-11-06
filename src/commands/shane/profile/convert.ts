@@ -104,6 +104,15 @@ export default class PermSetConvert extends SfdxCommand {
           existing.applicationVisibilities = aVs;
         }
 
+        if (item.permSetType === 'recordTypeVisibilities') {
+          const aVs = existing.recordTypeVisibilities;
+          aVs.forEach(aV => {
+            delete aV.default;
+            delete aV.personAccountDefault;
+          });
+          existing.recordTypeVisibilities = aVs;
+        }
+
         if (this.flags.editprofile) {
           delete profile[item.profileType];
         }
