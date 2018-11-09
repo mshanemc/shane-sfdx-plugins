@@ -58,11 +58,11 @@
   "oclif": {
     "commands": "./lib/commands",
     "topics": {
-      "shane:org": {
-        "description": "create an org with a friendly username or delete an org without a username, or open its componentLibrary or metadataCoverage page"
+      "shane:data": {
+        "description": "upload a file (optionally attached to record or in chatter feed) or query something to get its id"
       },
-      "shane:user": {
-        "description": "set a users password or their chatter profile/banner photo.  Or change all default chatter photos to annoying characters to encourage users to set their photo"
+      "shane:github": {
+        "description": "install a package that's on github, using either the source OR a packaged version"
       },
       "shane:mdapi": {
         "description": "pull unpackaged or packaged source from an org, or push dx-formatted source to an org.  Also, list or describe the objects via mdapi"
@@ -70,11 +70,14 @@
       "shane:object": {
         "description": "create objects locally or add fields or retention policies to them.  Also, power of one, perm-align on all objects, and remove all perms on any object"
       },
-      "shane:github": {
-        "description": "install a package that's on github, using either the source OR a packaged version"
+      "shane:org": {
+        "description": "create an org with a friendly username or delete an org without a username, or open its componentLibrary or metadataCoverage page, or reauth to it, or get a refresh token on an auth'd org"
       },
       "shane:profile": {
         "description": "convert (most) everything in a profile to a permset OR whitelist ip ranges"
+      },
+      "shane:user": {
+        "description": "set a users password or their chatter profile/banner photo.  Or change all default chatter photos to annoying characters to encourage users to set their photo"
       }
     },
     "bin": "sfdx",
@@ -87,7 +90,7 @@
     "build": "rm -rf lib && tsc",
     "clean": "rm -f .oclif.manifest.json",
     "lint": "tsc -p test --noEmit && tslint -p test -t stylish",
-    "postpublish": "yarn run clean",
+    "postpublish": "yarn run clean; git push; git push --tags",
     "posttest": "yarn run lint",
     "prepare": "yarn run build && oclif-dev manifest",
     "prepublishOnly": "yarn run build && oclif-dev manifest",
