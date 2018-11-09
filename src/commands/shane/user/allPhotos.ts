@@ -17,7 +17,7 @@ export default class AllPhotos extends SfdxCommand {
   public static description = 'set the chatter photos of anyone who has not set theirs already to encourage them to do so';
 
   public static examples = [
-'sfdx shane:user:allPhotos -u someAlias'
+'sfdx shane:user:allphotos -u someAlias'
   ];
 
   protected static flagsConfig = {
