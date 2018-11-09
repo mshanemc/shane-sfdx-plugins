@@ -1,7 +1,7 @@
 {
   "name": "shane-sfdx-plugins",
   "description": "sfdx plugins by Shane McLaughlin",
-  "version": "0.36.1",
+  "version": "0.36.2",
   "author": "@mshanemc",
   "bugs": "https://github.com/mshanemc/shane-sfdx-plugins/issues",
   "dependencies": {
