@@ -53,11 +53,11 @@ export default class ScratchOrgReAuth extends SfdxCommand {
         const result = await exec(`sfdx force:auth:jwt:grant --json --clientid ${hubInfo.clientId} --username ${username} --jwtkeyfile ${hubInfo.privateKey} --instanceurl https://test.salesforce.com -s`);
       } catch (err) {
         if (err.message.includes('This org appears to have a problem with its OAuth configuration')) {
-          console.log('login not available yet.');
+          this.ux.log('login not available yet.');
         } else if (err.message.includes('This command requires a scratch org username set either with a flag or by default in the config.')) {
-          console.log('no default scratch org username set');
+          this.ux.log('no default scratch org username set');
         } else {
-          console.log(err.message);
+          this.ux.log(err.message);
           keepTrying = false;
         }
         // this.ux.log(`error: ${JSON.parse(loginResult.stdout).message}`);
@@ -66,16 +66,17 @@ export default class ScratchOrgReAuth extends SfdxCommand {
       const auth = await AuthInfo.create(username);
       const authFields = auth.getFields();
 
-      this.ux.logJson(authFields);
+      // this.ux.logJson(authFields);
 
       if (authFields.instanceUrl.match(/(.my.salesforce.com)/g)) {
         this.ux.log(`domain is ${authFields.instanceUrl}`);
         keepTrying = false;
+        return authFields;
       } else if (this.flags.requirecustomdomain) {
         this.ux.log(`domain was ${authFields.instanceUrl}.  Pausing to wait 1 minute before checking domain again (${tryCounter}/${maxTries})`);
         await timeout(60000);
       } else {
-        this.ux.logJson(authFields);
+        // this.ux.logJson(authFields);
         return authFields;
       }
 
