@@ -22,7 +22,7 @@ export default class MetadataDescribe extends SfdxCommand {
   public async run(): Promise<any> { // tslint:disable-line:no-any
 
     const conn = await this.org.getConnection();
-    const apiVersion = await this.org.retrieveMaxApiVersion();
+    const apiVersion = this.flags.apiversion || await this.org.retrieveMaxApiVersion();
     const metadata = await conn.metadata.list([{ type: this.flags.type, folder: null }], apiVersion );
     this.ux.log(metadata);
   }
