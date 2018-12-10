@@ -6,8 +6,7 @@ import util = require('util');
 const exec = util.promisify(child_process.exec);
 
 export default class LoginURL extends SfdxCommand {
-  public static description =
-    'generate a long-lived shareable login url for the org';
+  public static description = 'generate a long-lived shareable login url for the org';
 
   public static examples = [
     `sfdx shane:user:loginurl
