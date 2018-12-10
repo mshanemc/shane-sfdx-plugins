@@ -35,7 +35,8 @@ export default class LoginURL extends SfdxCommand {
 
     const username = this.org.getUsername();
 
-    const result = await exec('sfdx force:org:display --json');
+    const result = await exec(`sfdx force:org:display --json -u ${username}`);
+
     let resultObject;
 
     if (JSON.parse(result.stdout)) {
