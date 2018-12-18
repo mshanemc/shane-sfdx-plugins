@@ -183,7 +183,7 @@ export default class FieldCreate extends SfdxCommand {
 
     if (this.flags.externalid) {
       outputJSON.externalId = true;
-    } else if (this.flags.interactive && ['Number', 'Text'].includes(outputJSON.type)) {
+    } else if (this.flags.interactive && !this.flags.object.endsWith('__e') && ['Number', 'Text'].includes(outputJSON.type)) {
       outputJSON.externalId = await cli.confirm('external ID?  (y/n)');
     }
 
@@ -195,13 +195,13 @@ export default class FieldCreate extends SfdxCommand {
 
     if (this.flags.helptext) {
       outputJSON.inlineHelpText = this.flags.helptext;
-    } else if (this.flags.interactive) {
+    } else if (this.flags.interactive && !this.flags.object.endsWith('__e')) {
       outputJSON.inlineHelpText = await cli.prompt('inline help text?  Be nice to your users!', {required: false, default: outputJSON.description});
     }
 
     if (this.flags.trackhistory) {
       outputJSON.trackHistory = this.flags.trackhistory;
-    } else if (this.flags.interactive) {
+    } else if (this.flags.interactive && this.flags.object.endsWith('__c')) {
       outputJSON.trackHistory = await cli.confirm('enable history tracking?  (y/n)');
     }
 
