@@ -23,8 +23,8 @@ export default class Photo extends SfdxCommand {
   protected static flagsConfig = {
     firstname: { type: 'string',  char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency'},
     lastname: { type: 'string',  char: 'l', required: true, description: 'last name of the user' },
-    file: { type: 'string',  char: 'f', description: 'local path of the photo to use' },
-    banner: { type: 'string',  char: 'b', description: 'local path of the chatter banner photo to use' }
+    file: { type: 'string', char: 'f', description: 'local path of the photo to use', exclusive: ['banner']},
+    banner: { type: 'string', char: 'b', description: 'local path of the chatter banner photo to use', exclusive: ['file'] }
   };
 
   // Comment this out if your command does not require an org username
@@ -60,12 +60,7 @@ export default class Photo extends SfdxCommand {
       user = await userIdLookup.getUserId(conn, this.flags.lastname, this.flags.firstname);
     } catch (e) {
       this.ux.error(chalk.red(e));
-      return {
-        status: 1,
-        result: {
-          error: e
-        }
-      };
+      throw new Error (e);
     }
 
     this.ux.log(`found user with id ${user.Id}`);
@@ -89,17 +84,16 @@ export default class Photo extends SfdxCommand {
         fileId: photoCV.ContentDocumentId
       };
       const photoResult = await request(options);
-      this.ux.logJson(photoResult);
-    }
-
-    if (this.flags.banner) {
+      return photoResult;
+    } else if (this.flags.banner) {
       const bannerCV = <Record> await localFile2CV.file2CV(conn, this.flags.banner);
       options.uri = `${conn.instanceUrl}/services/data/v42.0/connect/user-profiles/${userid}/banner-photo`;
       options.body = {
         fileId: bannerCV.ContentDocumentId
       };
       const bannerResult = await request(options);
-      this.ux.logJson(bannerResult);
+      return bannerResult;
+
     }
   }
 }
