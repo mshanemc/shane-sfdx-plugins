@@ -1,4 +1,4 @@
-import { SfdxCommand, core } from '@salesforce/command';
+import { core, SfdxCommand } from '@salesforce/command';
 import request = require('request-promise-native');
 import userIdLookup = require('../../../../shared/userIdLookup');
 
@@ -30,13 +30,7 @@ export default class Set extends SfdxCommand {
     try {
       user = await userIdLookup.getUserId(conn, this.flags.lastname, this.flags.firstname);
     } catch (e) {
-      this.ux.error(chalk.red(e));
-      return {
-        status: 1,
-        result: {
-          error: e
-        }
-      };
+      throw new Error(e);
     }
 
     this.ux.log(`found user with id ${user.Id}`);
@@ -58,7 +52,8 @@ export default class Set extends SfdxCommand {
       this.ux.log(chalk.green(`Successfully set the password "${this.flags.password}" for user ${user.Username}.`));
       this.ux.log(`You can see the password again by running "sfdx force:user:display -u ${user.Username}".`);
       return {
-        password: this.flags.password
+        password: this.flags.password,
+        username: user.Username
       };
     } else {
       this.ux.error(chalk.red('Password not set correctly.'));
