@@ -1,4 +1,4 @@
-import { core, SfdxCommand } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
 import request = require('request-promise-native');
 import userIdLookup = require('../../../../shared/userIdLookup');
 

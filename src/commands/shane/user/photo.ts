@@ -1,4 +1,4 @@
-import { core, SfdxCommand } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import request = require('request-promise-native');
 import localFile2CV = require('../../../shared/localFile2CV');

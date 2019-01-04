@@ -1,8 +1,8 @@
-import { core, SfdxCommand } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
+import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 
-import chalk from 'chalk';
 import * as options from '../../../shared/js2xmlStandardOptions';
 
 export default class StaticCreate extends SfdxCommand {

@@ -18,7 +18,7 @@ export async function retrieveUnzipConvertClean(tmpDir, retrieveCommand, target)
 
   process.stdout.write('done.  Unzipping...');
 
-  const unzipResult = await exec(`unzip -qqo ./${tmpDir}/unpackaged.zip -d ./${tmpDir}`);
+  await exec(`unzip -qqo ./${tmpDir}/unpackaged.zip -d ./${tmpDir}`);
   process.stdout.write('done.  Converting...');
 
   try {

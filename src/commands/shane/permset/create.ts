@@ -1,4 +1,5 @@
-import { core, SfdxCommand } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
+import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 import util = require('util');
@@ -9,7 +10,6 @@ import { setupArray } from '../../../shared/setupArray';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
 
-import chalk from 'chalk';
 
 export default class PermSetCreate extends SfdxCommand {
 
