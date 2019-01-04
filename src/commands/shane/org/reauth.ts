@@ -50,7 +50,7 @@ export default class ScratchOrgReAuth extends SfdxCommand {
       try {
         // await exec(`sfdx force:auth:logout -u ${username} -p`);
         AuthInfo.clearCache(username);
-        const result = await exec(`sfdx force:auth:jwt:grant --json --clientid ${hubInfo.clientId} --username ${username} --jwtkeyfile ${hubInfo.privateKey} --instanceurl https://test.salesforce.com -s`);
+        await exec(`sfdx force:auth:jwt:grant --json --clientid ${hubInfo.clientId} --username ${username} --jwtkeyfile ${hubInfo.privateKey} --instanceurl https://test.salesforce.com -s`);
       } catch (err) {
         if (err.message.includes('This org appears to have a problem with its OAuth configuration')) {
           this.ux.log('login not available yet.');

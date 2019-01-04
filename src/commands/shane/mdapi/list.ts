@@ -1,5 +1,4 @@
 import { SfdxCommand } from '@salesforce/command';
-import child_process = require('child_process');
 
 export default class MetadataDescribe extends SfdxCommand {
 

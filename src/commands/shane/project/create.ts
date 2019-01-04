@@ -1,5 +1,4 @@
 import { SfdxCommand } from '@salesforce/command';
-import { Org } from '@salesforce/core';
 import chalk from 'chalk';
 import child_process = require('child_process');
 import fs = require('fs-extra');

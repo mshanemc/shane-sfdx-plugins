@@ -1,10 +1,7 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
-import { SfdxCommand, core } from '@salesforce/command';
-import util = require('util');
-
-import child_process = require('child_process');
+import { SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
+import child_process = require('child_process');
+import util = require('util');
 
 const exec = util.promisify(child_process.exec);
 

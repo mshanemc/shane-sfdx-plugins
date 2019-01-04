@@ -1,6 +1,6 @@
-import { SfdxCommand, core } from '@salesforce/command';
-import util = require('util');
+import { SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
+import util = require('util');
 
 const exec = util.promisify(child_process.exec);
 

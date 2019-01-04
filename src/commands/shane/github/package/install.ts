@@ -1,4 +1,3 @@
-import { flags } from '@oclif/command';
 import { SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
 import request = require('request-promise-native');

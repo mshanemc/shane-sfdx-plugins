@@ -1,4 +1,5 @@
 import { SfdxCommand } from '@salesforce/command';
+import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 import * as _ from 'lodash';
@@ -7,9 +8,6 @@ import { fixExistingDollarSign, getExisting } from '../../../../shared/getExisti
 import { setupArray } from '../../../../shared/setupArray';
 
 import * as options from '../../../../shared/js2xmlStandardOptions';
-
-import chalk from 'chalk';
-import { readdirSync } from 'fs-extra';
 
 export default class PermAlign extends SfdxCommand {
 

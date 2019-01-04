@@ -1,12 +1,9 @@
-import { flags } from '@oclif/command';
-import { join } from 'path';
-import { SfdxCommand, core } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
+import chalk from 'chalk';
 import fs = require('fs-extra');
-import cli from 'cli-ux';
 import jsToXml = require('js2xmlparser');
 
-import chalk from 'chalk';
-import { getExisting, fixExistingDollarSign } from '../../../shared/getExisting';
+import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
 import * as options from '../../../shared/js2xmlStandardOptions';
 
 export default class FATUpdate extends SfdxCommand {

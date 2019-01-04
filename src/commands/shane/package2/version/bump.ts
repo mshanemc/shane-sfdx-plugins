@@ -106,13 +106,13 @@ export default class Bump extends SfdxCommand {
         const actualResult = JSON.parse(createResult.stdout).result;
         this.ux.logJson(actualResult);
 
-        const writeResult = await fs.writeFile(`${this.project.getPath()}/${pkgVersionFileName}`, JSON.stringify(actualResult, null, 2));
+        await fs.writeFile(`${this.project.getPath()}/${pkgVersionFileName}`, JSON.stringify(actualResult, null, 2));
         this.ux.log(chalk.green(`Version Created with Id: ${actualResult.Package2VersionId}.  Details written to ${pkgVersionFileName}`));
 
         // now, are we publishing
         if (this.flags.release) {
             cli.action.start(`Releasing: sfdx force:package:version:promote -n -p ${actualResult.Package2VersionId} -v ${this.hubOrg.getUsername()} --json`);
-            const updateResult = await exec(`sfdx force:package:version:promote -n -p ${actualResult.Package2VersionId} -v ${this.hubOrg.getUsername()} --json`);
+            await exec(`sfdx force:package:version:promote -n -p ${actualResult.Package2VersionId} -v ${this.hubOrg.getUsername()} --json`);
             cli.action.stop();
             this.ux.log(chalk.green(`Version released. May take several minutes to become available to destination org.  Install with sfdx force:package:install -r -p 20 -w 20 -i ${actualResult.SubscriberPackageVersionId} -u destinationOrgAlias`));
         } else {

@@ -1,5 +1,4 @@
-import { core, SfdxCommand} from '@salesforce/command';
-import chalk from 'chalk';
+import { SfdxCommand} from '@salesforce/command';
 import child_process = require('child_process');
 import fs = require('fs-extra');
 import util = require('util');

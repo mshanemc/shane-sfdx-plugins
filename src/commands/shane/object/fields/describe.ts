@@ -1,5 +1,4 @@
-import { SfdxCommand, UX } from '@salesforce/command';
-import { DescribeSObjectResult} from 'jsforce';
+import { SfdxCommand } from '@salesforce/command';
 
 export default class FieldDescribe extends SfdxCommand {
 

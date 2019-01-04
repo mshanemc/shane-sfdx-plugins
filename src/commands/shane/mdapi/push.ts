@@ -1,4 +1,4 @@
-import { SfdxCommand, core } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
 import util = require('util');
 

@@ -1,9 +1,9 @@
-import { SfdxCommand, core } from '@salesforce/command';
-import * as _ from 'lodash';
+import { SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
+import * as _ from 'lodash';
 
-import { getExisting, fixExistingDollarSign } from '../../../shared/getExisting';
+import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
 import { setupArray } from '../../../shared/setupArray';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
@@ -77,12 +77,12 @@ export default class UnPerm extends SfdxCommand {
     const layoutBefore = existing.layoutAssignments.length;
     const recordTypeBefore = existing.recordTypeVisibilities.length;
 
-    existing.objectPermissions = _.filter(existing.objectPermissions, (item) => item.object !== this.flags.object);
-    existing.fieldPermissions = _.filter(existing.fieldPermissions, (item) => !item.field.startsWith(`${this.flags.object}.`));
-    existing.layoutAssignments = _.filter(existing.layoutAssignments, (item) => !item.layout.startsWith(`${this.flags.object}-`));
-    existing.recordTypeVisibilities = _.filter(existing.recordTypeVisibilities, (item) => !item.recordType.startsWith(`${this.flags.object}.`));
-    existing.tabSettings = _.filter(existing.tabSettings, (item) => item.tab !== this.flags.object && item.tab !== `standard-${this.flags.object}`);
-    existing.tabVisibilities = _.filter(existing.tabVisibilities, (item) => item.tab !== this.flags.object && item.tab !== `standard-${this.flags.object}`);
+    existing.objectPermissions = _.filter(existing.objectPermissions, item => item.object !== this.flags.object);
+    existing.fieldPermissions = _.filter(existing.fieldPermissions, item => !item.field.startsWith(`${this.flags.object}.`));
+    existing.layoutAssignments = _.filter(existing.layoutAssignments, item => !item.layout.startsWith(`${this.flags.object}-`));
+    existing.recordTypeVisibilities = _.filter(existing.recordTypeVisibilities, item => !item.recordType.startsWith(`${this.flags.object}.`));
+    existing.tabSettings = _.filter(existing.tabSettings, item => item.tab !== this.flags.object && item.tab !== `standard-${this.flags.object}`);
+    existing.tabVisibilities = _.filter(existing.tabVisibilities, item => item.tab !== this.flags.object && item.tab !== `standard-${this.flags.object}`);
 
     existing = await fixExistingDollarSign(existing);
 

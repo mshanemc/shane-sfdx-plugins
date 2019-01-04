@@ -63,7 +63,7 @@ export default class Activation extends SfdxCommand {
       auth,
       json: true
     });
-    // this.ux.logJson(contextActivationResult);
+    this.ux.log(contextActivationResult);
 
     // wait for a sign that the context is active
     let contextActive = false;
