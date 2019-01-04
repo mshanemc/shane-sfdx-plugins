@@ -46,10 +46,10 @@ export default class RemoteSite extends SfdxCommand {
       '@' : {
         xmlns: 'http://soap.sforce.com/2006/04/metadata'
       },
-      'url' : this.flags.url,
-      'disableProtocolSecurity' : false,
-      'isActive' : true,
-      'description': this.flags.description
+      url : this.flags.url,
+      disableProtocolSecurity : false,
+      isActive : true,
+      description: this.flags.description
     };
 
     const xml = jsToXml.parse('RemoteSiteSetting', settingJSON, options.js2xmlStandardOptions);

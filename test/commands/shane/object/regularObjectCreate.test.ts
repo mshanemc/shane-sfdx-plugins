@@ -1,9 +1,8 @@
 /* tslint:disable:no-unused-expression */
 
-import { expect, test } from '@salesforce/command/dist/test';
+import { expect } from '@salesforce/command/dist/test';
 import fs = require('fs-extra');
 import util = require('util');
-import xml2js = require('xml2js');
 
 import child_process = require('child_process');
 
@@ -118,7 +117,7 @@ describe('shane:object:create (regular object flavor)', () => {
     expect(parsed.CustomField.precision).to.equal('18');
     expect(parsed.CustomField.scale).to.equal('0');
 
-    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   });
 
@@ -138,7 +137,7 @@ describe('shane:object:create (regular object flavor)', () => {
     expect(parsed.CustomField.fullName).to.equal(fieldAPI);
     expect(parsed.CustomField.length).to.equal('255');
 
-    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   });
 
@@ -159,7 +158,7 @@ describe('shane:object:create (regular object flavor)', () => {
     expect(parsed.CustomField.length).to.equal('255');
     expect(parsed.CustomField.required).to.equal('true');
 
-    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   });
 
@@ -179,7 +178,7 @@ describe('shane:object:create (regular object flavor)', () => {
     expect(parsed.CustomField.fullName).to.equal(fieldAPI);
     expect(parsed.CustomField.defaultValue).to.equal('true');
 
-    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   });
 
@@ -188,7 +187,7 @@ describe('shane:object:create (regular object flavor)', () => {
     const fieldAPI = 'Text_Area_Field__c';
     const fieldLabel = 'My Text Area Field';
 
-    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -n "${fieldLabel}" -t LongTextArea`, { cwd: testProjectName });
+    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -n "${fieldLabel}" -t LongTextArea --length 131072`, { cwd: testProjectName });
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).to.be.true;
 
     const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
@@ -199,7 +198,7 @@ describe('shane:object:create (regular object flavor)', () => {
     expect(parsed.CustomField.fullName).to.equal(fieldAPI);
     expect(parsed.CustomField.visibleLines).to.equal('3');
 
-    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   });
 

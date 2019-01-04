@@ -42,7 +42,7 @@ export default class ProjectCreate extends SfdxCommand {
     // files I like to have
     fs.writeFileSync(`${this.flags.name}/orgInit.sh`, this.orgInit()); // basic init script
     await exec('chmod +x orgInit.sh', {cwd: this.flags.name}); // make executable
-    fs.writeFile(`${this.flags.name}/README.md`, '');  // blank the standard sfdx readme
+    await fs.writeFile(`${this.flags.name}/README.md`, '');  // blank the standard sfdx readme
     fs.writeFileSync(`${this.flags.name}/.gitignore`, this.gitIgnore()); // basic git ignore
     fs.writeFileSync(`${this.flags.name}/package.json`, this.packageJSON()); // basic git ignore
     fs.writeFileSync(`${this.flags.name}/config/project-scratch-def.json`, this.scratchJSON()); // basic git ignore

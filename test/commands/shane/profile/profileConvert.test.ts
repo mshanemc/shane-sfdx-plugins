@@ -1,14 +1,10 @@
 /* tslint:disable:no-unused-expression */
-
-import { expect, test } from '@salesforce/command/dist/test';
+import { expect } from '@salesforce/command/dist/test';
+import child_process = require('child_process');
 import fs = require('fs-extra');
 import util = require('util');
-import xml2js = require('xml2js');
 
-import child_process = require('child_process');
-
-import testutils = require('../../../helpers/testutils');
-import { fixExistingDollarSign, getExisting } from './../../../../src/shared/getExisting';
+import { getExisting } from './../../../../src/shared/getExisting';
 
 const exec = util.promisify(child_process.exec);
 

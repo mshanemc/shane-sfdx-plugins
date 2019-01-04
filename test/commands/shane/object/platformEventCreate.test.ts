@@ -1,11 +1,9 @@
 /* tslint:disable:no-unused-expression */
 
-import { expect, test } from '@salesforce/command/dist/test';
+import { expect } from '@salesforce/command/dist/test';
+import child_process = require('child_process');
 import fs = require('fs-extra');
 import util = require('util');
-import xml2js = require('xml2js');
-
-import child_process = require('child_process');
 
 import testutils = require('../../../helpers/testutils');
 
@@ -18,7 +16,7 @@ const plural = 'Hellos';
 
 describe('shane:object:create (platform event flavor)', () => {
 
-  before(async function() {
+  before(async () => {
     await exec(`rm -rf ${testProjectName}`);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
   });
@@ -58,7 +56,7 @@ describe('shane:object:create (platform event flavor)', () => {
     expect(parsed.CustomField.precision).to.equal('18');
     expect(parsed.CustomField.scale).to.equal('0');
 
-    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   });
 
@@ -78,7 +76,7 @@ describe('shane:object:create (platform event flavor)', () => {
     expect(parsed.CustomField.fullName).to.equal(fieldAPI);
     expect(parsed.CustomField.length).to.equal('255');
 
-    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   });
 
@@ -99,7 +97,7 @@ describe('shane:object:create (platform event flavor)', () => {
     expect(parsed.CustomField.length).to.equal('255');
     expect(parsed.CustomField.required).to.equal('true');
 
-    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   });
 
@@ -119,13 +117,13 @@ describe('shane:object:create (platform event flavor)', () => {
     expect(parsed.CustomField.fullName).to.equal(fieldAPI);
     expect(parsed.CustomField.defaultValue).to.equal('true');
 
-    const parsedObj = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
   });
 
   it('can build a permset', async () => {
     const permSetName = 'MyEventPerm';
-    const permResult = await exec(`sfdx shane:permset:create -n ${permSetName} -o ${api}`, { cwd: testProjectName });
+    await exec(`sfdx shane:permset:create -n ${permSetName} -o ${api}`, { cwd: testProjectName });
 
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/permissionsets`)).to.be.true;
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/permissionsets/${permSetName}.permissionset-meta.xml`)).to.be.true;

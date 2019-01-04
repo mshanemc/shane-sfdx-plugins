@@ -10,7 +10,6 @@ import { setupArray } from '../../../shared/setupArray';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
 
-
 export default class PermSetCreate extends SfdxCommand {
 
   public static description = 'create or add stuff to a permset with maximum access';

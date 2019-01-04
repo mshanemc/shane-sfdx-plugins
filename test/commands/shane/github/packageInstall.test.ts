@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-expression */
 
-import { expect, test } from '@salesforce/command/dist/test';
+import { expect } from '@salesforce/command/dist/test';
 import util = require('util');
 
 import child_process = require('child_process');
@@ -13,7 +13,7 @@ const username = 'mshanemc';
 
 describe('shane:github:package:install', () => {
 
-  before(async function() {
+  before(async () => {
     await exec(`rm -rf ${testProjectName}`);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
     await testutils.orgCreate(testProjectName);
@@ -34,7 +34,7 @@ describe('shane:github:package:install', () => {
 
   });
 
-  after(async function() {
+  after(async () => {
     await testutils.orgDelete(testProjectName);
     await exec(`rm -rf ${testProjectName}`);
   });

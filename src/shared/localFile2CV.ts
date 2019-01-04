@@ -1,6 +1,5 @@
-import fs = require('fs-extra');
-// import { SfdxCommand, core } from '@salesforce/command';
 import { Connection } from '@salesforce/core';
+import fs = require('fs-extra');
 
 interface ContentVersionCreateRequest {
   VersionData: string;

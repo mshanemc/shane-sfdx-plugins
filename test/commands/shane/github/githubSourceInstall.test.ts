@@ -1,21 +1,18 @@
 /* tslint:disable:no-unused-expression */
-
-import { expect, test } from '@salesforce/command/dist/test';
-import fs = require('fs-extra');
-import util = require('util');
-import xml2js = require('xml2js');
-
+import { expect } from '@salesforce/command/dist/test';
 import child_process = require('child_process');
+import util = require('util');
 
 import testutils = require('../../../helpers/testutils');
 
 const exec = util.promisify(child_process.exec);
+
 const testProjectName = 'testProject';
 const username = 'mshanemc';
 
 describe('shane:github:src:install', () => {
 
-  before(async function() {
+  before(async () => {
     await exec(`rm -rf ${testProjectName}`);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
     await testutils.orgCreate(testProjectName);
@@ -37,7 +34,7 @@ describe('shane:github:src:install', () => {
 
   });
 
-  after(async function() {
+  after(async () => {
     await testutils.orgDelete(testProjectName);
     await exec(`rm -rf ${testProjectName}`);
   });

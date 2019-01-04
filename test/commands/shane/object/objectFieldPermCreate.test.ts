@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-expression */
-import { expect, test } from '@salesforce/command/dist/test';
+import { expect } from '@salesforce/command/dist/test';
 import fs = require('fs-extra');
 import util = require('util');
 
@@ -16,7 +16,7 @@ const plural = 'Platypi';
 
 describe('shane:object:create (big object flavor)', () => {
 
-  before(async function() {
+  before(async () => {
     await exec(`rm -rf ${testProjectName}`);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
   });
@@ -206,7 +206,7 @@ describe('shane:object:create (big object flavor)', () => {
 
   it('can build a permset', async () => {
     const permSetName = 'MyPermSet1';
-    const permResult = await exec(`sfdx shane:permset:create -n ${permSetName} -o ${api}` , { cwd: testProjectName });
+    await exec(`sfdx shane:permset:create -n ${permSetName} -o ${api}` , { cwd: testProjectName });
 
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/permissionsets`)).to.be.true;
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/permissionsets/${permSetName}.permissionset-meta.xml`)).to.be.true;

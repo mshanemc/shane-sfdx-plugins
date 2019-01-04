@@ -45,7 +45,7 @@ export default class FieldCreate extends SfdxCommand {
     trackhistory: { type: 'boolean', description: 'enable history tracking on the field' },
     helptext: { type: 'string', description: 'optional inline help text'},
     // type specific flags
-    length: { type: 'number',  char: 'l', description: 'length (for text fields)' },
+    length: { type: 'number',  char: 'l', description: 'length (for text fields and text area)' },
 
     scale: { type: 'number',  char: 's', description: 'places right of the decimal' },
     precision: { type: 'number', description: 'maximum allowed digits of a number, including whole and decimal places' },

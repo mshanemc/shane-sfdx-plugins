@@ -1,9 +1,10 @@
 /* tslint:disable:no-unused-expression */
 
-import testutils = require('./testutils');
-import { expect, test } from '@salesforce/command/dist/test';
-import util = require('util');
+import { expect } from '@salesforce/command/dist/test';
 import child_process = require('child_process');
+import util = require('util');
+
+import testutils = require('./testutils');
 
 const exec = util.promisify(child_process.exec);
 
@@ -11,7 +12,7 @@ const testProjectName = 'testProject';
 
 describe('tests testUtils', () => {
 
-  before(async function() {
+  before(async () => {
     await exec(`rm -rf ${testProjectName}`);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
   });
@@ -27,7 +28,7 @@ describe('tests testUtils', () => {
     expect(JSON.parse(deleteResult.stdout).status).to.equal(0);
   });
 
-  after(async function() {
+  after(async () => {
     await exec(`rm -rf ${testProjectName}`);
   });
 

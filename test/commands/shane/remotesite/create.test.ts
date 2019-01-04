@@ -1,9 +1,8 @@
 /* tslint:disable:no-unused-expression */
 
-import { expect, test } from '@salesforce/command/dist/test';
+import { expect } from '@salesforce/command/dist/test';
 import fs = require('fs-extra');
 import util = require('util');
-import xml2js = require('xml2js');
 
 import child_process = require('child_process');
 
@@ -14,7 +13,7 @@ const testProjectName = 'testProject';
 
 describe('shane:remotesite:create', () => {
 
-  before(async function() {
+  before(async () => {
     await exec(`rm -rf ${testProjectName}`);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
   });
