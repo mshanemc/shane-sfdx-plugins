@@ -39,7 +39,7 @@ describe('shane:object:create (big object flavor)', () => {
     expect(parsed.CustomObject.indexes).to.be.an('object');
     expect(parsed.CustomObject.indexes.fullName).to.equal(`${label}Index`);
     expect(parsed.CustomObject.indexes.label).to.equal(`${label} Index`);
-  });
+  }).timeout(1500);
 
   it('creates a non indexed Text field on the Big Object', async () => {
 
@@ -62,7 +62,7 @@ describe('shane:object:create (big object flavor)', () => {
     // verify indexing didn't happen
     expect(parsedObj.CustomObject.indexes.fields).to.be.undefined;
 
-  });
+  }).timeout(1500);
 
   it('creates a non indexed Number field (18,0) on the Big Object', async () => {
 
@@ -86,7 +86,7 @@ describe('shane:object:create (big object flavor)', () => {
     // verify indexing didn't happen
     expect(parsedObj.CustomObject.indexes.fields).to.be.undefined;
 
-  });
+  }).timeout(1500);
 
   it('creates a required non indexed Text field on the Big Object', async () => {
 
@@ -110,7 +110,7 @@ describe('shane:object:create (big object flavor)', () => {
     // verify indexing didn't happen
     expect(parsedObj.CustomObject.indexes.fields).to.be.undefined;
 
-  });
+  }).timeout(1500);
 
   it('creates a indexed Text field on the Big Object', async () => {
 
@@ -136,7 +136,7 @@ describe('shane:object:create (big object flavor)', () => {
     expect(parsedObj.CustomObject.indexes.fields.name).to.equal(fieldAPI);
     expect(parsedObj.CustomObject.indexes.fields.sortDirection).to.equal('DESC');
 
-  });
+  }).timeout(1500);
 
   it('appends a second indexed Text field on the Big Object', async () => {
 
@@ -162,7 +162,7 @@ describe('shane:object:create (big object flavor)', () => {
     expect(parsedObj.CustomObject.indexes.fields[1].name).to.equal(fieldAPI);
     expect(parsedObj.CustomObject.indexes.fields[1].sortDirection).to.equal('ASC');
 
-  });
+  }).timeout(1500);
 
   it('adds a third indexed Text field on the Big Object in position 1', async () => {
 
@@ -188,7 +188,7 @@ describe('shane:object:create (big object flavor)', () => {
     expect(parsedObj.CustomObject.indexes.fields[1].name).to.equal(fieldAPI);
     expect(parsedObj.CustomObject.indexes.fields[1].sortDirection).to.equal('ASC');
 
-  });
+  }).timeout(1500);
 
   it('creates a big object with all params supplied in separate dir', async () => {
 
@@ -202,7 +202,7 @@ describe('shane:object:create (big object flavor)', () => {
     expect(fs.existsSync(`${testProjectName}/${myDir}/objects/${api}/fields`)).to.be.true;
     expect(fs.existsSync(`${testProjectName}/${myDir}/objects/${api}/${api}.object-meta.xml`)).to.be.true;
 
-  });
+  }).timeout(1500);
 
   it('can build a permset', async () => {
     const permSetName = 'MyPermSet1';
@@ -232,7 +232,7 @@ describe('shane:object:create (big object flavor)', () => {
     expect(parsed.PermissionSet.fieldPermissions).to.not.include({ readable: 'true', editable: 'true', field: `${api}.Indexed_Field__c` });
     expect(parsed.PermissionSet.fieldPermissions).to.not.include({ readable: 'true', editable: 'true', field: `${api}.Required_Non_Indexed_Field__c` });
 
-  });
+  }).timeout(1500);
 
   it('deploys as valid code', async () => {
     if (process.env.LOCALONLY === 'true') {

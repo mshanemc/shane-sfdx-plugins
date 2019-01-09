@@ -32,7 +32,7 @@ describe('shane:remotesite:create', () => {
     expect(parsed.RemoteSiteSetting).to.be.an('object');
     expect(parsed.RemoteSiteSetting.url).to.equal(url);
     expect(parsed.RemoteSiteSetting.description).to.equal('added from sfdx plugin');
-  });
+  }).timeout(1500);
 
   it('handles description field', async () => {
     const testDescription = 'My Description';
@@ -48,7 +48,7 @@ describe('shane:remotesite:create', () => {
     expect(parsed.RemoteSiteSetting).to.be.an('object');
     expect(parsed.RemoteSiteSetting.url).to.equal(url);
     expect(parsed.RemoteSiteSetting.description).to.equal(testDescription);
-  });
+  }).timeout(1500);
 
   it('deploys as valid code', async () => {
     if (process.env.LOCALONLY === 'true') {
