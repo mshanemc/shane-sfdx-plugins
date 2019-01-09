@@ -13,30 +13,33 @@ const username = 'mshanemc';
 
 describe('shane:github:package:install', () => {
 
-  before(async () => {
-    await exec(`rm -rf ${testProjectName}`);
-    await exec(`sfdx force:project:create -n ${testProjectName}`);
-    await testutils.orgCreate(testProjectName);
-  });
+  if (!process.env.LOCALONLY) {
 
-  it('works with the old latestVersion.json format', async () => {
+    before(async () => {
+      await exec(`rm -rf ${testProjectName}`);
+      await exec(`sfdx force:project:create -n ${testProjectName}`);
+      await testutils.orgCreate(testProjectName);
+    });
 
-    const repo = 'lightningErrorHandler';
-    const results = await exec(`sfdx shane:github:package:install -g ${username} -r ${repo} --json`, { cwd: testProjectName });
+    it('works with the old latestVersion.json format', async () => {
 
-    // console.log(results);
-    expect(results).to.be.an('object');
-    expect(results.stdout).to.be.a('string');
-    const stdout = JSON.parse(results.stdout);
-    // console.log(stdout);
-    // console.log(stdout.status);
-    expect(stdout.status).to.equal(0);
+      const repo = 'lightningErrorHandler';
+      const results = await exec(`sfdx shane:github:package:install -g ${username} -r ${repo} --json`, { cwd: testProjectName });
 
-  });
+      // console.log(results);
+      expect(results).to.be.an('object');
+      expect(results.stdout).to.be.a('string');
+      const stdout = JSON.parse(results.stdout);
+      // console.log(stdout);
+      // console.log(stdout.status);
+      expect(stdout.status).to.equal(0);
 
-  after(async () => {
-    await testutils.orgDelete(testProjectName);
-    await exec(`rm -rf ${testProjectName}`);
-  });
+    });
+
+    after(async () => {
+      await testutils.orgDelete(testProjectName);
+      await exec(`rm -rf ${testProjectName}`);
+    });
+  }
 
 });

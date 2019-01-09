@@ -19,36 +19,38 @@ describe('shane:data:file:upload', () => {
     await testutils.orgCreate(testProjectName);
   });
 
-  it('uploads a file simply', async () => {
+  if (!process.env.LOCALONLY ) {
+    it('uploads a file simply', async () => {
 
-    const results = await exec('sfdx shane:data:file:upload -f sfdx-project.json', { cwd: testProjectName });
-    expect(results.stdout).to.be.a('string');
-    expect(results.stdout).to.include('created file with content document id');
+      const results = await exec('sfdx shane:data:file:upload -f sfdx-project.json', { cwd: testProjectName });
+      expect(results.stdout).to.be.a('string');
+      expect(results.stdout).to.include('created file with content document id');
 
-  });
+    });
 
-  it('uploads a file with a name', async () => {
+    it('uploads a file with a name', async () => {
 
-    const results = await exec('sfdx shane:data:file:upload -f sfdx-project.json -n "sfdx project json file"', { cwd: testProjectName });
-    expect(results.stdout).to.be.a('string');
-    expect(results.stdout).to.include('created file with content document id');
-  });
+      const results = await exec('sfdx shane:data:file:upload -f sfdx-project.json -n "sfdx project json file"', { cwd: testProjectName });
+      expect(results.stdout).to.be.a('string');
+      expect(results.stdout).to.include('created file with content document id');
+    });
 
-  it('uploads a file with a name attached to a record', async () => {
+    it('uploads a file with a name attached to a record', async () => {
 
-    const newAcct = await exec('sfdx force:data:record:create -s Account -v "Name=Acme2" --json', { cwd: testProjectName });
-    const results = await exec(`sfdx shane:data:file:upload -f sfdx-project.json -n "sfdx project json file" -p ${JSON.parse(newAcct.stdout).result.id}`, { cwd: testProjectName });
-    expect(results.stdout).to.be.a('string');
-    expect(results.stdout).to.include('created regular file attachment on record');
-  });
+      const newAcct = await exec('sfdx force:data:record:create -s Account -v "Name=Acme2" --json', { cwd: testProjectName });
+      const results = await exec(`sfdx shane:data:file:upload -f sfdx-project.json -n "sfdx project json file" -p ${JSON.parse(newAcct.stdout).result.id}`, { cwd: testProjectName });
+      expect(results.stdout).to.be.a('string');
+      expect(results.stdout).to.include('created regular file attachment on record');
+    });
 
-  it('uploads a file with a name attached to a record in chatter', async () => {
+    it('uploads a file with a name attached to a record in chatter', async () => {
 
-    const newAcct = await exec('sfdx force:data:record:create -s Account -v "Name=Acme2" --json', { cwd: testProjectName });
-    const results = await exec(`sfdx shane:data:file:upload -f sfdx-project.json -n "sfdx project json file" -c -p ${JSON.parse(newAcct.stdout).result.id}`, { cwd: testProjectName });
-    expect(results.stdout).to.be.a('string');
-    expect(results.stdout).to.include('created chatter file attachment on record');
-  });
+      const newAcct = await exec('sfdx force:data:record:create -s Account -v "Name=Acme2" --json', { cwd: testProjectName });
+      const results = await exec(`sfdx shane:data:file:upload -f sfdx-project.json -n "sfdx project json file" -c -p ${JSON.parse(newAcct.stdout).result.id}`, { cwd: testProjectName });
+      expect(results.stdout).to.be.a('string');
+      expect(results.stdout).to.include('created chatter file attachment on record');
+    });
+  }
 
   it('fails chatter without a parentid', async () => {
 
