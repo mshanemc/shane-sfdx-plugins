@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import cli from 'cli-ux';
 import fs = require('fs-extra');
@@ -47,31 +47,31 @@ export default class ObjectCreate extends SfdxCommand {
 
   protected static flagsConfig = {
 
-    type: { type: 'string', char: 't', description: 'type of object', options: typeDefinitions.map(td => td.type)},
+    type: flags.string({char: 't', description: 'type of object', options: typeDefinitions.map(td => td.type)}),
 
     // attributes on all types
-    label: { type: 'string',  char: 'l', description: 'label for the UI' },
-    api: { type: 'string',  char: 'a', description: 'api name.  Ends with one of the supported types: [__b, __e]' },
-    plural: { type: 'string',  char: 'p', description: 'plural label for the UI' },
-    description: { type: 'string',  default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' },
+    label: flags.string({ char: 'l', description: 'label for the UI' }),
+    api: flags.string({ char: 'a', description: 'api name.  Ends with one of the supported types: [__b, __e]' }),
+    plural: flags.string({ char: 'p', description: 'plural label for the UI' }),
+    description: flags.string({ default: 'added from sfdx plugin', description: 'optional description so you can remember why you added this and what it\'s for' }),
 
     // type specific attributes
-    enterprise: { type: 'boolean', description: 'enable bulk/sharing/streaming' },
-    sharingmodel: {type: 'string', description: 'sharing model', options: ['Read', 'ReadWrite', 'Private'], default: 'ReadWrite'},
-    activities: { type: 'boolean', description: 'the enableActivities flag on an object (invalid for __b, __e)'},
-    search: { type: 'boolean', description: 'the enableSearch flag on an object (invalid for __b, __e)' },
-    reports: { type: 'boolean', description: 'the enableReports flag on an object (invalid for __b, __e)' },
-    history: { type: 'boolean', description: 'the enableHistory flag on an object (invalid for __b, __e)' },
-    feeds: { type: 'boolean', description: 'the enableFeeds flag on an object (invalid for __b, __e)' },
-    nametype: { type: 'string', description: 'name field type', options: ['Text', 'AutoNumber']},
-    namefieldlabel: { type: 'string', description: 'the label for the name field', default: 'Name'},
-    autonumberformat: { type: 'string', description: 'the display format for the autonumbering'},
+    enterprise: flags.boolean({ description: 'enable bulk/sharing/streaming' }),
+    sharingmodel: flags.string({description: 'sharing model', options: ['Read', 'ReadWrite', 'Private'], default: 'ReadWrite'}),
+    activities: flags.boolean({ description: 'the enableActivities flag on an object (invalid for __b, __e)'}),
+    search: flags.boolean({ description: 'the enableSearch flag on an object (invalid for __b, __e)' }),
+    reports: flags.boolean({ description: 'the enableReports flag on an object (invalid for __b, __e)' }),
+    history: flags.boolean({ description: 'the enableHistory flag on an object (invalid for __b, __e)' }),
+    feeds: flags.boolean({ description: 'the enableFeeds flag on an object (invalid for __b, __e)' }),
+    nametype: flags.string({description: 'name field type', options: ['Text', 'AutoNumber']}),
+    namefieldlabel: flags.string({description: 'the label for the name field', default: 'Name'}),
+    autonumberformat: flags.string({description: 'the display format for the autonumbering'}),
 
-    highvolume: { type: 'boolean',  char: 'h', description: 'high volume, valid only for platform events (__e)'},
+    highvolume: flags.boolean({  char: 'h', description: 'high volume, valid only for platform events (__e)'}),
 
     // general command params
-    interactive: { type: 'boolean', char: 'i', description: 'fully interactive--ask me every possible question.' },
-    directory: { type: 'directory',  char: 'd', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' }
+    interactive: flags.boolean({ char: 'i', description: 'fully interactive--ask me every possible question.' }),
+    directory: flags.directory({ char: 'd', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' })
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

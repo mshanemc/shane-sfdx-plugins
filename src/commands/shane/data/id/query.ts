@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 
 export default class IdQuery extends SfdxCommand {
 
@@ -11,8 +11,8 @@ export default class IdQuery extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    object: { char: 'o', description: 'object', required: true, type: 'string' },
-    where: { char: 'w', description: 'SOQL where clause for your query', required: true, type: 'string' }
+    object: flags.string({ char: 'o', description: 'object', required: true}),
+    where: flags.string({ char: 'w', description: 'SOQL where clause for your query', required: true})
   };
 
   // Comment this out if your command does not require an org username

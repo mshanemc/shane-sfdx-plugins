@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
@@ -20,7 +20,7 @@ export default class PermAlign extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    directory: { type: 'string', char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata?' }
+    directory: flags.directory({char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata?' })
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

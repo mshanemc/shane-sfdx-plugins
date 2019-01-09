@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import ucc = require('../../../../shared/unzipConvertClean');
 
 const tmpDir = 'mdapiout';
@@ -19,8 +19,8 @@ export default class XML extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    xmlpath: { type: 'filepath', required: true, char: 'p', description: 'the location of the package.xml you want to use' },
-    target: { type: 'string', char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' }
+    xmlpath: flags.filepath({required: true, char: 'p', description: 'the location of the package.xml you want to use' }),
+    target: flags.directory({char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' })
   };
 
   protected static requiresProject = true;

@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 
 export default class FieldDescribe extends SfdxCommand {
 
@@ -13,7 +13,7 @@ export default class FieldDescribe extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    object: { type: 'string', required: true, char: 'o', description: 'the object to describe'}
+    object: flags.string({required: true, char: 'o', description: 'the object to describe'})
   };
 
   protected static requiresProject = false;
@@ -21,27 +21,10 @@ export default class FieldDescribe extends SfdxCommand {
   public async run(): Promise<any> { // tslint:disable-line:no-any
 
     const conn = await this.org.getConnection();
-    const metadata = <BetterDescribe> await conn.sobject(this.flags.object).describe();
+    const metadata = await conn.sobject(this.flags.object).describe();
     // this.ux.logJson(metadata.fields);
 
     const output = [];
-
-    interface FieldDescribeResult {
-      name: string;
-      label: string;
-      aggregatable: boolean;
-      type: string;
-      nillable: boolean;
-      precision: number;
-      scale: number;
-      referenceTo: string;
-      picklistValue: object[];
-    }
-
-    interface BetterDescribe {
-      label: string;
-      fields: FieldDescribeResult[];
-    }
 
     for (const field of metadata.fields) {
       const rewritten = {

@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 
 export default class MetadataDescribe extends SfdxCommand {
 
@@ -13,7 +13,7 @@ export default class MetadataDescribe extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    type: { required: true, type: 'string', char: 't', description: 'pull only a specific type.  See the metadata api docs for type names' }
+    type: flags.string({ required: true, char: 't', description: 'pull only a specific type.  See the metadata api docs for type names' })
   };
 
   protected static requiresProject = false;
@@ -23,6 +23,7 @@ export default class MetadataDescribe extends SfdxCommand {
     const conn = await this.org.getConnection();
     const apiVersion = this.flags.apiversion || await this.org.retrieveMaxApiVersion();
     const metadata = await conn.metadata.list([{ type: this.flags.type, folder: null }], apiVersion );
-    this.ux.log(metadata);
+    this.ux.logJson(metadata);
+    return metadata;
   }
 }

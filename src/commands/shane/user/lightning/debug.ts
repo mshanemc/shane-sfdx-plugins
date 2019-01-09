@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import userIdLookup = require('../../../../shared/userIdLookup');
 
 export default class UserLightningDebug extends SfdxCommand {
@@ -15,8 +15,8 @@ export default class UserLightningDebug extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    firstname: { type: 'string', char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency' },
-    lastname: { type: 'string', char: 'l', description: 'last name of the user' }
+    firstname: flags.string({char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency' }),
+    lastname: flags.string({char: 'l', description: 'last name of the user' })
   };
 
   // Comment this out if your command does not require an org username

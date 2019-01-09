@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
 import fs = require('fs-extra');
 import request = require('request-promise-native');
@@ -21,8 +21,8 @@ export default class AllPhotos extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    repo: { type: 'url', char: 'r', default: photoRepo, description: 'optional alternate repo of photos, which contains a folder of photos named /img' },
-    folder: { type: 'directory', char: 'f', description: 'optional local folder of photos.  Overrides --repo' }
+    repo: flags.string({char: 'r', default: photoRepo, description: 'optional alternate repo of photos, which contains a folder of photos named /img' }),
+    folder: flags.directory({char: 'f', description: 'optional local folder of photos.  Overrides --repo' })
   };
 
   protected static requiresUsername = true;

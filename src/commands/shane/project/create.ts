@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import child_process = require('child_process');
 import fs = require('fs-extra');
@@ -19,8 +19,8 @@ export default class ProjectCreate extends SfdxCommand {
   protected static requiresDevhubUsername = true;
 
   protected static flagsConfig = {
-    name: { type: 'string', char: 'n', required: true, description: 'name and path for the project'},
-    gitremote: { type: 'string', char: 'g', required: true, description: 'full github url for the remote', default: 'RemoteTBD' }
+    name: flags.string({char: 'n', required: true, description: 'name and path for the project'}),
+    gitremote: flags.string({char: 'g', required: true, description: 'full github url for the remote', default: 'RemoteTBD' })
   };
 
   public async run(): Promise<any> { // tslint:disable-line:no-any

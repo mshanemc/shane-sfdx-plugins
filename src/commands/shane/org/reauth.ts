@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import { AuthInfo } from '@salesforce/core';
 import * as assert from 'assert';
 import child_process = require('child_process');
@@ -21,7 +21,7 @@ export default class ScratchOrgReAuth extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    requirecustomdomain: { type: 'boolean', char: 'r', description: 'keep trying until you get back an org with a custom domain on it' }
+    requirecustomdomain: flags.boolean({char: 'r', description: 'keep trying until you get back an org with a custom domain on it' })
   };
 
   protected static requiresUsername = true;
@@ -63,7 +63,7 @@ export default class ScratchOrgReAuth extends SfdxCommand {
         // this.ux.log(`error: ${JSON.parse(loginResult.stdout).message}`);
       }
 
-      const auth = await AuthInfo.create(username);
+      const auth = await AuthInfo.create({username});
       const authFields = auth.getFields();
 
       // this.ux.logJson(authFields);

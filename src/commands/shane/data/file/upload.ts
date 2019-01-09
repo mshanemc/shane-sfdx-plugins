@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import {flags, SfdxCommand } from '@salesforce/command';
 import localFile2CV = require('../../../../shared/localFile2CV');
 
 export default class Upload extends SfdxCommand {
@@ -21,10 +21,10 @@ export default class Upload extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    file: { char: 'f', description: 'path to file on local filesystem', required: true, type: 'filepath' },
-    parentid: { char: 'p', description: 'optional record ID that the file should be attached to', type: 'id' },
-    chatter: { char: 'c', description: 'attach as a chatter content post instead of just as a file', type: 'boolean', dependsOn: ['parentid'] },
-    name: { char: 'n', description: 'set the name of the uploaded file', type: 'string' }
+    file: flags.filepath({ char: 'f', description: 'path to file on local filesystem', required: true }),
+    parentid: flags.id({ char: 'p', description: 'optional record ID that the file should be attached to'}),
+    chatter: flags.boolean({ char: 'c', description: 'attach as a chatter content post instead of just as a file', dependsOn: ['parentid'] }),
+    name: flags.string({ char: 'n', description: 'set the name of the uploaded file'})
   };
 
   // Comment this out if your command does not require an org username

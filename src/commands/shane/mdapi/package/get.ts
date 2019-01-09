@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import ucc = require('../../../../shared/unzipConvertClean');
 
 const tmpDir = 'mdapiout';
@@ -19,8 +19,8 @@ export default class Get extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    packagename: {type: 'string', required: true, char: 'p', description: 'the name of the package you want to retrieve	' },
-    target: {type: 'string', char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' }
+    packagename: flags.string({required: true, char: 'p', description: 'the name of the package you want to retrieve' }),
+    target: flags.directory({char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' })
   };
 
   protected static requiresProject = true;

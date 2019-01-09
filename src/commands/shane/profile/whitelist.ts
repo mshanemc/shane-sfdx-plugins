@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
@@ -19,8 +19,8 @@ export default class ProfileWhitelist extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    name: { type: 'string',  char: 'n', required: true, description: 'profile name' },
-    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' }
+    name: flags.string({char: 'n', required: true, description: 'profile name' }),
+    directory: flags.directory({char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' })
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

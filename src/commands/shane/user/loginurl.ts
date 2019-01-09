@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import * as assert from 'assert';
 import child_process = require('child_process');
 import util = require('util');
@@ -18,7 +18,7 @@ export default class LoginURL extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    starturl: { type: 'string', char: 'p', description: 'url to open' }
+    starturl: flags.string({char: 'p', description: 'url to open' })
   };
 
   // Comment this out if your command does not require an org username

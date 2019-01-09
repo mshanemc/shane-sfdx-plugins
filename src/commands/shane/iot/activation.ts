@@ -1,5 +1,5 @@
 /* tslint:disable no-var-requires */
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import request = require('request-promise-native');
 
@@ -17,15 +17,17 @@ export default class Activation extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    name: {type: 'string', char: 'n', required: true, description: 'API name of the orchestration' },
-    reset: { type: 'boolean',  char: 'r', description: 'reset all instances of the orchestration' },
-    deactivate: { type: 'boolean',  char: 'd', description: 'deactivate the orchestration' }
+    name: flags.string({char: 'n', required: true, description: 'API name of the orchestration' }),
+    reset: flags.boolean({char: 'r', description: 'reset all instances of the orchestration' }),
+    deactivate: flags.boolean({char: 'd', description: 'deactivate the orchestration' })
   };
 
   protected static requiresUsername = true;
   protected static requiresProject = false;
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
+
+    // hardcoded because I've been burned on this one before
     const version = '44.0';
     const conn = this.org.getConnection();
     const auth = {

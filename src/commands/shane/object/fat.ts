@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
@@ -26,11 +26,11 @@ export default class FATUpdate extends SfdxCommand {
 ];
 
   protected static flagsConfig = {
-    object: {char: 'o', description: 'object to manage the policy for', type: 'string', required: true},
-    archiveaftermonths: { char: 'm', description: 'archive after this number of months', type: 'number', default: 18 },
-    archiveretentionyears: { char: 'y', default: 10, description: 'Archive for this many years', type: 'number' },
-    description: {description: 'optional friendly description for the policy', type: 'string'},
-    directory: { char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default', type: 'string' }
+    object: flags.string({char: 'o', description: 'object to manage the policy for', required: true}),
+    archiveaftermonths: flags.integer({ char: 'm', description: 'archive after this number of months', default: 18, min: 1, max: 18 }),
+    archiveretentionyears: flags.integer({ char: 'y', default: 10, min: 0, max: 10, description: 'Archive for this many years'}),
+    description: flags.string({description: 'optional friendly description for the policy'}),
+    directory: flags.directory({ char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default'})
   };
 
   protected static requiresProject = true;

@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 
@@ -24,8 +24,8 @@ export default class TSPUsernameUpdate extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    newusername: { char: 'n', description: 'manually specify the username, ignoring your default or any -u', type: 'email'},
-    directory: { char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default', type: 'string'}
+    newusername: flags.email({ char: 'n', description: 'manually specify the username, ignoring your default or any -u'}),
+    directory: flags.directory({ char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default'})
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

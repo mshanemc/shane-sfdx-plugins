@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import cli from 'cli-ux';
 import fs = require('fs-extra');
@@ -33,35 +33,35 @@ export default class FieldCreate extends SfdxCommand {
 
   protected static flagsConfig = {
     // common flags for field types
-    object: { type: 'string',  char: 'o', description: 'API name of an object to add a field to' },
-    name: { type: 'string',  char: 'n', description: 'Label for the field' },
-    api: { type: 'string',  char: 'a', description: 'API name for the field' },
-    type: { type: 'string',  char: 't', description: `field type.  Big Objects: ${SupportedTypes__b.join(',')}.  Events: ${SupportedTypes__e.join(',')}.  Regular Objects: ${SupportedTypes__c.join(',')}`},
-    description: { type: 'string', description: 'optional description for the field so you remember what it\'s for next year'},
-    default: { type: 'string', description: 'required for checkbox fields.  Express in Salesforce formula language (good luck with that!)'},
-    required: { type: 'boolean',  char: 'r', description: 'field is required' },
-    unique: { type: 'boolean',  char: 'u', description: 'field must be unique' },
-    externalid: { type: 'boolean',  description: 'use as an external id' },
-    trackhistory: { type: 'boolean', description: 'enable history tracking on the field' },
-    helptext: { type: 'string', description: 'optional inline help text'},
+    object: flags.string({ char: 'o', description: 'API name of an object to add a field to' }),
+    name: flags.string({  char: 'n', description: 'Label for the field' }),
+    api: flags.string({  char: 'a', description: 'API name for the field' }),
+    type: flags.string({  char: 't', description: `field type.  Big Objects: ${SupportedTypes__b.join(',')}.  Events: ${SupportedTypes__e.join(',')}.  Regular Objects: ${SupportedTypes__c.join(',')}`}),
+    description: flags.string({ description: 'optional description for the field so you remember what it\'s for next year'}),
+    default: flags.string({ description: 'required for checkbox fields.  Express in Salesforce formula language (good luck with that!)'}),
+    required: flags.boolean({char: 'r', description: 'field is required' }),
+    unique: flags.boolean({char: 'u', description: 'field must be unique' }),
+    externalid: flags.boolean({description: 'use as an external id' }),
+    trackhistory: flags.boolean({description: 'enable history tracking on the field' }),
+    helptext: flags.string({ description: 'optional inline help text'}),
     // type specific flags
-    length: { type: 'number',  char: 'l', description: 'length (for text fields and text area)' },
+    length: flags.integer({char: 'l', description: 'length (for text fields and text area)' }),
 
-    scale: { type: 'number',  char: 's', description: 'places right of the decimal' },
-    precision: { type: 'number', description: 'maximum allowed digits of a number, including whole and decimal places' },
+    scale: flags.integer({char: 's', description: 'places right of the decimal' }),
+    precision: flags.integer({description: 'maximum allowed digits of a number, including whole and decimal places' }),
 
-    lookupobject: { type: 'string', description: 'API name of the object the lookup goes to'},
-    relname: { type: 'string',  description: 'API name for the lookup relationship'},
+    lookupobject: flags.string({ description: 'API name of the object the lookup goes to'}),
+    relname: flags.string({  description: 'API name for the lookup relationship'}),
 
     // big object index handling
-    indexposition: { type: 'number',  description: 'put in a specific position in the big object index (0 is the first element).  You\'re responsible for dealing with producing a sane array'},
-    indexappend: { type: 'boolean',  description: 'put next in the big object index' },
-    indexdirection: { type: 'string',  description: 'sort direction for the big object index', options: ['ASC', 'DESC']},
-    noindex: { type: 'boolean', description: 'do not add this field to the index'},
+    indexposition: flags.integer({description: 'put in a specific position in the big object index (0 is the first element).  You\'re responsible for dealing with producing a sane array'}),
+    indexappend: flags.boolean({description: 'put next in the big object index' }),
+    indexdirection: flags.string({  description: 'sort direction for the big object index', options: ['ASC', 'DESC']}),
+    noindex: flags.boolean({description: 'do not add this field to the index'}),
 
     // stuff about the command's behavior itself
-    interactive: { type: 'boolean', char: 'i', description: 'fully interactive--ask me every possible question.'},
-    directory: { type: 'directory',  char: 'd', default: 'force-app/main/default', description: 'Where is this object metadata? defaults to force-app/main/default' }
+    interactive: flags.boolean({char: 'i', description: 'fully interactive--ask me every possible question.'}),
+    directory: flags.directory({char: 'd', default: 'force-app/main/default', description: 'Where is this object metadata? defaults to force-app/main/default' })
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

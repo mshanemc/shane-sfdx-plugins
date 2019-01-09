@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
@@ -56,11 +56,11 @@ export default class PermSetConvert extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    name: { type: 'string',  char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' },
-    profile: { type: 'string',  char: 'p', required: true, description: 'API name of an profile to convert.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' },
-    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' },
-    editprofile: { type: 'boolean', char: 'e', description: 'remove metadata from original profile', exclusive: ['skinnyclone']},
-    skinnyclone: { type: 'boolean', char: 'c', description: 'create a new profile that\'s the original profile less permset (does not modify original profile)', exclusive: ['editprofile']}
+    name: flags.string({char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you' }),
+    profile: flags.string({char: 'p', required: true, description: 'API name of an profile to convert.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' }),
+    directory: flags.directory({char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' }),
+    editprofile: flags.boolean({char: 'e', description: 'remove metadata from original profile', exclusive: ['skinnyclone']}),
+    skinnyclone: flags.boolean({char: 'c', description: 'create a new profile that\'s the original profile less permset (does not modify original profile)', exclusive: ['editprofile']})
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

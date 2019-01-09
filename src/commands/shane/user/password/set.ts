@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import request = require('request-promise-native');
 import userIdLookup = require('../../../../shared/userIdLookup');
 
@@ -15,9 +15,9 @@ export default class Set extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    firstname: { type: 'string',  char: 'g', required: true, description: 'first (given) name of the user--keeping -f for file for consistency' },
-    lastname: { type: 'string',  char: 'l', required: true, description: 'last name of the user' },
-    password: { type: 'string',  char: 'p', required: true, description: 'local path of the photo to use' }
+    firstname: flags.string({char: 'g', required: true, description: 'first (given) name of the user--keeping -f for file for consistency' }),
+    lastname: flags.string({char: 'l', required: true, description: 'last name of the user' }),
+    password: flags.string({char: 'p', required: true, description: 'local path of the photo to use' })
   };
 
   // Comment this out if your command does not require an org username

@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import request = require('request-promise-native');
 import localFile2CV = require('../../../shared/localFile2CV');
@@ -21,10 +21,10 @@ export default class Photo extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    firstname: { type: 'string',  char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency'},
-    lastname: { type: 'string',  char: 'l', required: true, description: 'last name of the user' },
-    file: { type: 'string', char: 'f', description: 'local path of the photo to use', exclusive: ['banner']},
-    banner: { type: 'string', char: 'b', description: 'local path of the chatter banner photo to use', exclusive: ['file'] }
+    firstname: flags.string({char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency'}),
+    lastname: flags.string({char: 'l', required: true, description: 'last name of the user' }),
+    file: flags.filepath({char: 'f', description: 'local path of the photo to use', exclusive: ['banner']}),
+    banner: flags.filepath({char: 'b', description: 'local path of the chatter banner photo to use', exclusive: ['file'] })
   };
 
   // Comment this out if your command does not require an org username

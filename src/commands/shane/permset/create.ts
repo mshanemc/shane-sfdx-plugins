@@ -1,4 +1,4 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
@@ -30,11 +30,11 @@ export default class PermSetCreate extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    name: { type: 'string',  char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you'},
-    object: { type: 'string',  char: 'o', description: 'API name of an object to add perms for.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' },
-    field: { type: 'string',  char: 'f', description: 'API name of an field to add perms for.  Required --object If blank, then you mean all the fields', dependsOn: ['object']},
-    directory: { type: 'string',  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' },
-    tab: { type: 'boolean',  char: 't', description: 'also add the tab for the specified object (or all objects if there is no specified objects)' }
+    name: flags.string({  char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you'}),
+    object: flags.string({  char: 'o', description: 'API name of an object to add perms for.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' }),
+    field: flags.string({  char: 'f', description: 'API name of an field to add perms for.  Required --object If blank, then you mean all the fields', dependsOn: ['object']}),
+    directory: flags.directory({  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' }),
+    tab: flags.boolean({ char: 't', description: 'also add the tab for the specified object (or all objects if there is no specified objects)' })
 
   };
 

@@ -1,4 +1,5 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
+import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 import * as _ from 'lodash';
@@ -7,8 +8,6 @@ import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting'
 import { setupArray } from '../../../shared/setupArray';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
-
-import chalk from 'chalk';
 
 export default class UnPerm extends SfdxCommand {
 
@@ -21,9 +20,9 @@ export default class UnPerm extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    object: { type: 'string', char: 'o', required: true, description: 'remove all references to an object from profiles or permsets' },
-    directory: { type: 'string', char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' },
-    specific: { type: 'string', char: 's', description: 'specify a profile or permset by name to only remove it from that one' }
+    object: flags.string({ char: 'o', required: true, description: 'remove all references to an object from profiles or permsets' }),
+    directory: flags.directory({ char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' }),
+    specific: flags.string({ char: 's', description: 'specify a profile or permset by name to only remove it from that one' })
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default

@@ -1,10 +1,9 @@
-import { SfdxCommand } from '@salesforce/command';
+import { flags, SfdxCommand } from '@salesforce/command';
+import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 
 import * as options from '../../../shared/js2xmlStandardOptions';
-
-import chalk from 'chalk';
 
 export default class PowerOfOne extends SfdxCommand {
 
@@ -17,11 +16,11 @@ export default class PowerOfOne extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    object: { type: 'string', char: 'o', required: true, description: 'API name of the object to add the field to' },
-    label: { type: 'string', char: 'l', default: 'Power Of One', description: 'label' },
-    api: { type: 'string', char: 'a', default: 'Power_Of_One__c', description: 'api name (will include the __c for you if you don\'t add it here' },
-    description: { type: 'string', char: 'd', default: 'Power of one is used for formulas, reporting, etc', description: 'optional description so you can remember why you added this and what it\'s for' },
-    target: { type: 'string', char: 't', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' }
+    object: flags.string({ char: 'o', required: true, description: 'API name of the object to add the field to' }),
+    label: flags.string({ char: 'l', default: 'Power Of One', description: 'label' }),
+    api: flags.string({ char: 'a', default: 'Power_Of_One__c', description: 'api name (will include the __c for you if you don\'t add it here' }),
+    description: flags.string({ char: 'd', default: 'Power of one is used for formulas, reporting, etc', description: 'optional description so you can remember why you added this and what it\'s for' }),
+    target: flags.directory({ char: 't', default: 'force-app/main/default', description: 'where to create the folder (if it doesn\'t exist already) and file...defaults to force-app/main/default' })
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
