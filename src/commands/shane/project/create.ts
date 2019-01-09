@@ -20,7 +20,7 @@ export default class ProjectCreate extends SfdxCommand {
 
   protected static flagsConfig = {
     name: flags.string({char: 'n', required: true, description: 'name and path for the project'}),
-    gitremote: flags.string({char: 'g', required: true, description: 'full github url for the remote', default: 'RemoteTBD' })
+    gitremote: flags.string({char: 'g', required: true, description: 'full github url for the remote'})
   };
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
