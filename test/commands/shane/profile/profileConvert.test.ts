@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-expression */
-import { expect } from '@salesforce/command/dist/test';
+import { expect } from 'chai';
 import child_process = require('child_process');
 import fs = require('fs-extra');
 import util = require('util');

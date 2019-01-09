@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-expression */
 
-import { expect } from '@salesforce/command/dist/test';
+import { expect } from 'chai';
 import util = require('util');
 
 import child_process = require('child_process');
