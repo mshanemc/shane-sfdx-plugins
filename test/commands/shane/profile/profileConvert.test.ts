@@ -44,7 +44,7 @@ describe('profile convert (just create a permset from a profile)', () => {
     expect(newPermSet.recordTypeVisibilities).to.be.an('array');
     expect(newPermSet.tabSettings).to.be.an('array');
 
-  }).timeout(1500);
+  }).timeout(2500);
 
   it('does a simple convert of the Admin profile and makes a skinny clone', async () => {
     await exec(`sfdx shane:profile:convert -p ${profileName} -n ${newPermSetName} -c`, { cwd: testProjectName });
@@ -77,7 +77,7 @@ describe('profile convert (just create a permset from a profile)', () => {
 
     expect(skinnyProfile.userPermissions).to.be.an('array');
 
-  }).timeout(1500);
+  }).timeout(2500);
 
   it('modifies the original profile', async () => {
     await exec(`sfdx shane:profile:convert -p ${profileName} -n ${newPermSetName} -e`, { cwd: testProjectName });
@@ -96,7 +96,7 @@ describe('profile convert (just create a permset from a profile)', () => {
 
     expect(editedProfile.userPermissions).to.be.an('array');
 
-  }).timeout(1500);
+  }).timeout(2500);
 
   after( () => {
     fs.emptyDirSync(testProjectName); // don't leave a mess

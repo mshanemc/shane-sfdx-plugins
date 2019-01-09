@@ -79,8 +79,7 @@ export default class CreateOrg extends SfdxCommand {
 
   protected static requiresProject = true;
 
-  public async run(): Promise<any> {
-    // tslint:disable-line:no-any
+  public async run(): Promise<any> { // tslint:disable-line:no-any
     // gets the unique username
     const usernameResult = await request.post({
       uri: usernameURL,
