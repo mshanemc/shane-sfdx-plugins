@@ -1,16 +1,5 @@
 import { Connection } from '@salesforce/core';
-
-export interface QueryResult {
-  totalSize: number;
-  done: boolean;
-  records: Record[];
-}
-
-export interface Record {
-  attributes: object;
-  Id: string;
-  ContentDocumentId?: string;
-}
+import { QueryResult, Record } from './../shared/typeDefs';
 
 export async function getUserId(conn: Connection, lastname: string, firstname?: string): Promise<Record> {
 

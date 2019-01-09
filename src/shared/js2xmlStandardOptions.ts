@@ -1,14 +1,3 @@
-// export interface Js2xmlOpts {
-//   declaration: {
-//     include: boolean;
-//     encoding: string;
-//     version: string;
-//   };
-//   format: {
-//     doubleQuotes: boolean;
-//   };
-// }
-
 export const js2xmlStandardOptions = {
   declaration: {
     include: true,

@@ -1,30 +1,12 @@
 import { Connection } from '@salesforce/core';
 import fs = require('fs-extra');
 
+import { CreateResult, QueryResult, Record } from './../shared/typeDefs';
+
 interface ContentVersionCreateRequest {
   VersionData: string;
   PathOnClient: string;
   Title?: string;
-}
-
-export interface CreateResult {
-  id: string;
-  success: boolean;
-  errors: string[];
-  name: string;
-  message: string;
-}
-
-export interface QueryResult {
-  totalSize: number;
-  done: boolean;
-  records: Record[];
-}
-
-export interface Record {
-  attributes: object;
-  Id: string;
-  ContentDocumentId?: string;
 }
 
 export async function file2CV(conn: Connection, filepath: string, name?: string): Promise<Record> {

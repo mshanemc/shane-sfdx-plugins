@@ -1,4 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+import { QueryResult } from './../../../../shared/typeDefs';
 
 export default class IdQuery extends SfdxCommand {
 
@@ -15,27 +16,10 @@ export default class IdQuery extends SfdxCommand {
     where: flags.string({ char: 'w', description: 'SOQL where clause for your query', required: true})
   };
 
-  // Comment this out if your command does not require an org username
   protected static requiresUsername = true;
-
-  // Comment this out if your command does not support a hub org username
-  // protected static supportsDevhubUsername = true;
-
-  // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
   protected static requiresProject = false;
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
-
-    interface Record {
-      attributes: object;
-      Id: string;
-    }
-
-    interface QueryResult {
-      totalSize: number;
-      done: boolean;
-      records: Record[];
-    }
 
     // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
     const conn = this.org.getConnection();

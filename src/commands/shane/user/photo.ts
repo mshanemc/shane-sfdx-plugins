@@ -2,6 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import request = require('request-promise-native');
 import localFile2CV = require('../../../shared/localFile2CV');
+import { Record } from '../../../shared/typeDefs';
 import userIdLookup = require('../../../shared/userIdLookup');
 
 export default class Photo extends SfdxCommand {
@@ -47,13 +48,6 @@ export default class Photo extends SfdxCommand {
     // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
     const conn = this.org.getConnection();
     // const query = 'Select Name, TrialExpirationDate from Organization';
-
-    interface Record {
-      attributes: object;
-      Id: string;
-      ContentDocumentId?: string;
-    }
-
     let user;
 
     try {

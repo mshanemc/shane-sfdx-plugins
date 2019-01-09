@@ -1,5 +1,6 @@
 import {flags, SfdxCommand } from '@salesforce/command';
 import localFile2CV = require('../../../../shared/localFile2CV');
+import { CreateResult, Record} from './../../../../shared/typeDefs';
 
 export default class Upload extends SfdxCommand {
 
@@ -41,24 +42,10 @@ export default class Upload extends SfdxCommand {
     // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
     const conn = this.org.getConnection();
 
-    interface CreateResult {
-      id: string;
-      success: boolean;
-      errors: string[];
-      name: string;
-      message: string;
-    }
-
     interface CDLCreateRequest {
       ContentDocumentId: string;
       LinkedEntityId: string;
       ShareType: string;
-    }
-
-    interface Record {
-      attributes: object;
-      Id: string;
-      ContentDocumentId?: string;
     }
 
     const CV = <Record> await localFile2CV.file2CV(conn, this.flags.file, this.flags.name);

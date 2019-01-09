@@ -4,6 +4,7 @@ import fs = require('fs-extra');
 import request = require('request-promise-native');
 import util = require('util');
 import localFile2CV = require('../../../shared/localFile2CV');
+import { QueryResult, Record } from './../../../shared/typeDefs';
 
 const exec = util.promisify(child_process.exec);
 
@@ -29,22 +30,8 @@ export default class AllPhotos extends SfdxCommand {
   protected static requiresProject = false;
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
-    // get the list of users without chatter photos
-    interface QueryResult {
-      totalSize: number;
-      done: boolean;
-      records: Record[];
-    }
-
-    interface Record {
-      attributes: object;
-      Id: string;
-      ContentDocumentId?: string;
-    }
-
     // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
     const conn = this.org.getConnection();
-    // const query = 'Select Name, TrialExpirationDate from Organization';
     let users;
 
     try {

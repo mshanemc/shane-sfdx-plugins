@@ -1,5 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import userIdLookup = require('../../../../shared/userIdLookup');
+import { QueryResult } from './../../../../shared/typeDefs';
 
 export default class UserLightningDebug extends SfdxCommand {
 
@@ -19,21 +20,9 @@ export default class UserLightningDebug extends SfdxCommand {
     lastname: flags.string({char: 'l', description: 'last name of the user' })
   };
 
-  // Comment this out if your command does not require an org username
   protected static requiresUsername = true;
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
-
-    interface Record {
-      attributes: object;
-      Id: string;
-    }
-
-    interface QueryResult {
-      totalSize: number;
-      done: boolean;
-      records: Record[];
-    }
 
     // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
     const conn = this.org.getConnection();
