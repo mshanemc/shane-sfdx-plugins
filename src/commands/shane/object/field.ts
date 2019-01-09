@@ -145,7 +145,11 @@ export default class FieldCreate extends SfdxCommand {
 
     // type specific values
     if (this.flags.type === 'Text') {
-      outputJSON.length = this.flags.length || await cli.prompt('Length? (Max 255)', { default: '255' });
+      if (this.flags.length >= 0) {
+        outputJSON.length = this.flags.length;
+      } else {
+        outputJSON.length = await cli.prompt('Length? (Max 255)', { default: '255' });
+      }
     }
 
     if (this.flags.type === 'Checkbox') {
@@ -153,7 +157,11 @@ export default class FieldCreate extends SfdxCommand {
     }
 
     if (this.flags.type === 'LongTextArea') {
-      outputJSON.length = this.flags.length || await cli.prompt('Length? (Max 131072)');
+      if (this.flags.length >= 0) {
+        outputJSON.length = this.flags.length;
+      } else {
+        outputJSON.length = await cli.prompt('Length? (Max 131072)');
+      }
       outputJSON.visibleLines = 3;
     }
 
@@ -164,8 +172,17 @@ export default class FieldCreate extends SfdxCommand {
     }
 
     if (this.flags.type === 'Number') {
-      outputJSON.scale = this.flags.scale || await cli.prompt('how many decimal places (scale)?', {default: '0'});
-      outputJSON.precision = this.flags.precision || await cli.prompt(`how many total digits, including those ${outputJSON.scale} decimal places? (precision, MAX ${18 - outputJSON.scale})?`, { default: `${18 - outputJSON.scale}` });
+      if (this.flags.scale >= 0) {
+        outputJSON.scale = this.flags.scale;
+      } else {
+        outputJSON.scale = await cli.prompt('how many decimal places (scale)?', { default: '0' });
+      }
+
+      if (this.flags.precision >= 0) {
+        outputJSON.precision = this.flags.precision;
+      } else {
+        outputJSON.precision = await cli.prompt(`how many total digits, including those ${outputJSON.scale} decimal places? (precision, MAX ${18 - outputJSON.scale})?`, { default: `${18 - outputJSON.scale}` });
+      }
     }
 
     // optional stuff
@@ -218,7 +235,7 @@ export default class FieldCreate extends SfdxCommand {
       existing.indexes[0].fields = existing.indexes[0].fields || [];
       // this.ux.log(existing.indexes[0].fields);
 
-      while (!this.flags.indexposition && !this.flags.indexappend && !this.flags.noindex) {
+      while (!(this.flags.indexposition > -1) && !this.flags.indexappend && !this.flags.noindex) {
         const response = await cli.prompt(`where in the big object index? Enter an array key (0 is first.  There are already ${existing.indexes[0].fields.length}) or the word LAST (add to the end) or NO (don't index this field)`, { default: 'LAST' });
         if (response === 'NONE') {
           this.flags.noindex = true;
@@ -226,7 +243,7 @@ export default class FieldCreate extends SfdxCommand {
         } else if (response === 'LAST') {
           this.flags.indexappend = true;
         } else {
-          if (this.flags.indexdirection >= 0) {
+          if (this.flags.indexposition >= 0) {
             this.flags.indexposition = response;
           }
         }

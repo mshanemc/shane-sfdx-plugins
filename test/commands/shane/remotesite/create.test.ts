@@ -30,7 +30,7 @@ describe('shane:remotesite:create', () => {
     const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/remoteSiteSettings/${testRemSite}.remoteSite-meta.xml`);
 
     expect(parsed.RemoteSiteSetting).to.be.an('object');
-    expect(parsed.RemoteSiteSetting.url).to.equal(url);
+    expect(parsed.RemoteSiteSetting.url).to.equal(url + '/');
     expect(parsed.RemoteSiteSetting.description).to.equal('added from sfdx plugin');
   }).timeout(1500);
 
@@ -46,7 +46,7 @@ describe('shane:remotesite:create', () => {
     const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/remoteSiteSettings/${testRemSite}.remoteSite-meta.xml`);
 
     expect(parsed.RemoteSiteSetting).to.be.an('object');
-    expect(parsed.RemoteSiteSetting.url).to.equal(url);
+    expect(parsed.RemoteSiteSetting.url).to.equal(url + '/');
     expect(parsed.RemoteSiteSetting.description).to.equal(testDescription);
   }).timeout(1500);
 

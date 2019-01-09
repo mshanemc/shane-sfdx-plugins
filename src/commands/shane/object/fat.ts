@@ -55,10 +55,10 @@ export default class FATUpdate extends SfdxCommand {
 
     existing.historyRetentionPolicy = existing.historyRetentionPolicy || {};
 
-    if (this.flags.archiveaftermonths) {
+    if (this.flags.archiveaftermonths >= 0) {
       existing.historyRetentionPolicy.archiveAfterMonths = this.flags.archiveaftermonths;
     }
-    if (this.flags.archiveretentionyears) {
+    if (this.flags.archiveretentionyears >= 0) {
       existing.historyRetentionPolicy.archiveRetentionYears = this.flags.archiveretentionyears;
     }
     if (this.flags.description) {

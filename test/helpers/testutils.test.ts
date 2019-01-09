@@ -12,24 +12,26 @@ const testProjectName = 'testProject';
 
 describe('tests testUtils', () => {
 
-  before(async () => {
-    await exec(`rm -rf ${testProjectName}`);
-    await exec(`sfdx force:project:create -n ${testProjectName}`);
-  });
+  if (!process.env.LOCALONLY) {
+    before(async () => {
+      await exec(`rm -rf ${testProjectName}`);
+      await exec(`sfdx force:project:create -n ${testProjectName}`);
+    });
 
-  it('creates an org', async () => {
-    const createResult = await testutils.orgCreate(testProjectName);
-    expect(JSON.parse(createResult.stdout).status).to.equal(0);
-    expect(JSON.parse(createResult.stdout).result.orgId).to.be.a('string');
-  });
+    it('creates an org', async () => {
+      const createResult = await testutils.orgCreate(testProjectName);
+      expect(JSON.parse(createResult.stdout).status).to.equal(0);
+      expect(JSON.parse(createResult.stdout).result.orgId).to.be.a('string');
+    });
 
-  it('deletes the org', async () => {
-    const deleteResult = await testutils.orgDelete(testProjectName);
-    expect(JSON.parse(deleteResult.stdout).status).to.equal(0);
-  });
+    it('deletes the org', async () => {
+      const deleteResult = await testutils.orgDelete(testProjectName);
+      expect(JSON.parse(deleteResult.stdout).status).to.equal(0);
+    });
 
-  after(async () => {
-    await exec(`rm -rf ${testProjectName}`);
-  });
+    after(async () => {
+      await exec(`rm -rf ${testProjectName}`);
+    });
+  }
 
 });

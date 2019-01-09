@@ -12,14 +12,14 @@ const exec = util.promisify(child_process.exec);
 const testProjectName = 'testProject';
 
 describe('shane:data:file:upload', () => {
+  if (!process.env.LOCALONLY) {
 
-  before(async () => {
-    await exec(`rm -rf ${testProjectName}`);
-    await exec(`sfdx force:project:create -n ${testProjectName}`);
-    await testutils.orgCreate(testProjectName);
-  });
+    before(async () => {
+      await exec(`rm -rf ${testProjectName}`);
+      await exec(`sfdx force:project:create -n ${testProjectName}`);
+      await testutils.orgCreate(testProjectName);
+    });
 
-  if (!process.env.LOCALONLY ) {
     it('uploads a file simply', async () => {
 
       const results = await exec('sfdx shane:data:file:upload -f sfdx-project.json', { cwd: testProjectName });
@@ -50,19 +50,19 @@ describe('shane:data:file:upload', () => {
       expect(results.stdout).to.be.a('string');
       expect(results.stdout).to.include('created chatter file attachment on record');
     });
+
+    it('fails chatter without a parentid', async () => {
+
+      try {
+        await exec('sfdx shane:data:file:upload -f sfdx-project.json -n "sfdx project json file" -c --json', { cwd: testProjectName });
+      } catch (err) {
+        expect(err.message).to.include('--parentid= must also be provided when using --chatter=');
+      }
+    });
+
+    after(async () => {
+      await testutils.orgDelete(testProjectName);
+      await exec(`rm -rf ${testProjectName}`);
+    });
   }
-
-  it('fails chatter without a parentid', async () => {
-
-    try {
-      await exec('sfdx shane:data:file:upload -f sfdx-project.json -n "sfdx project json file" -c --json', { cwd: testProjectName });
-    } catch (err) {
-      expect(err.message).to.include('--parentid= must also be provided when using --chatter=');
-    }
-  });
-
-  after(async () => {
-    await testutils.orgDelete(testProjectName);
-    await exec(`rm -rf ${testProjectName}`);
-  });
 });
