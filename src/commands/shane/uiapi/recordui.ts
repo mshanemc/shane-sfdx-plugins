@@ -15,8 +15,16 @@ export default class RecordApi extends SfdxCommand {
   protected static flagsConfig = {
     recordid: flags.string({ char: 'r', description: 'single recordId to generate the data/metadata', exclusive: ['recordids'] }),
     recordids: flags.array({ description: 'array of recordIds to generate the data/metadata', exclusive: ['recordid']}),
-    layouttypes: flags.array({char: 'l', options: ['Compact', 'Full'], description: 'which layout (only choose one)' }),
-    modes: flags.array({char: 'm', options: ['Create', 'Edit', 'View'], description: 'which mode (only choose one)'})
+    layouttypes: flags.array({
+      char: 'l',
+      // options: ['Compact', 'Full'],
+      description: 'which layout (Compact, Full or both)'
+    }),
+    modes: flags.array({
+      char: 'm',
+      // options: ['Create', 'Edit', 'View'],
+      description: 'which mode (Create, Edit, View, or combo)'
+    })
   };
 
   // Comment this out if your command does not require an org username
@@ -32,7 +40,22 @@ export default class RecordApi extends SfdxCommand {
     } else if (this.flags.recordids) {
       uri = `${uri}/${this.flags.recordids.join(',')}`;
     }
-    console.log(uri);
+
+    if (this.flags.layouttypes) {
+      if (uri.includes('?')) {
+        uri = `${uri}&layoutTypes=${this.flags.layouttypes.join(',')}`;
+      } else {
+        uri = `${uri}?layoutTypes=${this.flags.layouttypes.join(',')}`;
+      }
+    }
+
+    if (this.flags.modes) {
+      if (uri.includes('?')) {
+        uri = `${uri}&modes=${this.flags.modes.join(',')}`;
+      } else {
+        uri = `${uri}?modes=${this.flags.modes.join(',')}`;
+      }
+    }
 
     const result = await request({
       method: 'get',
@@ -42,8 +65,8 @@ export default class RecordApi extends SfdxCommand {
       },
       json: true
     });
-
-    console.log(result);
-    }
+    this.ux.log(result);
+    return result;
+  }
 
 }
