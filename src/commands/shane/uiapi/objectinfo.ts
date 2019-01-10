@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-// import chalk from 'chalk';
+import fs = require('fs-extra');
 import request = require('request-promise-native');
 
 export default class ObjectInfo extends SfdxCommand {
@@ -8,12 +8,16 @@ export default class ObjectInfo extends SfdxCommand {
 
   public static examples = [
     `sfdx shane:uiapi:objectinfo -o Account --json
-// returns ui-api objectinfo for Account
-`
+    // returns ui-api objectinfo for Account
+    `,
+    `sfdx shane:uiapi:objectinfo -o Account --json --outputfile accountObjectInfo.json
+    // returns ui-api objectinfo for Account and saves it to a local file
+    `
   ];
 
   protected static flagsConfig = {
-    object: flags.string({ char: 'o', description: 'object api name' })
+    object: flags.string({ char: 'o', description: 'object api name' }),
+    outputfile: flags.filepath({description: 'local path to save the output to'})
   };
 
   // Comment this out if your command does not require an org username
@@ -34,6 +38,11 @@ export default class ObjectInfo extends SfdxCommand {
       json: true
     });
     this.ux.log(result);
+
+    if (this.flags.outputfile) {
+      fs.writeFileSync(result, this.flags.outputfile);
+    }
+
     return result;
   }
 

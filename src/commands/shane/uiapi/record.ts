@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-// import chalk from 'chalk';
+import fs = require('fs-extra');
 import request = require('request-promise-native');
 
 export default class Record extends SfdxCommand {
@@ -15,8 +15,8 @@ export default class Record extends SfdxCommand {
   protected static flagsConfig = {
     recordid: flags.string({ char: 'r', description: 'single recordId to generate the data/metadata', required: true }),
     fields: flags.array({ char: 'f', required: true, description: 'fields to return.  Specify with the object API name, like Account.Name, Account.Phone, etc.  If not visible to the running user, an error is thrown'}),
-    optionalfields: flags.array({ description: 'optional fields to return.  If not visible to the running user, the field is just omitted' })
-
+    optionalfields: flags.array({ description: 'optional fields to return.  If not visible to the running user, the field is just omitted' }),
+    outputfile: flags.filepath({ description: 'local path to save the output to' })
   };
 
   // Comment this out if your command does not require an org username
@@ -53,6 +53,11 @@ export default class Record extends SfdxCommand {
       json: true
     });
     this.ux.log(result);
+
+    if (this.flags.outputfile) {
+      fs.writeFileSync(result, this.flags.outputfile);
+    }
+
     return result;
   }
 

@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-// import chalk from 'chalk';
+import fs = require('fs-extra');
 import request = require('request-promise-native');
 
 export default class RecordUI extends SfdxCommand {
@@ -24,7 +24,9 @@ export default class RecordUI extends SfdxCommand {
       char: 'm',
       // options: ['Create', 'Edit', 'View'],
       description: 'which mode (Create, Edit, View, or combo)'
-    })
+    }),
+    outputfile: flags.filepath({ description: 'local path to save the output to' })
+
   };
 
   // Comment this out if your command does not require an org username
@@ -66,6 +68,11 @@ export default class RecordUI extends SfdxCommand {
       json: true
     });
     this.ux.log(result);
+
+    if (this.flags.outputfile) {
+      fs.writeFileSync(result, this.flags.outputfile);
+    }
+
     return result;
   }
 
