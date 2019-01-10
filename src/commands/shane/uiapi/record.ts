@@ -7,8 +7,8 @@ export default class Record extends SfdxCommand {
   public static description = 'get a ui api response from the getrecord endpoint: https://developer.salesforce.com/docs/atlas.en-us.uiapi.meta/uiapi/ui_api_resources_record_get.htm';
 
   public static examples = [
-    `sfdx shane:uiapi:record -r 001R0000003I6CoIAK
-// default ui-api response for a record
+    `sfdx shane:uiapi:record -r 001R0000003I6CoIAK -f Account.Name --optionalfields Account.AnnualRevenue,AccountAccount.Number --json
+// default ui-api response for a getrecord.
 `
   ];
 
