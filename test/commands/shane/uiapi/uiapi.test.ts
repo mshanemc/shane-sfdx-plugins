@@ -16,7 +16,7 @@ describe('shane:uiapi', () => {
   let recordId: string;
   let recordIds: string[];
 
-  if (true) {
+  if (!process.env.LOCALONLY) {
     before(async () => {
       await exec(`rm -rf ${testProjectName}`);
       await exec(`sfdx force:project:create -n ${testProjectName}`);
