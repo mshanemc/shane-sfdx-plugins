@@ -70,7 +70,7 @@ export default class RecordUI extends SfdxCommand {
     this.ux.log(result);
 
     if (this.flags.outputfile) {
-      fs.writeFileSync(result, this.flags.outputfile);
+      fs.outputJSON(this.flags.outputfile, result);
     }
 
     return result;
