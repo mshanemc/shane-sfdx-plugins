@@ -2,12 +2,12 @@ import { flags, SfdxCommand } from '@salesforce/command';
 // import chalk from 'chalk';
 import request = require('request-promise-native');
 
-export default class RecordApi extends SfdxCommand {
+export default class RecordUI extends SfdxCommand {
 
   public static description = 'get a ui api response from the record-ui endpoint: https://developer.salesforce.com/docs/atlas.en-us.uiapi.meta/uiapi/ui_api_resources_record_ui.htm';
 
   public static examples = [
-    `sfdx shane:uiapi:recordui -r 001R0000003I6CoIAK
+    `sfdx shane:uiapi:recordui -r 001R0000003I6CoIAK --json
 // default ui-api response for a single recordId
 `
   ];

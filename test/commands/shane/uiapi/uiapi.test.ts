@@ -43,96 +43,98 @@ describe('shane:uiapi', () => {
 
     it('tests recordui with single recordId', async () => {
       const result = await exec(`sfdx shane:uiapi:recordui -r ${recordId} --json`, { cwd: testProjectName, maxBuffer });
-      // console.log(result);
       const output = JSON.parse(result.stdout).result;
 
-      looksValidSingle(output);
+      looksValidSingleRecordUI(output);
     });
 
     it('tests recordui with single and multiple layouts', async () => {
       const result = await exec(`sfdx shane:uiapi:recordui -r ${recordId} --json -l Compact`, { cwd: testProjectName, maxBuffer });
-      // console.log(result);
       const output = JSON.parse(result.stdout).result;
 
-      looksValidSingle(output);
+      looksValidSingleRecordUI(output);
     });
 
     it('tests recordui with single recordid and single mode', async () => {
       const result = await exec(`sfdx shane:uiapi:recordui -r ${recordId} --json -m View`, { cwd: testProjectName, maxBuffer });
-      // console.log(result);
       const output = JSON.parse(result.stdout).result;
 
-      looksValidSingle(output);
+      looksValidSingleRecordUI(output);
     });
 
     it('tests recordui with single recordid and single mode and layout', async () => {
       const result = await exec(`sfdx shane:uiapi:recordui -r ${recordId} --json -m View -l Full`, { cwd: testProjectName, maxBuffer });
-      // console.log(result);
       const output = JSON.parse(result.stdout).result;
 
-      looksValidSingle(output);
+      looksValidSingleRecordUI(output);
     });
 
     it('tests recordui with single recordid and multiple modes and layouts', async () => {
       const result = await exec(`sfdx shane:uiapi:recordui -r ${recordId} --json -m View,Create,Edit -l Full,Compact`, { cwd: testProjectName, maxBuffer });
-      // console.log(result);
       const output = JSON.parse(result.stdout).result;
 
-      looksValidSingle(output);
+      looksValidSingleRecordUI(output);
     });
 
     it('tests recordui with single recordid and multiple modes', async () => {
       const result = await exec(`sfdx shane:uiapi:recordui -r ${recordId} --json -m Create`, { cwd: testProjectName, maxBuffer });
-      // console.log(result);
       const output = JSON.parse(result.stdout).result;
 
-      looksValidSingle(output);
+      looksValidSingleRecordUI(output);
     });
 
     it('tests recordui with list of recordIds', async () => {
-      expect(recordIds).to.be.an('array');
-      expect(recordIds.length).to.be.greaterThan(0);
-
       const result = await exec(`sfdx shane:uiapi:recordui -r ${recordIds.join(',')} --json`, { cwd: testProjectName, maxBuffer });
-      // console.log(result);
       const output = JSON.parse(result.stdout).result;
-
-      expect(output.eTag).to.be.a('string');
-      recordIds.forEach( id => {
-        expect(output.records).to.be.an('object').with.property(id);
-      });
-      expect(output.objectInfos).to.be.an('object').with.property('Account');
+      looksValidMultipleRecordUI(output);
     });
 
     it('tests recordui with list of recordIds and layout', async () => {
-      expect(recordIds).to.be.an('array');
-      expect(recordIds.length).to.be.greaterThan(0);
-
       const result = await exec(`sfdx shane:uiapi:recordui -r ${recordIds.join(',')} --json -l Full`, { cwd: testProjectName, maxBuffer });
-      // console.log(result);
       const output = JSON.parse(result.stdout).result;
-
-      looksValidMultiple(output);
+      looksValidMultipleRecordUI(output);
     });
 
     it('tests recordui with list of recordIds and mode', async () => {
-      expect(recordIds).to.be.an('array');
-      expect(recordIds.length).to.be.greaterThan(0);
-
       const result = await exec(`sfdx shane:uiapi:recordui -r ${recordIds.join(',')} --json -m Create`, { cwd: testProjectName, maxBuffer });
-      // console.log(result);
       const output = JSON.parse(result.stdout).result;
-
-      looksValidMultiple(output);
+      looksValidMultipleRecordUI(output);
     });
 
-    const looksValidSingle = output => {
+    it('tests objectinfo', async () => {
+      const apiName = 'Account';
+      const result = await exec(`sfdx shane:uiapi:objectinfo -o ${apiName} --json`, { cwd: testProjectName, maxBuffer });
+      const output = JSON.parse(result.stdout).result;
+      expect(output).to.be.an('object').with.property('apiName').equals('Account');
+      expect(output).to.be.an('object').with.property('eTag');
+      expect(output).to.be.an('object').with.property('fields');
+    });
+
+    it('tests getrecord', async () => {
+      const result = await exec(`sfdx shane:uiapi:record -r ${recordId} -f Account.Name --json`, { cwd: testProjectName, maxBuffer });
+      const output = JSON.parse(result.stdout).result;
+      looksValidRecord(output);
+    });
+
+    it('tests getrecord with optional fields', async () => {
+      const result = await exec(`sfdx shane:uiapi:record -r ${recordId} -f Account.Name --optionalfields Account.AnnualRevenue,AccountAccount.Number --json`, { cwd: testProjectName, maxBuffer });
+      const output = JSON.parse(result.stdout).result;
+      looksValidRecord(output);
+    });
+
+    const looksValidRecord = output => {
+      expect(output.eTag).to.be.a('string');
+      expect(output.apiName).to.equal('Account');
+      expect(output.fields).to.be.an('object').with.property('Name');
+    };
+
+    const looksValidSingleRecordUI = output => {
       expect(output.eTag).to.be.a('string');
       expect(output.records).to.be.an('object').with.property(recordId);
       expect(output.objectInfos).to.be.an('object').with.property('Account');
     };
 
-    const looksValidMultiple = output => {
+    const looksValidMultipleRecordUI = output => {
       expect(output.eTag).to.be.a('string');
       recordIds.forEach(id => {
         expect(output.records).to.be.an('object').with.property(id);
