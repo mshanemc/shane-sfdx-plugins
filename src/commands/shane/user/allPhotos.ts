@@ -2,10 +2,10 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
 import fs = require('fs-extra');
 import request = require('request-promise-native');
+import { URL } from 'url';
 import util = require('util');
 import localFile2CV = require('../../../shared/localFile2CV');
 import { QueryResult, Record } from './../../../shared/typeDefs';
-
 const exec = util.promisify(child_process.exec);
 
 import chalk from 'chalk';
@@ -22,7 +22,7 @@ export default class AllPhotos extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    repo: flags.string({char: 'r', default: photoRepo, description: 'optional alternate repo of photos, which contains a folder of photos named /img' }),
+    repo: flags.url({char: 'r', default: new URL(photoRepo), description: 'optional alternate repo of photos, which contains a folder of photos named /img' }),
     folder: flags.directory({char: 'f', description: 'optional local folder of photos.  Overrides --repo' })
   };
 
