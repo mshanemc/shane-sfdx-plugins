@@ -5,7 +5,7 @@ const tmpDir = 'mdapiout';
 
 export default class XML extends SfdxCommand {
 
-  public static description = 'gets metadata form an org based on a local package.xml, converts, and merges it into the local source';
+  public static description = 'DEPRECATED.  Use force:source:retrieve these days!  gets metadata form an org based on a local package.xml, converts, and merges it into the local source';
 
   public static examples = [
 `sfdx shane:mdapi:package:xml -p someFolder/package.xml -u someOrg
