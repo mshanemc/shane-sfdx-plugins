@@ -21,5 +21,6 @@ export default class MetadataDescribe extends SfdxCommand {
     const conn = await this.org.getConnection();
     const metadata = await conn.metadata.describe(this.flags.apiversion || await this.org.retrieveMaxApiVersion());
     this.ux.logJson(metadata);
+    return metadata;
   }
 }
