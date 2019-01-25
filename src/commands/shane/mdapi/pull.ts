@@ -28,10 +28,10 @@ export default class Pull extends SfdxCommand {
 
   public static examples = [
 `sfdx shane:mdapi:pull -c -u someOrg
-// pulls code kinda stuff from the org and converts/merges it into force-app
+// pulls code kinda stuff from the org and converts/merges it into your project's default pkgDir
 `,
-`sfdx shane:mdapi:pull -t ExternalDataSource -u someOrg
-// pulls all the external data source metadata from the org and converts/merges it into force-app
+`sfdx shane:mdapi:pull -u someOrg
+// pulls all the external data source metadata from the org and converts/merges it into your project's default pkgDir
 `
   ];
 
@@ -48,8 +48,7 @@ export default class Pull extends SfdxCommand {
     object: flags.string({char: 'o', description: 'pull metadata for a single object', exclusive: ['all', 'schema']}),
     type: flags.string({char: 't', description: 'pull only a specific type.  See the metadata api docs for type names', exclusive : ['all']}),
     // TODO: automation, security, reporting, i18n
-    all: flags.boolean({ description: 'Pulls just about everything.  Don\'t use this flag with any other subset of metadata.  Not recommended for really large metatadat orgs because it\'ll overflow stdout', exclusive: ['code', 'perms', 'wave', 'schema', 'ui', 'object', 'type']}),
-    target: flags.directory({char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' })
+    all: flags.boolean({ description: 'Pulls just about everything.  Don\'t use this flag with any other subset of metadata.  Not recommended for really large metatadat orgs because it\'ll overflow stdout', exclusive: ['code', 'perms', 'wave', 'schema', 'ui', 'object', 'type']})
   };
 
   protected static requiresProject = true;
