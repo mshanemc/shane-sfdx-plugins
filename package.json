@@ -75,8 +75,11 @@
       "shane:profile": {
         "description": "convert (most) everything in a profile to a permset OR whitelist ip ranges"
       },
+      "shane:uiapi": {
+        "description": "get record, recordinfo or recordui from ui-api (probably for LWC jest mocking)"
+      },
       "shane:user": {
-        "description": "set a users password or their chatter profile/banner photo.  Or change all default chatter photos to annoying characters to encourage users to set their photo"
+        "description": "set a users password or their chatter profile/banner photo.  Or change all default chatter photos to annoying characters to encourage users to set their photo.  Or set a user to debug mode"
       }
     },
     "bin": "sfdx",
