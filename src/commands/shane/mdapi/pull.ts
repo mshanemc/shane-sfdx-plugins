@@ -64,26 +64,12 @@ export default class Pull extends SfdxCommand {
     const conn = this.org.getConnection();
 
     const describeResult = await conn.metadata.describe(this.flags.apiversion);
-    // this.ux.logJson(describeResult);
-
-    if (this.flags.type && this.flags.code && code.includes(this.flags.type)) {
-      this.ux.error(`type ${this.flags.type} is already included in --code`);
-    }
-
-    if (this.flags.type && this.flags.ui && ui.includes(this.flags.type)) {
-      this.ux.error(`type ${this.flags.type} is already included in --ui`);
-    }
-
-    if (this.flags.type && this.flags.schema && schema.includes(this.flags.type)) {
-      this.ux.error(`type ${this.flags.type} is already included in --schema`);
-    }
-
-    if (this.flags.type && this.flags.perms && perms.includes(this.flags.type)) {
-      this.ux.error(`type ${this.flags.type} is already included in --perms`);
-    }
 
     const mdTypes = [];
     const requestedTypes = getTypeList(this.flags);
+    if (this.flags.type && requestedTypes.includes(this.flags.type)) {
+      this.ux.warn(`type ${this.flags.type} is already selected`);
+    }
     const all = describeResult.metadataObjects;
 
     // speial case
