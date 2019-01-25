@@ -17,7 +17,7 @@ const plural = 'Corgi';
 describe('shane:object:create (regular object flavor)', () => {
 
   before(async () => {
-    await exec(`rm -rf ${testProjectName}`);
+    await fs.remove(testProjectName);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
   });
 
@@ -113,6 +113,6 @@ describe('shane:object:create (regular object flavor)', () => {
   });
 
   after(async () => {
-    await exec(`rm -rf ${testProjectName}`);
+    await fs.remove(testProjectName);
   });
 });

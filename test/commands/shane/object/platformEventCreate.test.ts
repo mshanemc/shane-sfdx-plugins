@@ -17,7 +17,7 @@ const plural = 'Hellos';
 describe('shane:object:create (platform event flavor)', () => {
 
   before(async () => {
-    await exec(`rm -rf ${testProjectName}`);
+    await fs.remove(testProjectName);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
   });
 
@@ -159,6 +159,6 @@ describe('shane:object:create (platform event flavor)', () => {
   });
 
   after(async () => {
-    await exec(`rm -rf ${testProjectName}`);
+    await fs.remove(testProjectName);
   });
 });

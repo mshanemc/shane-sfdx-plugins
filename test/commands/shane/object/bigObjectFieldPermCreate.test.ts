@@ -17,7 +17,7 @@ const plural = 'Platypi';
 describe('shane:object:create (big object flavor)', () => {
 
   before(async () => {
-    await exec(`rm -rf ${testProjectName}`);
+    await fs.remove(testProjectName);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
   });
 
@@ -244,6 +244,6 @@ describe('shane:object:create (big object flavor)', () => {
   });
 
   after(async () => {
-    await exec(`rm -rf ${testProjectName}`);
+    await fs.remove(testProjectName);
   });
 });

@@ -9,14 +9,17 @@ import jsToXml = require('js2xmlparser');
 
 const exec = util.promisify(child_process.exec);
 
-const code = ['ApexClass', 'ApexTrigger', 'ApexComponent', 'ApexPage', 'AuraDefinitionBundle', 'StaticResource'];
-const perms = ['PermissionSet', 'Profile', 'Role', 'CustomPermission', 'Group'];
-const schema = ['ExternalDataSource', 'CustomMetadata', 'RecordType', 'GlobalValueSet', 'CustomField', 'CustomObject', 'StandardValueSet'];
-const ui = ['CompactLayout', 'Layout', 'ListView', 'CustomTab', 'AppMenu', 'CustomApplication', 'CustomPageWebLink', 'HomePageComponent', 'HomePageLayout', 'PathAssistant', 'WebLink', 'CustomLabels', 'FlexiPage', 'QuickAction'];
-const wave = ['WaveApplication', 'WaveDashboard', 'WaveDataflow', 'WaveLens', 'WaveTemplateBundle', 'Wavexmd', 'WaveDataset'];
+const booleanFlags = {
+  code: ['ApexClass', 'ApexTrigger', 'ApexComponent', 'ApexPage', 'AuraDefinitionBundle', 'StaticResource'],
+  perms: ['PermissionSet', 'Profile', 'Role', 'CustomPermission', 'Group'],
+  schema : ['ExternalDataSource', 'CustomMetadata', 'RecordType', 'GlobalValueSet', 'CustomField', 'CustomObject', 'StandardValueSet'],
+  ui : ['CompactLayout', 'Layout', 'ListView', 'CustomTab', 'AppMenu', 'CustomApplication', 'CustomPageWebLink', 'HomePageComponent', 'HomePageLayout', 'PathAssistant', 'WebLink', 'CustomLabels', 'FlexiPage', 'QuickAction'],
+  wave : ['WaveApplication', 'WaveDashboard', 'WaveDataflow', 'WaveLens', 'WaveTemplateBundle', 'Wavexmd', 'WaveDataset'],
+  reporting : ['Report', 'Dashboard']
+};
+
 const standardObjects = ['Account', 'AccountContactRelation', 'AccountContactRole', 'Activity', 'Asset', 'AssistantProgress', 'Campaign', 'CampaignMember', 'Case', 'CaseContactRole', 'Contact', 'ContentVersion', 'Contract', 'ContractContactRole', 'DuplicateRecordItem', 'DuplicateRecordSet', 'EmailMessage', 'Event', 'ExchangeUserMapping', 'FeedItem', 'Idea', 'Lead', 'LinkedArticle', 'Macro', 'MacroAction', 'MacroInstruction', 'Opportunity', 'OpportunityCompetitor', 'OpportunityContactRole', 'OpportunityLineItem', 'Order', 'OrderItem', 'PartnerRole', 'Pricebook2', 'PricebookEntry', 'Product2', 'ProfileSkill', 'ProfileSkillEndorsement', 'ProfileSkillUser', 'Quote', 'QuoteLineItem', 'Site', 'SocialPersona', 'Solution', 'StreamingChannel', 'Task', 'Territory', 'User', 'WorkBadge', 'WorkBadgeDefinition', 'WorkThanks'];
 const StandardValueSets = ['AccountContactMultiRoles', 'AccountContactRole', 'AccountOwnership', 'AccountRating', 'AccountType', 'AssetStatus', 'CampaignMemberStatus', 'CampaignStatus', 'CampaignType', 'CaseContactRole', 'CaseOrigin', 'CasePriority', 'CaseReason', 'CaseStatus', 'CaseType', 'ContactRole', 'ContractContactRole', 'ContractStatus', 'EntitlementType', 'EventSubject', 'EventType', 'FiscalYearPeriodName', 'FiscalYearPeriodPrefix', 'FiscalYearQuarterName', 'FiscalYearQuarterPrefix', 'IdeaCategory', 'IdeaMultiCategory', 'IdeaStatus', 'IdeaThemeStatus', 'Industry', 'LeadSource', 'LeadStatus', 'OpportunityCompetitor', 'OpportunityStage', 'OpportunityType', 'OrderType', 'PartnerRole', 'Product2Family', 'QuestionOrigin', 'QuickTextCategory', 'QuickTextChannel', 'QuoteStatus', 'RoleInTerritory2', 'SalesTeamRole', 'Salutation', 'ServiceContractApprovalStatus', 'SocialPostClassification', 'SocialPostEngagementLevel', 'SocialPostReviewedStatus', 'SolutionStatus', 'TaskPriority', 'TaskStatus', 'TaskSubject', 'TaskType', 'WorkOrderLineItemStatus', 'WorkOrderPriority', 'WorkOrderStatus'];
-const reporting = ['Report', 'Dashboard'];
 
 const CrawlDown = [];
 
@@ -38,17 +41,17 @@ export default class Pull extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    code: flags.boolean({ char: 'c', description: code.join(','), exclusive : ['all'] }),
-    perms: flags.boolean({ char: 'p', description: perms.join(','), exclusive : ['all'] }),
-    wave: flags.boolean({ description: `Pull ${wave.join(',')}`, exclusive : ['all'] }),
-    schema: flags.boolean({ char: 's', description: 'Pull objects, fields, list views, recordtypes, valueSets, custom Metadata', exclusive : ['all'] }),
-    ui: flags.boolean({ char: 'i', description: 'Pull page layouts, tabs, compact layouts, apps, tabs, more', exclusive : ['all'] }),
-    reporting: flags.boolean({ description: reporting.join(','), exclusive : ['all']}),
+    code: flags.boolean({ char: 'c', description: booleanFlags.code.join(','), exclusive : ['all'] }),
+    perms: flags.boolean({ char: 'p', description: booleanFlags.perms.join(','), exclusive : ['all'] }),
+    wave: flags.boolean({ description: booleanFlags.wave.join(','), exclusive : ['all'] }),
+    schema: flags.boolean({ char: 's', description: booleanFlags.schema.join(','), exclusive : ['all', 'object'] }),
+    ui: flags.boolean({ char: 'i', description: booleanFlags.ui.join(','), exclusive : ['all'] }),
+    reporting: flags.boolean({ description: booleanFlags.reporting.join(','), exclusive : ['all']}),
 
     object: flags.string({char: 'o', description: 'pull metadata for a single object', exclusive: ['all', 'schema']}),
     type: flags.string({char: 't', description: 'pull only a specific type.  See the metadata api docs for type names', exclusive : ['all']}),
     // TODO: automation, security, reporting, i18n
-    all: flags.boolean({ description: 'Pulls just about everything.  Don\'t use this flag with any other subset of metadata.  Not recommended for really large metatadat orgs because it\'ll overflow stdout', exclusive: ['code', 'perms', 'wave', 'schema', 'ui', 'object', 'type']})
+    all: flags.boolean({ description: 'Pulls just about everything.  Don\'t use this flag with any other subset of metadata.  Not recommended for really large metatadat orgs because it\'ll overflow stdout', exclusive: ['code', 'perms', 'wave', 'schema', 'ui', 'object', 'type', 'reporting']})
   };
 
   protected static requiresProject = true;
@@ -58,7 +61,7 @@ export default class Pull extends SfdxCommand {
     if (!this.flags.apiversion) {
       this.flags.apiversion = await this.org.retrieveMaxApiVersion();
     }
-    fs.ensureDirSync(this.flags.target);
+
     fs.ensureDirSync(pkgDir);
 
     const conn = this.org.getConnection();
@@ -149,17 +152,17 @@ export default class Pull extends SfdxCommand {
     // in parallel, build out all the local package.xmls
     this.ux.log('Going to retrieve all the metadata you asked for...this could take a while');
 
-    const retrieveResults = await Promise.all(mdTypes.map(mdType => localFilesystemBuild(mdType, this.flags.apiversion, this.org.getUsername(), this.flags.target)));
+    const retrieveResults = await Promise.all(mdTypes.map(mdType => localFilesystemBuild(mdType, this.flags.apiversion, this.org.getUsername())));
     retrieveResults.map( result => this.ux.log(result));
 
-    // await exec(`rm -rf ./${pkgDir}`);
+    await fs.remove(pkgDir);
 
   }
 
 }
 
 // builds out the package.xml in a folder for each type.
-const localFilesystemBuild = async (mdType, apiversion, username, target) => {
+const localFilesystemBuild = async (mdType, apiversion, username) => {
   // create a folder for that type within tmpDir
   const targetFolder = `${pkgDir}/${mdType.name}`;
   await fs.ensureDir(targetFolder);
@@ -195,32 +198,10 @@ const localFilesystemBuild = async (mdType, apiversion, username, target) => {
 // takes the command flags and builds a list of the types that the user wants
 const getTypeList = theFlags => {
   let outputTypes = [];
-
-  if (theFlags.reporting) {
-    outputTypes = [...outputTypes, ...reporting];
-  }
-
-  if (theFlags.code) {
-    outputTypes = [...outputTypes, ...code];
-  }
-
-  if (theFlags.schema) {
-    outputTypes = [...outputTypes, ...schema];
-  }
-
-  if (theFlags.perms) {
-    outputTypes = [...outputTypes, ...perms];
-
-  }
-
-  if (theFlags.wave) {
-    outputTypes = [...outputTypes, ...wave];
-
-  }
-
-  if (theFlags.ui) {
-    outputTypes = [...outputTypes, ...ui];
-  }
-
+  Object.keys(booleanFlags).forEach( flag => {
+    if (theFlags[flag]) {
+      outputTypes = [...outputTypes, ...theFlags[flag]];
+    }
+  });
   return outputTypes;
 };

@@ -42,7 +42,7 @@ export default class Push extends SfdxCommand {
 
     if (!this.flags.keepconverted) {
       process.stdout.write('done.  Cleaning up...');
-      await exec(`rm -rf ./${this.flags.convertedfolder}`);
+      await fs.remove(this.flags.convertedfolder);
     }
     process.stdout.write('Done!\n');
 

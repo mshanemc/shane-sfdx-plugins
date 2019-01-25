@@ -2,6 +2,7 @@
 
 import { expect } from 'chai';
 import child_process = require('child_process');
+import fs = require('fs-extra');
 import util = require('util');
 
 import testutils = require('./testutils');
@@ -14,7 +15,7 @@ describe('tests testUtils', () => {
 
   if (!process.env.LOCALONLY) {
     before(async () => {
-      await exec(`rm -rf ${testProjectName}`);
+      await fs.remove(testProjectName);
       await exec(`sfdx force:project:create -n ${testProjectName}`);
     });
 
@@ -30,7 +31,7 @@ describe('tests testUtils', () => {
     });
 
     after(async () => {
-      await exec(`rm -rf ${testProjectName}`);
+      await fs.remove(testProjectName);
     });
   }
 

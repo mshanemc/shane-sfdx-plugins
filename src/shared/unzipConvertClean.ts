@@ -26,7 +26,8 @@ export async function retrieveUnzipConvertClean(tmpDir, retrieveCommand, target)
     // const convertResult = await exec(`sfdx force:mdapi:convert -r ./${tmpDir} -d ${target} --json`);
     await exec(`sfdx force:mdapi:convert -r ./${tmpDir} -d ${target} --json`);
     // process.stdout.write(`done (converted ${JSON.parse(convertResult.stdout).result.length} items).  Cleaning up...`);
-    await exec(`rm -rf ./${tmpDir}`);
+    await fs.remove(tmpDir);
+
   } catch (err) {
     ux.errorJson(err);
     // ux.error('Error from conversion--it may have been too much metadata');

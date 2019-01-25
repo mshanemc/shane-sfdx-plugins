@@ -18,7 +18,7 @@ describe('shane:uiapi', () => {
 
   if (!process.env.LOCALONLY) {
     before(async () => {
-      await exec(`rm -rf ${testProjectName}`);
+      await fs.remove(testProjectName);
       await exec(`sfdx force:project:create -n ${testProjectName}`);
       // set up an org
       const configFileLocation = `${testProjectName}/config/project-scratch-def.json`;
@@ -144,7 +144,7 @@ describe('shane:uiapi', () => {
 
     after(async () => {
       await testutils.orgDelete(testProjectName);
-      await exec(`rm -rf ${testProjectName}`);
+      await fs.remove(testProjectName);
     });
 
   }

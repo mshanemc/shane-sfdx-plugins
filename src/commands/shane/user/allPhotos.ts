@@ -71,7 +71,7 @@ export default class AllPhotos extends SfdxCommand {
       this.ux.logJson(photoResult);
     });
 
-    await exec(`rm -rf ${tempRepo}`);
+    await fs.remove(tempRepo);
 
   }
 }

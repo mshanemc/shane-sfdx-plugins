@@ -1,9 +1,9 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai';
-import util = require('util');
-
 import child_process = require('child_process');
+import fs = require('fs-extra');
+import util = require('util');
 
 import testutils = require('../../../helpers/testutils');
 
@@ -16,7 +16,7 @@ describe('shane:github:package:install', () => {
   if (!process.env.LOCALONLY) {
 
     before(async () => {
-      await exec(`rm -rf ${testProjectName}`);
+      await fs.remove(testProjectName);
       await exec(`sfdx force:project:create -n ${testProjectName}`);
       await testutils.orgCreate(testProjectName);
     });
@@ -38,7 +38,7 @@ describe('shane:github:package:install', () => {
 
     after(async () => {
       await testutils.orgDelete(testProjectName);
-      await exec(`rm -rf ${testProjectName}`);
+      await fs.remove(testProjectName);
     });
   }
 

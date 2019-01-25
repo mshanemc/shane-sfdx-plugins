@@ -1,5 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
+import fs = require('fs-extra');
 import util = require('util');
 
 const exec = util.promisify(child_process.exec);
@@ -41,7 +42,7 @@ export default class GithubPackageInstall extends SfdxCommand {
     // this.ux.logJson(JSON.parse(installResult.stdout));
 
     if (!this.flags.keeplocally) {
-      await exec(`rm -rf ${this.flags.repo}`);
+      await fs.remove(this.flags.repo);
     }
 
     return JSON.parse(installResult.stdout);

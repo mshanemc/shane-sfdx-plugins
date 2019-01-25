@@ -13,7 +13,7 @@ const testProjectName = 'testProject';
 describe('shane:static:create', () => {
 
   before(async () => {
-    await exec(`rm -rf ${testProjectName}`);
+    await fs.remove(testProjectName);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
   });
 
@@ -45,7 +45,7 @@ describe('shane:static:create', () => {
   });
 
   after(async () => {
-    await exec(`rm -rf ${testProjectName}`);
+    await fs.remove(testProjectName);
   });
 
 });
