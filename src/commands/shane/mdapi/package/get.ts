@@ -30,6 +30,5 @@ export default class Get extends SfdxCommand {
 
     const retrieveCommand = `sfdx force:mdapi:retrieve -s -p "${this.flags.packagename}" -u ${this.org.getUsername()}  -r ./${tmpDir} -w 30`;
     await ucc.retrieveUnzipConvertClean(tmpDir, retrieveCommand, this.flags.target);
-
   }
 }
