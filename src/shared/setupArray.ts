@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 
-export function setupArray(existing, arrayName) {
+export function setupArray(existing, arrayName: string) {
   if (!existing[arrayName]) {
     existing[arrayName] = []; // doesn't exist
   } else if (existing[arrayName] && !(existing[arrayName] instanceof Array)) {
