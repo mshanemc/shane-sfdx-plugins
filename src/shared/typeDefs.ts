@@ -19,4 +19,12 @@ interface CreateResult {
   message: string;
 }
 
-export { Record, QueryResult, CreateResult };
+interface CustomLabel {
+  fullName: string;
+  value: string;
+  protected: boolean;
+  categories?: string;
+  shortDescription?: string;
+  language?: string;
+}
+export { Record, QueryResult, CreateResult, CustomLabel };
