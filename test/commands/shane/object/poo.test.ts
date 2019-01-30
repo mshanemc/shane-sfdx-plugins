@@ -14,7 +14,7 @@ const api = 'Corgi__c';
 const label = 'Corgi';
 const plural = 'Corgi';
 
-describe('shane:object:create (regular object flavor)', () => {
+describe('shane:object:powerofone', () => {
 
   before(async () => {
     await fs.remove(testProjectName);
@@ -38,7 +38,7 @@ describe('shane:object:create (regular object flavor)', () => {
     expect(parsed.CustomObject.pluralLabel).to.equal(plural);
     expect(parsed.CustomObject.eventType).to.be.undefined;
     expect(parsed.CustomObject.sharingModel).to.equal('ReadWrite');
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('adds poo on custom object', async () => {
 
@@ -59,7 +59,7 @@ describe('shane:object:create (regular object flavor)', () => {
     expect(parsed.CustomField.precision).to.equal('18');
     expect(parsed.CustomField.fullName).to.equal(apiname);
     expect(parsed.CustomField.label).to.equal(fieldLabel);
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('adds poo on standard object that is not local', async () => {
 
@@ -80,7 +80,7 @@ describe('shane:object:create (regular object flavor)', () => {
     expect(parsed.CustomField.precision).to.equal('18');
     expect(parsed.CustomField.fullName).to.equal(apiname);
     expect(parsed.CustomField.label).to.equal(fieldLabel);
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('adds poo on standard object with custom name/label and apply __c', async () => {
 
@@ -101,7 +101,7 @@ describe('shane:object:create (regular object flavor)', () => {
     expect(parsed.CustomField.precision).to.equal('18');
     expect(parsed.CustomField.fullName).to.equal(`${apiname}__c`);
     expect(parsed.CustomField.label).to.equal(fieldLabel);
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('deploys as valid code', async () => {
     if (process.env.LOCALONLY === 'true') {

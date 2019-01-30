@@ -39,7 +39,7 @@ describe('shane:object:create (regular object flavor)', () => {
     expect(parsed.CustomObject.pluralLabel).to.equal(plural);
     expect(parsed.CustomObject.eventType).to.be.undefined;
     expect(parsed.CustomObject.sharingModel).to.equal('ReadWrite');
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('creates an object with all params supplied for a AutoNumber Name field', async () => {
 
@@ -64,7 +64,7 @@ describe('shane:object:create (regular object flavor)', () => {
     expect(parsed.CustomObject.sharingModel).to.equal('ReadWrite');
     expect(parsed.CustomObject.nameField.type).to.equal('AutoNumber');
 
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('creates an object with all params supplied for a AutoNumber Name field and every option turned on', async () => {
 
@@ -98,7 +98,7 @@ describe('shane:object:create (regular object flavor)', () => {
     expect(parsed.CustomObject.enableSharing).to.equal('true');
     expect(parsed.CustomObject.enableStreamingApi).to.equal('true');
 
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('creates a Number field (18,0) on the Object', async () => {
 
@@ -119,7 +119,7 @@ describe('shane:object:create (regular object flavor)', () => {
 
     await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('creates a Text field on the Object', async () => {
 
@@ -139,7 +139,7 @@ describe('shane:object:create (regular object flavor)', () => {
 
     await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('creates a required text field on the Object', async () => {
 
@@ -160,7 +160,7 @@ describe('shane:object:create (regular object flavor)', () => {
 
     await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('creates a checkbox field on the Object', async () => {
 
@@ -180,7 +180,7 @@ describe('shane:object:create (regular object flavor)', () => {
 
     await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('creates a textArea field on the Object', async () => {
 
@@ -200,7 +200,7 @@ describe('shane:object:create (regular object flavor)', () => {
 
     await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
-  }).timeout(1500);
+  }).timeout(5000);
 
   // it('can build a permset', async () => {
   //   const permSetName = 'MyEventPerm';

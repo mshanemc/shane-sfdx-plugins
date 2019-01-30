@@ -37,7 +37,7 @@ describe('shane:object:create (platform event flavor)', () => {
     expect(parsed.CustomObject.label).to.equal(label);
     expect(parsed.CustomObject.pluralLabel).to.equal(plural);
     expect(parsed.CustomObject.eventType).to.equal('StandardVolume');
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('creates a Number field (18,0) on the Event', async () => {
 
@@ -58,7 +58,7 @@ describe('shane:object:create (platform event flavor)', () => {
 
     await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('creates a Text field on the Event', async () => {
 
@@ -78,7 +78,7 @@ describe('shane:object:create (platform event flavor)', () => {
 
     await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('creates a required text field on the Event', async () => {
 
@@ -99,7 +99,7 @@ describe('shane:object:create (platform event flavor)', () => {
 
     await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('creates a checkbox field on the Event', async () => {
 
@@ -119,7 +119,7 @@ describe('shane:object:create (platform event flavor)', () => {
 
     await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('can build a permset', async () => {
     const permSetName = 'MyEventPerm';
@@ -147,7 +147,7 @@ describe('shane:object:create (platform event flavor)', () => {
 
     expect(parsed.PermissionSet.fieldPermissions).to.not.deep.include({ readable: 'true', editable: 'true', field: `${api}.Required_Text_Field__c` });
 
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('deploys as valid code', async () => {
     if (process.env.LOCALONLY === 'true') {

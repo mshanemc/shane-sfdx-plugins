@@ -33,7 +33,7 @@ describe('shane:static:create', () => {
     expect(parsed.StaticResource).to.be.an('object');
     expect(parsed.StaticResource.contentType).to.equal('text/css');
     expect(parsed.StaticResource.fullName).to.equal(name);
-  }).timeout(1500);
+  }).timeout(5000);
 
   it('deploys as valid code', async () => {
     if (process.env.LOCALONLY === 'true') {
