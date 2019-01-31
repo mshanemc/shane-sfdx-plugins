@@ -12,7 +12,7 @@ interface ContentVersionCreateRequest {
 export async function file2CV(conn: Connection, filepath: string, name?: string): Promise<Record> {
   const fileData = await fs.readFile(filepath);
   const cvcr = <ContentVersionCreateRequest> {
-    VersionData: new Buffer(fileData).toString('base64'),
+    VersionData: Buffer.from(fileData).toString('base64'),
     PathOnClient: filepath
   };
   // optinal params
