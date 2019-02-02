@@ -30,23 +30,23 @@ export default class DatasetDownload extends SfdxCommand {
   public async run(): Promise<any> { // tslint:disable-line:no-any
     const conn = this.org.getConnection();
 
-    if (!this.flags.id) {
-      if (!this.flags.name) {
-        throw new Error('you must specify either ID or name.  Use shane:analytics:dataset:list for options');
+    if ((!this.flags.id && !this.flags.name) || (this.flags.id && this.flags.name)) {
+        throw new Error('you must specify either ID or name (not both).  Use shane:analytics:dataset:list for options');
+    }
+
+    const results = <WaveDataSetListResponse> <unknown> await conn.request({
+      method: 'GET',
+      url: `${conn.baseUrl()}/wave/datasets/`
+    });
+    const matched = results.datasets.find( item => item.name === this.flags.name || item.id === this.flags.id);
+    if (matched) {
+      this.flags.id = matched.id;
+      this.flags.name = matched.name;
+      if (!this.flags.versionid) {
+        this.flags.versionid = matched.currentVersionId;
       }
-      const results = <WaveDataSetListResponse> <unknown> await conn.request({
-        method: 'GET',
-        url: `${conn.baseUrl()}/wave/datasets/`
-      });
-      const matched = results.datasets.find( item => item.name === this.flags.name);
-      if (matched) {
-        this.flags.id = matched.id;
-        if (!this.flags.versionid) {
-          this.flags.versionid = matched.currentVersionId;
-        }
-      } else {
-        throw new Error(`Did not find that dataset ${this.flags.name}. Use shane:analytics:dataset:list for options`);
-      }
+    } else {
+      throw new Error(`Did not find that dataset ${this.flags.name || this.flags.id}. Use shane:analytics:dataset:list for options`);
     }
 
     // get the requested datasetVersion
@@ -73,7 +73,7 @@ export default class DatasetDownload extends SfdxCommand {
       body: JSON.stringify({query})
     });
 
-    this.ux.log(`writing ${queryResponse.results.records.length} rows to ${this.flags.target}/${this.flags.id}`);
+    this.ux.log(`writing ${queryResponse.results.records.length} rows to ${this.flags.target}/${this.flags.name}`);
 
     const input = new stream.Readable({ objectMode: true, read() {} });
 
@@ -83,7 +83,7 @@ export default class DatasetDownload extends SfdxCommand {
     await pipeline(
       input,
       new json2csv.Transform({fields: fieldNames}, { objectMode: true }),
-      fs.createWriteStream(`${this.flags.target}/${this.flags.id}.csv`, { encoding: 'utf8' })
+      fs.createWriteStream(`${this.flags.target}/${this.flags.name}.csv`, { encoding: 'utf8' })
     );
   }
 }
