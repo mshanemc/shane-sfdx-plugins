@@ -27,4 +27,40 @@ interface CustomLabel {
   shortDescription?: string;
   language?: string;
 }
-export { Record, QueryResult, CreateResult, CustomLabel };
+
+interface WaveDataset {
+  name: string;
+  currentVersionId: string;
+  createdBy: {
+    name: string;
+  };
+  datasetType: string;
+  id: string;
+}
+
+interface WaveDatasetVersion {
+
+  xmdMain: {
+    dates: [
+      {
+        alias: string;
+      }
+    ],
+    dimensions: [
+      {
+        field: string;
+      }
+    ],
+    measures: [
+      {
+        field: string;
+      }
+    ]
+  };
+}
+
+interface WaveDataSetListResponse {
+  datasets: WaveDataset[];
+}
+
+export { Record, QueryResult, CreateResult, CustomLabel, WaveDataSetListResponse, WaveDatasetVersion };
