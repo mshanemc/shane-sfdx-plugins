@@ -59,9 +59,8 @@ export default class ProjectCreate extends SfdxCommand {
 
   public orgInit(): string {
     return `sfdx force:org:create -f config/project-scratch-def.json -d 1 -s
-    sfdx force:source:push
-    sfdx force:org:open
-    `;
+sfdx force:source:push
+sfdx force:org:open`;
   }
 
   public gitIgnore(): string {
@@ -88,9 +87,13 @@ export default class ProjectCreate extends SfdxCommand {
     const scratch = {
       orgName: this.flags.name,
       edition: 'Developer',
-      orgPreferences: {
-        enabled: ['S1DesktopEnabled', 'PathAssistantsEnabled'],
-        disabled: ['S1EncryptedStoragePref2']
+      settings: {
+        orgPreferenceSettings : {
+          networksEnabled: false,
+          s1DesktopEnabled: true,
+          pathAssistantsEnabled: true,
+          s1EncryptedStoragePref2: false
+        }
       }
     };
 
