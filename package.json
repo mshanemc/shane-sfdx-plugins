@@ -12,6 +12,7 @@
     "@salesforce/command": "^1.2.0",
     "chalk": "^2.4.2",
     "cli-ux": "^4.9.3",
+    "csv-split-stream": "^1.0.2",
     "fs-extra": "^7.0.1",
     "js2xmlparser": "^3.0.0",
     "json2csv": "^4.3.3",

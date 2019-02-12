@@ -14,7 +14,8 @@ export default class DatasetDownload extends SfdxCommand {
   public static description = 'download a dataset as csv';
 
   public static examples = [
-    'sfdx shane:analytics:dataset:download'
+    'sfdx shane:analytics:dataset:download -n YourDataSetName -t myLocalFolder',
+    'sfdx shane:analytics:dataset:download -i 0Fb6A000000gDFxSAM --versionid 0Fc6A000002d8GwSAI -t myLocalFolder -r 100'
   ];
 
   protected static flagsConfig = {
@@ -60,6 +61,10 @@ export default class DatasetDownload extends SfdxCommand {
       ...datasetVersion.xmdMain.measures.map( measure => measure.field)
     ].filter( fieldname => fieldname);
 
+    const xmd = <unknown> await conn.request({
+      method: 'GET',
+      url: `${conn.baseUrl()}/wave/datasets/${this.flags.id}/versions/${this.flags.versionid}/xmds/user`
+    });
     // this.ux.logJson(fieldNames);
 
     const query = `q = load "${this.flags.id}/${this.flags.versionid}"; q = foreach q generate ${fieldNames.map( name => `'${name}' as '${name}'`).join(', ')}; q = limit q ${this.flags.rows}`;
@@ -73,7 +78,7 @@ export default class DatasetDownload extends SfdxCommand {
       body: JSON.stringify({query})
     });
 
-    this.ux.log(`writing ${queryResponse.results.records.length} rows to ${this.flags.target}/${this.flags.name}`);
+    this.ux.log(`writing ${queryResponse.results.records.length} rows to ${this.flags.target}/${this.flags.name}, with xmd file ${this.flags.name}_XMD.json`);
 
     const input = new stream.Readable({ objectMode: true, read() {} });
 
@@ -85,5 +90,7 @@ export default class DatasetDownload extends SfdxCommand {
       new json2csv.Transform({fields: fieldNames}, { objectMode: true }),
       fs.createWriteStream(`${this.flags.target}/${this.flags.name}.csv`, { encoding: 'utf8' })
     );
+
+    await fs.writeJSON(`${this.flags.target}/${this.flags.name}_XMD.json`, xmd);
   }
 }
