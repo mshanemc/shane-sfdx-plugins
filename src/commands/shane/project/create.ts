@@ -115,7 +115,7 @@ sfdx force:org:open`;
           'force-app'
         ],
         exec: 'sfdx force:source:push',
-        ext: 'cls,xml,json,js,trigger,cmp,css,design,svg',
+        ext: 'cls,xml,json,js,trigger,cmp,css,design,svg,html',
         delay: '2500'
       },
       repository: {
