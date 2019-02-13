@@ -114,7 +114,7 @@ export default class Bump extends SfdxCommand {
             cli.action.start(`Releasing: sfdx force:package:version:promote -n -p ${actualResult.Package2VersionId} -v ${this.hubOrg.getUsername()} --json`);
             await exec(`sfdx force:package:version:promote -n -p ${actualResult.Package2VersionId} -v ${this.hubOrg.getUsername()} --json`);
             cli.action.stop();
-            this.ux.log(chalk.green(`Version released. May take several minutes to become available to destination org.  Install with sfdx force:package:install -r -p 20 -w 20 -i ${actualResult.SubscriberPackageVersionId} -u destinationOrgAlias`));
+            this.ux.log(chalk.green(`Version released. May take several minutes to become available to destination org.  Install with sfdx force:package:install -r -b 20 -w 20 -p ${actualResult.SubscriberPackageVersionId} -u destinationOrgAlias`));
         } else {
           return JSON.parse(createResult.stdout);
         }
