@@ -44,6 +44,9 @@ interface WaveDatasetVersion {
     dates: [
       {
         alias: string;
+        fields: {
+          fullField: string;
+        }
       }
     ],
     dimensions: [

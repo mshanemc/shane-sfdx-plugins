@@ -56,14 +56,25 @@ export default class DatasetDownload extends SfdxCommand {
       url: `${conn.baseUrl()}/wave/datasets/${this.flags.id}/versions/${this.flags.versionid}`
     });
 
+    const fieldsFromDates = datasetVersion.xmdMain.dates.map( d => d.fields);
+
     const fieldNames = [
       ...datasetVersion.xmdMain.dimensions.map( dim => dim.field),
       ...datasetVersion.xmdMain.measures.map( measure => measure.field)
-    ].filter( fieldname => fieldname);
-
-    const xmd = <unknown> await conn.request({
-      method: 'GET',
-      url: `${conn.baseUrl()}/wave/datasets/${this.flags.id}/versions/${this.flags.versionid}/xmds/user`
+    ].filter( fieldname => {
+      if (!fieldname) return false; // fieldname has to be present
+      if (fieldsFromDates.map(d => d.fullField).includes(fieldname)) {
+        this.ux.log(`found matching fieldname: ${fieldname}`);
+        return true; // it's the original field
+      }
+      let returnValue = true;
+      fieldsFromDates.forEach( d => {
+        if ( Object.values(d).includes(fieldname)) {
+          returnValue = false; // it's one of the derived fields
+        }
+      });
+      returnValue ? this.ux.log(`not part of fieldsFromDates: ${fieldname}`) : this.ux.log(`rejecting fieldname: ${fieldname} because contained in fieldsFromDates`);
+      return returnValue;
     });
     // this.ux.logJson(fieldNames);
 
@@ -78,7 +89,7 @@ export default class DatasetDownload extends SfdxCommand {
       body: JSON.stringify({query})
     });
 
-    this.ux.log(`writing ${queryResponse.results.records.length} rows to ${this.flags.target}/${this.flags.name}, with xmd file ${this.flags.name}_XMD.json`);
+    this.ux.log(`writing ${queryResponse.results.records.length} rows to ${this.flags.target}/${this.flags.name}`);
 
     const input = new stream.Readable({ objectMode: true, read() {} });
 
@@ -91,6 +102,5 @@ export default class DatasetDownload extends SfdxCommand {
       fs.createWriteStream(`${this.flags.target}/${this.flags.name}.csv`, { encoding: 'utf8' })
     );
 
-    await fs.writeJSON(`${this.flags.target}/${this.flags.name}_XMD.json`, xmd);
   }
 }
