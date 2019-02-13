@@ -290,7 +290,7 @@ export default class FieldCreate extends SfdxCommand {
 
     fs.writeFileSync(fieldMetaPath, xml);
 
-    this.ux.log(chalk.green(`Created ${fieldMetaPath}`));
+    this.ux.log(`Created ${chalk.green(fieldMetaPath)}.  Add perms with ${chalk.cyan(`sfdx shane:permset:create -o ${this.flags.object} -f ${this.flags.api} -n yourPermSetName`)}`);
   }
 
 }
