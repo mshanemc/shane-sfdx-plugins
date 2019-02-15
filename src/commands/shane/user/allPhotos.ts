@@ -62,7 +62,7 @@ export default class AllPhotos extends SfdxCommand {
 
     users.records.forEach(async (user, index) => {
       this.ux.log(`going to upload ${photos[index % photos.length]} for ${user.FirstName} ${user.LastName}`);
-      const photoCV = <Record> await localFile2CV.file2CV(conn, `${tempRepo}/img/${photos[ Math.floor(Math.random() * photos.length) ]}`);
+      const photoCV = <Record> await localFile2CV.file2CV(conn, `${tempRepo}/img/${photos[ index % photos.length]}`);
       options.uri = `${conn.instanceUrl}/services/data/v42.0/connect/user-profiles/${user.Id}/photo`;
       options.body = {
         fileId: photoCV.ContentDocumentId
