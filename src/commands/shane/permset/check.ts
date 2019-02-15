@@ -6,7 +6,15 @@ export default class PermCheck extends SfdxCommand {
   public static description = 'who has access to what';
 
   public static examples = [
-    'sfdx shane:permset:check -o Project__c'
+    `sfdx shane:permset:check -o Project__c --profiles --permsets
+    // list the profiles and permsets that have Read access to the object
+    `,
+    `sfdx shane:permset:check -o Project__c -f Due_Date__c --fieldlevel Edit --profiles --permsets
+    // list the profiles and permsets that have Edit access to the field on the object
+    `,
+    `sfdx shane:permset:check -o Project__c -f Due_Date__c --users
+    // list the users that have Read access to the field on the object, and the profile/permset(s) that are granting it
+    `
   ];
 
   protected static flagsConfig = {
@@ -14,7 +22,7 @@ export default class PermCheck extends SfdxCommand {
     field: flags.string({char: 'f', description: 'what field to check'}),
     profiles: flags.boolean({description: 'return names/ids of profiles'}),
     permsets: flags.boolean({description: 'return names/ids of permission sets'}),
-    users: flags.boolean({description: 'return names/ids of users with those profiles and/or permission sets'}),
+    users: flags.boolean({description: 'return names/ids of users with those profiles and/or permission sets', exclusive: ['permsets', 'profiles']}),
     fieldlevel: flags.string({description: 'what level of perms are you looking for', default: 'Read', options: ['Read', 'Edit']}),
     objectlevel: flags.string({description: 'what level of perms are you looking for', default: 'Read', options: ['Read', 'Edit', 'Create', 'Delete', 'ViewAll', 'ModifyAll']})
   };
