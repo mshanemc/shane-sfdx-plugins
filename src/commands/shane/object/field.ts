@@ -160,7 +160,7 @@ export default class FieldCreate extends SfdxCommand {
       if (this.flags.length >= 0) {
         outputJSON.length = this.flags.length;
       } else {
-        outputJSON.length = await cli.prompt('Length? (Max 131072)');
+        outputJSON.length = await cli.prompt('Length? (Max 131072)', { default: '131072' });
       }
       outputJSON.visibleLines = 3;
     }
