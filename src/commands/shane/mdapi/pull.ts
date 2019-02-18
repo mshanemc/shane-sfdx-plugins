@@ -200,7 +200,7 @@ const getTypeList = theFlags => {
   let outputTypes = [];
   Object.keys(booleanFlags).forEach( flag => {
     if (theFlags[flag]) {
-      outputTypes = [...outputTypes, ...theFlags[flag]];
+      outputTypes = [...outputTypes, ...booleanFlags[flag]];
     }
   });
   return outputTypes;
