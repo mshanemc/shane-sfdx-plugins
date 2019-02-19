@@ -180,10 +180,10 @@ export default class ObjectCreate extends SfdxCommand {
         this.flags.feeds = await cli.confirm('enable feeds? (y/n)');
       }
       if (this.flags.interactive && !this.flags.reports) {
-        this.flags.feeds = await cli.confirm('enable reports? (y/n)');
+        this.flags.reports = await cli.confirm('enable reports? (y/n)');
       }
       if (this.flags.interactive && !this.flags.history) {
-        this.flags.feeds = await cli.confirm('enable history? (y/n)');
+        this.flags.history = await cli.confirm('enable history? (y/n)');
       }
       if (this.flags.interactive && !this.flags.activities) {
         this.flags.activities = await cli.confirm('enable activities? (y/n)');
