@@ -50,7 +50,7 @@ export default class Photo extends SfdxCommand {
       if (groups.totalSize > 1) {
         throw new Error('There are more than 1 result for that name.');
       } else if (groups.totalSize === 0) {
-        throw new Error('User not found');
+        throw new Error('Group not found');
       } else {
         group = groups.records[0];
       }
