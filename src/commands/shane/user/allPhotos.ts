@@ -42,13 +42,16 @@ export default class AllPhotos extends SfdxCommand {
     }
 
     let photos;
+    let folderPath;
     // get our bad profile photos
     if (this.flags.folder) {
-      photos = await fs.readdir(this.flags.folder);
+      folderPath = this.flags.folder;
     } else {
+      folderPath = `${tempRepo}/img`;
       await exec(`git clone ${this.flags.repo} ${tempRepo}`);
-      photos = await fs.readdir(`${tempRepo}/img`);
     }
+
+    photos = await fs.readdir(folderPath);
 
     const options = {
       method: 'POST',
@@ -62,7 +65,7 @@ export default class AllPhotos extends SfdxCommand {
 
     users.records.forEach(async (user, index) => {
       this.ux.log(`going to upload ${photos[index % photos.length]} for ${user.FirstName} ${user.LastName}`);
-      const photoCV = <Record> await localFile2CV.file2CV(conn, `${tempRepo}/img/${photos[ index % photos.length]}`);
+      const photoCV = <Record> await localFile2CV.file2CV(conn, `${folderPath}/${photos[ index % photos.length]}`);
       options.uri = `${conn.instanceUrl}/services/data/v42.0/connect/user-profiles/${user.Id}/photo`;
       options.body = {
         fileId: photoCV.ContentDocumentId
@@ -72,6 +75,5 @@ export default class AllPhotos extends SfdxCommand {
     });
 
     await fs.remove(tempRepo);
-
   }
 }
