@@ -18,7 +18,7 @@ export default class Photo extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    group: flags.string({char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency'}),
+    group: flags.string({char: 'g', description: 'the name of the group name you want to set the photo/banner for'}),
     file: flags.filepath({char: 'f', description: 'local path of the photo to use', exclusive: ['banner']}),
     banner: flags.filepath({char: 'b', description: 'local path of the chatter banner photo to use', exclusive: ['file']})
   };
