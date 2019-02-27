@@ -14,7 +14,8 @@ export default class ThemeActivate extends SfdxCommand {
   protected static requiresUsername = true;
 
   protected static flagsConfig = {
-    name: flags.string({char: 'n', required: true, description: 'name of the theme to activate'})
+    name: flags.string({char: 'n', required: true, description: 'name of the theme to activate'}),
+    showbrowser: flags.boolean({char: 'b', description: 'show the browser...useful for local debugging'})
   };
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
@@ -32,7 +33,7 @@ export default class ThemeActivate extends SfdxCommand {
     const themeId = results.records[0].Id;
     this.ux.startSpinner(`found matching theme with Id ${themeId}...starting headless browser`);
 
-    const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+    const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
     const context = browser.defaultBrowserContext();
 
     // get the force-org-open url for your scratch org
@@ -45,6 +46,7 @@ export default class ThemeActivate extends SfdxCommand {
     await page.goto(url, {
       waitUntil: 'networkidle2'
     });
+    await page.waitForSelector( `tr[data-row-key-value='${themeId}'`, { visible : true } );
 
     // open up the dropdown menu to populate the Activate link
     await page.evaluate( localThemeId => {
