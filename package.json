@@ -16,7 +16,7 @@
     "fs-extra": "^7.0.1",
     "js2xmlparser": "^3.0.0",
     "json2csv": "^4.3.5",
-    "lodash.unionby": "^4.8.0",
+    "lodash": "^4.17.11",
     "npm": "^6.8.0",
     "puppeteer": "^1.12.2",
     "puppeteer-core": "^1.12.2",
@@ -27,7 +27,7 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1.21.2",
+    "@oclif/dev-cli": "1.21.2",
     "@oclif/plugin-help": "^2.1.6",
     "@oclif/test": "^1.2.4",
     "@oclif/tslint": "^1.1.2",
