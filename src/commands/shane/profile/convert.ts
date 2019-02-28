@@ -2,7 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
-import * as _ from 'lodash';
+import unionBy from 'lodash.unionBy';
 import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
 import * as options from '../../../shared/js2xmlStandardOptions';
 import { setupArray } from '../../../shared/setupArray';
@@ -93,7 +93,7 @@ export default class PermSetConvert extends SfdxCommand {
         existing = setupArray(existing, item.permSetType);
 
         this.ux.log(`copying ${item.profileType} to perm set`);
-        existing[item.permSetType] = _.unionBy(existing[item.permSetType], profile[item.profileType], item.key); // merge profile with existing permset array
+        existing[item.permSetType] = unionBy(existing[item.permSetType], profile[item.profileType], item.key); // merge profile with existing permset array
 
         // special handling for applicationVisibility (default not allowed in permset)
         if (item.permSetType === 'applicationVisibilities') {
