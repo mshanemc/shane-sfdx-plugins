@@ -6,6 +6,8 @@ import fs = require('fs-extra');
 import util = require('util');
 
 const exec = util.promisify(child_process.exec);
+const retrySeconds = 20;
+const maxTries = 120;
 
 export default class ScratchOrgReAuth extends SfdxCommand {
 
@@ -30,7 +32,6 @@ export default class ScratchOrgReAuth extends SfdxCommand {
   public async run(): Promise<any> { // tslint:disable-line:no-any
     const username = this.org.getUsername();
 
-    const maxTries = 60;
     const hubInfo = this.hubOrg.getConnection().getAuthInfoFields();
 
     // validate that this'll work for jwt
@@ -43,6 +44,7 @@ export default class ScratchOrgReAuth extends SfdxCommand {
     let tryCounter = 0;
 
     const timeout = ms => new Promise(res => setTimeout(res, ms));
+    let hasError;
 
     do {
 
@@ -51,30 +53,32 @@ export default class ScratchOrgReAuth extends SfdxCommand {
         // await exec(`sfdx force:auth:logout -u ${username} -p`);
         AuthInfo.clearCache(username);
         await exec(`sfdx force:auth:jwt:grant --json --clientid ${hubInfo.clientId} --username ${username} --jwtkeyfile ${hubInfo.privateKey} --instanceurl https://test.salesforce.com -s`);
+        hasError = false;
       } catch (err) {
-        if (err.message.includes('This org appears to have a problem with its OAuth configuration')) {
+        const parsedOut = JSON.parse(err.stdout);
+        console.log(err);
+        if (parsedOut.message.includes('This org appears to have a problem with its OAuth configuration')) {
           this.ux.log('login not available yet.');
-        } else if (err.message.includes('This command requires a scratch org username set either with a flag or by default in the config.')) {
+          hasError = true;
+        } else if (parsedOut.message.includes('This command requires a scratch org username set either with a flag or by default in the config.')) {
           this.ux.log('no default scratch org username set');
+          hasError = true;
         } else {
-          this.ux.log(err.message);
+          this.ux.log(parsedOut.message);
           keepTrying = false;
         }
-        // this.ux.log(`error: ${JSON.parse(loginResult.stdout).message}`);
       }
 
       const auth = await AuthInfo.create({username});
       const authFields = auth.getFields();
 
-      // this.ux.logJson(authFields);
-
-      if (authFields.instanceUrl.match(/(.my.salesforce.com)/g)) {
+      if (!hasError && authFields.instanceUrl.match(/(.my.salesforce.com)/g)) {
         this.ux.log(`domain is ${authFields.instanceUrl}`);
         keepTrying = false;
         return authFields;
       } else if (this.flags.requirecustomdomain) {
-        this.ux.log(`domain was ${authFields.instanceUrl}.  Pausing to wait 1 minute before checking domain again (${tryCounter}/${maxTries})`);
-        await timeout(60000);
+        this.ux.log(`domain was ${authFields.instanceUrl}.  Pausing to wait ${retrySeconds} seconds before checking domain again (${tryCounter}/${maxTries})`);
+        await timeout(retrySeconds * 1000);
       } else {
         // this.ux.logJson(authFields);
         return authFields;
