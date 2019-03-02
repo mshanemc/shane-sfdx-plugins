@@ -56,7 +56,6 @@ export default class ScratchOrgReAuth extends SfdxCommand {
         hasError = false;
       } catch (err) {
         const parsedOut = JSON.parse(err.stdout);
-        console.log(err);
         if (parsedOut.message.includes('This org appears to have a problem with its OAuth configuration')) {
           this.ux.log('login not available yet.');
           hasError = true;
