@@ -30,9 +30,9 @@ export default class ScratchOrgReAuth extends SfdxCommand {
   protected static requiresDevhubUsername = true;
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
-    const username = this.org.getUsername();
+    const username = await this.org.getUsername();
 
-    const hubInfo = this.hubOrg.getConnection().getAuthInfoFields();
+    const hubInfo = await this.hubOrg.getConnection().getAuthInfoFields();
 
     // validate that this'll work for jwt
     assert.ok(hubInfo.privateKey, 'private key not present...did you use jwt auth flow?');
