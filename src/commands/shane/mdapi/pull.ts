@@ -75,7 +75,7 @@ export default class Pull extends SfdxCommand {
     }
     const all = describeResult.metadataObjects;
 
-    // speial case
+    // special case
     if (this.flags.object) {
       mdTypes.push({
         members: this.flags.object,
