@@ -111,9 +111,14 @@ export default class Pull extends SfdxCommand {
           // get a list of all the folders for this type
           // this.ux.log(`checking item ${item.xmlName}`);
           const finalItemList = [];
-          const folderListMetadata = await conn.metadata.list([{ type: item.xmlName === 'EmailTemplate' ? 'EmailFolder' : `${item.xmlName}Folder`, folder: null} ], this.flags.apiversion );
+          let folderListMetadata = await conn.metadata.list([{ type: item.xmlName === 'EmailTemplate' ? 'EmailFolder' : `${item.xmlName}Folder`, folder: null} ], this.flags.apiversion );
 
           if (folderListMetadata) {
+            // correct in case it's single object instead of an array
+            if (!Array.isArray(folderListMetadata)) {
+              folderListMetadata = [folderListMetadata];
+            }
+
             for (const folder of folderListMetadata) {
               finalItemList.push(folder.fullName);
 
