@@ -4,6 +4,11 @@ import { Duration } from '@salesforce/kit';
 
 export default class CDCStream extends SfdxCommand {
 
+  public static examples = [
+    'sfdx shane:cdc:stream // get all the change events',
+    'sfdx shane:cdc:stream -o Account // get all the change events on a single object'
+  ];
+
   protected static flagsConfig = {
     object: flags.string({char: 'o', description: 'subscribe to change events for only a single object (api name, including __c)'})
   };
