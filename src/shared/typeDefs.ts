@@ -66,4 +66,14 @@ interface WaveDataSetListResponse {
   datasets: WaveDataset[];
 }
 
-export { Record, QueryResult, CreateResult, CustomLabel, WaveDataSetListResponse, WaveDatasetVersion };
+interface CDCEvent {
+  schema: string;
+  payload: {
+    ChangeEventHeader: {
+      entityType: string;
+      recordIds: string[];
+    }
+  };
+}
+
+export { Record, QueryResult, CreateResult, CustomLabel, WaveDataSetListResponse, WaveDatasetVersion, CDCEvent };
