@@ -1,5 +1,4 @@
 /* tslint:disable:no-unused-expression */
-import { expect } from 'chai';
 import child_process = require('child_process');
 import fs = require('fs-extra');
 import util = require('util');
@@ -11,7 +10,7 @@ const exec = util.promisify(child_process.exec);
 const profileName = 'Admin';
 const newPermSetName = 'TestNewPerm';
 const goldenSourceRepo = './test/repos/profileTestRepo';
-const testProjectName = 'testProject';
+const testProjectName = 'testProjectProfileConvert';
 
 const newPermsetPath = `${testProjectName}/force-app/main/default/permissionsets/${newPermSetName}.permissionset-meta.xml`;
 const originalProfilePath = `${testProjectName}/force-app/main/default/profiles/${profileName}.profile-meta.xml`;

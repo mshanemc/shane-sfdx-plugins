@@ -1,6 +1,5 @@
 /* tslint:disable:no-unused-expression */
 
-import { expect } from 'chai';
 import fs = require('fs-extra');
 import util = require('util');
 
@@ -9,7 +8,7 @@ import child_process = require('child_process');
 import testutils = require('../../../helpers/testutils');
 
 const exec = util.promisify(child_process.exec);
-const testProjectName = 'testProject';
+const testProjectName = 'testProjectRemoteSiteSettings';
 
 describe('shane:remotesite:create', () => {
 

@@ -1,6 +1,5 @@
 /* tslint:disable:no-unused-expression */
 
-import { expect } from 'chai';
 import fs = require('fs-extra');
 import util = require('util');
 

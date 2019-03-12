@@ -1,6 +1,5 @@
 /* tslint:disable:no-unused-expression */
 
-import { expect } from 'chai';
 import fs = require('fs-extra');
 import util = require('util');
 
@@ -10,7 +9,7 @@ import testutils = require('../../../helpers/testutils');
 
 const exec = util.promisify(child_process.exec);
 
-const testProjectName = 'testProject';
+const testProjectName = 'testProjectRegularObjectCreate';
 const api = 'Corgi__c';
 const label = 'Corgi';
 const plural = 'Corgi';
