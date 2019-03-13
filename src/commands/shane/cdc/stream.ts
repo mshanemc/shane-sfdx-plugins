@@ -2,7 +2,11 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { StreamingClient } from '@salesforce/core';
 import { Duration } from '@salesforce/kit';
 import * as fs from 'fs-extra';
-// import { CDCEvent } from './../../../shared/typeDefs';
+import { CDCEvent } from './../../../shared/typeDefs';
+
+const writeJSONOptions = {
+  spaces: 2
+};
 
 export default class CDCStream extends SfdxCommand {
 
@@ -26,13 +30,10 @@ export default class CDCStream extends SfdxCommand {
       return { completed: false };
     };
 
-    const streamProcessorToFile = message => {
-      fs.outputJSON(
-        `${this.flags.dir}/records/${message.payload.ChangeEventHeader.entityName}/${message.payload.ChangeEventHeader.recordIds[0]}.json`,
-        message
-      );
+    const streamProcessorToFile = (message: CDCEvent ) => {
+      const filename = `${this.flags.dir}/cdc/records/${message.payload.ChangeEventHeader.entityName}/${message.event.replayId}.json`;
+      fs.outputJSON( filename, message, writeJSONOptions );
       return { completed: false };
-
     };
 
     const endpoint = this.flags.object ? `/data/${this.flags.object.replace('__c', '__')}ChangeEvent` : '/data/ChangeEvents';

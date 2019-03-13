@@ -70,9 +70,13 @@ interface CDCEvent {
   schema: string;
   payload: {
     ChangeEventHeader: {
-      entityType: string;
+      entityName: string;
+      changeType: string;
       recordIds: string[];
     }
+  };
+  event: {
+    replayId: number
   };
 }
 

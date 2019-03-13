@@ -27,22 +27,23 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
     "@oclif/dev-cli": "1.21.2",
     "@oclif/plugin-help": "^2.1.6",
     "@oclif/test": "^1.2.4",
     "@oclif/tslint": "^1.1.2",
     "@salesforce/dev-config": "^1.4.4",
-    "@types/chai": "^4.1.7",
     "@types/fs-extra": "^5.0.5",
+    "@types/jest": "^24.0.11",
     "@types/jsforce": "^1.9.5",
     "@types/lodash": "^4.14.121",
-    "@types/mocha": "^5.2.6",
     "@types/node": "^10.12.27",
     "@types/puppeteer": "^1.12.1",
     "@types/request-promise-native": "^1.0.15",
     "@types/unzipper": "^0.9.1",
-    "chai": "^4.2.0",
-    "mocha": "^5.2.0",
+    "jest": "^24.3.1",
+    "ts-jest": "^24.0.0",
     "ts-node": "^7.0.1",
     "tslint": "^5.13.0",
     "typescript": "^3.3.3333"
@@ -100,8 +101,9 @@
     "prepare": "yarn run build && oclif-dev manifest",
     "prepublishOnly": "yarn run build && oclif-dev manifest",
     "preversion": "yarn run clean",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
-    "test:watch": "mocha --forbid-only --watch --bail \"test/**/*.test.ts\"",
+    "test": "yarn run prepare && jest --runInBand",
+    "test:parallel": "yarn run prepare && jest",
+    "test:watch": "yarn run prepare && jest --watch --runInBand",
     "version": "oclif-dev readme && git add README.md"
   }
 }

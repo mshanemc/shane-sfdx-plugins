@@ -1,6 +1,5 @@
 /* tslint:disable:no-unused-expression */
 
-import { expect } from 'chai';
 import fs = require('fs-extra');
 import util = require('util');
 
@@ -17,7 +16,9 @@ const plural = 'Corgi';
 
 describe('shane:object:create (regular object flavor)', () => {
 
-  before(async () => {
+  jest.setTimeout(testutils.localTimeout);
+
+  beforeAll(async () => {
     await fs.remove(testProjectName);
     await exec(`sfdx force:project:create -n ${testProjectName}`);
   });
@@ -27,37 +28,37 @@ describe('shane:object:create (regular object flavor)', () => {
     // `sfdx shane:object:create --label "Platypus" --plural "${plural}" --api Platypus__b --directory /my / project / path
 
     await exec(`sfdx shane:object:create --type custom --label "${label}" --plural "${plural}" --api ${api} --nametype Text --sharingmodel ReadWrite`, { cwd: testProjectName });
-    expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}`)).to.be.true;
-    expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields`)).to.be.true;
-    expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`)).to.be.true;
+    expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}`)).toBe(true);
+    expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields`)).toBe(true);
+    expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`)).toBe(true);
 
     const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
 
-    expect(parsed.CustomObject).to.be.an('object');
-    expect(parsed.CustomObject.deploymentStatus).to.equal('Deployed');
-    expect(parsed.CustomObject.label).to.equal(label);
-    expect(parsed.CustomObject.pluralLabel).to.equal(plural);
-    expect(parsed.CustomObject.eventType).to.be.undefined;
-    expect(parsed.CustomObject.sharingModel).to.equal('ReadWrite');
+    expect(parsed.CustomObject.deploymentStatus).toBe('Deployed');
+    expect(parsed.CustomObject.label).toBe(label);
+    expect(parsed.CustomObject.pluralLabel).toBe(plural);
+    expect(parsed.CustomObject.eventType).toBeUndefined();
+    expect(parsed.CustomObject.sharingModel).toBe('ReadWrite');
 
     await exec(`sfdx shane:object:tab --object ${api} --icon 1`, { cwd: testProjectName });
     const parsedTab = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/tabs//${api}.tab-meta.xml`);
-    expect(parsedTab.CustomTab).to.be.an('object');
-    expect(parsedTab.CustomTab.customObject).to.equal('true');
-    expect(parsedTab.CustomTab.mobileReady).to.equal('false');
-    expect(parsedTab.CustomTab.motif).to.equal('Custom1: Heart');
-  }).timeout(5000);
+    expect(parsedTab.CustomTab.customObject).toBe('true');
+    expect(parsedTab.CustomTab.mobileReady).toBe('false');
+    expect(parsedTab.CustomTab.motif).toBe('Custom1: Heart');
+  });
 
   it('deploys as valid code', async () => {
+    jest.setTimeout(testutils.remoteTimeout);
+
     if (process.env.LOCALONLY === 'true') {
       console.log('skipping online-only test');
     } else {
       const deploySuccess = await testutils.itDeploys(testProjectName);
-      expect(deploySuccess).to.be.true;
+      expect(deploySuccess).toBe(true);
     }
   });
 
-  after(async () => {
+  afterAll(async () => {
     await fs.remove(testProjectName);
   });
 });

@@ -1,6 +1,5 @@
 /* tslint:disable:no-unused-expression */
 
-import { expect } from 'chai';
 import child_process = require('child_process');
 import fs = require('fs-extra');
 import util = require('util');
@@ -8,16 +7,17 @@ import util = require('util');
 import testutils = require('../../../helpers/testutils');
 
 const exec = util.promisify(child_process.exec);
-const testProjectName = 'testProject';
+const testProjectName = 'testProjectUIAPI';
 const maxBuffer = 1000 * 1024;
 
 describe('shane:uiapi', () => {
 
+  jest.setTimeout(testutils.remoteTimeout);
   let recordId: string;
   let recordIds: string[];
 
   if (!process.env.LOCALONLY) {
-    before(async () => {
+    beforeAll(async () => {
       await fs.remove(testProjectName);
       await exec(`sfdx force:project:create -n ${testProjectName}`);
       // set up an org
@@ -30,15 +30,13 @@ describe('shane:uiapi', () => {
 
       const { stdout } = await exec('sfdx force:data:soql:query -q "select id from account" --json', { cwd: testProjectName });
       const accounts = JSON.parse(stdout).result.records;
-      expect(accounts).to.be.an('array');
-      expect(accounts[0]).to.have.property('Id');
+      expect(accounts[0]).toHaveProperty('Id');
 
       recordId = accounts[0].Id;
       recordIds = accounts.map(account => account.Id);
 
-      expect(recordId).to.be.a('string');
-      expect(recordIds).to.be.an('array');
-      expect(recordIds.length).to.equal(accounts.length);
+      expect(typeof recordId).toBe('string');
+      expect(recordIds).toHaveLength(accounts.length);
     });
 
     it('tests recordui with single recordId', async () => {
@@ -105,9 +103,10 @@ describe('shane:uiapi', () => {
       const apiName = 'Account';
       const result = await exec(`sfdx shane:uiapi:objectinfo -o ${apiName} --json`, { cwd: testProjectName, maxBuffer });
       const output = JSON.parse(result.stdout).result;
-      expect(output).to.be.an('object').with.property('apiName').equals('Account');
-      expect(output).to.be.an('object').with.property('eTag');
-      expect(output).to.be.an('object').with.property('fields');
+      expect(output).toHaveProperty('apiName');
+      expect(output.apiName).toBe('Account');
+      expect(output).toHaveProperty('eTag');
+      expect(output).toHaveProperty('fields');
     });
 
     it('tests getrecord', async () => {
@@ -123,26 +122,26 @@ describe('shane:uiapi', () => {
     });
 
     const looksValidRecord = output => {
-      expect(output.eTag).to.be.a('string');
-      expect(output.apiName).to.equal('Account');
-      expect(output.fields).to.be.an('object').with.property('Name');
+      expect(typeof output.eTag).toBe('string');
+      expect(output.apiName).toBe('Account');
+      expect(output.fields).toHaveProperty('Name');
     };
 
     const looksValidSingleRecordUI = output => {
-      expect(output.eTag).to.be.a('string');
-      expect(output.records).to.be.an('object').with.property(recordId);
-      expect(output.objectInfos).to.be.an('object').with.property('Account');
+      expect(typeof output.eTag).toBe('string');
+      expect(output.records).toHaveProperty(recordId);
+      expect(output.objectInfos).toHaveProperty('Account');
     };
 
     const looksValidMultipleRecordUI = output => {
-      expect(output.eTag).to.be.a('string');
+      expect(typeof output.eTag).toBe('string');
       recordIds.forEach(id => {
-        expect(output.records).to.be.an('object').with.property(id);
+        expect(output.records).toHaveProperty(id);
       });
-      expect(output.objectInfos).to.be.an('object').with.property('Account');
+      expect(output.objectInfos).toHaveProperty('Account');
     };
 
-    after(async () => {
+    afterAll(async () => {
       await testutils.orgDelete(testProjectName);
       await fs.remove(testProjectName);
     });

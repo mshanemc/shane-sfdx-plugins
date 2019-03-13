@@ -1,8 +1,7 @@
+import child_process = require('child_process');
 import fs = require('fs-extra');
 import util = require('util');
 import xml2js = require('xml2js');
-
-import child_process = require('child_process');
 
 const exec = util.promisify(child_process.exec);
 
@@ -23,7 +22,9 @@ export async function orgCreate(testProjectName: string) {
 }
 
 export async function orgDelete(testProjectName: string) {
-  const deleteResult = await exec('sfdx shane:org:delete --json', { cwd: testProjectName });
+  const { stdout } = await exec('sfdx force:config:list --json', { cwd: testProjectName });
+  const username = JSON.parse(stdout).result.find(item => item.key === 'defaultusername').value;
+  const deleteResult = await exec(`sfdx force:org:delete -u ${username} --json -p`, { cwd: testProjectName });
   return deleteResult;
 }
 
@@ -40,3 +41,6 @@ export async function itDeploys(testProjectName: string) {
 
   return result.status === 0;
 }
+
+export const localTimeout = 50000;
+export const remoteTimeout = 150000;
