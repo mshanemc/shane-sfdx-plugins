@@ -11,10 +11,11 @@ const testProjectName = 'testProjectGithubPackageInstall';
 const username = 'mshanemc';
 
 describe('shane:github:package:install', () => {
+  jest.setTimeout(testutils.remoteTimeout);
 
   if (!process.env.LOCALONLY) {
 
-    before(async () => {
+    beforeAll(async () => {
       await fs.remove(testProjectName);
       await exec(`sfdx force:project:create -n ${testProjectName}`);
       await testutils.orgCreate(testProjectName);
@@ -26,16 +27,16 @@ describe('shane:github:package:install', () => {
       const results = await exec(`sfdx shane:github:package:install -g ${username} -r ${repo} --json`, { cwd: testProjectName });
 
       // console.log(results);
-      expect(results).to.be.an('object');
-      expect(results.stdout).to.be.a('string');
+      expect(results).toBeTruthy();
+      expect(results.stdout).toBeTruthy();
       const stdout = JSON.parse(results.stdout);
       // console.log(stdout);
       // console.log(stdout.status);
-      expect(stdout.status).to.equal(0);
+      expect(stdout.status).toBe(0);
 
     });
 
-    after(async () => {
+    afterAll(async () => {
       await testutils.orgDelete(testProjectName);
       await fs.remove(testProjectName);
     });

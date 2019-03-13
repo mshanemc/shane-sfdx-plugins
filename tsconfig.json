@@ -9,9 +9,14 @@
     "baseUrl": "./",
     "paths" : {
       "*" : ["./node_modules/@salesforce/core/typings/*"]
-    }
+    },
+    "types": ["node", "jest", "fs-extra", "moment", "request", "request-promise-native"]
   },
   "include": [
     "./src/**/*",
+  ],
+  "exclude": [
+    "./test/**",
+    "./test*"
   ]
 }
