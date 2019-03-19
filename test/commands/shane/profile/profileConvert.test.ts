@@ -43,6 +43,9 @@ describe('profile convert (just create a permset from a profile)', () => {
     expect(Array.isArray(newPermSet.recordTypeVisibilities)).toBe(true);
     expect(Array.isArray(newPermSet.tabSettings)).toBe(true);
 
+    newPermSet.tabSettings.map(ts => {
+      expect(['Available', 'Visible', 'None']).toContain(ts.visibility);
+    });
   });
 
   test('does a simple convert of the Admin profile and makes a skinny clone', async () => {
@@ -95,6 +98,16 @@ describe('profile convert (just create a permset from a profile)', () => {
 
     expect(Array.isArray(editedProfile.userPermissions)).toBe(true);
 
+  });
+
+  afterEach( async () => {
+    // jest.setTimeout(testutils.remoteTimeout);
+    // if (process.env.LOCALONLY === 'true') {
+    //   console.log('skipping online-only test');
+    // } else {
+    //   const deploySuccess = await testutils.itDeploys(testProjectName);
+    //   expect(deploySuccess).toBe(true);
+    // }
   });
 
   afterAll( () => {
