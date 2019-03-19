@@ -97,20 +97,22 @@ export default class PermSetConvert extends SfdxCommand {
 
         // special handling for applicationVisibility (default not allowed in permset)
         if (item.permSetType === 'applicationVisibilities') {
-          const aVs = existing.applicationVisibilities;
-          aVs.forEach( aV => {
+          existing.applicationVisibilities = existing.applicationVisibilities.map(aV => {
             delete aV.default;
+            return aV;
           });
-          existing.applicationVisibilities = aVs;
         }
 
         if (item.permSetType === 'recordTypeVisibilities') {
-          const aVs = existing.recordTypeVisibilities;
-          aVs.forEach(aV => {
-            delete aV.default;
-            delete aV.personAccountDefault;
+          existing.recordTypeVisibilities = existing.recordTypeVisibilities.map(rtV => {
+            delete rtV.default;
+            delete rtV.personAccountDefault;
+            return rtV;
           });
-          existing.recordTypeVisibilities = aVs;
+        }
+
+        if (item.permSetType === 'tabSettings') {
+          existing.tabSettings = existing.tabSettings.map(tV => ({ ...tV, visibility: translateTabTypes(tV.visibility) }));
         }
 
         if (this.flags.editprofile) {
@@ -154,3 +156,10 @@ export default class PermSetConvert extends SfdxCommand {
   }
 
 }
+
+const translateTabTypes = profileTabType => {
+  if (profileTabType === 'DefaultOff') return 'Available';
+  else if (profileTabType === 'DefaultOn') return 'Visible';
+  else if (profileTabType === 'Hidden') return 'None';
+  else throw new Error(`unmatched tab visibility type on profile: ${profileTabType}`);
+};
