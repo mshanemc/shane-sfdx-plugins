@@ -137,6 +137,42 @@ describe('shane:object:create (regular object flavor)', () => {
 
   });
 
+  it('creates a Email field on the Object', async () => {
+
+    const fieldAPI = 'Email__c';
+    const fieldLabel = 'My Email Field';
+
+    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -n "${fieldLabel}" -t Email`, { cwd: testProjectName });
+    expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).toBe(true);
+
+    const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
+
+    expect(parsed.CustomField.type).toBe('Email');
+    expect(parsed.CustomField.label).toBe(fieldLabel);
+    expect(parsed.CustomField.fullName).toBe(fieldAPI);
+
+    await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+
+  });
+
+  it('creates a Phone field on the Object', async () => {
+
+    const fieldAPI = 'Phone__c';
+    const fieldLabel = 'My Phone Field';
+
+    await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -n "${fieldLabel}" -t Phone`, { cwd: testProjectName });
+    expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).toBe(true);
+
+    const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
+
+    expect(parsed.CustomField.type).toBe('Phone');
+    expect(parsed.CustomField.label).toBe(fieldLabel);
+    expect(parsed.CustomField.fullName).toBe(fieldAPI);
+
+    await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+
+  });
+
   it('creates a required text field on the Object', async () => {
 
     const fieldAPI = 'Required_Text_Field__c';
