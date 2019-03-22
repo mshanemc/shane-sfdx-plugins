@@ -1,5 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
+import { getExternalApps } from './../../../shared/community';
 
 export default class CommunityDescribe extends SfdxCommand {
 
@@ -16,24 +17,8 @@ export default class CommunityDescribe extends SfdxCommand {
   protected static requiresUsername = true;
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
-    const conn = this.org.getConnection();
-
-    // tslint:disable-next-line:no-any
-    const output: any = {
-      communities: {}
-    };
-
-    // get the domain
-    const domains = await conn.query('select CnameTarget, Domain from Domain');
-    const mainDomain: any = domains.records.find( (domain: any) => domain.CnameTarget === null); // tslint:disable-line:no-any
-    output.domain = mainDomain.Domain;
-    // get the networks
-
-    const networks = await conn.query('select id, Name, status, UrlPathPrefix from Network where UrlPathPrefix != null');
-
-    networks.records.forEach( (network: any) => { // tslint:disable-line:no-any
-      output.communities[network.UrlPathPrefix] = network.Name;
-    });
+    const conn = await this.org.getConnection();
+    const output = await getExternalApps(conn);
 
     if (this.flags.store) {
       await fs.writeJSON('externalApps.json', output, {spaces: 2});
