@@ -1,12 +1,12 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { getExternalApps } from './../../../shared/community';
 
-export default class CommunityUr extends SfdxCommand {
+export default class CommunityUrl extends SfdxCommand {
 
   public static description = 'get me the login for a community from an org';
 
   public static examples = [
-'sfdx shane:communities:url --url dealers'
+'sfdx shane:communities:url --prefix dealers'
   ];
 
   protected static flagsConfig = {
