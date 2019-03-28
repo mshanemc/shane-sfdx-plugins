@@ -8,6 +8,7 @@ const exec = util.promisify(child_process.exec);
 export default class Delete extends SfdxCommand {
 
   public static description = 'delete the default scratch org.  Won\'t prompt you for confirmation';
+  public static aliases = ['shane:org:destroy'];
 
   public static examples = [
 `sfdx shane:org:delete
