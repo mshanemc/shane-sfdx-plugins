@@ -9,14 +9,14 @@ export default class AnalyticsAppShare extends SfdxCommand {
 
   public static examples = [
 `sfdx shane:analytics:app:share -n SharedApp --allprm
-// share the standard SharedApp with all partners
+// share the standard SharedApp with all partners view level perms (default)
 `
   ];
 
   protected static flagsConfig = {
     name: flags.string({char: 'n', required: true, description: 'name of the analytics app' }),
     allprm: flags.boolean({description: 'share with all partner users' }),
-    // allcsp: flags.boolean({description: 'share with all customer portal users' }),
+    allcsp: flags.boolean({description: 'share with all customer portal users' }),
     org: flags.boolean({description: 'share with all internal users' }),
     type: flags.string({char: 't', default: 'View', description: 'access level', options: ['View', 'Edit', 'Manage']})
   };
@@ -40,18 +40,19 @@ export default class AnalyticsAppShare extends SfdxCommand {
     });
     // this.ux.logJson(folders);
 
+    // match the folder from the list
     const foundFolder = folders.folders.find( folder => folder.name === this.flags.name);
     // this.ux.logJson(foundFolder);
 
-    // get the wave folder id for the application
-    const folderId = foundFolder.id;
+    if (!foundFolder) {
+      throw new Error(`no application by that name exists.  Folders: ${folders.folders.map( folder => folder.name).join(',')}`);
+    }
 
     // get the applications's existing json > shares
     const retrievedFolder = await request({
       ...defaultRequest,
-      uri: `${conn.instanceUrl}/services/data/v45.0/wave/folders/${folderId}`
+      uri: `${conn.instanceUrl}/services/data/v45.0/wave/folders/${foundFolder.id}`
     });
-    this.ux.logJson(retrievedFolder);
 
     // convert shareRepresentation to shareInputRepresentation
     let sharesToPatch = retrievedFolder.shares.map( share => {
@@ -61,15 +62,15 @@ export default class AnalyticsAppShare extends SfdxCommand {
     });
 
     if (this.flags.allprm) {
-      sharesToPatch = [...sharesToPatch, {shareType : 'AllPrmUsers', accessType: this.flags.type}];
+      sharesToPatch = [...sharesToPatch, {shareType : 'allprmusers', accessType: this.flags.type}];
     }
 
     // doesn't seem to work correctly, but might be my org not having csp users on?
     if (this.flags.allcsp) {
-      sharesToPatch = [...sharesToPatch, {shareType : 'All​Csp​Users', accessType: this.flags.type}];
+      sharesToPatch = [...sharesToPatch, {shareType : 'allcspusers', accessType: this.flags.type}];
     }
     if (this.flags.org) {
-      sharesToPatch = [...sharesToPatch, {shareType : 'Organization', accessType: this.flags.type}];
+      sharesToPatch = [...sharesToPatch, {shareType : 'organization', accessType: this.flags.type}];
     }
 
     this.ux.logJson(sharesToPatch);
@@ -78,7 +79,7 @@ export default class AnalyticsAppShare extends SfdxCommand {
       ...defaultRequest,
       method: 'PATCH',
       body: { shares: sharesToPatch},
-      uri: `${conn.instanceUrl}/services/data/v45.0/wave/folders/${folderId}`
+      uri: `${conn.instanceUrl}/services/data/v45.0/wave/folders/${foundFolder.id}`
     });
 
     if (!this.flags.json) {
