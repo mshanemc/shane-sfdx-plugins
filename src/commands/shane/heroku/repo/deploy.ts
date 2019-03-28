@@ -13,7 +13,7 @@ export default class HerokuRepoDeploy extends SfdxCommand {
   public static description = 'deploy a heroku app that has a valid app.json.  ';
 
   public static examples = [
-`sfdx shane:heroku:repo:deploy -g someUser -r someRepo -u
+`sfdx shane:heroku:repo:deploy -g someUser -r someRepo
 // deploys code from https://github.com/someUser/someRepo that has a valid app.json
 `
   ];
@@ -63,8 +63,7 @@ export default class HerokuRepoDeploy extends SfdxCommand {
 
     // fs.ensureDirSync(tmpDir);
     if (this.flags.overrides) {
-      // console.log(this.flags.overrides);
-      for (const override of this.flags.overrides.split(',')) {
+      for (const override of this.flags.overrides) {
         console.log(override);
         body.overrides.env[override.split('=')[0]] = override.split('=')[1];
       }
