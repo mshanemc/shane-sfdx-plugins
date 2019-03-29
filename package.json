@@ -97,7 +97,7 @@
     "clean": "rm -f .oclif.manifest.json",
     "lint": "tsc -p test --noEmit && tslint -p test -t stylish",
     "postpublish": "yarn run clean; git push; git push --tags",
-    "posttest": "yarn run lint",
+    "posttest": "",
     "prepare": "yarn run build && oclif-dev manifest",
     "prepublishOnly": "yarn run build && oclif-dev manifest",
     "preversion": "yarn run clean",
