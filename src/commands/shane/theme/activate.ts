@@ -64,6 +64,7 @@ export default class ThemeActivate extends SfdxCommand {
     await browser.close();
     this.ux.stopSpinner(`Activated theme ${this.flags.name}`);
 
+    return true;
   }
 
 }
