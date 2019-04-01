@@ -2,6 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
 import request = require('request-promise-native');
 import util = require('util');
+import * as stripcolor from 'strip-color';
 
 const exec = util.promisify(child_process.exec);
 
@@ -67,7 +68,7 @@ export default class GithubPackageInstall extends SfdxCommand {
 
     const installResult = await exec(`sfdx force:package:install --package ${packageVersionId} -r -u ${this.org.getUsername()} -w 20 --publishwait 20 --json`);
     // this.ux.logJson(JSON.parse(installResult.stdout));
-    return JSON.parse(installResult.stdout);
+    return JSON.parse(stripcolor(installResult.stdout));
   }
 
 }
