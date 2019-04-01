@@ -3,6 +3,7 @@ import { AuthInfo } from '@salesforce/core';
 import * as assert from 'assert';
 import child_process = require('child_process');
 import fs = require('fs-extra');
+import * as stripcolor from 'strip-color';
 import util = require('util');
 
 const exec = util.promisify(child_process.exec);
@@ -55,7 +56,7 @@ export default class ScratchOrgReAuth extends SfdxCommand {
         await exec(`sfdx force:auth:jwt:grant --json --clientid ${hubInfo.clientId} --username ${username} --jwtkeyfile ${hubInfo.privateKey} --instanceurl https://test.salesforce.com -s`);
         hasError = false;
       } catch (err) {
-        const parsedOut = JSON.parse(err.stdout);
+        const parsedOut = JSON.parse(stripcolor(err.stdout));
         if (parsedOut.message.includes('This org appears to have a problem with its OAuth configuration')) {
           this.ux.log('login not available yet.');
           hasError = true;

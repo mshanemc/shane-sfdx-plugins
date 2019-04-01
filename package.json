@@ -23,6 +23,7 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "stopword": "^0.1.13",
+    "strip-color": "^0.1.0",
     "unzipper": "^0.9.11",
     "xml2js": "^0.4.19"
   },
