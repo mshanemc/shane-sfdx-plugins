@@ -1,6 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as assert from 'assert';
 import child_process = require('child_process');
+import * as stripcolor from 'strip-color';
 import util = require('util');
 
 const exec = util.promisify(child_process.exec);
@@ -39,10 +40,10 @@ export default class LoginURL extends SfdxCommand {
 
     let resultObject;
 
-    if (JSON.parse(result.stdout)) {
-      resultObject = JSON.parse(result.stdout);
-    } else if (JSON.parse(result.stderr)) {
-      resultObject = JSON.parse(result.stderr);
+    if (JSON.parse(stripcolor(result.stdout))) {
+      resultObject = JSON.parse(stripcolor(result.stdout));
+    } else if (JSON.parse(stripcolor(result.stderr))) {
+      resultObject = JSON.parse(stripcolor(result.stderr));
     }
 
     // this.ux.logJson(resultObject.result);

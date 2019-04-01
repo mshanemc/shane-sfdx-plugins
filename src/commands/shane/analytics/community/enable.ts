@@ -1,6 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
 import * as puppeteer from 'puppeteer';
+import * as stripcolor from 'strip-color';
 import util = require('util');
 // import { Record } from './../../../shared/typeDefs';
 
@@ -28,7 +29,7 @@ export default class CommunityEnable extends SfdxCommand {
     const openResult = await exec('sfdx force:org:open -p /lightning/setup/InsightsSetupSettings/home -r --json');
     const iframeTitle = 'Get Started ~ Salesforce - Developer Edition';
 
-    const url = JSON.parse(openResult.stdout).result.url;
+    const url = JSON.parse(stripcolor(openResult.stdout)).result.url;
 
     await context.overridePermissions(url, ['notifications']);
     const page = await browser.newPage();

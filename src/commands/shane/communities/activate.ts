@@ -1,6 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
 import * as puppeteer from 'puppeteer';
+import * as stripcolor from 'strip-color';
 import util = require('util');
 // import { Record } from './../../../shared/typeDefs';
 
@@ -27,7 +28,7 @@ export default class CommunityActivate extends SfdxCommand {
     // // get the force-org-open url for your scratch org
     const openResult = await exec(`sfdx force:org:open -p /${this.flags.name}/communitySetup/cwApp.app#/c/page/settings -r --json`);
 
-    const url = JSON.parse(openResult.stdout).result.url;
+    const url = JSON.parse(stripcolor(openResult.stdout)).result.url;
 
     await context.overridePermissions(url, ['notifications']);
     const page = await browser.newPage();

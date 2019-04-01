@@ -1,6 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
 import fs = require('fs-extra');
+import * as stripcolor from 'strip-color';
 import util = require('util');
 
 const exec = util.promisify(child_process.exec);
@@ -45,7 +46,7 @@ export default class GithubPackageInstall extends SfdxCommand {
       await fs.remove(this.flags.repo);
     }
 
-    return JSON.parse(installResult.stdout);
+    return JSON.parse(stripcolor(installResult.stdout));
   }
 
 }
