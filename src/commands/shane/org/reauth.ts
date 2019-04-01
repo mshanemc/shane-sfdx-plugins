@@ -85,6 +85,7 @@ export default class ScratchOrgReAuth extends SfdxCommand {
       }
 
     } while (keepTrying && tryCounter < maxTries);
+    throw new Error('Did not complete reauth within allowed retry limit');
 
   }
 }
