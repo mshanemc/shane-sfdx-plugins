@@ -37,7 +37,7 @@ export default class ScratchOrgReAuth extends SfdxCommand {
     // validate that this'll work for jwt
     assert.ok(hubInfo.privateKey, 'private key not present...did you use jwt auth flow?');
     assert.ok(hubInfo.clientId, 'clientId not present...did you use jwt auth flow?');
-    assert.ok(hubInfo.isDevHub, 'not a valid dev hub');
+    // assert.ok(hubInfo.isDevHub, 'not a valid dev hub');
     assert.ok(fs.existsSync(hubInfo.privateKey), `key is part of hub auth, but does not exist on local filesystem: ${hubInfo.privateKey}`);
 
     let keepTrying = this.flags.requirecustomdomain;
