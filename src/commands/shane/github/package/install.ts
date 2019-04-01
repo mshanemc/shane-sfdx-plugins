@@ -1,8 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
 import request = require('request-promise-native');
-import util = require('util');
 import * as stripcolor from 'strip-color';
+import util = require('util');
 
 const exec = util.promisify(child_process.exec);
 
