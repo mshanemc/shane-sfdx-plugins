@@ -19,11 +19,32 @@ describe.skip('shane:org:reauth', () => {
       await testutils.orgCreate(testProjectName);
     });
 
+    afterEach( async () => {
+      await exec('sfdx shane:org:delete', { cwd: testProjectName });
+    });
+
     it('uses a simple org, not json', async () => {
-
+      await exec('sfdx force:org:create -d 1 -s edition=Developer');
       const results = await exec('sfdx shane:org:reauth', { cwd: testProjectName });
-      expect(results.stdout).toContain('created file with content document id');
+      expect(results.stdout).toBeTruthy();
+    });
 
+    it('uses a simple org, with wait, not json', async () => {
+      await exec('sfdx force:org:create -d 1 -s edition=Developer');
+      const results = await exec('sfdx shane:org:reauth -r', { cwd: testProjectName });
+      expect(results.stdout).toBeTruthy();
+    });
+
+    it('uses a simple org, with json', async () => {
+      await exec('sfdx force:org:create -d 1 -s edition=Developer');
+      const results = await exec('sfdx shane:org:reauth --json', { cwd: testProjectName });
+      expect(results.stdout).toBeTruthy();
+    });
+
+    it('uses a simple org, with wait, with json', async () => {
+      await exec('sfdx force:org:create -d 1 -s edition=Developer');
+      const results = await exec('sfdx shane:org:reauth -r --json', { cwd: testProjectName });
+      expect(results.stdout).toBeTruthy();
     });
 
     // it('uploads a file with a name', async () => {
