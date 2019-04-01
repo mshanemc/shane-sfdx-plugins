@@ -8,7 +8,7 @@ import testutils = require('../../../helpers/testutils');
 const exec = util.promisify(child_process.exec);
 const testProjectName = 'testProjectOrgReauth';
 
-describe.skip('shane:org:reauth', () => {
+describe('shane:org:reauth', () => {
   if (!process.env.LOCALONLY) {
 
     jest.setTimeout(testutils.remoteTimeout);
@@ -77,7 +77,6 @@ describe.skip('shane:org:reauth', () => {
     // });
 
     afterAll(async () => {
-      await testutils.orgDelete(testProjectName);
       await fs.remove(testProjectName);
     });
   }
