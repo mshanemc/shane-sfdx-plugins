@@ -22,6 +22,7 @@ $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
 shane-sfdx-plugins/3.6.0 darwin-x64 node-v11.7.0
+
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -370,6 +371,7 @@ EXAMPLE
 ```
 
 _See code: [src/commands/shane/connectedapp/uniquify.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.6.0/src/commands/shane/connectedapp/uniquify.ts)_
+
 
 ## `sfdx shane:data:file:upload`
 
@@ -1922,4 +1924,5 @@ EXAMPLE
 ```
 
 _See code: [src/commands/shane/user/psl.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.6.0/src/commands/shane/user/psl.ts)_
+
 <!-- commandsstop -->
