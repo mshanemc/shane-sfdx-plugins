@@ -73,7 +73,7 @@ export default class AnalyticsAppShare extends SfdxCommand {
       sharesToPatch = [...sharesToPatch, {shareType : 'organization', accessType: this.flags.type}];
     }
 
-    this.ux.logJson(sharesToPatch);
+    // this.ux.logJson(sharesToPatch);
 
     const patchResult = await request({
       ...defaultRequest,
