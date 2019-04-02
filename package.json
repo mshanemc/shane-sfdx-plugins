@@ -1,7 +1,7 @@
 {
   "name": "shane-sfdx-plugins",
   "description": "sfdx plugins by Shane McLaughlin",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "author": "@mshanemc",
   "bugs": "https://github.com/mshanemc/shane-sfdx-plugins/issues",
   "dependencies": {
@@ -23,6 +23,7 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "stopword": "^0.1.13",
+    "strip-color": "^0.1.0",
     "unzipper": "^0.9.11",
     "xml2js": "^0.4.19"
   },
@@ -97,7 +98,7 @@
     "clean": "rm -f .oclif.manifest.json",
     "lint": "tsc -p test --noEmit && tslint -p test -t stylish",
     "postpublish": "yarn run clean; git push; git push --tags",
-    "posttest": "yarn run lint",
+    "posttest": "",
     "prepare": "yarn run build && oclif-dev manifest",
     "prepublishOnly": "yarn run build && oclif-dev manifest",
     "preversion": "yarn run clean",

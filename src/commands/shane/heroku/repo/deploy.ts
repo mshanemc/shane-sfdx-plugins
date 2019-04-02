@@ -2,6 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import child_process = require('child_process');
 import request = require('request-promise-native');
+import * as stripcolor from 'strip-color';
 import util = require('util');
 
 const exec = util.promisify(child_process.exec);
@@ -75,7 +76,7 @@ export default class HerokuRepoDeploy extends SfdxCommand {
 
     if (this.flags.envpassword) {
       const displayResult = await exec('sfdx force:org:display --json');
-      const displayResultJSON = JSON.parse(displayResult.stdout);
+      const displayResultJSON = JSON.parse(stripcolor(displayResult.stdout));
       // this.ux.logJson(displayResultJSON);
       body.overrides.env[this.flags.envpassword] = displayResultJSON.result.password;
     }

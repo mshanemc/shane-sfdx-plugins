@@ -2,6 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import * as child_process from 'child_process';
 import request = require('request-promise-native');
+import * as stripcolor from 'strip-color';
 import util = require('util');
 
 const exec = util.promisify(child_process.exec);
@@ -128,7 +129,7 @@ export default class CreateOrg extends SfdxCommand {
 
     const response = await exec(command);
     if (response.stdout) {
-      const success = JSON.parse(response.stdout);
+      const success = JSON.parse(stripcolor(response.stdout));
       if (success.status === 0) {
         this.ux.log(
           chalk.green(

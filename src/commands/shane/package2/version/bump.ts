@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import child_process = require('child_process');
 import cli from 'cli-ux';
 import fs = require('fs-extra');
+import * as stripcolor from 'strip-color';
 import util = require('util');
 
 const exec = util.promisify(child_process.exec);
@@ -103,7 +104,7 @@ export default class Bump extends SfdxCommand {
         const createResult = <CreateResultI> await exec(`sfdx force:package:version:create -x -d ${this.flags.target} -w 20 -v ${this.hubOrg.getUsername()} --json`);
         cli.action.stop();
         // this.ux.logJson(JSON.parse(createResult.stdout));
-        const actualResult = JSON.parse(createResult.stdout).result;
+        const actualResult = JSON.parse(stripcolor(createResult.stdout)).result;
         this.ux.logJson(actualResult);
 
         await fs.writeFile(`${this.project.getPath()}/${pkgVersionFileName}`, JSON.stringify(actualResult, null, 2));

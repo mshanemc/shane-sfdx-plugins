@@ -3,6 +3,7 @@ import { AuthInfo } from '@salesforce/core';
 import * as assert from 'assert';
 import child_process = require('child_process');
 import fs = require('fs-extra');
+import * as stripcolor from 'strip-color';
 import util = require('util');
 
 const exec = util.promisify(child_process.exec);
@@ -37,7 +38,7 @@ export default class ScratchOrgReAuth extends SfdxCommand {
     // validate that this'll work for jwt
     assert.ok(hubInfo.privateKey, 'private key not present...did you use jwt auth flow?');
     assert.ok(hubInfo.clientId, 'clientId not present...did you use jwt auth flow?');
-    assert.ok(hubInfo.isDevHub, 'not a valid dev hub');
+    // assert.ok(hubInfo.isDevHub, 'not a valid dev hub');
     assert.ok(fs.existsSync(hubInfo.privateKey), `key is part of hub auth, but does not exist on local filesystem: ${hubInfo.privateKey}`);
 
     let keepTrying = this.flags.requirecustomdomain;
@@ -55,7 +56,7 @@ export default class ScratchOrgReAuth extends SfdxCommand {
         await exec(`sfdx force:auth:jwt:grant --json --clientid ${hubInfo.clientId} --username ${username} --jwtkeyfile ${hubInfo.privateKey} --instanceurl https://test.salesforce.com -s`);
         hasError = false;
       } catch (err) {
-        const parsedOut = JSON.parse(err.stdout);
+        const parsedOut = JSON.parse(stripcolor(err.stdout));
         if (parsedOut.message.includes('This org appears to have a problem with its OAuth configuration')) {
           this.ux.log('login not available yet.');
           hasError = true;
@@ -84,6 +85,7 @@ export default class ScratchOrgReAuth extends SfdxCommand {
       }
 
     } while (keepTrying && tryCounter < maxTries);
+    throw new Error('Did not complete reauth within allowed retry limit');
 
   }
 }

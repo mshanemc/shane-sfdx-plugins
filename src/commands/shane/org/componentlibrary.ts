@@ -1,5 +1,6 @@
 import { SfdxCommand } from '@salesforce/command';
 import child_process = require('child_process');
+import * as stripcolor from 'strip-color';
 import util = require('util');
 
 const exec = util.promisify(child_process.exec);
@@ -26,7 +27,7 @@ export default class ComponentLibrary extends SfdxCommand {
     // required flags
     const command = `sfdx force:org:open --path /componentReference/suite.app --json -u ${this.org.getUsername()}`;
     const response = await exec(command);
-    this.ux.logJson(JSON.parse(response.stdout));
+    this.ux.logJson(JSON.parse(stripcolor(response.stdout)));
     return response;
   }
 }
