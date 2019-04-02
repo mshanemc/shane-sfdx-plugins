@@ -52,7 +52,7 @@ export default class DatasetDownload extends SfdxCommand {
       body: JSON.stringify(body)
     });
 
-    this.ux.logJson(createUploadResult);
+    // this.ux.logJson(createUploadResult);
 
     // chunking
     const { size } = await fs.stat(this.flags.csvfile);
@@ -112,7 +112,6 @@ export default class DatasetDownload extends SfdxCommand {
         complete = true;
         this.ux.stopSpinner('Done!');
         finalResult = statusCheck;
-        this.ux.logJson(finalResult);
       }
     }
 
