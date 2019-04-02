@@ -45,7 +45,7 @@ export default class CommunityActivate extends SfdxCommand {
 
     await browser.close();
     this.ux.stopSpinner(`Published community: ${this.flags.name}`);
-
+    return true;
   }
 
 }
