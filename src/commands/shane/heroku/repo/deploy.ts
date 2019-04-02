@@ -120,13 +120,11 @@ export default class HerokuRepoDeploy extends SfdxCommand {
     // if error
     if (status === 'failed') {
       this.ux.log(chalk.red('Error deploying the app'));
-      this.ux.logJson(statusResult);
+      throw new Error(statusResult);
     } else if (status === 'succeeded') {
       this.ux.log(chalk.green(`App deployed, available at ${statusResult.resolved_success_url}. Delete by running heroku destroy -a ${statusResult.app.name} -c ${statusResult.app.name}`));
-      // this.ux.logJson(statusResult);
+      return statusResult;
     }
-
-    return result;
 
   }
 
