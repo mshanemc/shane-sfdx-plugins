@@ -65,7 +65,6 @@ export default class HerokuRepoDeploy extends SfdxCommand {
     // fs.ensureDirSync(tmpDir);
     if (this.flags.overrides) {
       for (const override of this.flags.overrides) {
-        console.log(override);
         body.overrides.env[override.split('=')[0]] = override.split('=')[1];
       }
     }

@@ -101,7 +101,7 @@ export default class Pull extends SfdxCommand {
         } else if (CrawlDown.includes(item.xmlName)) {
           for (const childName of item.childXmlNames) {
             const parentList = await conn.metadata.list([{ type: childName, folder: null} ], this.flags.apiversion );
-            console.log(parentList);
+            // console.log(parentList);
             // parentList.forEach( childItem => {
             //   this.ux.logJson(childItem);
             // });

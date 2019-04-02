@@ -59,7 +59,7 @@ export default class LabelAdd extends SfdxCommand {
     if (this.flags.categories) {
       newLabel.categories = this.flags.categories.join(',');
     }
-    console.log(existing);
+    // console.log(existing);
 
     // verify label doesn't already exist
     if (existing.labels.filter (label => label.fullName === newLabel.fullName).length > 0 ) {
