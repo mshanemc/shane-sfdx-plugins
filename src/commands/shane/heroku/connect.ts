@@ -11,7 +11,7 @@ import util = require('util');
 const exec = util.promisify(child_process.exec);
 const herokuAPIendpoint = 'https://api.heroku.com';
 
-export default class HerokuRepoDeploy extends SfdxCommand {
+export default class HerokuConnect extends SfdxCommand {
 
   public static description = 'set up heroku connect on an existing app to an existing org (that you may have just created)';
 
