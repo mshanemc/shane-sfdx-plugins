@@ -8,16 +8,17 @@ export default class AnalyticsAppShare extends SfdxCommand {
   public static description = 'share an analytics app by name';
 
   public static examples = [
-`sfdx shane:analytics:app:share -n SharedApp --allprm
-// share the standard SharedApp with all partners view level perms (default)
+`sfdx shane:analytics:app:share -n SharedApp --allprm -c
+// share the standard SharedApp with all partners view level perms (default) and check the "enable sharing with communities" box for this app
 `
   ];
 
   protected static flagsConfig = {
     name: flags.string({char: 'n', required: true, description: 'name of the analytics app' }),
-    allprm: flags.boolean({description: 'share with all partner users' }),
-    allcsp: flags.boolean({description: 'share with all customer portal users' }),
+    allprm: flags.boolean({description: 'share with all partner users', dependsOn: ['community'] }),
+    allcsp: flags.boolean({description: 'share with all customer portal users', dependsOn: ['community']}),
     org: flags.boolean({description: 'share with all internal users' }),
+    community: flags.boolean({ char: 'c', description: 'enable community sharing'}),
     type: flags.string({char: 't', default: 'View', description: 'access level', options: ['View', 'Edit', 'Manage']})
   };
 
@@ -84,6 +85,19 @@ export default class AnalyticsAppShare extends SfdxCommand {
 
     if (!this.flags.json) {
       this.ux.logJson(patchResult);
+    }
+
+    // do we need to make it shared with communities?
+    if ((this.flags.allcsp || this.flags.allprm) && !retrievedFolder.canBeSharedExternally) {
+      const communityShareResult = await request({
+        ...defaultRequest,
+        uri: `${conn.instanceUrl}/services/data/v45.0/wave/folders/${foundFolder.id}`,
+        method: 'PATCH',
+        body: { canBeSharedExternally: true }
+      });
+      if (!this.flags.json) {
+        this.ux.logJson(communityShareResult);
+      }
     }
 
     return patchResult;
