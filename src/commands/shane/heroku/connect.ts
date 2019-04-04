@@ -32,6 +32,7 @@ export default class HerokuConnect extends SfdxCommand {
     password: flags.string({ char: 'p', description: 'pass in a password to override the one associated with your org in sfdx, or if you don\'t have one set properly (like you used `shane:user:password:set` instead of `force:user:password:generate'}),
     configfile: flags.filepath({ char: 'f', description: 'path to the json file exported from Heroku Connect', required: true}),
     showbrowser: flags.boolean({char: 'b', description: 'show the browser...useful for local debugging'}),
+    instance: flags.boolean({ char: 'i', description: 'salesforce instance for making login easier.  Will be read from org:display if exists...this is the override' }),
     verbose: flags.builtin()
   };
 
@@ -44,6 +45,7 @@ export default class HerokuConnect extends SfdxCommand {
     if (!this.flags.password) {
       const result = await exec(`sfdx force:org:display --json -u ${this.org.getUsername()}`);
       this.flags.password = JSON.parse(stripcolor(result.stdout)).result.password;
+      this.flags.instance = JSON.parse(stripcolor(result.stdout)).result.instanceUrl.replace('https://', '');
     }
 
     if (!this.flags.password) {
@@ -51,6 +53,8 @@ export default class HerokuConnect extends SfdxCommand {
     }
 
     this.ux.log(`using password ${this.flags.password}`);
+    this.ux.log(`using domain ${this.flags.instance}`);
+
     // get the apps region to use the correct connect api endpoint
     const defaultHerokuRequest = {
       headers: {
@@ -98,61 +102,60 @@ export default class HerokuConnect extends SfdxCommand {
     const theConnection = connectionInfo.results.find( conn => conn.app_name === this.flags.app );
     this.ux.log(`found connection with id ${theConnection.id}`);
 
-    if (! theConnection.db_key || ! theConnection.schema_name) {
-      const patchResults = await request.patch({
-        ...defaultHerokuConnectRequest,
-        url: `${connectAPIendpoint}/connections/${theConnection.id}`,
-        body: {
-          id: theConnection.id,
-          name: this.flags.app,
-          resource_name: theConnection.resource_name,
-          schema_name: 'salesforce',
-          db_key: 'DATABASE_URL'
-        }
-      });
+    // if (! theConnection.db_key || ! theConnection.schema_name) {
+    const patchResults = await request.patch({
+      ...defaultHerokuConnectRequest,
+      url: `${connectAPIendpoint}/connections/${theConnection.id}`,
+      body: {
+        id: theConnection.id,
+        name: this.flags.app,
+        resource_name: theConnection.resource_name,
+        schema_name: 'salesforce',
+        db_key: 'DATABASE_URL'
+      }
+    });
 
-      if ( !this.flags.json && this.flags.verbose)  this.ux.logJson(patchResults);
-    } else {
-      this.ux.log('skipping connection config because already done');
-    }
+    if ( !this.flags.json && this.flags.verbose)  this.ux.logJson(patchResults);
+    // } else {
+    //   this.ux.log('skipping connection config because already done');
+    // }
 
-    if (! theConnection.organization_id) {
+    // you don't have a connection to a Salesforce org
+    const sfdcAuthUrlResp = await request.post({
+      ...defaultHerokuConnectRequest,
+      url: `${connectAPIendpoint}/connections/${theConnection.id}/authorize_url`,
+      body: {
+        environment: this.flags.environment,
+        domain: this.flags.instance
+      }
+    });
 
-      // you don't have a connection to a Salesforce org
-      const sfdcAuthUrlResp = await request.post({
-        ...defaultHerokuConnectRequest,
-        url: `${connectAPIendpoint}/connections/${theConnection.id}/authorize_url`,
-        body: {
-          environment: this.flags.environment
-        }
-      });
+    if ( !this.flags.json && this.flags.verbose)  this.ux.logJson(sfdcAuthUrlResp);
+    const sfdcAuthUrl = sfdcAuthUrlResp.redirect;
 
-      if ( !this.flags.json && this.flags.verbose)  this.ux.logJson(sfdcAuthUrlResp);
-      const sfdcAuthUrl = sfdcAuthUrlResp.redirect;
+    const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
+    const page = await browser.newPage();
+    await page.goto(sfdcAuthUrl, {
+      waitUntil: 'networkidle2'
+    });
 
-      const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
-      const page = await browser.newPage();
-      await page.goto(sfdcAuthUrl, {
-        waitUntil: 'networkidle2'
-      });
+    // login page
+    await page.waitForSelector('input#username');
+    await page.type('input#username', this.org.getUsername());
+    await page.type('input#password', this.flags.password);
+    await page.click('input#Login');
+    await page.waitFor(1000);
 
-      // login page
-      await page.waitForSelector('input#username');
-      await page.type('input#username', this.org.getUsername());
-      await page.type('input#password', this.flags.password);
-      await page.click('input#Login');
-
-      // allow access? page
+    // mostly happens on new scratch orgs, but not if you've previously auth'd it
+    try {
       await page.waitForSelector('input#oaapprove');
       await page.click('input#oaapprove');
-
-      await browser.close();
-    } else {
-      this.ux.log('Skipping org auth because already done');
+      await page.waitFor(1000);
+    } catch (e) {
+      this.ux.log('no connection approval page');
     }
 
-    // const jsonFile =
-    // this.ux.logJson(jsonFile);
+    await browser.close();
 
     const fileResult = await request.post({
       ...defaultHerokuConnectRequest,
