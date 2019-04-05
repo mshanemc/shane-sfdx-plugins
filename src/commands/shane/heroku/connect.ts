@@ -144,7 +144,7 @@ export default class HerokuConnect extends SfdxCommand {
     await page.type('input#username', this.org.getUsername());
     await page.type('input#password', this.flags.password);
     await page.click('input#Login');
-    await page.waitFor(1000);
+    await page.waitFor(3000);
 
     // mostly happens on new scratch orgs, but not if you've previously auth'd it
     try {
@@ -155,7 +155,7 @@ export default class HerokuConnect extends SfdxCommand {
       this.ux.log('no connection approval page');
     }
 
-    if (!this.flags.showbrowser)  await browser.close();
+    if (!this.flags.showbrowser) await browser.close();
 
     const fileResult = await request.post({
       headers: {
