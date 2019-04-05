@@ -53,12 +53,14 @@ export default class CommunityPublish extends SfdxCommand {
     await page.waitForSelector(publishButtonSelector);
     const publishButton1 = await page.$(publishButtonSelector);
     await publishButton1.click();
+    await page.waitFor(1500);
 
     const publishButton2Selector = 'input[value="Publish"]';
 
     await page.waitForSelector(publishButton2Selector);
     const publishButton2 = await page.$(publishButton2Selector);
     await publishButton2.click();
+    await page.waitFor(1500);
 
     await browser.close();
     this.ux.stopSpinner(`Published community: ${this.flags.name}`);
