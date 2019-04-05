@@ -28,7 +28,7 @@ export default class HerokuConnect extends SfdxCommand {
 
   protected static flagsConfig = {
     app: flags.string({char: 'a', description: 'name of the heroku app', required: true }),
-    environment: flags.string({ char: 'e', description: 'environment of the salesforce org', options: ['sandbox', 'production', 'custom'], default: 'sandbox'}),
+    environment: flags.string({ char: 'e', description: 'environment of the salesforce org', options: ['sandbox', 'production', 'custom'], default: 'custom'}),
     password: flags.string({ char: 'p', description: 'pass in a password to override the one associated with your org in sfdx, or if you don\'t have one set properly (like you used `shane:user:password:set` instead of `force:user:password:generate'}),
     configfile: flags.filepath({ char: 'f', description: 'path to the json file exported from Heroku Connect', required: true}),
     showbrowser: flags.boolean({char: 'b', description: 'show the browser...useful for local debugging'}),
