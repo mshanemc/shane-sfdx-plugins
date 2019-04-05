@@ -155,15 +155,21 @@ export default class HerokuConnect extends SfdxCommand {
       this.ux.log('no connection approval page');
     }
 
-    await browser.close();
+    if (!this.flags.showbrowser)  await browser.close();
 
     const fileResult = await request.post({
-      ...defaultHerokuConnectRequest,
+      headers: {
+        Authorization: `Bearer ${process.env.HEROKU_API_KEY}`
+      },
       url: `${connectAPIendpoint}/connections/${theConnection.id}/actions/import`,
-      body: await fs.readJSON(this.flags.configfile)
+      body: await fs.readJSON(this.flags.configfile),
+      json: true
     });
 
-    this.ux.log(fileResult);
+    if (fileResult !== undefined) {
+      this.ux.error(fileResult);
+      throw new Error(`file upload error: ${fileResult}`);
+    }
 
     this.ux.log(`set up Heroku Connect for ${this.flags.app}`);
     return `set up Heroku Connect for ${this.flags.app}`;

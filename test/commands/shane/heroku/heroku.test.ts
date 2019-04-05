@@ -41,22 +41,22 @@ describe('shane:heroku:connect', () => {
       expect(stdout.status).toBe(0);
     });
 
-    it('configures connect', async () => {
-      // sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f assets/herokuConnect/electron-web.json
-      const results = await exec('sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f mapping.json -e custom --json', { cwd: testProjectName });
+    // it('configures connect with json response', async () => {
+    //   // sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f assets/herokuConnect/electron-web.json
+    //   const results = await exec('sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f mapping.json -e custom --verbose', { cwd: testProjectName });
 
-      // console.log(results);
-      expect(results).toBeTruthy();
-      expect(results.stdout).toBeTruthy();
-      const stdout = JSON.parse(stripcolor(results.stdout));
-      expect(stdout.status).toBe(0);
-    });
+    //   // console.log(results);
+    //   expect(results).toBeTruthy();
+    //   expect(results.stdout).toBeTruthy();
+    //   // const stdout = JSON.parse(stripcolor(results.stdout));
+    //   // expect(stdout.status).toBe(0);
+    // });
 
-    afterAll(async () => {
-      await testutils.orgDelete(testProjectName);
-      await exec('heroku destroy -a `basename "${PWD/mshanemc-/}"` -c `basename "${PWD/mshanemc-/}"`', { cwd: testProjectName });
-      await fs.remove(testProjectName);
-    });
+    // afterAll(async () => {
+    //   await testutils.orgDelete(testProjectName);
+    //   await exec('heroku destroy -a `basename "${PWD/mshanemc-/}"` -c `basename "${PWD/mshanemc-/}"`', { cwd: testProjectName });
+    //   await fs.remove(testProjectName);
+    // });
 
     const testMapping = {
       mappings: [
