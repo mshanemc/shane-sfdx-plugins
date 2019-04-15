@@ -51,7 +51,7 @@ describe('shane:data:file:upload', () => {
       try {
         await exec('sfdx shane:data:file:upload -f sfdx-project.json -n "sfdx project json file" -c --json', { cwd: testProjectName });
       } catch (err) {
-        expect(err.message).toContain('--parentid= must also be provided when using --chatter=');
+        expect(JSON.parse(err.stdout).message).toContain('--parentid= must also be provided when using --chatter=');
       }
     });
 

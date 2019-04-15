@@ -10,7 +10,6 @@ const exec = util.promisify(child_process.exec);
 
 const profileName = 'Admin';
 const newPermSetName = 'TestNewPerm';
-const goldenSourceRepo = './test/repos/profileTestRepo';
 const testProjectName = 'testProjectProfileConvert';
 
 const newPermsetPath = `${testProjectName}/force-app/main/default/permissionsets/${newPermSetName}.permissionset-meta.xml`;
@@ -21,14 +20,13 @@ describe('profile convert (just create a permset from a profile)', () => {
   jest.setTimeout(testutils.localTimeout);
 
   // get a clean copy of the original repo
-  beforeEach( () => {
-    fs.emptyDirSync(testProjectName);
-    fs.copySync(goldenSourceRepo, testProjectName);
+  beforeEach( async () => {
+    await fs.remove(testProjectName);
+    await exec( `git clone https://github.com/mshanemc/profile-example-for-conversion-testing ${testProjectName}`);
   });
 
   test('does a simple convert of the Admin profile', async () => {
 
-    expect(fs.existsSync(goldenSourceRepo)).toBe(true);
     expect(fs.existsSync(testProjectName)).toBe(true);
 
     await exec(`sfdx shane:profile:convert -p ${profileName} -n ${newPermSetName}`, { cwd: testProjectName });
@@ -110,8 +108,8 @@ describe('profile convert (just create a permset from a profile)', () => {
     // }
   });
 
-  afterAll( () => {
-    fs.emptyDirSync(testProjectName); // don't leave a mess
+  afterAll(async () => {
+    await fs.remove(testProjectName); // don't leave a mess
   });
 
 });
