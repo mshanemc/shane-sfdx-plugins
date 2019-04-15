@@ -14,7 +14,7 @@ describe('shane:github:src:install', () => {
   jest.setTimeout(testutils.remoteTimeout);
 
   if (!process.env.LOCALONLY) {
-    beforeAll(async () => {
+    beforeEach(async () => {
       await fs.remove(testProjectName);
       await exec(`sfdx force:project:create -n ${testProjectName}`);
       await testutils.orgCreate(testProjectName);
@@ -36,7 +36,21 @@ describe('shane:github:src:install', () => {
 
     });
 
-    afterAll(async () => {
+    it('works with sfdx src format', async () => {
+
+      const repo = 'DF17integrationWorkshops';
+      const results = await exec(`sfdx shane:github:src:install -g ${username} -r ${repo} -p force-app -c --json`, { cwd: testProjectName });
+
+      expect(results).toBeTruthy();
+      expect(results.stdout).toBeTruthy();
+      const stdout = JSON.parse(results.stdout);
+      // console.log(stdout);
+      // console.log(stdout.status);
+      expect(stdout.status).toBe(0);
+
+    });
+
+    afterEach(async () => {
       await testutils.orgDelete(testProjectName);
       await fs.remove(testProjectName);
     });
