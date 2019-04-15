@@ -25,7 +25,8 @@ export default class GithubPackageInstall extends SfdxCommand {
     githubuser: flags.string({required: true, char: 'g', description: 'github username where the package lives' }),
     repo: flags.string({required: true, char: 'r', description: 'repo where the packages lives' }),
     path: flags.directory({default: 'src', char: 'p', description: 'folder where the source lives' }),
-    keeplocally: flags.boolean({char: 'k', description: 'keep the cloned repo in local source instead of deleting it'})
+    keeplocally: flags.boolean({char: 'k', description: 'keep the cloned repo in local source instead of deleting it'}),
+    convert: flags.boolean({char: 'c', description: 'the path folder is sfdx format, not mdapi, and should be converted first'})
     // branch: {type: 'string', char: 'b', description: 'optional branch' })
   };
 
@@ -33,12 +34,22 @@ export default class GithubPackageInstall extends SfdxCommand {
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
 
+    await fs.remove(this.flags.repo);
     const repoUrl = `https://github.com/${this.flags.githubuser}/${this.flags.repo}`;
 
     const gitResult = await exec(`git clone ${repoUrl}`);
     this.ux.log(gitResult.stderr);
 
-    // install in the org
+    if (this.flags.convert) {
+      // convert to temp dir
+      await exec(`sfdx force:source:convert -r ${this.flags.path} -d tmpSrcFolder`, {cwd: this.flags.repo});
+      // delete the original source
+      await fs.remove(`${this.flags.repo}/${this.flags.path}`);
+      // put the converted source where the original was
+      await fs.move(`${this.flags.repo}/tmpSrcFolder`, `${this.flags.repo}/${this.flags.path}`);
+    }
+
+    // install in the org via mdapi
     const installResult = await exec(`sfdx force:mdapi:deploy -d ${this.flags.repo}/${this.flags.path} -u ${this.org.getUsername()} -w 20 --json`);
     // this.ux.logJson(JSON.parse(installResult.stdout));
 
