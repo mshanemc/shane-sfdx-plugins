@@ -43,13 +43,14 @@ describe('shane:heroku:connect', () => {
 
     it('configures connect with json response', async () => {
       // sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f assets/herokuConnect/electron-web.json
-      const results = await exec('sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f mapping.json -e custom --verbose', { cwd: testProjectName });
+      const results = await exec('sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f mapping.json -e custom --json', { cwd: testProjectName });
 
       // console.log(results);
       expect(results).toBeTruthy();
       expect(results.stdout).toBeTruthy();
-      // const stdout = JSON.parse(stripcolor(results.stdout));
-      // expect(stdout.status).toBe(0);
+      console.log(results.stdout);
+      const stdout = JSON.parse(stripcolor(results.stdout));
+      expect(stdout.status).toBe(0);
     });
 
     afterAll(async () => {
