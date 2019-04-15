@@ -48,20 +48,21 @@ export default class Set extends SfdxCommand {
       resolveWithFullResponse: true
     });
 
-    if (resetResult.statusCode === 204) {
-      this.ux.log(chalk.green(`Successfully set the password "${this.flags.password}" for user ${user.Username}.`));
-      this.ux.log(`You can see the password again by running "sfdx force:user:display -u ${user.Username}".`);
-      return {
-        password: this.flags.password,
-        username: user.Username
-      };
-    } else {
-      this.ux.error(chalk.red('Password not set correctly.'));
-      return {
-        status: 1,
-        result: resetResult
-      };
+    if (resetResult.statusCode !== 204) {
+      throw new Error(`Password not set correctly: ${resetResult}`);
     }
+
+    // store in local sfdx
+    // await userOrg.saveConfig(Object.assign(orgConfig, { password: pwd }), undefined);
+    const auth = await this.org.readUserAuthFiles();
+    await auth[0].save({ ...auth, password: this.flags.password});
+
+    this.ux.log(chalk.green(`Successfully set the password "${this.flags.password}" for user ${user.Username}.`));
+    this.ux.log(`You can see the password again by running "sfdx force:user:display -u ${user.Username}".`);
+    return {
+      password: this.flags.password,
+      username: user.Username
+    };
 
   }
 
