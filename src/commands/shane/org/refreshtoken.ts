@@ -17,11 +17,14 @@ export default class RefreshToken extends SfdxCommand {
   protected static requiresUsername = true;
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
-    const authInfo = this.org.getConnection();
-    // this.ux.log(authInfo.getAuthInfoFields().refreshToken);
-
-    this.ux.log(`Your refresh token for ${chalk.blue(authInfo.getAuthInfoFields().username)} is ${chalk.green(authInfo.getAuthInfoFields().refreshToken)}`);
-    this.ux.log(chalk.red('PLEASE BE CAREFUL WITH THIS AND TREAT THIS AS YOU WOULD A PASSWORD, INCLUDING CLEARING YOUR TERMINAL HISTORY'));
-    return (authInfo.getAuthInfoFields().refreshToken);
+    const auth = await this.org.readUserAuthFiles();
+    const fields = auth[0].getFields();
+    if (fields.refreshToken) {
+      this.ux.log(`Your refresh token for ${chalk.blue(fields.username)} is ${chalk.green(fields.refreshToken)}`);
+      this.ux.log(chalk.red('PLEASE BE CAREFUL WITH THIS AND TREAT THIS AS YOU WOULD A PASSWORD, INCLUDING CLEARING YOUR TERMINAL HISTORY'));
+      return fields.refreshToken;
+    } else {
+      throw new Error('Refresh token not available');
+    }
   }
 }

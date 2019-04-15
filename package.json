@@ -5,11 +5,11 @@
   "author": "@mshanemc",
   "bugs": "https://github.com/mshanemc/shane-sfdx-plugins/issues",
   "dependencies": {
-    "@oclif/command": "^1.5.11",
+    "@oclif/command": "^1.5.12",
     "@oclif/config": "^1.12.8",
     "@oclif/errors": "^1.2.2",
     "@oclif/parser": "^3.7.2",
-    "@salesforce/command": "^1.2.0",
+    "@salesforce/command": "^1.5.0",
     "chalk": "^2.4.2",
     "cli-ux": "^5.2.0",
     "csv-split-stream": "^1.0.2",
