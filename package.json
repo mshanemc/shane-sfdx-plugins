@@ -16,6 +16,7 @@
     "fs-extra": "^7.0.1",
     "js2xmlparser": "^3.0.0",
     "json2csv": "^4.3.5",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "npm": "^6.8.0",
     "puppeteer": "^1.12.2",
