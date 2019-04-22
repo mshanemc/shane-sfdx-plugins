@@ -63,6 +63,21 @@ interface WaveDatasetVersion {
   };
 }
 
+interface WaveDataFlow {
+  name: string;
+  createdBy: {
+    name: string;
+  };
+  type: string;
+  id: string;
+  label: string;
+  url: string;
+}
+
+interface WaveDataFlowListResponse {
+  dataflows: WaveDataFlow[];
+}
+
 interface WaveDataSetListResponse {
   datasets: WaveDataset[];
 }
@@ -81,4 +96,4 @@ interface CDCEvent {
   };
 }
 
-export { Record, QueryResult, CreateResult, CustomLabel, WaveDataSetListResponse, WaveDatasetVersion, CDCEvent };
+export { Record, QueryResult, CreateResult, CustomLabel, WaveDataSetListResponse, WaveDatasetVersion, CDCEvent, WaveDataFlowListResponse };
