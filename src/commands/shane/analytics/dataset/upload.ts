@@ -12,14 +12,16 @@ export default class DatasetDownload extends SfdxCommand {
   public static description = 'upload a dataset from csv';
 
   public static examples = [
-    'sfdx shane:analytics:dataset:upload'
+    'sfdx shane:analytics:dataset:upload -n someName -f data/myFile.csv -m myMetaFile.json',
+    'sfdx shane:analytics:dataset:upload -n someName -f data/myFile.csv -m myMetaFile.json -a SharedApp  --async'
   ];
 
   protected static flagsConfig = {
     name: flags.string({ char: 'n', description: 'dataset name', required: true}),
     csvfile: flags.filepath({char: 'f', description: 'local csv file containing the data', required: true}),
     app: flags.string({ char: 'a', description: 'app name'}),
-    metajson: flags.filepath({char: 'm', description: 'path to json file for describing your upload (highly recommended)'})
+    metajson: flags.filepath({char: 'm', description: 'path to json file for describing your upload (highly recommended)'}),
+    async: flags.boolean({ description: 'do not wait for successful completion of the dataset upload...just return and hope for the best'})
   };
 
   protected static requiresUsername = true;
@@ -88,13 +90,19 @@ export default class DatasetDownload extends SfdxCommand {
     }));
 
     // then start the job by changing its status
-    await conn.request({
+    const processRequestResult = await conn.request({
       method: 'PATCH',
       url: `${conn.baseUrl()}/sobjects/InsightsExternalData/${createUploadResult.id}`,
       body: JSON.stringify({
         Action: 'Process'
       })
     });
+
+    if (this.flags.async) {
+      await fs.remove('chunkFolder');
+      this.ux.log(`job started with id ${createUploadResult.id}`);
+      return processRequestResult;
+    }
 
     // ping for completion
     let complete = false;
