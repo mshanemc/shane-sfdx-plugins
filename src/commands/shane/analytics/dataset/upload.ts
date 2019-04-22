@@ -21,7 +21,7 @@ export default class DatasetDownload extends SfdxCommand {
     csvfile: flags.filepath({char: 'f', description: 'local csv file containing the data', required: true}),
     app: flags.string({ char: 'a', description: 'app name'}),
     metajson: flags.filepath({char: 'm', description: 'path to json file for describing your upload (highly recommended)'}),
-    async: flags.boolean({ description: 'do not wait for successful completion of the dataset upload...just return and hope for the best'})
+    async: flags.boolean({ description: 'do not wait for successful completion of the dataset upload...just return and hope for the best.  If omitted, will poll the analytics rest API for job processing status until complete'})
   };
 
   protected static requiresUsername = true;
