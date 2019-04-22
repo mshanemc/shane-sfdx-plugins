@@ -1,6 +1,7 @@
 interface Record {
   attributes: object;
   Id: string;
+  Name?: string;
 
   ContentDocumentId?: string;
 }
