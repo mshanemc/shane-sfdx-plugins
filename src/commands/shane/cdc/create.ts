@@ -90,7 +90,7 @@ const getDescribe = async (entityType: string) => {
   // get and save for future use
   if (! describes[entityType]) {
     const apiVersion = await conn.retrieveMaxApiVersion();
-    const uri = `${conn.instanceUrl}services/data/v${apiVersion}/ui-api/object-info/${entityType}`;
+    const uri = `${conn.instanceUrl}/services/data/v${apiVersion}/ui-api/object-info/${entityType}`;
 
     const result = await request({
       method: 'get',

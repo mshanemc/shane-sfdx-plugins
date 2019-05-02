@@ -36,7 +36,7 @@ export default class RecordUI extends SfdxCommand {
     const conn = this.org.getConnection();
 
     this.flags.apiversion = this.flags.apiversion || await conn.retrieveMaxApiVersion();
-    let uri = `${conn.instanceUrl}services/data/v${this.flags.apiversion}/ui-api/record-ui`;
+    let uri = `${conn.instanceUrl}/services/data/v${this.flags.apiversion}/ui-api/record-ui`;
     if (this.flags.recordid) {
       uri = `${uri}/${this.flags.recordid}`;
     } else if (this.flags.recordids) {

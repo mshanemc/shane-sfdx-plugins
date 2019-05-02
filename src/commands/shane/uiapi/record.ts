@@ -26,7 +26,7 @@ export default class Record extends SfdxCommand {
     const conn = this.org.getConnection();
 
     this.flags.apiversion = this.flags.apiversion || await conn.retrieveMaxApiVersion();
-    let uri = `${conn.instanceUrl}services/data/v${this.flags.apiversion}/ui-api/records/${this.flags.recordid}`;
+    let uri = `${conn.instanceUrl}/services/data/v${this.flags.apiversion}/ui-api/records/${this.flags.recordid}`;
 
     if (this.flags.fields) {
       if (uri.includes('?')) {

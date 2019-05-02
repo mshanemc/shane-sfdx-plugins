@@ -27,7 +27,7 @@ export default class ObjectInfo extends SfdxCommand {
     const conn = this.org.getConnection();
 
     this.flags.apiversion = this.flags.apiversion || await conn.retrieveMaxApiVersion();
-    const uri = `${conn.instanceUrl}services/data/v${this.flags.apiversion}/ui-api/object-info/${this.flags.object}`;
+    const uri = `${conn.instanceUrl}/services/data/v${this.flags.apiversion}/ui-api/object-info/${this.flags.object}`;
 
     const result = await request({
       method: 'get',
