@@ -8,6 +8,7 @@ import * as options from '../../../shared/js2xmlStandardOptions';
 import jsToXml = require('js2xmlparser');
 
 const exec = util.promisify(child_process.exec);
+const retryLimit = 5;
 
 const booleanFlags = {
   code: ['ApexClass', 'ApexTrigger', 'ApexComponent', 'ApexPage', 'AuraDefinitionBundle', 'StaticResource'],
@@ -158,10 +159,11 @@ export default class Pull extends SfdxCommand {
     this.ux.log('Going to retrieve all the metadata you asked for...this could take a while');
 
     const retrieveResults = await Promise.all(mdTypes.map(mdType => localFilesystemBuild(mdType, this.flags.apiversion, this.org.getUsername())));
-    retrieveResults.map( result => this.ux.log(result));
+    this.ux.log(`Success: ${retrieveResults.filter( result => result.status === 'success').map(result => result.type).join(',')}`);
+    this.ux.log(`Failure: ${retrieveResults.filter( result => result.status === 'failure').map(result => result.type).join(',')}`);
 
     await fs.remove(pkgDir);
-
+    return retrieveResults;
   }
 
 }
@@ -187,17 +189,16 @@ const localFilesystemBuild = async (mdType, apiversion, username) => {
   const retrieveCommand = `sfdx force:source:retrieve -x ${targetFolder}/package.xml -w 30 -u ${username} --json`;
 
   // build in retry logic beause of flakiness on .sfdx/stash.json
-  try {
-    await exec(retrieveCommand, { maxBuffer: 1000000 * 1024 });
-    return `successfully retrieved files for ${mdType.name}`;
-  } catch (e) {
+  let retries = 0;
+  while (retries < retryLimit) {
     try {
       await exec(retrieveCommand, { maxBuffer: 1000000 * 1024 });
-      return `successfully retrieved files for ${mdType.name}`;
-    } catch (e2) {
-      return `successfully retrieved files for ${mdType.name}`;
+      return { type: mdType.name, status : 'success' };
+    } catch (e) {
+      retries++;
     }
   }
+  return { type: mdType.name, status : 'failure' };
 };
 
 // takes the command flags and builds a list of the types that the user wants
