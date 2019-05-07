@@ -1,24 +1,16 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-// import { ux } from 'cli-ux';
 import * as fs from 'fs-extra';
-import request = require('request-promise-native');
-import { CDCEvent } from '../../../../shared/typeDefs';
 
-const describes = {};
-let conn;
-const writeJSONOptions = {
-  spaces: 2
-};
+const rowLimit = 200;
 
 export default class DataTreeImport extends SfdxCommand {
   public static examples = [
-    // 'sfdx shane:cdc:stream // get all the change events',
-    // 'sfdx shane:cdc:stream -o Account // get all the change events on a single object',
-    // 'sfdx shane:cdc:stream -d myDir // stream change events to myDir/cdc, organized into folders by object api type'
+    'sfdx shane:data:tree:import -p data/myPlan.json -d data/  // run all the data in the plan, and files mentioned are relative to ./data'
   ];
 
   protected static flagsConfig = {
-    plan: flags.filepath({char: 'p', required: true, description: 'location of plan file'})
+    plan: flags.filepath({char: 'p', required: true, description: 'location of plan file'}),
+    filesfolder: flags.directory({char: 'd', required: true, description : 'folder that the plan lives in'})
   };
 
   protected static requiresProject = true;
@@ -26,108 +18,69 @@ export default class DataTreeImport extends SfdxCommand {
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
     // get each object
-    conn = await this.org.getConnection();
-
+    const conn = await this.org.getConnection();
     const plan = await fs.readJSON(this.flags.plan);
-    let rowCounter = 0;
+    const idLookup = [];
+    const output = {};
 
-    // read 200 rows at a time from the first object until it's complete
-    // save to Saleforce
-    // write success results to the lookup map (name, savedId)
+    for (const planItem of plan) {
+      output[planItem.sobject] = {success: 0, failures: [] };
+      const currentObjectIdLookupStartingLength = idLookup.length;
+      let recordsToAdd = []; // create empty array to hold the records as we accumulate them
 
-    // next object.  If you got a ref, yo, I'll solve it.  Get the id from the map to resolve it
+      for (const file of planItem.files) {
+        const fileContents = await fs.readJSON(`${this.flags.filesfolder}/${file}`);
+        recordsToAdd = [ ...recordsToAdd, ...fileContents.records.map( record => {
+          if (planItem.saveRefs) {
+            idLookup.push({ ref: record.attributes.referenceId});
+          }
+          delete record.attributes.referenceId;
 
-    for (const objectType of objectList) {
-      this.ux.log(`prepping object ${objectType}`);
-      // build an array from the objects
-      let outputArray: SimpleRecord[] = [];
-
-      let cdcItemList = await fs.readdir(`${recordsFolder}/${objectType}`);
-      // sort by replayId
-      cdcItemList = cdcItemList.sort( (a, b) => parseInt(a, 10) - parseInt(b, 10) );
-      for (const cdcItem of cdcItemList) {
-        const cdc = await fs.readJSON(`${recordsFolder}/${objectType}/${cdcItem}`);
-        outputArray = await cdcToArray(outputArray, cdc);
+          // resolve references?
+          if (planItem.resolveRefs) {
+            for ( const key of Object.keys(record)) {
+              if (typeof record[key] === 'string' && record[key].startsWith('@')) {
+                record[key] = idLookup.find( item => item.ref === record[key].replace('@', '')).id;
+              }
+            }
+          }
+          return record;
+        })];
       }
-      await fs.outputJSON(`${this.flags.dir}/cdc/originalIds/${objectType}.json`, outputArray, writeJSONOptions);
-    }
 
+      this.ux.log(`creating ${recordsToAdd.length} ${planItem.sobject}`);
+
+      let recordCounter = 0;
+      while (recordCounter < recordsToAdd.length) {
+        const saveResults = await <SaveResult[]> <unknown> conn.request({
+          method: 'POST',
+          url: `${conn.baseUrl()}/composite/sobjects`,
+          body: JSON.stringify({records: recordsToAdd.slice(recordCounter, recordCounter + rowLimit )})
+        });
+
+        saveResults.forEach( (saveResult, index: number) => {
+          if ( !saveResult.success && !this.flags.json) {
+            this.ux.logJson(saveResult.errors);
+          }
+
+          if (planItem.saveRefs) {
+            idLookup[index + recordCounter + currentObjectIdLookupStartingLength].id = saveResult.id;
+          }
+        });
+
+        output[planItem.sobject].success = output[planItem.sobject].success + saveResults.filter( item => item.success).length;
+        output[planItem.sobject].failures = [...output[planItem.sobject].failures, ...saveResults.filter( item => !item.success)];
+        recordCounter = recordCounter + rowLimit;
+      }
+
+    }
+    return output;
   }
 
 }
 
-// converts a cdc item to a insertable record
-const cdcToArray = async (outputArray: SimpleRecord[], cdc: CDCEvent) => {
-  let modifiedArray: SimpleRecord[] = Array.from(outputArray);
-  const cdcRecordIds = cdc.payload.ChangeEventHeader.recordIds;
-  // const entityType = cdc.payload.ChangeEventHeader.entityType;
-  const changeType = cdc.payload.ChangeEventHeader.changeType;
-
-  if (changeType === 'CREATE') {
-    const newRecord = await cdcToRecord(cdc);
-    modifiedArray.push(newRecord);
-  } else  if (changeType === 'DELETE') {
-    modifiedArray = modifiedArray.filter( record => !cdcRecordIds.includes(record.Id));
-  } else  if (changeType === 'UPDATE') {
-    for (const recordId of cdcRecordIds) {
-      const recordKey = modifiedArray.findIndex( record => record.Id === recordId);
-      const oldRecord = modifiedArray[recordKey];
-      const newRecord = await cdcToRecord(cdc);
-      modifiedArray[recordKey] = { ...oldRecord, ...newRecord };
-    }
-  } else  if (changeType === 'UNDELETE') {
-    // NOT HANDLED
-
-  }
-
-  return modifiedArray;
-};
-
-const cdcToRecord = async (cdc: CDCEvent) => {
-  const recordOutput: SimpleRecord = {
-    Id: cdc.payload.ChangeEventHeader.recordIds[0]
-  };
-
-  const entityType = cdc.payload.ChangeEventHeader.entityName;
-  const describe = await getDescribe(entityType);
-
-  const createableFieldsApiNames = Object.keys(describe.fields)
-    .map( key => describe.fields[key])
-    .filter( field => field.createable)
-    .map( field => field.apiName);
-
-  Object.keys(cdc.payload).forEach( key => {
-    if (createableFieldsApiNames.includes(key)) {
-      recordOutput[key] = cdc.payload[key];
-    }
-  });
-
-  return recordOutput;
-};
-
-const getDescribe = async (entityType: string) => {
-  // get and save for future use
-  if (! describes[entityType]) {
-    const apiVersion = await conn.retrieveMaxApiVersion();
-    const uri = `${conn.instanceUrl}/services/data/v${apiVersion}/ui-api/object-info/${entityType}`;
-
-    const result = await request({
-      method: 'get',
-      uri,
-      headers: {
-        Authorization: `Bearer ${conn.accessToken}`
-      },
-      json: true
-    });
-    // save for future use
-    describes[entityType] = result;
-  }
-
-  return describes[entityType];
-
-};
-
-interface SimpleRecord {
-  Id: string;
-  OwnerId?: string;
+interface SaveResult {
+  id: string;
+  success: boolean;
+  errors?: [];
 }
