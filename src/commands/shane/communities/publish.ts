@@ -3,7 +3,7 @@ import child_process = require('child_process');
 import * as puppeteer from 'puppeteer';
 import * as stripcolor from 'strip-color';
 import util = require('util');
-// import { Record } from './../../../shared/typeDefs';
+import { CommunitiesRestResult } from './../../../shared/typeDefs';
 
 const exec = util.promisify(child_process.exec);
 
@@ -22,6 +22,23 @@ export default class CommunityPublish extends SfdxCommand {
 
     // first, get the id of the theme
     const conn = this.org.getConnection();
+    const apiVersion = await conn.getApiVersion();
+
+    if (parseFloat(apiVersion) > 45.0 ) {
+      const communitiesList = <CommunitiesRestResult> <unknown> await conn.request(`${conn.baseUrl()}/connect/communities/`);
+      const foundCommunity = communitiesList.communities.find( comm => comm.name === this.flags.name);
+      const publishUrl = `${conn.baseUrl()}/connect/communities/${foundCommunity.id}/publish`;
+
+      this.ux.startSpinner(`publishing community via rest api [${publishUrl}]...`);
+      await conn.request({
+        method: 'POST',
+        url: publishUrl,
+        body: '{}'
+      });
+      this.ux.stopSpinner('done');
+      return;
+    }
+
     const sites = await conn.query(`select id from site where masterlabel = '${this.flags.name}' and sitetype = 'ChatterNetworkPicasso'`);
     // tslint:disable-next-line:no-any
     if (sites.totalSize === 0) {

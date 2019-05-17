@@ -96,4 +96,12 @@ interface CDCEvent {
   };
 }
 
-export { Record, QueryResult, CreateResult, CustomLabel, WaveDataSetListResponse, WaveDatasetVersion, CDCEvent, WaveDataFlowListResponse };
+interface CommunitiesRestResult {
+  communities: [
+    {
+      name: string;
+      id: string;
+    }
+  ];
+}
+export { Record, QueryResult, CreateResult, CustomLabel, WaveDataSetListResponse, WaveDatasetVersion, CDCEvent, WaveDataFlowListResponse, CommunitiesRestResult };
