@@ -1,4 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+import { sleep } from '@salesforce/kit';
 import chalk from 'chalk';
 import child_process = require('child_process');
 import request = require('request-promise-native');
@@ -113,13 +114,18 @@ export default class HerokuRepoDeploy extends SfdxCommand {
         json: true,
         headers
       });
+      console.log(statusResult);
       status = statusResult.status;
+      sleep(2000);
     }
 
     // if error
     if (status === 'failed') {
       this.ux.log(chalk.red('Error deploying the app'));
-      throw new Error(statusResult);
+      if (!this.flags.json){
+        this.ux.logJson(statusResult);
+      }
+      throw new Error(statusResult.failure_message);
     } else if (status === 'succeeded') {
       this.ux.log(chalk.green(`App deployed, available at ${statusResult.resolved_success_url}. Delete by running heroku destroy -a ${statusResult.app.name} -c ${statusResult.app.name}`));
       return statusResult;
