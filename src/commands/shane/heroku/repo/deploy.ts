@@ -7,7 +7,7 @@ import * as stripcolor from 'strip-color';
 import util = require('util');
 
 const exec = util.promisify(child_process.exec);
-
+const pollingInterval = 2000; // ms polling when checking for app deployment
 const herokuAPIendpoint = 'https://api.heroku.com/app-setups';
 
 export default class HerokuRepoDeploy extends SfdxCommand {
@@ -114,15 +114,14 @@ export default class HerokuRepoDeploy extends SfdxCommand {
         json: true,
         headers
       });
-      console.log(statusResult);
       status = statusResult.status;
-      sleep(2000);
+      sleep(pollingInterval);
     }
 
     // if error
     if (status === 'failed') {
       this.ux.log(chalk.red('Error deploying the app'));
-      if (!this.flags.json){
+      if (!this.flags.json) {
         this.ux.logJson(statusResult);
       }
       throw new Error(statusResult.failure_message);
