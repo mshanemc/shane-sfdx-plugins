@@ -10,6 +10,7 @@ import util = require('util');
 
 const exec = util.promisify(child_process.exec);
 const herokuAPIendpoint = 'https://api.heroku.com';
+const HC_DiscoveryServiceEndpoint = 'https://hc-central.heroku.com/connections';
 
 export default class HerokuConnect extends SfdxCommand {
 
@@ -58,23 +59,24 @@ export default class HerokuConnect extends SfdxCommand {
     // get the apps region to use the correct connect api endpoint
     const defaultHerokuRequest = {
       headers: {
-        Accept: 'application/vnd.heroku+json; version=3',
         Authorization: `Bearer ${process.env.HEROKU_API_KEY}`
       },
       json: true
     };
 
-    const app = await request.get({ ...defaultHerokuRequest,
-      url: `${herokuAPIendpoint}/apps/${this.flags.app}`
+    this.ux.log(`getting connections url from ${HC_DiscoveryServiceEndpoint}?app=${this.flags.app}`);
+    const discoveryResult = await request.get({
+      ...defaultHerokuRequest,
+      url:  `${HC_DiscoveryServiceEndpoint}?app=${this.flags.app}`
     });
 
     if ( !this.flags.json && this.flags.verbose) {
-      this.ux.log('this is the app');
-      this.ux.logJson(app);
+      this.ux.log('this is the discoveryResult');
+      this.ux.logJson(discoveryResult);
     }
+    const app = discoveryResult.results[0];
 
-
-    const connectAPIendpoint = `https://connect-${app.region.name}.heroku.com/api/v3`;
+    const connectAPIendpoint = `${app.region_url}/api/v3`;
 
     // verify the app has connect add-on installed
     const addons = await request.get({ ...defaultHerokuRequest,
@@ -86,11 +88,10 @@ export default class HerokuConnect extends SfdxCommand {
       this.ux.logJson(addons);
     }
 
-    if ( !addons.some( addon => addon.addon_service.name === 'herokuconnect' )) {
-      throw new Error('the app needs to have both Postgres and Heroku Connect addons already installed');
-    }
-
-    if ( !addons.some( addon => addon.addon_service.name === 'heroku-postgresql' )) {
+    if (
+      !addons.some( addon => addon.addon_service.name === 'herokuconnect' ) ||
+      !addons.some( addon => addon.addon_service.name === 'heroku-postgresql')
+    ) {
       throw new Error('the app needs to have both Postgres and Heroku Connect addons already installed');
     }
 
@@ -101,14 +102,17 @@ export default class HerokuConnect extends SfdxCommand {
       json: true
     };
 
-    const postResult = await request.post({...defaultHerokuConnectRequest, url: `${connectAPIendpoint}/users/me/apps/${this.flags.app}/auth`});
+    if ( this.flags.verbose ) {
+      this.ux.log(`calling endpoint: ${connectAPIendpoint}/users/me/apps/${this.flags.app}/auth`);
+    }
+    const postResult = await request.post({headers: defaultHerokuConnectRequest.headers, url: `${connectAPIendpoint}/users/me/apps/${this.flags.app}/auth`});
 
     if ( !this.flags.json && this.flags.verbose) {
       this.ux.log('postResult from creating Auth');
       this.ux.log(postResult);
     }
 
-    const connectionInfo = await request.get({...defaultHerokuConnectRequest, url: `${connectAPIendpoint}/connections?app=${this.flags.app}`});
+    const connectionInfo = await request.get({ ...defaultHerokuConnectRequest, url: `${connectAPIendpoint}/connections?app=${this.flags.app}`});
 
     if ( !this.flags.json && this.flags.verbose) {
       this.ux.log('connectionInfo');
