@@ -63,6 +63,8 @@ export default class AllPhotos extends SfdxCommand {
       }
     };
 
+    const results = [];
+
     users.records.forEach(async (user, index) => {
       this.ux.log(`going to upload ${photos[index % photos.length]} for ${user.FirstName} ${user.LastName}`);
       const photoCV = <Record> await localFile2CV.file2CV(conn, `${folderPath}/${photos[ index % photos.length]}`);
@@ -71,9 +73,13 @@ export default class AllPhotos extends SfdxCommand {
         fileId: photoCV.ContentDocumentId
       };
       const photoResult = await request(options);
-      this.ux.logJson(photoResult);
+      results.push(photoResult);
+      if (!this.flags.json) {
+        this.ux.logJson(photoResult);
+      }
     });
 
     await fs.remove(tempRepo);
+    return results;
   }
 }
