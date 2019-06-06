@@ -30,7 +30,7 @@ export default class LWCCreate extends SfdxCommand {
     await fs.writeFile(`${lwcPath}/${this.flags.name}.html`,
 `<template>
 
-<template>`);
+</template>`);
     await fs.writeFile(`${lwcPath}/${this.flags.name}.js`,
 
 `import { LightningElement } from 'lwc';
