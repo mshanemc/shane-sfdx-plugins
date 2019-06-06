@@ -2,15 +2,15 @@ import { flags, SfdxCommand } from '@salesforce/command';
 // import chalk from 'chalk';
 
 import child_process = require('child_process');
-import * as fs from 'fs-extra';
-import * as puppeteer from 'puppeteer';
+// import * as fs from 'fs-extra';
+// import * as puppeteer from 'puppeteer';
 import request = require('request-promise-native');
 import * as stripcolor from 'strip-color';
 import util = require('util');
 
 const exec = util.promisify(child_process.exec);
-const herokuAPIendpoint = 'https://api.heroku.com';
-const HC_DiscoveryServiceEndpoint = 'https://hc-central.heroku.com/connections';
+// const herokuAPIendpoint = 'https://api.heroku.com';
+const HC_DiscoveryServiceEndpoint = 'https://hc-central.heroku.com';
 
 export default class HerokuConnect extends SfdxCommand {
 
@@ -64,72 +64,69 @@ export default class HerokuConnect extends SfdxCommand {
       json: true
     };
 
-    this.ux.log(`getting connections url from ${HC_DiscoveryServiceEndpoint}?app=${this.flags.app}`);
-    const discoveryResult = await request.get({
+    this.ux.log(`getting connections url from ${HC_DiscoveryServiceEndpoint}/auth/${this.flags.app}`);
+    const discoveryResult = await request.post({
       ...defaultHerokuRequest,
-      url:  `${HC_DiscoveryServiceEndpoint}?app=${this.flags.app}`
+      url:  `${HC_DiscoveryServiceEndpoint}/auth/${this.flags.app}`
     });
 
     if ( !this.flags.json && this.flags.verbose) {
       this.ux.log('this is the discoveryResult');
       this.ux.logJson(discoveryResult);
     }
-    const app = discoveryResult.results[0];
 
-    const connectAPIendpoint = `${app.region_url}/api/v3`;
-
-    // verify the app has connect add-on installed
-    const addons = await request.get({ ...defaultHerokuRequest,
-      url: `${herokuAPIendpoint}/apps/${this.flags.app}/addons`
-    });
+    const matchingApp = discoveryResult.connections.find( app => app.app_name = this.flags.app);
 
     if ( !this.flags.json && this.flags.verbose) {
-      this.ux.log('addons: ');
-      this.ux.logJson(addons);
+      this.ux.log('this is the matching app');
+      this.ux.logJson(matchingApp);
     }
 
-    if (
-      !addons.some( addon => addon.addon_service.name === 'herokuconnect' ) ||
-      !addons.some( addon => addon.addon_service.name === 'heroku-postgresql')
-    ) {
-      throw new Error('the app needs to have both Postgres and Heroku Connect addons already installed');
-    }
+    // const connectAPIendpoint = `${app.region_url}/api/v3`;
 
-    const defaultHerokuConnectRequest = {
-      headers: {
-        Authorization: `Bearer ${process.env.HEROKU_API_KEY}`
-      },
-      json: true
-    };
+    // // verify the app has connect add-on installed
+    // const addons = await request.get({ ...defaultHerokuRequest,
+    //   url: `${herokuAPIendpoint}/apps/${this.flags.app}/addons`
+    // });
 
-    if ( this.flags.verbose ) {
-      this.ux.log(`calling endpoint: ${connectAPIendpoint}/users/me/apps/${this.flags.app}/auth`);
-    }
-    const postResult = await request.post({headers: defaultHerokuConnectRequest.headers, url: `${connectAPIendpoint}/users/me/apps/${this.flags.app}/auth`});
+    // if ( !this.flags.json && this.flags.verbose) {
+    //   this.ux.log('addons: ');
+    //   this.ux.logJson(addons);
+    // }
 
-    if ( !this.flags.json && this.flags.verbose) {
-      this.ux.log('postResult from creating Auth');
-      this.ux.log(postResult);
-    }
+    // if (
+    //   !addons.some( addon => addon.addon_service.name === 'herokuconnect' ) ||
+    //   !addons.some( addon => addon.addon_service.name === 'heroku-postgresql')
+    // ) {
+    //   throw new Error('the app needs to have both Postgres and Heroku Connect addons already installed');
+    // }
 
-    const connectionInfo = await request.get({ ...defaultHerokuConnectRequest, url: `${connectAPIendpoint}/connections?app=${this.flags.app}`});
+    // if ( this.flags.verbose ) {
+    //   this.ux.log(`calling endpoint: ${connectAPIendpoint}/users/me/apps/${this.flags.app}/auth`);
+    // }
+    // const postResult = await request.post({headers: defaultHerokuConnectRequest.headers, url: `${connectAPIendpoint}/users/me/apps/${this.flags.app}/auth`});
 
-    if ( !this.flags.json && this.flags.verbose) {
-      this.ux.log('connectionInfo');
-      this.ux.logJson(connectionInfo);
-    }
+    // if ( !this.flags.json && this.flags.verbose) {
+    //   this.ux.log('postResult from creating Auth');
+    //   this.ux.log(postResult);
+    // }
 
-    const theConnection = connectionInfo.results.find( conn => conn.app_name === this.flags.app );
-    this.ux.log(`found connection with id ${theConnection.id}`);
+    // const connectionInfo = await request.get({ ...defaultHerokuConnectRequest, url: `${connectAPIendpoint}/connections?app=${this.flags.app}`});
 
-    // if (! theConnection.db_key || ! theConnection.schema_name) {
+    // if ( !this.flags.json && this.flags.verbose) {
+    //   this.ux.log('connectionInfo');
+    //   this.ux.logJson(connectionInfo);
+    // }
+
+    // const theConnection = connectionInfo.results.find( conn => conn.app_name === this.flags.app );
+    // this.ux.log(`found connection with id ${theConnection.id}`);
+
+    // // if (! theConnection.db_key || ! theConnection.schema_name) {
+
     const patchResults = await request.patch({
-      ...defaultHerokuConnectRequest,
-      url: `${connectAPIendpoint}/connections/${theConnection.id}`,
+      ...defaultHerokuRequest,
+      uri: matchingApp.detail_url,
       body: {
-        id: theConnection.id,
-        name: this.flags.app,
-        resource_name: theConnection.resource_name,
         schema_name: 'salesforce',
         db_key: 'DATABASE_URL'
       }
@@ -141,58 +138,58 @@ export default class HerokuConnect extends SfdxCommand {
     // }
 
     // you don't have a connection to a Salesforce org
-    const sfdcAuthUrlResp = await request.post({
-      ...defaultHerokuConnectRequest,
-      url: `${connectAPIendpoint}/connections/${theConnection.id}/authorize_url`,
-      body: {
-        environment: this.flags.environment,
-        domain: this.flags.instance
-      }
-    });
+    // const sfdcAuthUrlResp = await request.post({
+    //   ...defaultHerokuRequest,
+    //   url: `${matchingApp.detail_url}/authorize_url`,
+    //   body: {
+    //     environment: this.flags.environment,
+    //     domain: this.flags.instance
+    //   }
+    // });
 
-    if ( !this.flags.json && this.flags.verbose)  this.ux.logJson(sfdcAuthUrlResp);
-    const sfdcAuthUrl = sfdcAuthUrlResp.redirect;
+    // if ( !this.flags.json && this.flags.verbose)  this.ux.logJson(sfdcAuthUrlResp);
+    // const sfdcAuthUrl = sfdcAuthUrlResp.redirect;
 
-    const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
-    const page = await browser.newPage();
-    await page.goto(sfdcAuthUrl, {
-      waitUntil: 'networkidle2'
-    });
+    // const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
+    // const page = await browser.newPage();
+    // await page.goto(sfdcAuthUrl, {
+    //   waitUntil: 'networkidle2'
+    // });
 
-    // login page
-    await page.waitForSelector('input#username');
-    await page.type('input#username', this.org.getUsername());
-    await page.type('input#password', this.flags.password);
-    await page.click('input#Login');
-    await page.waitFor(3000);
+    // // login page
+    // await page.waitForSelector('input#username');
+    // await page.type('input#username', this.org.getUsername());
+    // await page.type('input#password', this.flags.password);
+    // await page.click('input#Login');
+    // await page.waitFor(3000);
 
-    // mostly happens on new scratch orgs, but not if you've previously auth'd it
-    try {
-      await page.waitForSelector('input#oaapprove');
-      await page.click('input#oaapprove');
-      await page.waitFor(1000);
-    } catch (e) {
-      this.ux.log('no connection approval page');
-    }
+    // // mostly happens on new scratch orgs, but not if you've previously auth'd it
+    // try {
+    //   await page.waitForSelector('input#oaapprove');
+    //   await page.click('input#oaapprove');
+    //   await page.waitFor(1000);
+    // } catch (e) {
+    //   this.ux.log('no connection approval page');
+    // }
 
-    if (!this.flags.showbrowser) await browser.close();
+    // if (!this.flags.showbrowser) await browser.close();
 
-    const fileResult = await request.post({
-      headers: {
-        Authorization: `Bearer ${process.env.HEROKU_API_KEY}`
-      },
-      url: `${connectAPIendpoint}/connections/${theConnection.id}/actions/import`,
-      body: await fs.readJSON(this.flags.configfile),
-      json: true
-    });
+    // const fileResult = await request.post({
+    //   headers: {
+    //     Authorization: `Bearer ${process.env.HEROKU_API_KEY}`
+    //   },
+    //   url: `${connectAPIendpoint}/connections/${theConnection.id}/actions/import`,
+    //   body: await fs.readJSON(this.flags.configfile),
+    //   json: true
+    // });
 
-    if (fileResult !== undefined) {
-      this.ux.error(fileResult);
-      throw new Error(`file upload error: ${fileResult}`);
-    }
+    // if (fileResult !== undefined) {
+    //   this.ux.error(fileResult);
+    //   throw new Error(`file upload error: ${fileResult}`);
+    // }
 
-    this.ux.log(`set up Heroku Connect for ${this.flags.app}`);
-    return `set up Heroku Connect for ${this.flags.app}`;
+    // this.ux.log(`set up Heroku Connect for ${this.flags.app}`);
+    // return `set up Heroku Connect for ${this.flags.app}`;
 
   }
 

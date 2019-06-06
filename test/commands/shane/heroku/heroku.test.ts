@@ -53,9 +53,9 @@ describe('shane:heroku:connect', () => {
     });
 
     afterAll(async () => {
-      await testutils.orgDelete(testProjectName);
-      await exec('heroku destroy -a `basename "${PWD/mshanemc-/}"` -c `basename "${PWD/mshanemc-/}"`', { cwd: testProjectName });
-      await fs.remove(testProjectName);
+      // await testutils.orgDelete(testProjectName);
+      // await exec('heroku destroy -a `basename "${PWD/mshanemc-/}"` -c `basename "${PWD/mshanemc-/}"`', { cwd: testProjectName });
+      // await fs.remove(testProjectName);
     });
 
     const testMapping = {
