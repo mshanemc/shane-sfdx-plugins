@@ -8,7 +8,7 @@ import testutils = require('../../../helpers/testutils');
 
 const exec = util.promisify(child_process.exec);
 
-const testProjectName = 'mshanemc-custexp-123456789';
+const testProjectName = 'mshanemc-custexp-1234567890';
 
 describe('shane:heroku:connect', () => {
   jest.setTimeout(testutils.remoteTimeout);
@@ -34,7 +34,6 @@ describe('shane:heroku:connect', () => {
       // sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t autodeployed-demos
       const results = await exec('sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t autodeployed-demos --json', { cwd: testProjectName });
 
-      // console.log(results);
       expect(results).toBeTruthy();
       expect(results.stdout).toBeTruthy();
       const stdout = JSON.parse(stripcolor(results.stdout));
@@ -45,7 +44,7 @@ describe('shane:heroku:connect', () => {
       // sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f assets/herokuConnect/electron-web.json
       const results = await exec('sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f mapping.json -e custom --json', { cwd: testProjectName });
 
-      // console.log(results);
+      console.log(results);
       expect(results).toBeTruthy();
       expect(results.stdout).toBeTruthy();
       console.log(results.stdout);
