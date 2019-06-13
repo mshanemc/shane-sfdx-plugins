@@ -42,7 +42,7 @@ describe('shane:heroku:connect', () => {
 
     it('configures connect with json response', async () => {
       // sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f assets/herokuConnect/electron-web.json
-      const results = await exec('sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f mapping.json -e custom --verbose', { cwd: testProjectName });
+      const results = await exec('sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f mapping.json -e custom --json', { cwd: testProjectName });
 
       console.log(results);
       expect(results).toBeTruthy();
@@ -53,9 +53,9 @@ describe('shane:heroku:connect', () => {
     });
 
     afterAll(async () => {
-      // await testutils.orgDelete(testProjectName);
-      // await exec('heroku destroy -a `basename "${PWD/mshanemc-/}"` -c `basename "${PWD/mshanemc-/}"`', { cwd: testProjectName });
-      // await fs.remove(testProjectName);
+      await testutils.orgDelete(testProjectName);
+      await exec('heroku destroy -a `basename "${PWD/mshanemc-/}"` -c `basename "${PWD/mshanemc-/}"`', { cwd: testProjectName });
+      await fs.remove(testProjectName);
     });
 
     const testMapping = {

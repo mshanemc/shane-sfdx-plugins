@@ -2,8 +2,8 @@ import { flags, SfdxCommand } from '@salesforce/command';
 // import chalk from 'chalk';
 
 import child_process = require('child_process');
-// import * as fs from 'fs-extra';
-// import * as puppeteer from 'puppeteer';
+import * as fs from 'fs-extra';
+import * as puppeteer from 'puppeteer';
 import request = require('request-promise-native');
 import * as stripcolor from 'strip-color';
 import util = require('util');
@@ -121,8 +121,6 @@ export default class HerokuConnect extends SfdxCommand {
     // const theConnection = connectionInfo.results.find( conn => conn.app_name === this.flags.app );
     // this.ux.log(`found connection with id ${theConnection.id}`);
 
-    // // if (! theConnection.db_key || ! theConnection.schema_name) {
-
     const patchResults = await request.patch({
       ...defaultHerokuRequest,
       uri: matchingApp.detail_url,
@@ -133,63 +131,61 @@ export default class HerokuConnect extends SfdxCommand {
     });
 
     if ( !this.flags.json && this.flags.verbose)  this.ux.logJson(patchResults);
-    // } else {
-    //   this.ux.log('skipping connection config because already done');
-    // }
 
-    // you don't have a connection to a Salesforce org
-    // const sfdcAuthUrlResp = await request.post({
-    //   ...defaultHerokuRequest,
-    //   url: `${matchingApp.detail_url}/authorize_url`,
-    //   body: {
-    //     environment: this.flags.environment,
-    //     domain: this.flags.instance
-    //   }
-    // });
+    // let's find out where to authenticate
 
-    // if ( !this.flags.json && this.flags.verbose)  this.ux.logJson(sfdcAuthUrlResp);
-    // const sfdcAuthUrl = sfdcAuthUrlResp.redirect;
+    const sfdcAuthUrlResp = await request.post({
+      ...defaultHerokuRequest,
+      url: `${matchingApp.detail_url}/authorize_url`,
+      body: {
+        environment: this.flags.environment,
+        domain: this.flags.instance
+      }
+    });
 
-    // const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
-    // const page = await browser.newPage();
-    // await page.goto(sfdcAuthUrl, {
-    //   waitUntil: 'networkidle2'
-    // });
+    if ( !this.flags.json && this.flags.verbose)  this.ux.logJson(sfdcAuthUrlResp);
+    const sfdcAuthUrl = sfdcAuthUrlResp.redirect;
 
-    // // login page
-    // await page.waitForSelector('input#username');
-    // await page.type('input#username', this.org.getUsername());
-    // await page.type('input#password', this.flags.password);
-    // await page.click('input#Login');
-    // await page.waitFor(3000);
+    const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
+    const page = await browser.newPage();
+    await page.goto(sfdcAuthUrl, {
+      waitUntil: 'networkidle2'
+    });
 
-    // // mostly happens on new scratch orgs, but not if you've previously auth'd it
-    // try {
-    //   await page.waitForSelector('input#oaapprove');
-    //   await page.click('input#oaapprove');
-    //   await page.waitFor(1000);
-    // } catch (e) {
-    //   this.ux.log('no connection approval page');
-    // }
+    // login page
+    await page.waitForSelector('input#username');
+    await page.type('input#username', this.org.getUsername());
+    await page.type('input#password', this.flags.password);
+    await page.click('input#Login');
+    await page.waitFor(3000);
 
-    // if (!this.flags.showbrowser) await browser.close();
+    // mostly happens on new scratch orgs, but not if you've previously auth'd it
+    try {
+      await page.waitForSelector('input#oaapprove');
+      await page.click('input#oaapprove');
+      await page.waitFor(1000);
+    } catch (e) {
+      this.ux.log('no connection approval page');
+    }
 
-    // const fileResult = await request.post({
-    //   headers: {
-    //     Authorization: `Bearer ${process.env.HEROKU_API_KEY}`
-    //   },
-    //   url: `${connectAPIendpoint}/connections/${theConnection.id}/actions/import`,
-    //   body: await fs.readJSON(this.flags.configfile),
-    //   json: true
-    // });
+    await browser.close();
 
-    // if (fileResult !== undefined) {
-    //   this.ux.error(fileResult);
-    //   throw new Error(`file upload error: ${fileResult}`);
-    // }
+    const fileResult = await request.post({
+      headers: {
+        Authorization: `Bearer ${process.env.HEROKU_API_KEY}`
+      },
+      url: `${matchingApp.detail_url}/actions/import`,
+      body: await fs.readJSON(this.flags.configfile),
+      json: true
+    });
 
-    // this.ux.log(`set up Heroku Connect for ${this.flags.app}`);
-    // return `set up Heroku Connect for ${this.flags.app}`;
+    if (fileResult !== undefined) {
+      this.ux.error(fileResult);
+      throw new Error(`file upload error: ${fileResult}`);
+    }
+
+    this.ux.log(`set up Heroku Connect for ${this.flags.app}`);
+    return `set up Heroku Connect for ${this.flags.app}`;
 
   }
 
