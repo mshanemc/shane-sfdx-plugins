@@ -1,7 +1,7 @@
 {
   "name": "shane-sfdx-plugins",
   "description": "sfdx plugins by Shane McLaughlin",
-  "version": "3.19.0",
+  "version": "3.20.0",
   "author": "@mshanemc",
   "bugs": "https://github.com/mshanemc/shane-sfdx-plugins/issues",
   "dependencies": {
@@ -20,10 +20,12 @@
     "npm": "^6.8.0",
     "puppeteer": "^1.12.2",
     "puppeteer-core": "^1.12.2",
+    "purify-css": "^1.2.5",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "stopword": "^0.1.13",
     "strip-color": "^0.1.0",
+    "strip-css-comments": "^4.0.0",
     "unzipper": "^0.9.11",
     "xml2js": "^0.4.19"
   },
@@ -62,11 +64,26 @@
   "oclif": {
     "commands": "./lib/commands",
     "topics": {
+      "shane:analytics": {
+        "description": "share apps, enable communities for analytics, start a dataflow, or download/upload/list datasets"
+      },
+      "shane:cdc": {
+        "description": "work with Change Data Capture streams"
+      },
+      "shane:communities": {
+        "description": "publish, activate, and query communities"
+      },
       "shane:data": {
         "description": "upload a file (optionally attached to record or in chatter feed) or query something to get its id"
       },
       "shane:github": {
         "description": "install a package that's on github, using either the source OR a packaged version"
+      },
+      "shane:heroku": {
+        "description": "wait for success on heroku deployments and fully connect an org to Heroku Connect"
+      },
+      "shane:lwc": {
+        "description": "work with off-core (OSS) LWC locally, including creation and css extract/merge utilities"
       },
       "shane:mdapi": {
         "description": "pull unpackaged or packaged source from an org, or push dx-formatted source to an org.  Also, list or describe the objects via mdapi"
@@ -76,6 +93,9 @@
       },
       "shane:org": {
         "description": "create an org with a friendly username or delete an org without a username, or open its componentLibrary or metadataCoverage page, or reauth to it, or get a refresh token on an auth'd org"
+      },
+      "shane:permset": {
+        "description": "get information about or create permsets from local source schema"
       },
       "shane:profile": {
         "description": "convert (most) everything in a profile to a permset OR whitelist ip ranges"
