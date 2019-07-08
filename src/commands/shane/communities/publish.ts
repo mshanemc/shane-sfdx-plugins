@@ -10,9 +10,18 @@ export default class CommunityPublish extends SfdxCommand {
   protected static flagsConfig = {
     name: flags.string({
       char: 'n',
-      description: 'name of the community to publish'
+      description: 'name of the community to publish (case sensitive!)'
     })
   };
+
+  public static examples = [
+    `sfdx shane:communities:publish
+// publishes all the communities in the org
+`,
+    `sfdx shane:communities:publish -n customer
+// finds a community named customer, publishes it.
+`
+  ];
 
   // tslint:disable-next-line: no-any
   public async run(): Promise<any> {
