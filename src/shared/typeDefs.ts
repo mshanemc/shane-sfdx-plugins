@@ -101,6 +101,7 @@ interface CommunitiesRestResult {
     {
       name: string;
       id: string;
+      siteAsContainerEnabled: boolean;
     }
   ];
 }
