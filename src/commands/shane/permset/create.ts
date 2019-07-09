@@ -86,7 +86,7 @@ export default class PermSetCreate extends SfdxCommand {
 
     this.ux.log(`Object list is ${objectList}`);
 
-    if (this.flags.check) {
+    if (this.flags.checkpermissionable) {
       this.ux.startSpinner('Getting objects describe from org');
 
       if (objectList.includes('Activity')) {
@@ -215,7 +215,7 @@ export default class PermSetCreate extends SfdxCommand {
     } else {
 
       // get the field
-      if (this.flags.check) {
+      if (this.flags.checkpermissionable) {
 
         // Use org instead to know if field is creatable/updatable/permissionable
         if (objectDescribe.has(objectName) && objectDescribe.get(objectName).has(fieldName)) {
