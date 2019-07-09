@@ -1,4 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+import { Connection } from '@salesforce/core';
 import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
@@ -10,23 +11,29 @@ import { setupArray } from '../../../shared/setupArray';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
 
+let conn: Connection;
+let objectDescribe: Map<string, Map<String, any>>;
+
 export default class PermSetCreate extends SfdxCommand {
 
   public static description = 'create or add stuff to a permset with maximum access';
 
   public static examples = [
-`sfdx shane:permset:create -n MyPermSet1 -o Something__c -f Some_Field__c
-// create a permset in force-app/main/default for the object/field.  If MyPermSet1 doesn't exist, it will be created.
-`,
-`sfdx shane:permset:create -n MyPermSet1 -o Something__c
-// create a permset in force-app/main/default for every field on Something__c.
-`,
-`sfdx shane:permset:create -n MyPermSet1
-// create a permset in force-app/main/default for every field on every object!
-`,
-`sfdx shane:permset:create -n MyPermSet1 -t
-// create a permset in force-app/main/default for every field on every object.  If there's a tab for any of those objects, add that tab to the permset, too
-`
+    `sfdx shane:permset:create -n MyPermSet1 -o Something__c -f Some_Field__c
+    // create a permset in force-app/main/default for the object/field.  If MyPermSet1 doesn't exist, it will be created.
+    `,
+    `sfdx shane:permset:create -n MyPermSet1 -o Something__c
+    // create a permset in force-app/main/default for every field on Something__c.
+    `,
+    `sfdx shane:permset:create -n MyPermSet1
+    // create a permset in force-app/main/default for every field on every object!
+    `,
+    `sfdx shane:permset:create -n MyPermSet1 -t
+    // create a permset in force-app/main/default for every field on every object.  If there's a tab for any of those objects, add that tab to the permset, too
+    `,
+    `sfdx shane:permset:create -n MyPermSet1 -c
+    // create a permset in force-app/main/default for every field on every object, checking on org that all fields are permissionable
+    `
   ];
 
   protected static flagsConfig = {
@@ -34,14 +41,18 @@ export default class PermSetCreate extends SfdxCommand {
     object: flags.string({  char: 'o', description: 'API name of an object to add perms for.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' }),
     field: flags.string({  char: 'f', description: 'API name of an field to add perms for.  Required --object If blank, then you mean all the fields', dependsOn: ['object']}),
     directory: flags.directory({  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' }),
-    tab: flags.boolean({ char: 't', description: 'also add the tab for the specified object (or all objects if there is no specified objects)' })
-
+    tab: flags.boolean({ char: 't', description: 'also add the tab for the specified object (or all objects if there is no specified objects)' }),
+    checkpermissionable: flags.boolean({ char: 'c', description: 'some fields\'permissions can\'t be deducted from metadata, use describe on org to check if field is permissionable' })
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
   protected static requiresProject = true;
+  protected static requiresUsername = true;
 
   public async run(): Promise<any> { // tslint:disable-line:no-any
+
+    conn = this.org.getConnection();
+    objectDescribe = new Map<string, Map<String, any>>();
 
     // validations
     if (this.flags.field && ! this.flags.object) {
@@ -74,6 +85,29 @@ export default class PermSetCreate extends SfdxCommand {
     }
 
     this.ux.log(`Object list is ${objectList}`);
+
+    if (this.flags.check) {
+      this.ux.startSpinner('Getting objects describe from org');
+
+      if (objectList.includes('Activity')) {
+        // Describe call doesn't work with Activity, but works with Event & Task
+        // Both of them can be used for fieldPermissions
+        objectList.splice(objectList.indexOf('Activity'), 1, 'Event','Task');
+      }
+
+      // Calling describe on all sObjects - don't think you can do this in only 1 call
+      let index = 1;
+      for (const objectName of objectList) {
+        this.ux.setSpinnerStatus(`${index}/${objectList.length}`);
+
+        const descr = await this.getFieldsPermissions(objectName);
+        objectDescribe.set(objectName, descr);
+
+        index++;
+      }
+
+      this.ux.stopSpinner('Done.');
+    }
 
     // do the objects
     for (const obj of objectList) {
@@ -181,7 +215,31 @@ export default class PermSetCreate extends SfdxCommand {
     } else {
 
       // get the field
-      if (fs.existsSync(`${targetLocationObjects}/${objectName}/fields/${fieldName}.field-meta.xml`)) {
+      if (this.flags.check) {
+
+        // Use org instead to know if field is creatable/updatable/permissionable
+        if (objectDescribe.has(objectName) && objectDescribe.get(objectName).has(fieldName)) {
+          const fieldDescribe = objectDescribe.get(objectName).get(fieldName);
+
+          // Check we can add permission, for instance mandatory fields are readable and editable anyway
+          // Adding access rights to them will throw an error
+          if (fieldDescribe.permissionable) {
+            const editable = fieldDescribe.createable && fieldDescribe.updateable;
+            existing.fieldPermissions.push(
+              {
+                readable: 'true',
+                editable: editable,
+                field: `${objectName}.${fieldName}`
+              }
+            );
+            this.ux.log(`Read${editable?'/Edit':''} permission added for field ${objectName}/${fieldName} `);
+          }
+        }
+        else {
+          this.ux.warn(chalk.yellow(`field not found on org: ${objectName}/${fieldName}`));
+        }
+      } 
+      else if (fs.existsSync(`${targetLocationObjects}/${objectName}/fields/${fieldName}.field-meta.xml`)) {
         const parser = new xml2js.Parser({ explicitArray: false });
         const parseString = util.promisify(parser.parseString);
         const fieldJSON = await parseString(fs.readFileSync(`${targetLocationObjects}/${objectName}/fields/${fieldName}.field-meta.xml`));
@@ -265,4 +323,15 @@ export default class PermSetCreate extends SfdxCommand {
     return existing;
   }
 
+  public async getFieldsPermissions(objectName: string) {
+
+    let fieldsPermissions: Map<String, any> = new Map<String, any>();
+    const describeResult = await conn.sobject(objectName).describe();
+
+    for (const field of describeResult.fields) {
+      fieldsPermissions.set(field.name, field);
+    }
+
+    return fieldsPermissions;
+  }
 }
