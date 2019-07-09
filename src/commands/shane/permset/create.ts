@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { Connection } from '@salesforce/core';
+import { SfdxError, Connection } from '@salesforce/core';
 import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
@@ -13,6 +13,7 @@ import * as options from '../../../shared/js2xmlStandardOptions';
 
 let conn: Connection;
 let objectDescribe: Map<string, Map<String, any>>;
+let resolvedDescribePromises = 0;
 
 export default class PermSetCreate extends SfdxCommand {
 
@@ -75,13 +76,13 @@ export default class PermSetCreate extends SfdxCommand {
       label: this.flags.name
     });
 
-    let objectList = [];
+    let objectList:Set<string> = new Set<string>();
 
     if (!this.flags.object) {
       const files = fs.readdirSync(targetLocationObjects);
-      objectList = objectList.concat(files);
+      files.forEach(file => objectList.add(file));
     } else {
-      objectList.push(this.flags.object);
+      objectList.add(this.flags.object);
     }
 
     this.ux.log(`Object list is ${objectList}`);
@@ -89,24 +90,39 @@ export default class PermSetCreate extends SfdxCommand {
     if (this.flags.checkpermissionable) {
       this.ux.startSpinner('Getting objects describe from org');
 
-      if (objectList.includes('Activity')) {
+      if (objectList.has('Activity')) {
         // Describe call doesn't work with Activity, but works with Event & Task
         // Both of them can be used for fieldPermissions
-        objectList.splice(objectList.indexOf('Activity'), 1, 'Event','Task');
+        objectList.delete('Activity');
+        objectList.add('Event');
+        objectList.add('Task');
       }
 
       // Calling describe on all sObjects - don't think you can do this in only 1 call
-      let index = 1;
+      let describePromises:Array<Promise<void | Map<String, any>>> = new Array<Promise<void | Map<String, any>>>();
+      
       for (const objectName of objectList) {
-        this.ux.setSpinnerStatus(`${index}/${objectList.length}`);
-
-        const descr = await this.getFieldsPermissions(objectName);
-        objectDescribe.set(objectName, descr);
-
-        index++;
+        describePromises.push(this.getFieldsPermissions(objectName)
+                              .then(result => {
+                                objectDescribe.set(objectName, result);
+                                resolvedDescribePromises++;
+                                this.ux.setSpinnerStatus(`${resolvedDescribePromises}/${objectList.size}`);
+                              })
+                              .catch(err => {
+                                err.objectName = objectName;
+                                throw err;
+                              }));
       }
 
-      this.ux.stopSpinner('Done.');
+      await Promise.all(describePromises)
+            .then(() => {
+              this.ux.stopSpinner('Done.');
+            })
+            .catch(err => {
+              // Looks like the process is still waiting for other promises to resolve before exiting, how to avoid that ?
+              this.ux.stopSpinner(err);
+              throw new SfdxError(`Unable to get describe for object ${err.objectName}`);
+            });
     }
 
     // do the objects
@@ -228,7 +244,7 @@ export default class PermSetCreate extends SfdxCommand {
             existing.fieldPermissions.push(
               {
                 readable: 'true',
-                editable: editable,
+                editable: `${editable}`,
                 field: `${objectName}.${fieldName}`
               }
             );
