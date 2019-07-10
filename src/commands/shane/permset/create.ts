@@ -43,7 +43,8 @@ export default class PermSetCreate extends SfdxCommand {
     field: flags.string({  char: 'f', description: 'API name of an field to add perms for.  Required --object If blank, then you mean all the fields', dependsOn: ['object']}),
     directory: flags.directory({  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' }),
     tab: flags.boolean({ char: 't', description: 'also add the tab for the specified object (or all objects if there is no specified objects)' }),
-    checkpermissionable: flags.boolean({ char: 'c', description: 'some fields\'permissions can\'t be deducted from metadata, use describe on org to check if field is permissionable' })
+    checkpermissionable: flags.boolean({ char: 'c', description: 'some fields\'permissions can\'t be deducted from metadata, use describe on org to check if field is permissionable' }),
+    verbose: flags.builtin()
   };
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
@@ -260,7 +261,9 @@ export default class PermSetCreate extends SfdxCommand {
         const parseString = util.promisify(parser.parseString);
         const fieldJSON = await parseString(fs.readFileSync(`${targetLocationObjects}/${objectName}/fields/${fieldName}.field-meta.xml`));
 
-        this.ux.logJson(fieldJSON);
+        if (this.flags.verbose) {
+          this.ux.logJson(fieldJSON);
+        }
 
         // Is it required at the DB level?
         if (fieldJSON.CustomField.required === 'true' || fieldJSON.CustomField.type === 'MasterDetail' || !fieldJSON.CustomField.type || fieldJSON.CustomField.fullName === 'OwnerId') {
