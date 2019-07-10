@@ -16,7 +16,6 @@ let objectDescribe: Map<string, Map<String, any>>;
 let resolvedDescribePromises = 0;
 
 export default class PermSetCreate extends SfdxCommand {
-
   public static description = 'create or add stuff to a permset with maximum access';
 
   public static examples = [
@@ -38,12 +37,30 @@ export default class PermSetCreate extends SfdxCommand {
   ];
 
   protected static flagsConfig = {
-    name: flags.string({  char: 'n', required: true, description: 'path to existing permset.  If it exists, new perms will be added to it.  If not, then it\'ll be created for you'}),
-    object: flags.string({  char: 'o', description: 'API name of an object to add perms for.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs' }),
-    field: flags.string({  char: 'f', description: 'API name of an field to add perms for.  Required --object If blank, then you mean all the fields', dependsOn: ['object']}),
-    directory: flags.directory({  char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata? defaults to force-app/main/default' }),
+    name: flags.string({
+      char: 'n',
+      required: true,
+      description: "path to existing permset.  If it exists, new perms will be added to it.  If not, then it'll be created for you"
+    }),
+    object: flags.string({
+      char: 'o',
+      description: 'API name of an object to add perms for.  If blank, then you mean ALL the objects and ALL their fields and ALL their tabs'
+    }),
+    field: flags.string({
+      char: 'f',
+      description: 'API name of an field to add perms for.  Required --object If blank, then you mean all the fields',
+      dependsOn: ['object']
+    }),
+    directory: flags.directory({
+      char: 'd',
+      default: 'force-app/main/default',
+      description: 'Where is all this metadata? defaults to force-app/main/default'
+    }),
     tab: flags.boolean({ char: 't', description: 'also add the tab for the specified object (or all objects if there is no specified objects)' }),
-    checkpermissionable: flags.boolean({ char: 'c', description: 'some fields\'permissions can\'t be deducted from metadata, use describe on org to check if field is permissionable' }),
+    checkpermissionable: flags.boolean({
+      char: 'c',
+      description: "some fields'permissions can't be deducted from metadata, use describe on org to check if field is permissionable"
+    }),
     verbose: flags.builtin()
   };
 
@@ -51,13 +68,14 @@ export default class PermSetCreate extends SfdxCommand {
   protected static requiresProject = true;
   protected static requiresUsername = true;
 
-  public async run(): Promise<any> { // tslint:disable-line:no-any
+  public async run(): Promise<any> {
+    // tslint:disable-line:no-any
 
     conn = this.org.getConnection();
     objectDescribe = new Map<string, Map<String, any>>();
 
     // validations
-    if (this.flags.field && ! this.flags.object) {
+    if (this.flags.field && !this.flags.object) {
       this.ux.error(chalk.red('If you say a field, you have to say the object'));
     }
 
@@ -77,7 +95,7 @@ export default class PermSetCreate extends SfdxCommand {
       label: this.flags.name
     });
 
-    let objectList:Set<string> = new Set<string>();
+    let objectList: Set<string> = new Set<string>();
 
     if (!this.flags.object) {
       const files = fs.readdirSync(targetLocationObjects);
@@ -100,41 +118,43 @@ export default class PermSetCreate extends SfdxCommand {
       }
 
       // Calling describe on all sObjects - don't think you can do this in only 1 call
-      let describePromises:Array<Promise<void | Map<String, any>>> = new Array<Promise<void | Map<String, any>>>();
-      
+      let describePromises: Array<Promise<void | Map<String, any>>> = new Array<Promise<void | Map<String, any>>>();
+
       for (const objectName of objectList) {
-        describePromises.push(this.getFieldsPermissions(objectName)
-                              .then(result => {
-                                objectDescribe.set(objectName, result);
-                                resolvedDescribePromises++;
-                                this.ux.setSpinnerStatus(`${resolvedDescribePromises}/${objectList.size}`);
-                              })
-                              .catch(err => {
-                                err.objectName = objectName;
-                                throw err;
-                              }));
+        describePromises.push(
+          this.getFieldsPermissions(objectName)
+            .then(result => {
+              objectDescribe.set(objectName, result);
+              resolvedDescribePromises++;
+              this.ux.setSpinnerStatus(`${resolvedDescribePromises}/${objectList.size}`);
+            })
+            .catch(err => {
+              err.objectName = objectName;
+              throw err;
+            })
+        );
       }
 
       await Promise.all(describePromises)
-            .then(() => {
-              this.ux.stopSpinner('Done.');
-            })
-            .catch(err => {
-              // Looks like the process is still waiting for other promises to resolve before exiting, how to avoid that ?
-              this.ux.stopSpinner(err);
-              throw new SfdxError(`Unable to get describe for object ${err.objectName}`);
-            });
+        .then(() => {
+          this.ux.stopSpinner('Done.');
+        })
+        .catch(err => {
+          // Looks like the process is still waiting for other promises to resolve before exiting, how to avoid that ?
+          this.ux.stopSpinner(err);
+          throw new SfdxError(`Unable to get describe for object ${err.objectName}`);
+        });
     }
 
     // do the objects
     for (const obj of objectList) {
       if (fs.existsSync(`${targetLocationObjects}/${obj}`)) {
-
         existing = this.addObjectPerms(existing, obj);
 
         if (this.flags.field) {
           existing = await this.addFieldPerms(existing, this.flags.object, this.flags.field);
-        } else { // all the fields
+        } else {
+          // all the fields
           existing = await this.addAllFieldPermissions(existing, obj);
         }
 
@@ -178,14 +198,17 @@ export default class PermSetCreate extends SfdxCommand {
   //   }
   // }
 
-  public addObjectPerms(existing, objectName: string) { // tslint:disable-line:no-any
+  public addObjectPerms(existing, objectName: string) {
+    // tslint:disable-line:no-any
     // make sure it the parent level objectPermissions[] exists
 
     existing = setupArray(existing, 'objectPermissions');
 
-    if (existing.objectPermissions.find(e => {
-      return e.object === objectName;
-    })) {
+    if (
+      existing.objectPermissions.find(e => {
+        return e.object === objectName;
+      })
+    ) {
       this.ux.log(`Object Permission already exists: ${objectName}.  Nothing to add.`);
       return existing;
     } else if (objectName.endsWith('__c')) {
@@ -215,25 +238,25 @@ export default class PermSetCreate extends SfdxCommand {
       });
     }
     return existing;
-
   }
 
-  public async addFieldPerms(existing, objectName: string, fieldName: string) { // tslint:disable-line:no-any
+  public async addFieldPerms(existing, objectName: string, fieldName: string) {
+    // tslint:disable-line:no-any
     // make sure it the parent level objectPermissions[] exists
     const targetLocationObjects = `${this.flags.directory}/objects`;
 
     existing = setupArray(existing, 'fieldPermissions');
 
-    if (existing.fieldPermissions.find(e => {
-      return e.field === `${objectName}.${fieldName}`;
-    })) {
+    if (
+      existing.fieldPermissions.find(e => {
+        return e.field === `${objectName}.${fieldName}`;
+      })
+    ) {
       this.ux.log(`Field Permission already exists: ${objectName}.${fieldName}.  Nothing to add.`);
       return existing;
     } else {
-
       // get the field
       if (this.flags.checkpermissionable) {
-
         // Use org instead to know if field is creatable/updatable/permissionable
         if (objectDescribe.has(objectName) && objectDescribe.get(objectName).has(fieldName)) {
           const fieldDescribe = objectDescribe.get(objectName).get(fieldName);
@@ -242,21 +265,17 @@ export default class PermSetCreate extends SfdxCommand {
           // Adding access rights to them will throw an error
           if (fieldDescribe.permissionable) {
             const editable = fieldDescribe.createable && fieldDescribe.updateable;
-            existing.fieldPermissions.push(
-              {
-                readable: 'true',
-                editable: `${editable}`,
-                field: `${objectName}.${fieldName}`
-              }
-            );
-            this.ux.log(`Read${editable?'/Edit':''} permission added for field ${objectName}/${fieldName} `);
+            existing.fieldPermissions.push({
+              readable: 'true',
+              editable: `${editable}`,
+              field: `${objectName}.${fieldName}`
+            });
+            this.ux.log(`Read${editable ? '/Edit' : ''} permission added for field ${objectName}/${fieldName} `);
           }
-        }
-        else {
+        } else {
           this.ux.warn(chalk.yellow(`field not found on org: ${objectName}/${fieldName}`));
         }
-      } 
-      else if (fs.existsSync(`${targetLocationObjects}/${objectName}/fields/${fieldName}.field-meta.xml`)) {
+      } else if (fs.existsSync(`${targetLocationObjects}/${objectName}/fields/${fieldName}.field-meta.xml`)) {
         const parser = new xml2js.Parser({ explicitArray: false });
         const parseString = util.promisify(parser.parseString);
         const fieldJSON = await parseString(fs.readFileSync(`${targetLocationObjects}/${objectName}/fields/${fieldName}.field-meta.xml`));
@@ -266,28 +285,27 @@ export default class PermSetCreate extends SfdxCommand {
         }
 
         // Is it required at the DB level?
-        if (fieldJSON.CustomField.required === 'true' || fieldJSON.CustomField.type === 'MasterDetail' || !fieldJSON.CustomField.type || fieldJSON.CustomField.fullName === 'OwnerId') {
+        if (
+          fieldJSON.CustomField.required === 'true' ||
+          fieldJSON.CustomField.type === 'MasterDetail' ||
+          !fieldJSON.CustomField.type ||
+          fieldJSON.CustomField.fullName === 'OwnerId'
+        ) {
           this.ux.log(`required field ${objectName}/${fieldName} needs no permissions `);
         } else if (fieldJSON.CustomField.type === 'Summary' || fieldJSON.CustomField.type === 'AutoNumber' || fieldJSON.CustomField.formula) {
           // these are read-only types
-          existing.fieldPermissions.push(
-            {
-              readable: 'true',
-              field: `${objectName}.${fieldName}`
-            }
-          );
+          existing.fieldPermissions.push({
+            readable: 'true',
+            field: `${objectName}.${fieldName}`
+          });
           this.ux.log(`Read-only permission added for field ${objectName}/${fieldName} `);
-
         } else {
-          existing.fieldPermissions.push(
-            {
-              readable: 'true',
-              editable: 'true',
-              field: `${objectName}.${fieldName}`
-            }
-          );
+          existing.fieldPermissions.push({
+            readable: 'true',
+            editable: 'true',
+            field: `${objectName}.${fieldName}`
+          });
           this.ux.log(`Read/Edit permission added for field ${objectName}/${fieldName} `);
-
         }
       } else {
         throw new Error(`field not found: ${objectName}/${fieldName}`);
@@ -323,7 +341,7 @@ export default class PermSetCreate extends SfdxCommand {
 
     // this.ux.log(`doing tab for ${objectName}`);
 
-    if ( ! ( objectName.includes('__c') || objectName.includes('__x') ) ) {
+    if (!(objectName.includes('__c') || objectName.includes('__x'))) {
       this.ux.warn(chalk.yellow(`Tab for this object type is not supported: ${objectName}`));
       return existing;
     }
@@ -343,7 +361,6 @@ export default class PermSetCreate extends SfdxCommand {
   }
 
   public async getFieldsPermissions(objectName: string) {
-
     let fieldsPermissions: Map<String, any> = new Map<String, any>();
     const describeResult = await conn.sobject(objectName).describe();
 
