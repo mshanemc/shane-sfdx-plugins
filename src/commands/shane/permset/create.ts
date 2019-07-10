@@ -66,12 +66,16 @@ export default class PermSetCreate extends SfdxCommand {
 
   // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
   protected static requiresProject = true;
-  protected static requiresUsername = true;
+  protected static supportsUsername = true;
 
   public async run(): Promise<any> {
     // tslint:disable-line:no-any
 
-    conn = this.org.getConnection();
+    // fail early on lack of username
+    if (this.flags.checkpermissionable && !this.org) {
+      throw new SfdxError(`username is required when using --checkpermissionable`);
+    }
+
     objectDescribe = new Map<string, Map<String, any>>();
 
     // validations
@@ -107,6 +111,8 @@ export default class PermSetCreate extends SfdxCommand {
     this.ux.log(`Object list is ${objectList}`);
 
     if (this.flags.checkpermissionable) {
+      conn = this.org.getConnection();
+
       this.ux.startSpinner('Getting objects describe from org');
 
       if (objectList.has('Activity')) {
