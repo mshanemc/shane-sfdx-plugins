@@ -31,8 +31,11 @@ describe('shane:heroku:connect', () => {
     });
 
     it('sets up a heroku app with deploy', async () => {
-      // sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t autodeployed-demos
-      const results = await exec('sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t autodeployed-demos --json', { cwd: testProjectName });
+      // sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t ci-tests
+      const results = await exec(
+        'sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t ci-tests --json',
+        { cwd: testProjectName }
+      );
 
       expect(results).toBeTruthy();
       expect(results.stdout).toBeTruthy();
@@ -42,12 +45,14 @@ describe('shane:heroku:connect', () => {
 
     it('configures connect with json response', async () => {
       // sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f assets/herokuConnect/electron-web.json
-      const results = await exec('sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f mapping.json -e custom --json', { cwd: testProjectName });
+      const results = await exec('sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f mapping.json -e custom --json', {
+        cwd: testProjectName
+      });
 
-      console.log(results);
+      // console.log(results);
       expect(results).toBeTruthy();
       expect(results.stdout).toBeTruthy();
-      console.log(results.stdout);
+      // console.log(results.stdout);
       const stdout = JSON.parse(stripcolor(results.stdout));
       expect(stdout.status).toBe(0);
     });
@@ -106,5 +111,4 @@ describe('shane:heroku:connect', () => {
       version: 1
     };
   }
-
 });
