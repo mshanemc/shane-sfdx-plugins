@@ -1,22 +1,20 @@
 {
-  "buildpacks": [
-    {
-      "url": "heroku/nodejs"
-    },
-    {
-      "url": "https://buildpack-registry.s3.amazonaws.com/buildpacks/jontewks/puppeteer.tgz"
-    },
-    {
-      "url": "https://github.com/mshanemc/salesforce-cli-buildpack#456646ed76729bc4ef32db7a22758de5c217a7b8"
+    "buildpacks": [
+        {
+            "url": "heroku/nodejs"
+        },
+        {
+            "url": "https://buildpack-registry.s3.amazonaws.com/buildpacks/jontewks/puppeteer.tgz"
+        },
+        {
+            "url": "https://github.com/mshanemc/salesforce-cli-buildpack#456646ed76729bc4ef32db7a22758de5c217a7b8"
+        }
+    ],
+    "environments": {
+        "test": {
+            "scripts": {
+                "test": "jest --runInBand --bail"
+            }
+        }
     }
-  ],
-  "environments": {
-    "test": {
-      "scripts": {
-        "test-setup": "./remoteCI.sh",
-        "test-out": "echo \"skipping tests\"",
-        "test": "yarn run prepare && jest --runInBand --bail"
-      }
-    }
-  }
 }

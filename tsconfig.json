@@ -1,23 +1,15 @@
 {
-  "extends": "./node_modules/@salesforce/dev-config/tsconfig",
-  "compilerOptions": {
-    "lib" : ["dom", "es2018"],
-    "outDir": "./lib",
-    "rootDirs": [
-      "./src"
-    ],
-    "baseUrl": "./",
-    "paths" : {
-      "*" : ["./node_modules/@salesforce/core/typings/*"]
+    "extends": "./node_modules/@salesforce/dev-config/tsconfig",
+    "compilerOptions": {
+        "lib": ["dom", "es2018"],
+        "outDir": "./lib",
+        "rootDirs": ["./src"],
+        "baseUrl": "./",
+        "paths": {
+            "*": ["./node_modules/@salesforce/core/typings/*"]
+        },
+        "types": ["node", "jest", "fs-extra", "moment", "request", "request-promise-native"]
     },
-    "types": ["node", "jest", "fs-extra", "moment", "request", "request-promise-native"]
-  },
-  "include": [
-    "./src/**/*",
-  ],
-  "exclude": [
-    "./test/**",
-    "./test*",
-    "./test/**/*"
-  ]
+    "include": ["./src/**/*"],
+    "exclude": ["./test/**", "./test*", "./test/**/*"]
 }
