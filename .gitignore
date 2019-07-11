@@ -4,7 +4,7 @@
 /lib
 /node_modules
 /tmp
-/testProject
+/testProject*
 dump.rdb
 
 mshanemc-*
