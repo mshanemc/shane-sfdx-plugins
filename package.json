@@ -45,7 +45,9 @@
         "@types/puppeteer": "^1.12.1",
         "@types/request-promise-native": "^1.0.15",
         "@types/unzipper": "^0.9.1",
+        "husky": ">=1",
         "jest": "^24.3.1",
+        "lint-staged": ">=8",
         "prettier": "^1.18.2",
         "ts-jest": "^24.0.0",
         "ts-node": "^7.0.1",
@@ -127,6 +129,17 @@
         "test:parallel": "yarn run prepare && jest",
         "test:watch": "yarn run prepare && jest --watch --runInBand",
         "version": "oclif-dev readme && git add README.md",
-        "prettier": "prettier"
+        "prettier": "prettier --write"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,css,json,md}": [
+            "prettier --write",
+            "git add"
+        ]
     }
 }
