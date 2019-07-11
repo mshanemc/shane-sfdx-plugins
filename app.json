@@ -13,7 +13,7 @@
   "environments": {
     "test": {
       "scripts": {
-        "test-setup": "echo 'hello from a test script'",
+        "test-setup": "./remoteCI.sh",
         "test": "yarn run prepare && jest --runInBand --bail"
       }
     }
