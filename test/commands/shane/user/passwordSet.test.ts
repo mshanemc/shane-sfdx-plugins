@@ -6,11 +6,10 @@ import util = require('util');
 import testutils = require('../../../helpers/testutils');
 
 const exec = util.promisify(child_process.exec);
-const testProjectName = 'testUserPasswordSet';
+const testProjectName = 'testProjectUserPasswordSet';
 const maxBuffer = 1000 * 1024;
 
 describe('shane:user:password:set', () => {
-
   jest.setTimeout(testutils.remoteTimeout);
 
   if (!process.env.LOCALONLY) {
@@ -29,14 +28,11 @@ describe('shane:user:password:set', () => {
       const displayResult = await exec('sfdx force:org:display --json', { cwd: testProjectName, maxBuffer });
       const displayResultJSON = JSON.parse(stripcolor(displayResult.stdout));
       expect(displayResultJSON.result.password).toBe(password);
-
     });
 
     afterAll(async () => {
       await testutils.orgDelete(testProjectName);
       await fs.remove(testProjectName);
     });
-
   }
-
 });
