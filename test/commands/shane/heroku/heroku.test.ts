@@ -27,6 +27,15 @@ describe('shane:heroku:connect', () => {
             await exec('sfdx force:source:push', { cwd: testProjectName });
             // create our test file
             await fs.writeJSON(`${testProjectName}/mapping.json`, testMapping);
+
+            try {
+                await exec('heroku destroy -a `basename "${PWD/mshanemc-/}"` -c `basename "${PWD/mshanemc-/}"`', {
+                    cwd: testProjectName,
+                    shell: '/bin/bash'
+                });
+            } catch (e) {
+                // it's ok....just wanted to make sure it's not there before trying to create it
+            }
             // generate a password because we'll need it for heroku connect authing
         });
 
