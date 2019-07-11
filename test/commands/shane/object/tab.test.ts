@@ -15,7 +15,6 @@ const label = 'Corgi';
 const plural = 'Corgi';
 
 describe('shane:object:create (regular object flavor)', () => {
-
   jest.setTimeout(testutils.localTimeout);
 
   beforeAll(async () => {
@@ -24,10 +23,12 @@ describe('shane:object:create (regular object flavor)', () => {
   });
 
   it('creates an object with all params supplied for a Text Name', async () => {
-
     // `sfdx shane:object:create --label "Platypus" --plural "${plural}" --api Platypus__b --directory /my / project / path
 
-    await exec(`sfdx shane:object:create --type custom --label "${label}" --plural "${plural}" --api ${api} --nametype Text --sharingmodel ReadWrite`, { cwd: testProjectName });
+    await exec(
+      `sfdx shane:object:create --type custom --label "${label}" --plural "${plural}" --api ${api} --nametype Text --sharingmodel ReadWrite`,
+      { cwd: testProjectName }
+    );
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}`)).toBe(true);
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields`)).toBe(true);
     expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`)).toBe(true);
@@ -43,7 +44,6 @@ describe('shane:object:create (regular object flavor)', () => {
     await exec(`sfdx shane:object:tab --object ${api} --icon 1`, { cwd: testProjectName });
     const parsedTab = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/tabs//${api}.tab-meta.xml`);
     expect(parsedTab.CustomTab.customObject).toBe('true');
-    expect(parsedTab.CustomTab.mobileReady).toBe('false');
     expect(parsedTab.CustomTab.motif).toBe('Custom1: Heart');
   });
 
