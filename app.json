@@ -14,8 +14,8 @@
     "test": {
       "scripts": {
         "test-setup": "./remoteCI.sh",
-        "test": "echo \"skipping tests\"",
-        "test-out": "yarn run prepare && jest --runInBand --bail"
+        "test-out": "echo \"skipping tests\"",
+        "test": "yarn run prepare && jest --runInBand --bail"
       }
     }
   }
