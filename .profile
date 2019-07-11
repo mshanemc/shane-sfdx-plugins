@@ -1,5 +1,5 @@
 # Save a keyfile
-mkdir -p app/tmp
+mkdir -p /app/tmp
 echo "$JWTKEY" > /app/tmp/server.key
 
 # Auth to SFDX
