@@ -13,7 +13,7 @@
     "environments": {
         "test": {
             "scripts": {
-                "test": "jest --runInBand --bail"
+                "test": "jest --runInBand"
             }
         }
     }
