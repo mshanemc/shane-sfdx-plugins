@@ -31,9 +31,9 @@ describe('shane:heroku:connect', () => {
     });
 
     it('sets up a heroku app with deploy', async () => {
-      // sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t autodeployed-demos
+      // sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t ci-tests
       const results = await exec(
-        'sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t autodeployed-demos --json',
+        'sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t ci-tests --json',
         { cwd: testProjectName }
       );
 
