@@ -1,6 +1,5 @@
 echo "hello from a CI test-script"
 # Save a keyfile
-mkdir -p app
 mkdir -p app/tmp
 echo "$JWTKEY" > app/tmp/server.key
 # Auth to SFDX
