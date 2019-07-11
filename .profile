@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Save a keyfile
 mkdir -p /app/tmp
 echo "$JWTKEY" > /app/tmp/server.key
