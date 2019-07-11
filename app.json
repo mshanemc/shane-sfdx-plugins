@@ -9,5 +9,12 @@
     {
       "url": "https://github.com/mshanemc/salesforce-cli-buildpack#456646ed76729bc4ef32db7a22758de5c217a7b8"
     }
-  ]
+  ],
+  "environments": {
+    "test": {
+      "scripts": {
+        "test-setup": "echo 'hello from a test script'"
+      }
+    }
+  }
 }
