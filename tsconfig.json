@@ -1,6 +1,7 @@
 {
     "extends": "./node_modules/@salesforce/dev-config/tsconfig",
     "compilerOptions": {
+        "allowJs": false,
         "lib": ["dom", "es2018"],
         "outDir": "./lib",
         "rootDirs": ["./src"],
@@ -11,5 +12,5 @@
         "types": ["node", "jest", "fs-extra", "moment", "request", "request-promise-native"]
     },
     "include": ["./src/**/*"],
-    "exclude": ["./test/**", "./test*", "./test/**/*"]
+    "exclude": ["./test/**", "./testProject*/**/*", "./test/**/*", "./mshanemc-*/**/*"]
 }

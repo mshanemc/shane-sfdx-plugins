@@ -1,17 +1,13 @@
 import fs = require('fs-extra');
-import xml2js = require('xml2js');
 
 import { exec } from '../../src/shared/execProm';
+import { getParsed } from '../../src/shared/xml2jsAsync';
 
 // pass in a local path to mdapi xml, get back the json equivalent
-export async function getParsedXML(url: string) {
+// tslint:disable-next-line: no-any
+export async function getParsedXML(url: string): Promise<any> {
     const xml = await fs.readFile(url);
-
-    const parser = new xml2js.Parser({ explicitArray: false });
-    const parseString = util.promisify(parser.parseString);
-    const parsed = await parseString(xml);
-
-    return parsed;
+    return await getParsed(xml);
 }
 
 export async function orgCreate(testProjectName: string) {

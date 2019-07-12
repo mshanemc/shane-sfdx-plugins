@@ -4,11 +4,10 @@ import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 import { Field } from 'jsforce/describe-result';
-import util = require('util');
-import xml2js = require('xml2js');
 
 import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
 import { setupArray } from '../../../shared/setupArray';
+import { getParsed } from '../../../shared/xml2jsAsync';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
 
@@ -263,9 +262,10 @@ export default class PermSetCreate extends SfdxCommand {
                     this.ux.warn(chalk.yellow(`field not found on org: ${objectName}/${fieldName}`));
                 }
             } else if (fs.existsSync(`${targetLocationObjects}/${objectName}/fields/${fieldName}.field-meta.xml`)) {
-                const parser = new xml2js.Parser({ explicitArray: false });
-                const parsestring = util.promisify(parser.parsestring);
-                const fieldJSON = await parsestring(fs.readFileSync(`${targetLocationObjects}/${objectName}/fields/${fieldName}.field-meta.xml`));
+                // tslint:disable-next-line: no-any
+                const fieldJSON = <any>(
+                    await getParsed(await fs.readFile(`${targetLocationObjects}/${objectName}/fields/${fieldName}.field-meta.xml`))
+                );
 
                 if (this.flags.verbose) {
                     this.ux.logJson(fieldJSON);

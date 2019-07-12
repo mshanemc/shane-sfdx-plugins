@@ -3,10 +3,10 @@ import chalk from 'chalk';
 import cli from 'cli-ux';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
-import util = require('util');
-import xml2js = require('xml2js');
+
 import { fixExistingDollarSign } from '../../../shared/getExisting';
 import * as options from '../../../shared/js2xmlStandardOptions';
+import { getParsed } from '../../../shared/xml2jsAsync';
 
 const SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
 const SupportedTypes__e = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
@@ -241,11 +241,10 @@ export default class FieldCreate extends SfdxCommand {
 
         // dealing with big object indexes
         if (this.flags.object.includes('__b') && !this.flags.noindex) {
-            const parser = new xml2js.Parser({ explicitArray: true });
-            const parseString = util.promisify(parser.parseString);
             const filePath = `${this.flags.directory}/objects/${this.flags.object}/${this.flags.object}.object-meta.xml`;
-            const fileRead = await parseString(fs.readFileSync(filePath));
+            const fileRead = await getParsed(await fs.readFile(filePath), true);
 
+            this.ux.logJson(fileRead);
             let existing = fileRead.CustomObject;
             // this.ux.log(existing.indexes[0].fields);
             existing.indexes[0].fields = existing.indexes[0].fields || [];
