@@ -119,7 +119,6 @@
     "scripts": {
         "build": "rm -rf lib && tsc",
         "clean": "rm -f .oclif.manifest.json",
-        "lint": "tsc -p test --noEmit && tslint -p test -t stylish",
         "postpublish": "yarn run clean; git push; git push --tags",
         "posttest": "",
         "prepare": "yarn run build && oclif-dev manifest",
@@ -137,7 +136,7 @@
         }
     },
     "lint-staged": {
-        "*.{js,css,json,md}": [
+        "*.{ts,js,css,json,md}": [
             "prettier --write",
             "git add"
         ]
