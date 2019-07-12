@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 import fs = require('fs-extra');
 
-import { exec } from '../../../../src/shared/execProm';
+import { exec, exec2JSON } from '../../../../src/shared/execProm';
 import testutils = require('../../../helpers/testutils');
 
 const testProjectName = 'testProjectGithubSrcInstall';
@@ -19,27 +19,15 @@ describe('shane:github:src:install', () => {
 
         it('works with specified src folder', async () => {
             const repo = 'lightningErrorHandler';
-
-            const results = await exec(`sfdx shane:github:src:install -g ${username} -r ${repo} -p src --json`, { cwd: testProjectName });
-
-            // console.log(results);
-            expect(results).toBeTruthy();
-            expect(results.stdout).toBeTruthy();
-            const stdout = JSON.parse(results.stdout);
-            // console.log(stdout);
-            // console.log(stdout.status);
+            const stdout = await exec2JSON(`sfdx shane:github:src:install -g ${username} -r ${repo} -p src --json`, { cwd: testProjectName });
             expect(stdout.status).toBe(0);
         });
 
         it('works with sfdx src format', async () => {
             const repo = 'DF17integrationWorkshops';
-            const results = await exec(`sfdx shane:github:src:install -g ${username} -r ${repo} -p force-app -c --json`, { cwd: testProjectName });
-
-            expect(results).toBeTruthy();
-            expect(results.stdout).toBeTruthy();
-            const stdout = JSON.parse(results.stdout);
-            // console.log(stdout);
-            // console.log(stdout.status);
+            const stdout = await exec2JSON(`sfdx shane:github:src:install -g ${username} -r ${repo} -p force-app -c --json`, {
+                cwd: testProjectName
+            });
             expect(stdout.status).toBe(0);
         });
 
