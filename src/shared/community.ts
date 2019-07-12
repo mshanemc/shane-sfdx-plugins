@@ -8,7 +8,8 @@ interface ExternalAppsJSON {
 export async function getExternalApps(conn: Connection): Promise<ExternalAppsJSON> {
     // get the domain
     const domains = await conn.query('select CnameTarget, Domain from Domain');
-    const mainDomain: any = domains.records.find((domain: any) => domain.CnameTarget === null); // tslint:disable-line:no-any
+    // tslint:disable-next-line:no-any
+    const mainDomain: any = domains.records.find((domain: any) => domain.CnameTarget === null);
     const output: ExternalAppsJSON = {
         domain: mainDomain.Domain,
         communities: {}

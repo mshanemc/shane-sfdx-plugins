@@ -52,6 +52,7 @@
         "ts-jest": "^24.0.0",
         "ts-node": "^7.0.1",
         "tslint": "^5.13.0",
+        "tslint-config-prettier": "^1.18.0",
         "typescript": "^3.3.3333"
     },
     "files": [
@@ -128,7 +129,7 @@
         "test:parallel": "yarn run prepare && jest",
         "test:watch": "yarn run prepare && jest --watch --runInBand",
         "version": "oclif-dev readme && git add README.md",
-        "prettier": "prettier --write"
+        "prettier": "prettier --write src/**/**/*.ts && prettier --write src/**/*.ts && prettier --write src/*.ts && prettier --write test/**/*.ts && prettier --write test/**/**/*.ts"
     },
     "husky": {
         "hooks": {

@@ -8,61 +8,57 @@ import util = require('util');
 const exec = util.promisify(child_process.exec);
 
 export default class CommunityEnable extends SfdxCommand {
+    public static description = 'Activate a community using a headless browser';
+    public static aliases = ['shane:communities:analytics:enable'];
 
-  public static description = 'Activate a community using a headless browser';
-  public static aliases = ['shane:communities:analytics:enable'];
+    protected static requiresUsername = true;
 
-  protected static requiresUsername = true;
+    protected static flagsConfig = {
+        showbrowser: flags.boolean({ char: 'b', description: 'show the browser...useful for local debugging' })
+    };
 
-  protected static flagsConfig = {
-    showbrowser: flags.boolean({char: 'b', description: 'show the browser...useful for local debugging'})
-  };
+    // tslint:disable-next-line:no-any
+    public async run(): Promise<any> {
+        // this.ux.startSpinner('starting headless browser');
 
-  public async run(): Promise<any> { // tslint:disable-line:no-any
+        const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
+        const context = browser.defaultBrowserContext();
 
-    // this.ux.startSpinner('starting headless browser');
+        // // get the force-org-open url for your scratch org
+        const openResult = await exec('sfdx force:org:open -p /lightning/setup/InsightsSetupSettings/home -r --json');
+        const iframeTitle = 'Get Started ~ Salesforce - Developer Edition';
 
-    const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
-    const context = browser.defaultBrowserContext();
+        const url = JSON.parse(stripcolor(openResult.stdout)).result.url;
 
-    // // get the force-org-open url for your scratch org
-    const openResult = await exec('sfdx force:org:open -p /lightning/setup/InsightsSetupSettings/home -r --json');
-    const iframeTitle = 'Get Started ~ Salesforce - Developer Edition';
+        await context.overridePermissions(url, ['notifications']);
+        const page = await browser.newPage();
 
-    const url = JSON.parse(stripcolor(openResult.stdout)).result.url;
+        await page.goto(url, {
+            waitUntil: 'networkidle2'
+        });
 
-    await context.overridePermissions(url, ['notifications']);
-    const page = await browser.newPage();
+        const enable = 'input.enableWaveInCommunities';
+        await page.waitForSelector(`iframe[title="${iframeTitle}"]`);
 
-    await page.goto(url, {
-      waitUntil: 'networkidle2'
-    });
+        for (const frame of page.frames()) {
+            const title = await frame.title();
+            if (title === iframeTitle) {
+                await frame.waitForSelector('input.enableWaveInCommunities');
+                await frame.click(enable);
 
-    const enable = 'input.enableWaveInCommunities';
-    await page.waitForSelector(`iframe[title="${iframeTitle}"]`);
+                // verify that it actually changed value from the click?
+                await frame.waitForSelector('input.enableWaveInCommunities:checked');
 
-    for (const frame of page.frames()) {
-      const title = await frame.title();
-      if (title === iframeTitle) {
-
-        await frame.waitForSelector('input.enableWaveInCommunities');
-        await frame.click(enable);
-
-        // verify that it actually changed value from the click?
-        await frame.waitForSelector('input.enableWaveInCommunities:checked');
-
-        await frame.waitForSelector('input[title="Save"]');
-        await frame.click('input[title="Save"]');
-        // this.ux.log('clicked save');
-        await frame.waitFor(500);
+                await frame.waitForSelector('input[title="Save"]');
+                await frame.click('input[title="Save"]');
+                // this.ux.log('clicked save');
+                await frame.waitFor(500);
+                await browser.close();
+                // this.ux.stopSpinner('Activated analytics for communities');
+                return true;
+            }
+        }
         await browser.close();
-        // this.ux.stopSpinner('Activated analytics for communities');
-        return true;
-      }
+        throw new Error('UI elements not found');
     }
-    await browser.close();
-    throw new Error('UI elements not found');
-
-  }
-
 }
