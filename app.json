@@ -16,7 +16,7 @@
     "environments": {
         "test": {
             "scripts": {
-                "test": "jest --runInBand"
+                "test": "jest"
             }
         }
     }
