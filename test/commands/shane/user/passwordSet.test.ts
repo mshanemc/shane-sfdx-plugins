@@ -1,7 +1,6 @@
 import fs = require('fs-extra');
-import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../../src/shared/execProm';
+import { exec, exec2JSON } from '../../../../src/shared/execProm';
 import testutils = require('../../../helpers/testutils');
 
 const testProjectName = 'testProjectUserPasswordSet';
@@ -19,13 +18,14 @@ describe('shane:user:password:set', () => {
 
         it('sets the password and verifies via force:org:display', async () => {
             const password = 'thePassw0rd';
-            const result = await exec(`sfdx shane:user:password:set -l User -g User -p ${password} --json`, { cwd: testProjectName, maxBuffer });
-            const output = JSON.parse(result.stdout).result;
-            expect(output.password).toBe(password);
+            const setResult = await exec2JSON(`sfdx shane:user:password:set -l User -g User -p ${password} --json`, {
+                cwd: testProjectName,
+                maxBuffer
+            });
+            expect(setResult.result.password).toBe(password);
 
-            const displayResult = await exec('sfdx force:org:display --json', { cwd: testProjectName, maxBuffer });
-            const displayResultJSON = JSON.parse(stripcolor(displayResult.stdout));
-            expect(displayResultJSON.result.password).toBe(password);
+            const displayResult = await exec2JSON('sfdx force:org:display --json', { cwd: testProjectName, maxBuffer });
+            expect(displayResult.result.password).toBe(password);
         });
 
         afterAll(async () => {
