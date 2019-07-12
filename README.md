@@ -27,7 +27,7 @@ $ npm install -g shane-sfdx-plugins
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-shane-sfdx-plugins/3.21.0 darwin-x64 node-v12.4.0
+shane-sfdx-plugins/3.22.0 darwin-x64 node-v12.4.0
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -40,94 +40,104 @@ USAGE
 
 <!-- commands -->
 
--   [`sfdx shane:analytics:app:share -n <string> [--allprm -c] [--allcsp undefined] [--org] [-t <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsappshare--n-string---allprm--c---allcsp-undefined---org--t-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:analytics:community:enable [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticscommunityenable--b--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:analytics:dataflow:start [-n <string>] [-i <id>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsdataflowstart--n-string--i-id--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:analytics:dataset:download [-i <id>] [-n <string>] [--versionid <string>] [-t <filepath>] [-r <number>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsdatasetdownload--i-id--n-string---versionid-string--t-filepath--r-number--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:analytics:dataset:list [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsdatasetlist--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:analytics:dataset:upload -n <string> -f <filepath> [-a <string>] [-m <filepath>] [--async] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsdatasetupload--n-string--f-filepath--a-string--m-filepath---async--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:cdc:create -d <directory> [--batchsize <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecdccreate--d-directory---batchsize-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:cdc:prep -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecdcprep--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:cdc:stream [-o <string>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecdcstream--o-string--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:communities:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecommunitiesactivate--n-string--b--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:communities:describe [--store] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecommunitiesdescribe---store--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:communities:publish [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecommunitiespublish--n-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:communities:url [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecommunitiesurl--p-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:connectedapp:uniquify -p <string> -a <filepath> [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneconnectedappuniquify--p-string--a-filepath---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:data:file:upload -f <filepath> [-c -p <id>] [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanedatafileupload--f-filepath--c--p-id--n-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:data:id:query -o <string> -w <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanedataidquery--o-string--w-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:data:tree:import -p <filepath> -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanedatatreeimport--p-filepath--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:github:package:install -g <string> -r <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanegithubpackageinstall--g-string--r-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:github:src:install -g <string> -r <string> [-p <directory>] [-k] [-c] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanegithubsrcinstall--g-string--r-string--p-directory--k--c--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:group:photo [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanegroupphoto--g-string--f-filepath---b-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:heroku:connect -a <string> -f <filepath> [-e <string>] [-p <string>] [-b] [-i] [-u <string>] [--apiversion <string>] [--verbose] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneherokuconnect--a-string--f-filepath--e-string--p-string--b--i--u-string---apiversion-string---verbose---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:heroku:repo:deploy -g <string> -r <string> [-n <string>] [-o <array>] [--envuser <string>] [--envpassword <string>] [-t <string>] [-d <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneherokurepodeploy--g-string--r-string--n-string--o-array---envuser-string---envpassword-string--t-string--d-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:iot:activation -n <string> [-r] [-d] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneiotactivation--n-string--r--d--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:label:add -t <string> [--bundle <string>] [-n <string>] [-d <string>] [--protected] [--categories <array>] [-l <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanelabeladd--t-string---bundle-string--n-string--d-string---protected---categories-array--l-string--t-directory---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:lwc:create -n <string> -d <directory> [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanelwccreate--n-string--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:lwc:css:merge -f <filepath> -c <directory> [-l <filepath>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanelwccssmerge--f-filepath--c-directory--l-filepath---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:mdapi:describe [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapidescribe--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:mdapi:list -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapilist--t-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:mdapi:package:get -p <string> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapipackageget--p-string--t-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:mdapi:package:xml -p <filepath> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapipackagexml--p-filepath--t-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:mdapi:pull [-c | --all] [-p | undefined] [--wave | undefined] [-s | undefined | -o <string>] [-i | undefined] [--reporting | undefined] [-t <string> | undefined] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapipull--c----all--p--undefined---wave--undefined--s--undefined---o-string--i--undefined---reporting--undefined--t-string--undefined--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:mdapi:push [-d <directory>] [-k] [-r <directory>] [-w <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapipush--d-directory--k--r-directory--w-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>] [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectcreate--t-string--l-string--a-string--p-string---description-string---enterprise---sharingmodel-string---activities---search---reports---history---feeds---nametype-string---namefieldlabel-string---autonumberformat-string--h--i--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:object:fat -o <string> [-m <integer>] [-y <integer>] [--description <string>] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectfat--o-string--m-integer--y-integer---description-string--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:object:field [-o <string>] [-n <string>] [-a <string>] [-t <string>] [--description <string>] [--default <string>] [-r] [-u] [--externalid] [--trackhistory] [--helptext <string>] [-l <integer>] [-s <integer>] [--precision <integer>] [--lookupobject <string>] [--relname <string>] [--indexposition <integer>] [--indexappend] [--indexdirection <string>] [--noindex] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectfield--o-string--n-string--a-string--t-string---description-string---default-string--r--u---externalid---trackhistory---helptext-string--l-integer--s-integer---precision-integer---lookupobject-string---relname-string---indexposition-integer---indexappend---indexdirection-string---noindex--i--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:object:fields:describe -o <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectfieldsdescribe--o-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:object:perms:align [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectpermsalign--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:object:powerofone -o <string> [-l <string>] [-a <string>] [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectpowerofone--o-string--l-string--a-string--d-string--t-directory---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:object:tab -o <string> -i <integer> [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjecttab--o-string--i-integer--t-directory---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:object:unperm -o <string> [-d <directory>] [-s <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectunperm--o-string--d-directory--s-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:org:componentlibrary [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgcomponentlibrary--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:org:create --userprefix <string> -o <string> [-i <string>] [-f <filepath>] [-a <string>] [-d <integer>] [--wait <integer>] [-c] [-n] [-s] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgcreate---userprefix-string--o-string--i-string--f-filepath--a-string--d-integer---wait-integer--c--n--s---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:org:delete [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgdelete--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:org:domain:verify [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgdomainverify--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:org:metadatacoverage [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgmetadatacoverage--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:org:reauth [-r] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgreauth--r--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:org:refreshtoken [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgrefreshtoken--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:package2:version:bump [-M | -m | -p] [-c] [-r] [-t <string>] [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanepackage2versionbump--m---m---p--c--r--t-string--v-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:permset:check -o <string> [-f <string>] [--users | --permsets | --profiles] [--fieldlevel <string>] [--objectlevel <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanepermsetcheck--o-string--f-string---users----permsets----profiles---fieldlevel-string---objectlevel-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:permset:create -n <string> [-f <string> -o <string>] [-d <directory>] [-t] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanepermsetcreate--n-string--f-string--o-string--d-directory--t---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:profile:convert -n <string> -p <string> [-d <directory>] [-e | -c] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneprofileconvert--n-string--p-string--d-directory--e---c---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:profile:whitelist -n <string> [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneprofilewhitelist--n-string--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:project:create -n <string> -g <string> [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneprojectcreate--n-string--g-string--v-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:remotesite:create -u <url> -n <string> [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneremotesitecreate--u-url--n-string--d-string--t-directory---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:static:create -n <string> -y <string> [-d <string>] [-t <directory>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanestaticcreate--n-string--y-string--d-string--t-directory--p---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:theme:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanethemeactivate--n-string--b--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:tsp:username:update [-n <email>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanetspusernameupdate--n-email--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:uiapi:objectinfo [-o <string>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuiapiobjectinfo--o-string---outputfile-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:uiapi:record -r <string> -f <array> [--optionalfields <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuiapirecord--r-string--f-array---optionalfields-array---outputfile-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:uiapi:recordui [-r <string> | --recordids <array>] [-l <array>] [-m <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuiapirecordui--r-string----recordids-array--l-array--m-array---outputfile-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:user:allPhotos [-r <url>] [-f <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserallphotos--r-url--f-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:user:lightning:debug [-g <string>] [-l <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserlightningdebug--g-string--l-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:user:loginurl [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserloginurl--p-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:user:password:set -g <string> -l <string> -p <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserpasswordset--g-string--l-string--p-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:user:permset:assign -l <string> -n <string> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserpermsetassign--l-string--n-string--g-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:user:photo -l <string> [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserphoto--l-string--g-string--f-filepath---b-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
--   [`sfdx shane:user:psl -l <string> -n <filepath> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserpsl--l-string--n-filepath--g-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:analytics:app:share -n <string> [--allprm -c] [--allcsp undefined] [--org] [-t <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneanalyticsappshare--n-string---allprm--c---allcsp-undefined---org--t-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:analytics:community:enable [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneanalyticscommunityenable--b--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:analytics:dataflow:start [-n <string>] [-i <id>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneanalyticsdataflowstart--n-string--i-id--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:analytics:dataset:download [-i <id>] [-n <string>] [--versionid <string>] [-t <filepath>] [-r <number>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneanalyticsdatasetdownload--i-id--n-string---versionid-string--t-filepath--r-number--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:analytics:dataset:list [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneanalyticsdatasetlist--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:analytics:dataset:upload -n <string> -f <filepath> [-a <string>] [-m <filepath>] [--async] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneanalyticsdatasetupload--n-string--f-filepath--a-string--m-filepath---async--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:cdc:create -d <directory> [--batchsize <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanecdccreate--d-directory---batchsize-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:cdc:prep -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanecdcprep--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:cdc:stream [-o <string>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanecdcstream--o-string--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:communities:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanecommunitiesactivate--n-string--b--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:communities:describe [--store] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanecommunitiesdescribe---store--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:communities:publish [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanecommunitiespublish--n-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:communities:url [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanecommunitiesurl--p-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:connectedapp:uniquify -p <string> -a <filepath> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneconnectedappuniquify--p-string--a-filepath---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:data:file:upload -f <filepath> [-c -p <id>] [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanedatafileupload--f-filepath--c--p-id--n-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:data:id:query -o <string> -w <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanedataidquery--o-string--w-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:data:tree:import -p <filepath> -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanedatatreeimport--p-filepath--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:github:package:install -g <string> -r <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanegithubpackageinstall--g-string--r-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:github:src:install -g <string> -r <string> [-p <directory>] [-k] [-c] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanegithubsrcinstall--g-string--r-string--p-directory--k--c--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:group:photo [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanegroupphoto--g-string--f-filepath---b-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:heroku:connect -a <string> -f <filepath> [-e <string>] [-p <string>] [-b] [-i] [-u <string>] [--apiversion <string>] [--verbose] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneherokuconnect--a-string--f-filepath--e-string--p-string--b--i--u-string---apiversion-string---verbose---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:heroku:repo:deploy -g <string> -r <string> [-n <string>] [-o <array>] [--envuser <string>] [--envpassword <string>] [-t <string>] [-d <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneherokurepodeploy--g-string--r-string--n-string--o-array---envuser-string---envpassword-string--t-string--d-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:iot:activation -n <string> [-r] [-d] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneiotactivation--n-string--r--d--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:label:add -t <string> [--bundle <string>] [-n <string>] [-d <string>] [--protected] [--categories <array>] [-l <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanelabeladd--t-string---bundle-string--n-string--d-string---protected---categories-array--l-string--t-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:lwc:create -n <string> -d <directory> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanelwccreate--n-string--d-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:lwc:css:merge -f <filepath> -c <directory> [-l <filepath>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanelwccssmerge--f-filepath--c-directory--l-filepath---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:mdapi:describe [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanemdapidescribe--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:mdapi:list -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanemdapilist--t-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:mdapi:package:get -p <string> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanemdapipackageget--p-string--t-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:mdapi:package:xml -p <filepath> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanemdapipackagexml--p-filepath--t-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:mdapi:pull [-c | --all] [-p | undefined] [--wave | undefined] [-s | undefined | -o <string>] [-i | undefined] [--reporting | undefined] [-t <string> | undefined] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanemdapipull--c----all--p--undefined---wave--undefined--s--undefined---o-string--i--undefined---reporting--undefined--t-string--undefined--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:mdapi:push [-d <directory>] [-k] [-r <directory>] [-w <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanemdapipush--d-directory--k--r-directory--w-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>] [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjectcreate--t-string--l-string--a-string--p-string---description-string---enterprise---sharingmodel-string---activities---search---reports---history---feeds---nametype-string---namefieldlabel-string---autonumberformat-string--h--i--d-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:fat -o <string> [-m <integer>] [-y <integer>] [--description <string>] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjectfat--o-string--m-integer--y-integer---description-string--d-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:field [-o <string>] [-n <string>] [-a <string>] [-t <string>] [--description <string>] [--default <string>] [-r] [-u] [--externalid] [--trackhistory] [--helptext <string>] [-l <integer>] [-s <integer>] [--precision <integer>] [--lookupobject <string>] [--relname <string>] [--indexposition <integer>] [--indexappend] [--indexdirection <string>] [--noindex] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjectfield--o-string--n-string--a-string--t-string---description-string---default-string--r--u---externalid---trackhistory---helptext-string--l-integer--s-integer---precision-integer---lookupobject-string---relname-string---indexposition-integer---indexappend---indexdirection-string---noindex--i--d-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:fields:describe -o <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjectfieldsdescribe--o-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:perms:align [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjectpermsalign--d-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:powerofone -o <string> [-l <string>] [-a <string>] [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjectpowerofone--o-string--l-string--a-string--d-string--t-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:tab -o <string> -i <integer> [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjecttab--o-string--i-integer--t-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:unperm -o <string> [-d <directory>] [-s <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjectunperm--o-string--d-directory--s-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:componentlibrary [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneorgcomponentlibrary--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:create --userprefix <string> -o <string> [-i <string>] [-f <filepath>] [-a <string>] [-d <integer>] [--wait <integer>] [-c] [-n] [-s] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneorgcreate---userprefix-string--o-string--i-string--f-filepath--a-string--d-integer---wait-integer--c--n--s---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:delete [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneorgdelete--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:domain:verify [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneorgdomainverify--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:metadatacoverage [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneorgmetadatacoverage--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:reauth [-r] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneorgreauth--r--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:refreshtoken [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneorgrefreshtoken--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:package2:version:bump [-M | -m | -p] [-c] [-r] [-t <string>] [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanepackage2versionbump--m---m---p--c--r--t-string--v-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:permset:check -o <string> [-f <string>] [--users | --permsets | --profiles] [--fieldlevel <string>] [--objectlevel <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanepermsetcheck--o-string--f-string---users----permsets----profiles---fieldlevel-string---objectlevel-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:permset:create -n <string> [-f <string> -o <string>] [-d <directory>] [-t] [-c] [-u <string>] [--apiversion <string>] [--verbose] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanepermsetcreate--n-string--f-string--o-string--d-directory--t--c--u-string---apiversion-string---verbose---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:profile:convert -n <string> -p <string> [-d <directory>] [-e | -c] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneprofileconvert--n-string--p-string--d-directory--e---c---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:profile:whitelist -n <string> [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneprofilewhitelist--n-string--d-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:project:create -n <string> -g <string> [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneprojectcreate--n-string--g-string--v-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:remotesite:create -u <url> -n <string> [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneremotesitecreate--u-url--n-string--d-string--t-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:static:create -n <string> -y <string> [-d <string>] [-t <directory>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanestaticcreate--n-string--y-string--d-string--t-directory--p---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:theme:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanethemeactivate--n-string--b--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:tsp:username:update [-n <email>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanetspusernameupdate--n-email--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:uiapi:objectinfo [-o <string>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneuiapiobjectinfo--o-string---outputfile-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:uiapi:record -r <string> -f <array> [--optionalfields <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneuiapirecord--r-string--f-array---optionalfields-array---outputfile-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:uiapi:recordui [-r <string> | --recordids <array>] [-l <array>] [-m <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneuiapirecordui--r-string----recordids-array--l-array--m-array---outputfile-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:allPhotos [-r <url>] [-f <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneuserallphotos--r-url--f-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:lightning:debug [-g <string>] [-l <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneuserlightningdebug--g-string--l-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:loginurl [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneuserloginurl--p-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:password:set -g <string> -l <string> -p <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneuserpasswordset--g-string--l-string--p-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:permset:assign -l <string> -n <string> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneuserpermsetassign--l-string--n-string--g-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:photo -l <string> [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneuserphoto--l-string--g-string--f-filepath---b-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:psl -l <string> -n <filepath> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneuserpsl--l-string--n-filepath--g-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 
-## `sfdx shane:analytics:app:share -n <string> [--allprm -c] [--allcsp undefined] [--org] [-t <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:analytics:app:share -n <string> [--allprm -c] [--allcsp undefined] [--org] [-t <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 share an analytics app by name
 
 ```
 USAGE
   $ sfdx shane:analytics:app:share -n <string> [--allprm -c] [--allcsp undefined] [--org] [-t <string>] [-u <string>]
-  [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -c, --community                                 enable community sharing
-  -n, --name=name                                 (required) name of the analytics app
-  -t, --type=View|Edit|Manage                     [default: View] access level
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --allcsp                                        share with all customer portal users
-  --allprm                                        share with all partner users
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
-  --org                                           share with all internal users
+  -c, --community                                                                   enable community sharing
+  -n, --name=name                                                                   (required) name of the analytics app
+  -t, --type=View|Edit|Manage                                                       [default: View] access level
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --allcsp                                                                          share with all customer portal users
+
+  --allprm                                                                          share with all partner users
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+
+  --org                                                                             share with all internal users
 
 EXAMPLE
   sfdx shane:analytics:app:share -n SharedApp --allprm -c
@@ -135,46 +145,63 @@ EXAMPLE
   communities" box for this app
 ```
 
-_See code: [src/commands/shane/analytics/app/share.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/analytics/app/share.ts)_
+_See code: [src/commands/shane/analytics/app/share.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/analytics/app/share.ts)_
 
-## `sfdx shane:analytics:community:enable [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:analytics:community:enable [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Activate a community using a headless browser
 
 ```
 USAGE
   $ sfdx shane:analytics:community:enable [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -b, --showbrowser                               show the browser...useful for local debugging
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -b, --showbrowser                                                                 show the browser...useful for local
+                                                                                    debugging
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 ALIASES
   $ sfdx shane:communities:analytics:enable
 ```
 
-_See code: [src/commands/shane/analytics/community/enable.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/analytics/community/enable.ts)_
+_See code: [src/commands/shane/analytics/community/enable.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/analytics/community/enable.ts)_
 
-## `sfdx shane:analytics:dataflow:start [-n <string>] [-i <id>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:analytics:dataflow:start [-n <string>] [-i <id>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 start an analytics dataflow by name/label/id
 
 ```
 USAGE
   $ sfdx shane:analytics:dataflow:start [-n <string>] [-i <id>] [-u <string>] [--apiversion <string>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -i, --id=id                                     the id of the dataflow
-  -n, --name=name                                 name or label of the analytics app (will match either)
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -i, --id=id                                                                       the id of the dataflow
+
+  -n, --name=name                                                                   name or label of the analytics app
+                                                                                    (will match either)
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:analytics:dataflow:start -n MyDataFlowName
@@ -182,143 +209,196 @@ EXAMPLE
   dataflow)
 ```
 
-_See code: [src/commands/shane/analytics/dataflow/start.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/analytics/dataflow/start.ts)_
+_See code: [src/commands/shane/analytics/dataflow/start.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/analytics/dataflow/start.ts)_
 
-## `sfdx shane:analytics:dataset:download [-i <id>] [-n <string>] [--versionid <string>] [-t <filepath>] [-r <number>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:analytics:dataset:download [-i <id>] [-n <string>] [--versionid <string>] [-t <filepath>] [-r <number>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 download a dataset as csv
 
 ```
 USAGE
   $ sfdx shane:analytics:dataset:download [-i <id>] [-n <string>] [--versionid <string>] [-t <filepath>] [-r <number>]
-  [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  [-u <string>] [--apiversion <string>] [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -i, --id=id                                     dataset id
-  -n, --name=name                                 dataset name
-  -r, --rows=rows                                 [default: 1000000000] how many rows?
-  -t, --target=target                             [default: .] where you want to save the file
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
-  --versionid=versionid                           specify a version
+  -i, --id=id                                                                       dataset id
+  -n, --name=name                                                                   dataset name
+  -r, --rows=rows                                                                   [default: 1000000000] how many rows?
+
+  -t, --target=target                                                               [default: .] where you want to save
+                                                                                    the file
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+
+  --versionid=versionid                                                             specify a version
 
 EXAMPLES
   sfdx shane:analytics:dataset:download -n YourDataSetName -t myLocalFolder
   sfdx shane:analytics:dataset:download -i 0Fb6A000000gDFxSAM --versionid 0Fc6A000002d8GwSAI -t myLocalFolder -r 100
 ```
 
-_See code: [src/commands/shane/analytics/dataset/download.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/analytics/dataset/download.ts)_
+_See code: [src/commands/shane/analytics/dataset/download.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/analytics/dataset/download.ts)_
 
-## `sfdx shane:analytics:dataset:list [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:analytics:dataset:list [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 what analytics datasets are in my org?
 
 ```
 USAGE
   $ sfdx shane:analytics:dataset:list [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:analytics:dataset:list
 ```
 
-_See code: [src/commands/shane/analytics/dataset/list.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/analytics/dataset/list.ts)_
+_See code: [src/commands/shane/analytics/dataset/list.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/analytics/dataset/list.ts)_
 
-## `sfdx shane:analytics:dataset:upload -n <string> -f <filepath> [-a <string>] [-m <filepath>] [--async] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:analytics:dataset:upload -n <string> -f <filepath> [-a <string>] [-m <filepath>] [--async] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 upload a dataset from csv
 
 ```
 USAGE
   $ sfdx shane:analytics:dataset:upload -n <string> -f <filepath> [-a <string>] [-m <filepath>] [--async] [-u <string>]
-  [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -a, --app=app                                   app name
-  -f, --csvfile=csvfile                           (required) local csv file containing the data
-  -m, --metajson=metajson                         path to json file for describing your upload (highly recommended)
-  -n, --name=name                                 (required) dataset name
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  -a, --app=app
+      app name
 
-  --async                                         do not wait for successful completion of the dataset upload...just
-                                                  return and hope for the best.  If omitted, will poll the analytics
-                                                  rest API for job processing status until complete
+  -f, --csvfile=csvfile
+      (required) local csv file containing the data
 
-  --json                                          format output as json
+  -m, --metajson=metajson
+      path to json file for describing your upload (highly recommended)
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -n, --name=name
+      (required) dataset name
+
+  -u, --targetusername=targetusername
+      username or alias for the target org; overrides default target org
+
+  --apiversion=apiversion
+      override the api version used for api requests made by this command
+
+  --async
+      do not wait for successful completion of the dataset upload...just return and hope for the best.  If omitted, will
+      poll the analytics rest API for job processing status until complete
+
+  --json
+      format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)
+      [default: warn] logging level for this command invocation
 
 EXAMPLES
   sfdx shane:analytics:dataset:upload -n someName -f data/myFile.csv -m myMetaFile.json
   sfdx shane:analytics:dataset:upload -n someName -f data/myFile.csv -m myMetaFile.json -a SharedApp  --async
 ```
 
-_See code: [src/commands/shane/analytics/dataset/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/analytics/dataset/upload.ts)_
+_See code: [src/commands/shane/analytics/dataset/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/analytics/dataset/upload.ts)_
 
-## `sfdx shane:cdc:create -d <directory> [--batchsize <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:cdc:create -d <directory> [--batchsize <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 ```
 USAGE
   $ sfdx shane:cdc:create -d <directory> [--batchsize <integer>] [-u <string>] [--apiversion <string>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --dir=dir                                   (required) folder to upload, containing /cdc/records
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --batchsize=batchsize                           [default: 200] how many records to insert in a batch
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -d, --dir=dir                                                                     (required) folder to upload,
+                                                                                    containing /cdc/records
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --batchsize=batchsize                                                             [default: 200] how many records to
+                                                                                    insert in a batch
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 ```
 
-_See code: [src/commands/shane/cdc/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/cdc/create.ts)_
+_See code: [src/commands/shane/cdc/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/cdc/create.ts)_
 
-## `sfdx shane:cdc:prep -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:cdc:prep -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 ```
 USAGE
   $ sfdx shane:cdc:prep -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --dir=dir                                   (required) folder to upload, containing /cdc/records
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -d, --dir=dir                                                                     (required) folder to upload,
+                                                                                    containing /cdc/records
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 ```
 
-_See code: [src/commands/shane/cdc/prep.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/cdc/prep.ts)_
+_See code: [src/commands/shane/cdc/prep.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/cdc/prep.ts)_
 
-## `sfdx shane:cdc:stream [-o <string>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:cdc:stream [-o <string>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 ```
 USAGE
   $ sfdx shane:cdc:stream [-o <string>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --dir=dir                                   stream the events to a folder instead of the console
+  -d, --dir=dir                                                                     stream the events to a folder
+                                                                                    instead of the console
 
-  -o, --object=object                             subscribe to change events for only a single object (api name,
-                                                  including __c)
+  -o, --object=object                                                               subscribe to change events for only
+                                                                                    a single object (api name, including
+                                                                                    __c)
 
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
 
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:cdc:stream // get all the change events
@@ -326,65 +406,91 @@ EXAMPLES
   sfdx shane:cdc:stream -d myDir // stream change events to myDir/cdc, organized into folders by object api type
 ```
 
-_See code: [src/commands/shane/cdc/stream.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/cdc/stream.ts)_
+_See code: [src/commands/shane/cdc/stream.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/cdc/stream.ts)_
 
-## `sfdx shane:communities:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:communities:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Activate a community using a headless browser
 
 ```
 USAGE
   $ sfdx shane:communities:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -b, --showbrowser                               show the browser...useful for local debugging
-  -n, --name=name                                 (required) name of the community to activate
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -b, --showbrowser                                                                 show the browser...useful for local
+                                                                                    debugging
+
+  -n, --name=name                                                                   (required) name of the community to
+                                                                                    activate
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 ```
 
-_See code: [src/commands/shane/communities/activate.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/communities/activate.ts)_
+_See code: [src/commands/shane/communities/activate.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/communities/activate.ts)_
 
-## `sfdx shane:communities:describe [--store] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:communities:describe [--store] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 tell me about the communities in the org, and optionally store the description
 
 ```
 USAGE
   $ sfdx shane:communities:describe [--store] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
-  --store                                         store the community description in externalApps.json
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+
+  --store                                                                           store the community description in
+                                                                                    externalApps.json
 
 EXAMPLE
   sfdx shane:communities:describe
 ```
 
-_See code: [src/commands/shane/communities/describe.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/communities/describe.ts)_
+_See code: [src/commands/shane/communities/describe.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/communities/describe.ts)_
 
-## `sfdx shane:communities:publish [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:communities:publish [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Publish a community using a headless browser
 
 ```
 USAGE
   $ sfdx shane:communities:publish [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -n, --name=name                                 name of the community to publish (case sensitive!)
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -n, --name=name                                                                   name of the community to publish
+                                                                                    (case sensitive!)
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:communities:publish
@@ -394,69 +500,97 @@ EXAMPLES
   // finds a community named customer, publishes it.
 ```
 
-_See code: [src/commands/shane/communities/publish.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/communities/publish.ts)_
+_See code: [src/commands/shane/communities/publish.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/communities/publish.ts)_
 
-## `sfdx shane:communities:url [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:communities:url [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 get me the login for a community from an org
 
 ```
 USAGE
   $ sfdx shane:communities:url [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -p, --prefix=prefix                             community prefix (thing after the slash in the url)
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -p, --prefix=prefix                                                               community prefix (thing after the
+                                                                                    slash in the url)
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:communities:url --prefix dealers
 ```
 
-_See code: [src/commands/shane/communities/url.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/communities/url.ts)_
+_See code: [src/commands/shane/communities/url.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/communities/url.ts)_
 
-## `sfdx shane:connectedapp:uniquify -p <string> -a <filepath> [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:connectedapp:uniquify -p <string> -a <filepath> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 modify a clientId/consumerKey on a local connected app to guaranatee uniqueness
 
 ```
 USAGE
-  $ sfdx shane:connectedapp:uniquify -p <string> -a <filepath> [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  $ sfdx shane:connectedapp:uniquify -p <string> -a <filepath> [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -a, --app=app                                   (required) full path to your connected app locally
-  -p, --prefix=prefix                             (required) add a prefix to the connected app's consumerKey
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -a, --app=app                                                                     (required) full path to your
+                                                                                    connected app locally
+
+  -p, --prefix=prefix                                                               (required) add a prefix to the
+                                                                                    connected app's consumerKey
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:connectedapp:uniquify -a force-app/main/default/connectedappmyConnectedApp -p 5h4n3
   // update the consumerKey of myConnectedApp to be unique, but start with 5h4n3
 ```
 
-_See code: [src/commands/shane/connectedapp/uniquify.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/connectedapp/uniquify.ts)_
+_See code: [src/commands/shane/connectedapp/uniquify.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/connectedapp/uniquify.ts)_
 
-## `sfdx shane:data:file:upload -f <filepath> [-c -p <id>] [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:data:file:upload -f <filepath> [-c -p <id>] [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 upload a file from local resources, optionally as a chatter post or attached file on a record
 
 ```
 USAGE
   $ sfdx shane:data:file:upload -f <filepath> [-c -p <id>] [-n <string>] [-u <string>] [--apiversion <string>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -c, --chatter                                   attach as a chatter content post instead of just as a file
-  -f, --file=file                                 (required) path to file on local filesystem
-  -n, --name=name                                 set the name of the uploaded file
-  -p, --parentid=parentid                         optional record ID that the file should be attached to
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -c, --chatter                                                                     attach as a chatter content post
+                                                                                    instead of just as a file
+
+  -f, --file=file                                                                   (required) path to file on local
+                                                                                    filesystem
+
+  -n, --name=name                                                                   set the name of the uploaded file
+
+  -p, --parentid=parentid                                                           optional record ID that the file
+                                                                                    should be attached to
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:data:file:upload -f ~/Downloads/King.png
@@ -473,24 +607,33 @@ EXAMPLES
   name as the local filesystem used
 ```
 
-_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/data/file/upload.ts)_
+_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/data/file/upload.ts)_
 
-## `sfdx shane:data:id:query -o <string> -w <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:data:id:query -o <string> -w <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 query some object and get back the id of the matching record
 
 ```
 USAGE
   $ sfdx shane:data:id:query -o <string> -w <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -o, --object=object                             (required) object
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  -w, --where=where                               (required) SOQL where clause for your query
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -o, --object=object                                                               (required) object
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  -w, --where=where                                                                 (required) SOQL where clause for
+                                                                                    your query
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:data:id:query -o User -u platformers -w "Firstname = 'Shane' and Lastname = 'McLaughlin' and username =
@@ -498,48 +641,67 @@ EXAMPLE
        // returns the id of the user. Use these ids between `` in other commands
 ```
 
-_See code: [src/commands/shane/data/id/query.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/data/id/query.ts)_
+_See code: [src/commands/shane/data/id/query.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/data/id/query.ts)_
 
-## `sfdx shane:data:tree:import -p <filepath> -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:data:tree:import -p <filepath> -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 similr to the original tree:import, but handles more than 200 records at a go, while still preserving relationships. Takes longer.
 
 ```
 USAGE
   $ sfdx shane:data:tree:import -p <filepath> -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --filesfolder=filesfolder                   (required) folder that the plan lives in
-  -p, --plan=plan                                 (required) location of plan file
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -d, --filesfolder=filesfolder                                                     (required) folder that the plan
+                                                                                    lives in
+
+  -p, --plan=plan                                                                   (required) location of plan file
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:data:tree:import -p data/myPlan.json -d data/  // run all the data in the plan, and files mentioned are
   relative to ./data
 ```
 
-_See code: [src/commands/shane/data/tree/import.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/data/tree/import.ts)_
+_See code: [src/commands/shane/data/tree/import.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/data/tree/import.ts)_
 
-## `sfdx shane:github:package:install -g <string> -r <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:github:package:install -g <string> -r <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 installs a package from github using the sfdx-project.json file (v43+) OR the latestVersion.json file convention
 
 ```
 USAGE
   $ sfdx shane:github:package:install -g <string> -r <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -g, --githubuser=githubuser                     (required) github username where the package lives
-  -r, --repo=repo                                 (required) repo where the packages lives
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -g, --githubuser=githubuser                                                       (required) github username where the
+                                                                                    package lives
+
+  -r, --repo=repo                                                                   (required) repo where the packages
+                                                                                    lives
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:github:package:install -g someUser -r someRepo -u someOrg
@@ -547,36 +709,43 @@ EXAMPLE
   https://github.com/someUser/someRepo/latestVersion.json
 ```
 
-_See code: [src/commands/shane/github/package/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/github/package/install.ts)_
+_See code: [src/commands/shane/github/package/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/github/package/install.ts)_
 
-## `sfdx shane:github:src:install -g <string> -r <string> [-p <directory>] [-k] [-c] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:github:src:install -g <string> -r <string> [-p <directory>] [-k] [-c] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 installs a package from github from mdapi src
 
 ```
 USAGE
   $ sfdx shane:github:src:install -g <string> -r <string> [-p <directory>] [-k] [-c] [-u <string>] [--apiversion
-  <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -c, --convert                                   the path folder is sfdx format, not mdapi, and should be converted
-                                                  first
+  -c, --convert                                                                     the path folder is sfdx format, not
+                                                                                    mdapi, and should be converted first
 
-  -g, --githubuser=githubuser                     (required) github username where the package lives
+  -g, --githubuser=githubuser                                                       (required) github username where the
+                                                                                    package lives
 
-  -k, --keeplocally                               keep the cloned repo in local source instead of deleting it
+  -k, --keeplocally                                                                 keep the cloned repo in local source
+                                                                                    instead of deleting it
 
-  -p, --path=path                                 [default: src] folder where the source lives
+  -p, --path=path                                                                   [default: src] folder where the
+                                                                                    source lives
 
-  -r, --repo=repo                                 (required) repo where the packages lives
+  -r, --repo=repo                                                                   (required) repo where the packages
+                                                                                    lives
 
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
 
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:github:src:install -g someUser -r someRepo -u someOrg
@@ -586,25 +755,36 @@ EXAMPLES
   // pulls mdapi-formatted code from https://github.com/someUser/someRepo/my/folder/tree and deploys to the org
 ```
 
-_See code: [src/commands/shane/github/src/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/github/src/install.ts)_
+_See code: [src/commands/shane/github/src/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/github/src/install.ts)_
 
-## `sfdx shane:group:photo [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:group:photo [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Set the photo for a user by first/last name
 
 ```
 USAGE
   $ sfdx shane:group:photo [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -b, --banner=banner                             local path of the chatter banner photo to use
-  -f, --file=file                                 local path of the photo to use
-  -g, --group=group                               the name of the group name you want to set the photo/banner for
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -b, --banner=banner                                                               local path of the chatter banner
+                                                                                    photo to use
+
+  -f, --file=file                                                                   local path of the photo to use
+
+  -g, --group=group                                                                 the name of the group name you want
+                                                                                    to set the photo/banner for
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:group:photo -g AwesomePeople -f ~/Downloads/King.png
@@ -614,39 +794,52 @@ EXAMPLES
   // sets the chatter banner photo for the group named AwesomePeople using the local file
 ```
 
-_See code: [src/commands/shane/group/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/group/photo.ts)_
+_See code: [src/commands/shane/group/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/group/photo.ts)_
 
-## `sfdx shane:heroku:connect -a <string> -f <filepath> [-e <string>] [-p <string>] [-b] [-i] [-u <string>] [--apiversion <string>] [--verbose] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:heroku:connect -a <string> -f <filepath> [-e <string>] [-p <string>] [-b] [-i] [-u <string>] [--apiversion <string>] [--verbose] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 set up heroku connect on an existing app to an existing org (that you may have just created)
 
 ```
 USAGE
   $ sfdx shane:heroku:connect -a <string> -f <filepath> [-e <string>] [-p <string>] [-b] [-i] [-u <string>]
-  [--apiversion <string>] [--verbose] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  [--apiversion <string>] [--verbose] [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -a, --app=app                                   (required) name of the heroku app
-  -b, --showbrowser                               show the browser...useful for local debugging
-  -e, --environment=sandbox|production|custom     [default: custom] environment of the salesforce org
-  -f, --configfile=configfile                     (required) path to the json file exported from Heroku Connect
+  -a, --app=app
+      (required) name of the heroku app
 
-  -i, --instance                                  salesforce instance for making login easier.  Will be read from
-                                                  org:display if exists...this is the override
+  -b, --showbrowser
+      show the browser...useful for local debugging
 
-  -p, --password=password                         pass in a password to override the one associated with your org in
-                                                  sfdx, or if you don't have one set properly (like you used
-                                                  `shane:user:password:set` instead of `force:user:password:generate
+  -e, --environment=sandbox|production|custom
+      [default: custom] environment of the salesforce org
 
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -f, --configfile=configfile
+      (required) path to the json file exported from Heroku Connect
 
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  -i, --instance
+      salesforce instance for making login easier.  Will be read from org:display if exists...this is the override
 
-  --json                                          format output as json
+  -p, --password=password
+      pass in a password to override the one associated with your org in sfdx, or if you don't have one set properly (like
+      you used `shane:user:password:set` instead of `force:user:password:generate
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -u, --targetusername=targetusername
+      username or alias for the target org; overrides default target org
 
-  --verbose                                       emit additional command output to stdout
+  --apiversion=apiversion
+      override the api version used for api requests made by this command
+
+  --json
+      format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)
+      [default: warn] logging level for this command invocation
+
+  --verbose
+      emit additional command output to stdout
 
 EXAMPLES
   sfdx shane:heroku:connect -a prosaic-samurai-4564 -f assets/myConfig.json
@@ -657,9 +850,9 @@ EXAMPLES
   // same, but not the default org, with a specified password
 ```
 
-_See code: [src/commands/shane/heroku/connect.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/heroku/connect.ts)_
+_See code: [src/commands/shane/heroku/connect.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/heroku/connect.ts)_
 
-## `sfdx shane:heroku:repo:deploy -g <string> -r <string> [-n <string>] [-o <array>] [--envuser <string>] [--envpassword <string>] [-t <string>] [-d <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:heroku:repo:deploy -g <string> -r <string> [-n <string>] [-o <array>] [--envuser <string>] [--envpassword <string>] [-t <string>] [-d <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 deploy a heroku app that has a valid app.json.
 
@@ -667,61 +860,82 @@ deploy a heroku app that has a valid app.json.
 USAGE
   $ sfdx shane:heroku:repo:deploy -g <string> -r <string> [-n <string>] [-o <array>] [--envuser <string>] [--envpassword
   <string>] [-t <string>] [-d <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --days=days                                 [default: 1] days you want the heroku app to live (does nothing
-                                                  locally)
+  -d, --days=days                                                                   [default: 1] days you want the
+                                                                                    heroku app to live (does nothing
+                                                                                    locally)
 
-  -g, --githubuser=githubuser                     (required) github username where the app lives
+  -g, --githubuser=githubuser                                                       (required) github username where the
+                                                                                    app lives
 
-  -n, --name=name                                 what do you want to Heroku app to be named
+  -n, --name=name                                                                   what do you want to Heroku app to be
+                                                                                    named
 
-  -o, --overrides=overrides                       an array of key-value pairs, like SOME_VAR="some Value" (use quotes
-                                                  where string have spaces!)
+  -o, --overrides=overrides                                                         an array of key-value pairs, like
+                                                                                    SOME_VAR="some Value" (use quotes
+                                                                                    where string have spaces!)
 
-  -r, --repo=repo                                 (required) repo where the app lives
+  -r, --repo=repo                                                                   (required) repo where the app lives
 
-  -t, --team=team                                 assign this new app to an existing heroku team
+  -t, --team=team                                                                   assign this new app to an existing
+                                                                                    heroku team
 
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
 
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
 
-  --envpassword=envpassword                       grab the default scratch org password and set it to this Heroku
-                                                  environment var
+  --envpassword=envpassword                                                         grab the default scratch org
+                                                                                    password and set it to this Heroku
+                                                                                    environment var
 
-  --envuser=envuser                               grab the default scratch org username and set it to this Heroku
-                                                  environment var
+  --envuser=envuser                                                                 grab the default scratch org
+                                                                                    username and set it to this Heroku
+                                                                                    environment var
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:heroku:repo:deploy -g someUser -r someRepo
   // deploys code from https://github.com/someUser/someRepo that has a valid app.json
 ```
 
-_See code: [src/commands/shane/heroku/repo/deploy.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/heroku/repo/deploy.ts)_
+_See code: [src/commands/shane/heroku/repo/deploy.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/heroku/repo/deploy.ts)_
 
-## `sfdx shane:iot:activation -n <string> [-r] [-d] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:iot:activation -n <string> [-r] [-d] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Activate an iot orchestration by name
 
 ```
 USAGE
   $ sfdx shane:iot:activation -n <string> [-r] [-d] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --deactivate                                deactivate the orchestration
-  -n, --name=name                                 (required) API name of the orchestration
-  -r, --reset                                     reset all instances of the orchestration
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -d, --deactivate                                                                  deactivate the orchestration
+
+  -n, --name=name                                                                   (required) API name of the
+                                                                                    orchestration
+
+  -r, --reset                                                                       reset all instances of the
+                                                                                    orchestration
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:iot:activate -n orchName -r
@@ -731,81 +945,104 @@ EXAMPLES
   // deactivates the orchestration, without resetting all the instances
 ```
 
-_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/iot/activation.ts)_
+_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/iot/activation.ts)_
 
-## `sfdx shane:label:add -t <string> [--bundle <string>] [-n <string>] [-d <string>] [--protected] [--categories <array>] [-l <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:label:add -t <string> [--bundle <string>] [-n <string>] [-d <string>] [--protected] [--categories <array>] [-l <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 create a remote site setting in the local source. Push it when you're done
 
 ```
 USAGE
   $ sfdx shane:label:add -t <string> [--bundle <string>] [-n <string>] [-d <string>] [--protected] [--categories
-  <array>] [-l <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  <array>] [-l <string>] [-t <directory>] [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --description=description                   description for your label
-  -l, --language=language                         [default: en_US] language code
-  -n, --name=name                                 api name for your label
+  -d, --description=description                                                     description for your label
+  -l, --language=language                                                           [default: en_US] language code
+  -n, --name=name                                                                   api name for your label
 
-  -t, --target=target                             [default: force-app/main/default] where to create the folder (if it
-                                                  doesn't exist already) and file...defaults to force-app/main/default
+  -t, --target=target                                                               [default: force-app/main/default]
+                                                                                    where to create the folder (if it
+                                                                                    doesn't exist already) and
+                                                                                    file...defaults to
+                                                                                    force-app/main/default
 
-  -t, --text=text                                 (required) the text you want to turn into a label
+  -t, --text=text                                                                   (required) the text you want to turn
+                                                                                    into a label
 
-  --bundle=bundle                                 [default: CustomLabels] label bundle when you want to organize them
-                                                  more
+  --bundle=bundle                                                                   [default: CustomLabels] label bundle
+                                                                                    when you want to organize them more
 
-  --categories=categories                         categories to add to your custom label
+  --categories=categories                                                           categories to add to your custom
+                                                                                    label
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
-  --protected                                     mark as protected (packaged, subscribers cannot change the label
+  --protected                                                                       mark as protected (packaged,
+                                                                                    subscribers cannot change the label
 
 EXAMPLE
   sfdx shane:label:add -t "This is some Text"
   // create a custom label with the displayed text and all the defaults
 ```
 
-_See code: [src/commands/shane/label/add.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/label/add.ts)_
+_See code: [src/commands/shane/label/add.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/label/add.ts)_
 
-## `sfdx shane:lwc:create -n <string> -d <directory> [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:lwc:create -n <string> -d <directory> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 create a lwc locally without need for sfdx project
 
 ```
 USAGE
-  $ sfdx shane:lwc:create -n <string> -d <directory> [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  $ sfdx shane:lwc:create -n <string> -d <directory> [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --directory=directory                       (required) where to create the new lwc's folder
-  -n, --name=name                                 (required) name it headsDownCamelCase
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -d, --directory=directory                                                         (required) where to create the new
+                                                                                    lwc's folder
+
+  -n, --name=name                                                                   (required) name it
+                                                                                    headsDownCamelCase
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:lwc:create -n someLWC -d modules/namespace
   // creates lwc in the given folder path
 ```
 
-_See code: [src/commands/shane/lwc/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/lwc/create.ts)_
+_See code: [src/commands/shane/lwc/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/lwc/create.ts)_
 
-## `sfdx shane:lwc:css:merge -f <filepath> -c <directory> [-l <filepath>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:lwc:css:merge -f <filepath> -c <directory> [-l <filepath>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 take css from existing file(s), extract component-level relevant selectors and save to a LWC's css file
 
 ```
 USAGE
   $ sfdx shane:lwc:css:merge -f <filepath> -c <directory> [-l <filepath>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -c, --component=component                       (required) component directory where template and js live
-  -f, --file=file                                 (required) file containing all css selectors to select from
-  -l, --localcss=localcss                         local css file to merge with contents of --file
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -c, --component=component                                                         (required) component directory where
+                                                                                    template and js live
+
+  -f, --file=file                                                                   (required) file containing all css
+                                                                                    selectors to select from
+
+  -l, --localcss=localcss                                                           local css file to merge with
+                                                                                    contents of --file
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:lwc:css:merge -c modules/namespace/myComp -f some/big_file.css
@@ -816,80 +1053,95 @@ EXAMPLES
   selectors from modules/namespace/myComp/local.css
 ```
 
-_See code: [src/commands/shane/lwc/css/merge.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/lwc/css/merge.ts)_
+_See code: [src/commands/shane/lwc/css/merge.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/lwc/css/merge.ts)_
 
-## `sfdx shane:mdapi:describe [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:mdapi:describe [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 what's in the org?
 
 ```
 USAGE
   $ sfdx shane:mdapi:describe [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:mdapi:describe -u someOrg
   // list the metadata available in the org
 ```
 
-_See code: [src/commands/shane/mdapi/describe.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/mdapi/describe.ts)_
+_See code: [src/commands/shane/mdapi/describe.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/mdapi/describe.ts)_
 
-## `sfdx shane:mdapi:list -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:mdapi:list -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 what's in the org?
 
 ```
 USAGE
   $ sfdx shane:mdapi:list -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -t, --type=type                                 (required) pull only a specific type.  See the metadata api docs for
-                                                  type names
+  -t, --type=type                                                                   (required) pull only a specific
+                                                                                    type.  See the metadata api docs for
+                                                                                    type names
 
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
 
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:mdapi:list -u someOrg -t CustomObject
   // what metadata exists for a specific type
 ```
 
-_See code: [src/commands/shane/mdapi/list.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/mdapi/list.ts)_
+_See code: [src/commands/shane/mdapi/list.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/mdapi/list.ts)_
 
-## `sfdx shane:mdapi:package:get -p <string> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:mdapi:package:get -p <string> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 gets package from an org, converts, and merges it into the local source
 
 ```
 USAGE
   $ sfdx shane:mdapi:package:get -p <string> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -p, --packagename=packagename                   (required) the name of the package you want to retrieve
+  -p, --packagename=packagename                                                     (required) the name of the package
+                                                                                    you want to retrieve
 
-  -t, --target=target                             [default: force-app] where to convert the result to...defaults to
-                                                  force-app
+  -t, --target=target                                                               [default: force-app] where to
+                                                                                    convert the result to...defaults to
+                                                                                    force-app
 
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
 
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:mdapi:package:get -p MyPkg -u someOrg
@@ -899,30 +1151,35 @@ EXAMPLES
   // pulls a package from the org and converts/merges it into /someDir
 ```
 
-_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/mdapi/package/get.ts)_
+_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/mdapi/package/get.ts)_
 
-## `sfdx shane:mdapi:package:xml -p <filepath> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:mdapi:package:xml -p <filepath> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 DEPRECATED. Use force:source:retrieve these days! gets metadata form an org based on a local package.xml, converts, and merges it into the local source
 
 ```
 USAGE
   $ sfdx shane:mdapi:package:xml -p <filepath> [-t <directory>] [-u <string>] [--apiversion <string>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -p, --xmlpath=xmlpath                           (required) the location of the package.xml you want to use
+  -p, --xmlpath=xmlpath                                                             (required) the location of the
+                                                                                    package.xml you want to use
 
-  -t, --target=target                             [default: force-app] where to convert the result to...defaults to
-                                                  force-app
+  -t, --target=target                                                               [default: force-app] where to
+                                                                                    convert the result to...defaults to
+                                                                                    force-app
 
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
 
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:mdapi:package:xml -p someFolder/package.xml -u someOrg
@@ -932,9 +1189,9 @@ EXAMPLES
   // pulls a package from the org and converts/merges it into /someDir
 ```
 
-_See code: [src/commands/shane/mdapi/package/xml.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/mdapi/package/xml.ts)_
+_See code: [src/commands/shane/mdapi/package/xml.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/mdapi/package/xml.ts)_
 
-## `sfdx shane:mdapi:pull [-c | --all] [-p | undefined] [--wave | undefined] [-s | undefined | -o <string>] [-i | undefined] [--reporting | undefined] [-t <string> | undefined] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:mdapi:pull [-c | --all] [-p | undefined] [--wave | undefined] [-s | undefined | -o <string>] [-i | undefined] [--reporting | undefined] [-t <string> | undefined] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 gets unpackaged metadata for you
 
@@ -942,41 +1199,53 @@ gets unpackaged metadata for you
 USAGE
   $ sfdx shane:mdapi:pull [-c | --all] [-p | undefined] [--wave | undefined] [-s | undefined | -o <string>] [-i |
   undefined] [--reporting | undefined] [-t <string> | undefined] [-u <string>] [--apiversion <string>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -c, --code                                      ApexClass,ApexTrigger,ApexComponent,ApexPage,AuraDefinitionBundle,Stat
-                                                  icResource
+  -c, --code                                                                        ApexClass,ApexTrigger,ApexComponent,
+                                                                                    ApexPage,AuraDefinitionBundle,Static
+                                                                                    Resource
 
-  -i, --ui                                        CompactLayout,Layout,ListView,CustomTab,AppMenu,CustomApplication,Cust
-                                                  omPageWebLink,HomePageComponent,HomePageLayout,PathAssistant,WebLink,C
-                                                  ustomLabels,FlexiPage,QuickAction
+  -i, --ui                                                                          CompactLayout,Layout,ListView,Custom
+                                                                                    Tab,AppMenu,CustomApplication,Custom
+                                                                                    PageWebLink,HomePageComponent,HomePa
+                                                                                    geLayout,PathAssistant,WebLink,Custo
+                                                                                    mLabels,FlexiPage,QuickAction
 
-  -o, --object=object                             pull metadata for a single object
+  -o, --object=object                                                               pull metadata for a single object
 
-  -p, --perms                                     PermissionSet,Profile,Role,CustomPermission,Group
+  -p, --perms                                                                       PermissionSet,Profile,Role,CustomPer
+                                                                                    mission,Group
 
-  -s, --schema                                    ExternalDataSource,CustomMetadata,RecordType,GlobalValueSet,CustomFiel
-                                                  d,CustomObject,StandardValueSet
+  -s, --schema                                                                      ExternalDataSource,CustomMetadata,Re
+                                                                                    cordType,GlobalValueSet,CustomField,
+                                                                                    CustomObject,StandardValueSet
 
-  -t, --type=type                                 pull only a specific type.  See the metadata api docs for type names
+  -t, --type=type                                                                   pull only a specific type.  See the
+                                                                                    metadata api docs for type names
 
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
 
-  --all                                           Pulls just about everything.  Don't use this flag with any other
-                                                  subset of metadata.  Not recommended for really large metatadat orgs
-                                                  because it'll overflow stdout
+  --all                                                                             Pulls just about everything.  Don't
+                                                                                    use this flag with any other subset
+                                                                                    of metadata.  Not recommended for
+                                                                                    really large metatadat orgs because
+                                                                                    it'll overflow stdout
 
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
-  --reporting                                     Report,Dashboard
+  --reporting                                                                       Report,Dashboard
 
-  --wave                                          WaveApplication,WaveDashboard,WaveDataflow,WaveLens,WaveTemplateBundle
-                                                  ,Wavexmd,WaveDataset
+  --wave                                                                            WaveApplication,WaveDashboard,WaveDa
+                                                                                    taflow,WaveLens,WaveTemplateBundle,W
+                                                                                    avexmd,WaveDataset
 
 EXAMPLES
   sfdx shane:mdapi:pull -c -u someOrg
@@ -986,35 +1255,49 @@ EXAMPLES
   // pulls all the external data source metadata from the org and converts/merges it into your project's default pkgDir
 ```
 
-_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/mdapi/pull.ts)_
+_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/mdapi/pull.ts)_
 
-## `sfdx shane:mdapi:push [-d <directory>] [-k] [-r <directory>] [-w <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:mdapi:push [-d <directory>] [-k] [-r <directory>] [-w <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 convert and deploy the packaged source
 
 ```
 USAGE
   $ sfdx shane:mdapi:push [-d <directory>] [-k] [-r <directory>] [-w <integer>] [-u <string>] [--apiversion <string>]
-  [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --convertedfolder=convertedfolder           [default: mdapiout] where to store the mdapi-converted source
-  -k, --keepconverted                             Don't automatically delete the converted source
-  -r, --source=source                             [default: force-app] deploy a specific folder that's not force-app
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  -w, --deploymenttimelimit=deploymenttimelimit   [default: 200] How many minutes to wait for the deployment to finish
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -d, --convertedfolder=convertedfolder                                             [default: mdapiout] where to store
+                                                                                    the mdapi-converted source
+
+  -k, --keepconverted                                                               Don't automatically delete the
+                                                                                    converted source
+
+  -r, --source=source                                                               [default: force-app] deploy a
+                                                                                    specific folder that's not force-app
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  -w, --deploymenttimelimit=deploymenttimelimit                                     [default: 200] How many minutes to
+                                                                                    wait for the deployment to finish
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:mdapi:push -u someOrg
   // convert to mdapi format and push to the given org
 ```
 
-_See code: [src/commands/shane/mdapi/push.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/mdapi/push.ts)_
+_See code: [src/commands/shane/mdapi/push.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/mdapi/push.ts)_
 
-## `sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>] [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>] [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 create an object in local source. Only **c (limited support), **b (big objects) and events \_\_e are currently supported
 
@@ -1023,50 +1306,66 @@ USAGE
   $ sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>]
   [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype
   <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -a, --api=api                                   api name.  Ends with one of the supported types: [__b, __e]
+  -a, --api=api                                                                     api name.  Ends with one of the
+                                                                                    supported types: [__b, __e]
 
-  -d, --directory=directory                       [default: force-app/main/default] where to create the folder (if it
-                                                  doesn't exist already) and file...defaults to force-app/main/default
+  -d, --directory=directory                                                         [default: force-app/main/default]
+                                                                                    where to create the folder (if it
+                                                                                    doesn't exist already) and
+                                                                                    file...defaults to
+                                                                                    force-app/main/default
 
-  -h, --highvolume                                high volume, valid only for platform events (__e)
+  -h, --highvolume                                                                  high volume, valid only for platform
+                                                                                    events (__e)
 
-  -i, --interactive                               fully interactive--ask me every possible question.
+  -i, --interactive                                                                 fully interactive--ask me every
+                                                                                    possible question.
 
-  -l, --label=label                               label for the UI
+  -l, --label=label                                                                 label for the UI
 
-  -p, --plural=plural                             plural label for the UI
+  -p, --plural=plural                                                               plural label for the UI
 
-  -t, --type=custom|big|event                     type of object
+  -t, --type=custom|big|event                                                       type of object
 
-  --activities                                    the enableActivities flag on an object (invalid for __b, __e)
+  --activities                                                                      the enableActivities flag on an
+                                                                                    object (invalid for __b, __e)
 
-  --autonumberformat=autonumberformat             the display format for the autonumbering
+  --autonumberformat=autonumberformat                                               the display format for the
+                                                                                    autonumbering
 
-  --description=description                       [default: added from sfdx plugin] optional description so you can
-                                                  remember why you added this and what it's for
+  --description=description                                                         [default: added from sfdx plugin]
+                                                                                    optional description so you can
+                                                                                    remember why you added this and what
+                                                                                    it's for
 
-  --enterprise                                    enable bulk/sharing/streaming
+  --enterprise                                                                      enable bulk/sharing/streaming
 
-  --feeds                                         the enableFeeds flag on an object (invalid for __b, __e)
+  --feeds                                                                           the enableFeeds flag on an object
+                                                                                    (invalid for __b, __e)
 
-  --history                                       the enableHistory flag on an object (invalid for __b, __e)
+  --history                                                                         the enableHistory flag on an object
+                                                                                    (invalid for __b, __e)
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
-  --namefieldlabel=namefieldlabel                 [default: Name] the label for the name field
+  --namefieldlabel=namefieldlabel                                                   [default: Name] the label for the
+                                                                                    name field
 
-  --nametype=Text|AutoNumber                      name field type
+  --nametype=Text|AutoNumber                                                        name field type
 
-  --reports                                       the enableReports flag on an object (invalid for __b, __e)
+  --reports                                                                         the enableReports flag on an object
+                                                                                    (invalid for __b, __e)
 
-  --search                                        the enableSearch flag on an object (invalid for __b, __e)
+  --search                                                                          the enableSearch flag on an object
+                                                                                    (invalid for __b, __e)
 
-  --sharingmodel=Read|ReadWrite|Private           [default: ReadWrite] sharing model
+  --sharingmodel=Read|ReadWrite|Private                                             [default: ReadWrite] sharing model
 
 EXAMPLES
   sfdx shane:object:create
@@ -1082,32 +1381,38 @@ EXAMPLES
   // create a platform event
 ```
 
-_See code: [src/commands/shane/object/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/object/create.ts)_
+_See code: [src/commands/shane/object/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/object/create.ts)_
 
-## `sfdx shane:object:fat -o <string> [-m <integer>] [-y <integer>] [--description <string>] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:object:fat -o <string> [-m <integer>] [-y <integer>] [--description <string>] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 add or update a field audit trail retention policy on an object. Modifies local source--you still need to push/deploy
 
 ```
 USAGE
   $ sfdx shane:object:fat -o <string> [-m <integer>] [-y <integer>] [--description <string>] [-d <directory>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --directory=directory                          [default: force-app/main/default] Where is all this metadata?
-                                                     defaults to force-app/main/default
+  -d, --directory=directory                                                         [default: force-app/main/default]
+                                                                                    Where is all this metadata? defaults
+                                                                                    to force-app/main/default
 
-  -m, --archiveaftermonths=archiveaftermonths        [default: 18] archive after this number of months
+  -m, --archiveaftermonths=archiveaftermonths                                       [default: 18] archive after this
+                                                                                    number of months
 
-  -o, --object=object                                (required) object to manage the policy for
+  -o, --object=object                                                               (required) object to manage the
+                                                                                    policy for
 
-  -y, --archiveretentionyears=archiveretentionyears  [default: 10] Archive for this many years
+  -y, --archiveretentionyears=archiveretentionyears                                 [default: 10] Archive for this many
+                                                                                    years
 
-  --description=description                          optional friendly description for the policy
+  --description=description                                                         optional friendly description for
+                                                                                    the policy
 
-  --json                                             format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)     [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:object:fat -o Account
@@ -1124,9 +1429,9 @@ EXAMPLES
   // get some object you don't have locally, create the policy, and push that back up to where it came from
 ```
 
-_See code: [src/commands/shane/object/fat.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/object/fat.ts)_
+_See code: [src/commands/shane/object/fat.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/object/fat.ts)_
 
-## `sfdx shane:object:field [-o <string>] [-n <string>] [-a <string>] [-t <string>] [--description <string>] [--default <string>] [-r] [-u] [--externalid] [--trackhistory] [--helptext <string>] [-l <integer>] [-s <integer>] [--precision <integer>] [--lookupobject <string>] [--relname <string>] [--indexposition <integer>] [--indexappend] [--indexdirection <string>] [--noindex] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:object:field [-o <string>] [-n <string>] [-a <string>] [-t <string>] [--description <string>] [--default <string>] [-r] [-u] [--externalid] [--trackhistory] [--helptext <string>] [-l <integer>] [-s <integer>] [--precision <integer>] [--lookupobject <string>] [--relname <string>] [--indexposition <integer>] [--indexappend] [--indexdirection <string>] [--noindex] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 create or add fields to an existing object
 
@@ -1135,63 +1440,84 @@ USAGE
   $ sfdx shane:object:field [-o <string>] [-n <string>] [-a <string>] [-t <string>] [--description <string>] [--default
   <string>] [-r] [-u] [--externalid] [--trackhistory] [--helptext <string>] [-l <integer>] [-s <integer>] [--precision
   <integer>] [--lookupobject <string>] [--relname <string>] [--indexposition <integer>] [--indexappend]
-  [--indexdirection <string>] [--noindex] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  [--indexdirection <string>] [--noindex] [-i] [-d <directory>] [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -a, --api=api                                   API name for the field
+  -a, --api=api
+      API name for the field
 
-  -d, --directory=directory                       [default: force-app/main/default] Where is this object metadata?
-                                                  defaults to force-app/main/default
+  -d, --directory=directory
+      [default: force-app/main/default] Where is this object metadata? defaults to force-app/main/default
 
-  -i, --interactive                               fully interactive--ask me every possible question.
+  -i, --interactive
+      fully interactive--ask me every possible question.
 
-  -l, --length=length                             length (for text fields and text area)
+  -l, --length=length
+      length (for text fields and text area)
 
-  -n, --name=name                                 Label for the field
+  -n, --name=name
+      Label for the field
 
-  -o, --object=object                             API name of an object to add a field to
+  -o, --object=object
+      API name of an object to add a field to
 
-  -r, --required                                  field is required
+  -r, --required
+      field is required
 
-  -s, --scale=scale                               places right of the decimal
+  -s, --scale=scale
+      places right of the decimal
 
-  -t, --type=type                                 field type.  Big Objects: Text,Number,DateTime,Lookup,LongTextArea.
-                                                  Events: Text,Number,DateTime,Date,LongTextArea,Checkbox.  Regular
-                                                  Objects:
-                                                  Text,Number,DateTime,Date,LongTextArea,Checkbox,Url,Email,Phone
+  -t, --type=type
+      field type.  Big Objects: Text,Number,DateTime,Lookup,LongTextArea.  Events:
+      Text,Number,DateTime,Date,LongTextArea,Checkbox.  Regular Objects:
+      Text,Number,DateTime,Date,LongTextArea,Checkbox,Url,Email,Phone
 
-  -u, --unique                                    field must be unique
+  -u, --unique
+      field must be unique
 
-  --default=default                               required for checkbox fields.  Express in Salesforce formula language
-                                                  (good luck with that!)
+  --default=default
+      required for checkbox fields.  Express in Salesforce formula language (good luck with that!)
 
-  --description=description                       optional description for the field so you remember what it's for next
-                                                  year
+  --description=description
+      optional description for the field so you remember what it's for next year
 
-  --externalid                                    use as an external id
+  --externalid
+      use as an external id
 
-  --helptext=helptext                             optional inline help text
+  --helptext=helptext
+      optional inline help text
 
-  --indexappend                                   put next in the big object index
+  --indexappend
+      put next in the big object index
 
-  --indexdirection=ASC|DESC                       sort direction for the big object index
+  --indexdirection=ASC|DESC
+      sort direction for the big object index
 
-  --indexposition=indexposition                   put in a specific position in the big object index (0 is the first
-                                                  element).  You're responsible for dealing with producing a sane array
+  --indexposition=indexposition
+      put in a specific position in the big object index (0 is the first element).  You're responsible for dealing with
+      producing a sane array
 
-  --json                                          format output as json
+  --json
+      format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)
+      [default: warn] logging level for this command invocation
 
-  --lookupobject=lookupobject                     API name of the object the lookup goes to
+  --lookupobject=lookupobject
+      API name of the object the lookup goes to
 
-  --noindex                                       do not add this field to the index
+  --noindex
+      do not add this field to the index
 
-  --precision=precision                           maximum allowed digits of a number, including whole and decimal places
+  --precision=precision
+      maximum allowed digits of a number, including whole and decimal places
 
-  --relname=relname                               API name for the lookup relationship
+  --relname=relname
+      API name for the lookup relationship
 
-  --trackhistory                                  enable history tracking on the field
+  --trackhistory
+      enable history tracking on the field
 
 EXAMPLES
   sfdx shane:object:field
@@ -1209,43 +1535,55 @@ EXAMPLES
   // create new text field called My Field (My_Field__c) on Platform Event EventTest__e
 ```
 
-_See code: [src/commands/shane/object/field.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/object/field.ts)_
+_See code: [src/commands/shane/object/field.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/object/field.ts)_
 
-## `sfdx shane:object:fields:describe -o <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:object:fields:describe -o <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 what fields are on the object?
 
 ```
 USAGE
   $ sfdx shane:object:fields:describe -o <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -o, --object=object                             (required) the object to describe
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -o, --object=object                                                               (required) the object to describe
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:object:fields:describe -o Account -u someOrg
   // list the fields (with type/label) on account
 ```
 
-_See code: [src/commands/shane/object/fields/describe.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/object/fields/describe.ts)_
+_See code: [src/commands/shane/object/fields/describe.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/object/fields/describe.ts)_
 
-## `sfdx shane:object:perms:align [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:object:perms:align [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 align profiles with
 
 ```
 USAGE
-  $ sfdx shane:object:perms:align [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  $ sfdx shane:object:perms:align [-d <directory>] [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --directory=directory                       [default: force-app/main/default] Where is all this metadata?
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -d, --directory=directory                                                         [default: force-app/main/default]
+                                                                                    Where is all this metadata?
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:object:perms:align
@@ -1253,34 +1591,42 @@ EXAMPLE
   source
 ```
 
-_See code: [src/commands/shane/object/perms/align.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/object/perms/align.ts)_
+_See code: [src/commands/shane/object/perms/align.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/object/perms/align.ts)_
 
-## `sfdx shane:object:powerofone -o <string> [-l <string>] [-a <string>] [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:object:powerofone -o <string> [-l <string>] [-a <string>] [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 add a "power of one" formula field to any object
 
 ```
 USAGE
   $ sfdx shane:object:powerofone -o <string> [-l <string>] [-a <string>] [-d <string>] [-t <directory>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -a, --api=api                                   [default: Power_Of_One__c] api name (will include the __c for you if
-                                                  you don't add it here
+  -a, --api=api                                                                     [default: Power_Of_One__c] api name
+                                                                                    (will include the __c for you if you
+                                                                                    don't add it here
 
-  -d, --description=description                   [default: Power of one is used for formulas, reporting, etc] optional
-                                                  description so you can remember why you added this and what it's for
+  -d, --description=description                                                     [default: Power of one is used for
+                                                                                    formulas, reporting, etc] optional
+                                                                                    description so you can remember why
+                                                                                    you added this and what it's for
 
-  -l, --label=label                               [default: Power Of One] label
+  -l, --label=label                                                                 [default: Power Of One] label
 
-  -o, --object=object                             (required) API name of the object to add the field to
+  -o, --object=object                                                               (required) API name of the object to
+                                                                                    add the field to
 
-  -t, --target=target                             [default: force-app/main/default] where to create the folder (if it
-                                                  doesn't exist already) and file...defaults to force-app/main/default
+  -t, --target=target                                                               [default: force-app/main/default]
+                                                                                    where to create the folder (if it
+                                                                                    doesn't exist already) and
+                                                                                    file...defaults to
+                                                                                    force-app/main/default
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:object:powerofone -a Poo -l "Power of One" -o User
@@ -1288,58 +1634,66 @@ EXAMPLE
   default folder
 ```
 
-_See code: [src/commands/shane/object/powerofone.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/object/powerofone.ts)_
+_See code: [src/commands/shane/object/powerofone.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/object/powerofone.ts)_
 
-## `sfdx shane:object:tab -o <string> -i <integer> [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:object:tab -o <string> -i <integer> [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
-create a tab from a custom object, and you have to pick an
+create a tab from a custom object, and you have to pick an icon
 
 ```
 USAGE
   $ sfdx shane:object:tab -o <string> -i <integer> [-t <directory>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -i, --icon=icon                                 (required) icon number from
-                                                  https://lightningdesignsystem.com/icons/#custom but only up to 100
+  -i, --icon=icon                                                                   (required) icon number from
+                                                                                    https://lightningdesignsystem.com/ic
+                                                                                    ons/#custom but only up to 100
 
-  -o, --object=object                             (required) object api name
+  -o, --object=object                                                               (required) object api name
 
-  -t, --target=target                             [default: force-app/main/default] where to create the folder (if it
-                                                  doesn't exist already) and file...defaults to force-app/main/default
+  -t, --target=target                                                               [default: force-app/main/default]
+                                                                                    where to create the folder (if it
+                                                                                    doesn't exist already) and
+                                                                                    file...defaults to
+                                                                                    force-app/main/default
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:object:tab -o SomeObject__c -i 86
   // create a tab for the object using icon #86 from https://lightningdesignsystem.com/icons/#custom
 ```
 
-_See code: [src/commands/shane/object/tab.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/object/tab.ts)_
+_See code: [src/commands/shane/object/tab.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/object/tab.ts)_
 
-## `sfdx shane:object:unperm -o <string> [-d <directory>] [-s <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:object:unperm -o <string> [-d <directory>] [-s <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 remove references to an object from profiles/permsets (all or a specific one)
 
 ```
 USAGE
   $ sfdx shane:object:unperm -o <string> [-d <directory>] [-s <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --directory=directory                       [default: force-app/main/default] Where is all this metadata? defaults
-                                                  to force-app/main/default
+  -d, --directory=directory                                                         [default: force-app/main/default]
+                                                                                    Where is all this metadata? defaults
+                                                                                    to force-app/main/default
 
-  -o, --object=object                             (required) remove all references to an object from profiles or
-                                                  permsets
+  -o, --object=object                                                               (required) remove all references to
+                                                                                    an object from profiles or permsets
 
-  -s, --specific=specific                         specify a profile or permset by name to only remove it from that one
+  -s, --specific=specific                                                           specify a profile or permset by name
+                                                                                    to only remove it from that one
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:object:unperm -o OpportunitySplit
@@ -1347,22 +1701,28 @@ EXAMPLE
   assignments (profile only) for the named object
 ```
 
-_See code: [src/commands/shane/object/unperm.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/object/unperm.ts)_
+_See code: [src/commands/shane/object/unperm.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/object/unperm.ts)_
 
-## `sfdx shane:org:componentlibrary [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:org:componentlibrary [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 opens the lightning component library for the specified org
 
 ```
 USAGE
   $ sfdx shane:org:componentlibrary [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:org:componentlibrary
@@ -1372,45 +1732,61 @@ EXAMPLES
   // opens library for specified org
 ```
 
-_See code: [src/commands/shane/org/componentlibrary.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/org/componentlibrary.ts)_
+_See code: [src/commands/shane/org/componentlibrary.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/org/componentlibrary.ts)_
 
-## `sfdx shane:org:create --userprefix <string> -o <string> [-i <string>] [-f <filepath>] [-a <string>] [-d <integer>] [--wait <integer>] [-c] [-n] [-s] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:org:create --userprefix <string> -o <string> [-i <string>] [-f <filepath>] [-a <string>] [-d <integer>] [--wait <integer>] [-c] [-n] [-s] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 create an org with a friendly username. wraps force:org:create
 
 ```
 USAGE
   $ sfdx shane:org:create --userprefix <string> -o <string> [-i <string>] [-f <filepath>] [-a <string>] [-d <integer>]
-  [--wait <integer>] [-c] [-n] [-s] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  [--wait <integer>] [-c] [-n] [-s] [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -a, --setalias=setalias                         set an alias for for the created scratch org
-  -c, --noancestors                               do not include second-generation package ancestors in the scratch org
+  -a, --setalias=setalias                                                           set an alias for for the created
+                                                                                    scratch org
 
-  -d, --durationdays=durationdays                 [default: 7] duration of the scratch org (in days) (default:7, min:1,
-                                                  max:30)
+  -c, --noancestors                                                                 do not include second-generation
+                                                                                    package ancestors in the scratch org
 
-  -f, --definitionfile=definitionfile             [default: config/project-scratch-def.json] path to a scratch org
-                                                  definition file.  Default = config/project-scratch-def.json
+  -d, --durationdays=durationdays                                                   [default: 7] duration of the scratch
+                                                                                    org (in days) (default:7, min:1,
+                                                                                    max:30)
 
-  -i, --clientid=clientid                         connected app consumer key
+  -f, --definitionfile=definitionfile                                               [default:
+                                                                                    config/project-scratch-def.json]
+                                                                                    path to a scratch org definition
+                                                                                    file.  Default =
+                                                                                    config/project-scratch-def.json
 
-  -n, --nonamespace                               creates the scratch org with no namespace
+  -i, --clientid=clientid                                                           connected app consumer key
 
-  -o, --userdomain=userdomain                     (required) last part of the generated username (after the @ sign).
-                                                  Example: 'demo.org' produces shane1@demo.org, shane2@demo.org
+  -n, --nonamespace                                                                 creates the scratch org with no
+                                                                                    namespace
 
-  -s, --setdefaultusername                        set the created org as the default username
+  -o, --userdomain=userdomain                                                       (required) last part of the
+                                                                                    generated username (after the @
+                                                                                    sign).  Example: 'demo.org' produces
+                                                                                    shane1@demo.org, shane2@demo.org
 
-  --json                                          format output as json
+  -s, --setdefaultusername                                                          set the created org as the default
+                                                                                    username
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --json                                                                            format output as json
 
-  --userprefix=userprefix                         (required) first part of the generated username.  Example: 'shane'
-                                                  produces shane1@demo.org, shane2@demo.org
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
-  --wait=wait                                     [default: 20] the streaming client socket timeout (in minutes)
-                                                  (default:20, min:2)
+  --userprefix=userprefix                                                           (required) first part of the
+                                                                                    generated username.  Example:
+                                                                                    'shane' produces shane1@demo.org,
+                                                                                    shane2@demo.org
+
+  --wait=wait                                                                       [default: 20] the streaming client
+                                                                                    socket timeout (in minutes)
+                                                                                    (default:20, min:2)
 
 EXAMPLES
   sfdx shane:org:create --userprefix shane -o org.test
@@ -1421,21 +1797,28 @@ EXAMPLES
   // above, but with an alias, a longer duration, and not the default hub, and not the default config file
 ```
 
-_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/org/create.ts)_
+_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/org/create.ts)_
 
-## `sfdx shane:org:delete [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:org:delete [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 delete the default scratch org. Won't prompt you for confirmation
 
 ```
 USAGE
-  $ sfdx shane:org:delete [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  $ sfdx shane:org:delete [-u <string>] [--apiversion <string>] [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 ALIASES
   $ sfdx shane:org:destroy
@@ -1445,43 +1828,55 @@ EXAMPLE
   // deletes the current default scratch org
 ```
 
-_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/org/delete.ts)_
+_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/org/delete.ts)_
 
-## `sfdx shane:org:domain:verify [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:org:domain:verify [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Verifies that a domain was successfully setup with MyDomain
 
 ```
 USAGE
   $ sfdx shane:org:domain:verify [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:org:domain:verify
 ```
 
-_See code: [src/commands/shane/org/domain/verify.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/org/domain/verify.ts)_
+_See code: [src/commands/shane/org/domain/verify.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/org/domain/verify.ts)_
 
-## `sfdx shane:org:metadatacoverage [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:org:metadatacoverage [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 opens the metadata coverage report page
 
 ```
 USAGE
   $ sfdx shane:org:metadatacoverage [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:org:metadatacoverage
@@ -1491,24 +1886,34 @@ EXAMPLES
   // opens mdcoverage for specified org
 ```
 
-_See code: [src/commands/shane/org/metadatacoverage.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/org/metadatacoverage.ts)_
+_See code: [src/commands/shane/org/metadatacoverage.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/org/metadatacoverage.ts)_
 
-## `sfdx shane:org:reauth [-r] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:org:reauth [-r] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 reauthenticates (generates a new authinfo) for a scratch org, optionally insisting on custom domain being ready. Requires a hub
 
 ```
 USAGE
   $ sfdx shane:org:reauth [-r] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -r, --requirecustomdomain                        keep trying until you get back an org with a custom domain on it
-  -u, --targetusername=targetusername              username or alias for the target org; overrides default target org
-  -v, --targetdevhubusername=targetdevhubusername  username or alias for the dev hub org; overrides default dev hub org
-  --apiversion=apiversion                          override the api version used for api requests made by this command
-  --json                                           format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)   [default: warn] logging level for this command invocation
+  -r, --requirecustomdomain                                                         keep trying until you get back an
+                                                                                    org with a custom domain on it
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  -v, --targetdevhubusername=targetdevhubusername                                   username or alias for the dev hub
+                                                                                    org; overrides default dev hub org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:org:reauth
@@ -1518,58 +1923,74 @@ EXAMPLES
        // will try each minute, up to 60 minutes, until an org with a valid mydomain is ready
 ```
 
-_See code: [src/commands/shane/org/reauth.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/org/reauth.ts)_
+_See code: [src/commands/shane/org/reauth.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/org/reauth.ts)_
 
-## `sfdx shane:org:refreshtoken [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:org:refreshtoken [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Outputs a refresh token from an org that you've already auth'd sfdx to. PLEASE BE CAREFUL WITH THIS AND TREAT IT AS A PASSWORD
 
 ```
 USAGE
   $ sfdx shane:org:refreshtoken [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:org:refreshtoken -u someAliasOrUsername
   // prints the refresh token for some org that you've already connected to
 ```
 
-_See code: [src/commands/shane/org/refreshtoken.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/org/refreshtoken.ts)_
+_See code: [src/commands/shane/org/refreshtoken.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/org/refreshtoken.ts)_
 
-## `sfdx shane:package2:version:bump [-M | -m | -p] [-c] [-r] [-t <string>] [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:package2:version:bump [-M | -m | -p] [-c] [-r] [-t <string>] [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 bump the major/minor version number in the packageDirectory
 
 ```
 USAGE
   $ sfdx shane:package2:version:bump [-M | -m | -p] [-c] [-r] [-t <string>] [-v <string>] [--apiversion <string>]
-  [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -M, --major                                      Bump the major version by 1, sets minor,build to 0
-  -c, --create                                     create a new packageVersion from the new versionNumber
-  -m, --minor                                      Bump the minor version by 1
-  -p, --patch                                      Bump the patch version by 1
+  -M, --major                                                                       Bump the major version by 1, sets
+                                                                                    minor,build to 0
 
-  -r, --release                                    set the newly version as released (out of Beta).  Implies create
-                                                   whether you flag it or not :)
+  -c, --create                                                                      create a new packageVersion from the
+                                                                                    new versionNumber
 
-  -t, --target=target                              [default: force-app] name of your package directory (defaults to
-                                                   force-app)
+  -m, --minor                                                                       Bump the minor version by 1
 
-  -v, --targetdevhubusername=targetdevhubusername  username or alias for the dev hub org; overrides default dev hub org
+  -p, --patch                                                                       Bump the patch version by 1
 
-  --apiversion=apiversion                          override the api version used for api requests made by this command
+  -r, --release                                                                     set the newly version as released
+                                                                                    (out of Beta).  Implies create
+                                                                                    whether you flag it or not :)
 
-  --json                                           format output as json
+  -t, --target=target                                                               [default: force-app] name of your
+                                                                                    package directory (defaults to
+                                                                                    force-app)
 
-  --loglevel=(trace|debug|info|warn|error|fatal)   [default: warn] logging level for this command invocation
+  -v, --targetdevhubusername=targetdevhubusername                                   username or alias for the dev hub
+                                                                                    org; overrides default dev hub org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:package2:version:bump -m
@@ -1591,41 +2012,47 @@ EXAMPLES
   // bump the minor version up by one and create a new package2version, then set that as released
 ```
 
-_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/package2/version/bump.ts)_
+_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/package2/version/bump.ts)_
 
-## `sfdx shane:permset:check -o <string> [-f <string>] [--users | --permsets | --profiles] [--fieldlevel <string>] [--objectlevel <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:permset:check -o <string> [-f <string>] [--users | --permsets | --profiles] [--fieldlevel <string>] [--objectlevel <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 who has access to what
 
 ```
 USAGE
   $ sfdx shane:permset:check -o <string> [-f <string>] [--users | --permsets | --profiles] [--fieldlevel <string>]
-  [--objectlevel <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  [--objectlevel <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -f, --field=field                                        what field to check
-  -o, --object=object                                      (required) what object to check perms on
+  -f, --field=field                                                                 what field to check
 
-  -u, --targetusername=targetusername                      username or alias for the target org; overrides default
-                                                           target org
+  -o, --object=object                                                               (required) what object to check
+                                                                                    perms on
 
-  --apiversion=apiversion                                  override the api version used for api requests made by this
-                                                           command
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
 
-  --fieldlevel=Read|Edit                                   [default: Read] what level of perms are you looking for
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
 
-  --json                                                   format output as json
+  --fieldlevel=Read|Edit                                                            [default: Read] what level of perms
+                                                                                    are you looking for
 
-  --loglevel=(trace|debug|info|warn|error|fatal)           [default: warn] logging level for this command invocation
+  --json                                                                            format output as json
 
-  --objectlevel=Read|Edit|Create|Delete|ViewAll|ModifyAll  [default: Read] what level of perms are you looking for
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
-  --permsets                                               return names/ids of permission sets
+  --objectlevel=Read|Edit|Create|Delete|ViewAll|ModifyAll                           [default: Read] what level of perms
+                                                                                    are you looking for
 
-  --profiles                                               return names/ids of profiles
+  --permsets                                                                        return names/ids of permission sets
 
-  --users                                                  return names/ids of users with those profiles and/or
-                                                           permission sets
+  --profiles                                                                        return names/ids of profiles
+
+  --users                                                                           return names/ids of users with those
+                                                                                    profiles and/or permission sets
 
 EXAMPLES
   sfdx shane:permset:check -o Project__c --profiles --permsets
@@ -1639,81 +2066,117 @@ EXAMPLES
   it
 ```
 
-_See code: [src/commands/shane/permset/check.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/permset/check.ts)_
+_See code: [src/commands/shane/permset/check.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/permset/check.ts)_
 
-## `sfdx shane:permset:create -n <string> [-f <string> -o <string>] [-d <directory>] [-t] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:permset:create -n <string> [-f <string> -o <string>] [-d <directory>] [-t] [-c] [-u <string>] [--apiversion <string>] [--verbose] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 create or add stuff to a permset with maximum access
 
 ```
 USAGE
-  $ sfdx shane:permset:create -n <string> [-f <string> -o <string>] [-d <directory>] [-t] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  $ sfdx shane:permset:create -n <string> [-f <string> -o <string>] [-d <directory>] [-t] [-c] [-u <string>]
+  [--apiversion <string>] [--verbose] [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --directory=directory                       [default: force-app/main/default] Where is all this metadata? defaults
-                                                  to force-app/main/default
+  -c, --checkpermissionable                                                         some fields'permissions can't be
+                                                                                    deducted from metadata, use describe
+                                                                                    on org to check if field is
+                                                                                    permissionable
 
-  -f, --field=field                               API name of an field to add perms for.  Required --object If blank,
-                                                  then you mean all the fields
+  -d, --directory=directory                                                         [default: force-app/main/default]
+                                                                                    Where is all this metadata? defaults
+                                                                                    to force-app/main/default
 
-  -n, --name=name                                 (required) path to existing permset.  If it exists, new perms will be
-                                                  added to it.  If not, then it'll be created for you
+  -f, --field=field                                                                 API name of an field to add perms
+                                                                                    for.  Required --object If blank,
+                                                                                    then you mean all the fields
 
-  -o, --object=object                             API name of an object to add perms for.  If blank, then you mean ALL
-                                                  the objects and ALL their fields and ALL their tabs
+  -n, --name=name                                                                   (required) path to existing permset.
+                                                                                    If it exists, new perms will be
+                                                                                    added to it.  If not, then it'll be
+                                                                                    created for you
 
-  -t, --tab                                       also add the tab for the specified object (or all objects if there is
-                                                  no specified objects)
+  -o, --object=object                                                               API name of an object to add perms
+                                                                                    for.  If blank, then you mean ALL
+                                                                                    the objects and ALL their fields and
+                                                                                    ALL their tabs
 
-  --json                                          format output as json
+  -t, --tab                                                                         also add the tab for the specified
+                                                                                    object (or all objects if there is
+                                                                                    no specified objects)
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+
+  --verbose                                                                         emit additional command output to
+                                                                                    stdout
 
 EXAMPLES
   sfdx shane:permset:create -n MyPermSet1 -o Something__c -f Some_Field__c
-  // create a permset in force-app/main/default for the object/field.  If MyPermSet1 doesn't exist, it will be created.
+       // create a permset in force-app/main/default for the object/field.  If MyPermSet1 doesn't exist, it will be
+  created.
 
   sfdx shane:permset:create -n MyPermSet1 -o Something__c
-  // create a permset in force-app/main/default for every field on Something__c.
+       // create a permset in force-app/main/default for every field on Something__c.
 
   sfdx shane:permset:create -n MyPermSet1
-  // create a permset in force-app/main/default for every field on every object!
+       // create a permset in force-app/main/default for every field on every object!
 
   sfdx shane:permset:create -n MyPermSet1 -t
-  // create a permset in force-app/main/default for every field on every object.  If there's a tab for any of those
+       // create a permset in force-app/main/default for every field on every object.  If there's a tab for any of those
   objects, add that tab to the permset, too
+
+  sfdx shane:permset:create -n MyPermSet1 -c
+       // create a permset in force-app/main/default for every field on every object, checking on org that all fields
+  are permissionable
 ```
 
-_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/permset/create.ts)_
+_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/permset/create.ts)_
 
-## `sfdx shane:profile:convert -n <string> -p <string> [-d <directory>] [-e | -c] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:profile:convert -n <string> -p <string> [-d <directory>] [-e | -c] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 convert a profile into a permset
 
 ```
 USAGE
   $ sfdx shane:profile:convert -n <string> -p <string> [-d <directory>] [-e | -c] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -c, --skinnyclone                               create a new profile that's the original profile less permset (does
-                                                  not modify original profile)
+  -c, --skinnyclone                                                                 create a new profile that's the
+                                                                                    original profile less permset (does
+                                                                                    not modify original profile)
 
-  -d, --directory=directory                       [default: force-app/main/default] Where is all this metadata? defaults
-                                                  to force-app/main/default
+  -d, --directory=directory                                                         [default: force-app/main/default]
+                                                                                    Where is all this metadata? defaults
+                                                                                    to force-app/main/default
 
-  -e, --editprofile                               remove metadata from original profile
+  -e, --editprofile                                                                 remove metadata from original
+                                                                                    profile
 
-  -n, --name=name                                 (required) path to existing permset.  If it exists, new perms will be
-                                                  added to it.  If not, then it'll be created for you
+  -n, --name=name                                                                   (required) path to existing permset.
+                                                                                    If it exists, new perms will be
+                                                                                    added to it.  If not, then it'll be
+                                                                                    created for you
 
-  -p, --profile=profile                           (required) API name of an profile to convert.  If blank, then you mean
-                                                  ALL the objects and ALL their fields and ALL their tabs
+  -p, --profile=profile                                                             (required) API name of an profile to
+                                                                                    convert.  If blank, then you mean
+                                                                                    ALL the objects and ALL their fields
+                                                                                    and ALL their tabs
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:profile:convert -p Admin -n MyNewPermSet -e
@@ -1726,80 +2189,101 @@ EXAMPLES
   permset removed (-c)
 ```
 
-_See code: [src/commands/shane/profile/convert.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/profile/convert.ts)_
+_See code: [src/commands/shane/profile/convert.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/profile/convert.ts)_
 
-## `sfdx shane:profile:whitelist -n <string> [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:profile:whitelist -n <string> [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 whitelist the whole internet for a profile (no ip verification or 2FA/OTP challenges in dev)
 
 ```
 USAGE
-  $ sfdx shane:profile:whitelist -n <string> [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  $ sfdx shane:profile:whitelist -n <string> [-d <directory>] [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --directory=directory                       [default: force-app/main/default] Where is all this metadata? defaults
-                                                  to force-app/main/default
+  -d, --directory=directory                                                         [default: force-app/main/default]
+                                                                                    Where is all this metadata? defaults
+                                                                                    to force-app/main/default
 
-  -n, --name=name                                 (required) profile name
+  -n, --name=name                                                                   (required) profile name
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:profile:whitelist -n Admin
   // add loginIpRanges of 0.0.0.0 to 255.255.255.255 to an existing profile, or create one if it doesn't exist
 ```
 
-_See code: [src/commands/shane/profile/whitelist.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/profile/whitelist.ts)_
+_See code: [src/commands/shane/profile/whitelist.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/profile/whitelist.ts)_
 
-## `sfdx shane:project:create -n <string> -g <string> [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:project:create -n <string> -g <string> [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 creates an sfdx project
 
 ```
 USAGE
   $ sfdx shane:project:create -n <string> -g <string> [-v <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -g, --gitremote=gitremote                        (required) full github url for the remote
-  -n, --name=name                                  (required) name and path for the project
-  -v, --targetdevhubusername=targetdevhubusername  username or alias for the dev hub org; overrides default dev hub org
-  --apiversion=apiversion                          override the api version used for api requests made by this command
-  --json                                           format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)   [default: warn] logging level for this command invocation
+  -g, --gitremote=gitremote                                                         (required) full github url for the
+                                                                                    remote
+
+  -n, --name=name                                                                   (required) name and path for the
+                                                                                    project
+
+  -v, --targetdevhubusername=targetdevhubusername                                   username or alias for the dev hub
+                                                                                    org; overrides default dev hub org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:project:create -n myProject
   // create a project in the folder with all the default structure
 ```
 
-_See code: [src/commands/shane/project/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/project/create.ts)_
+_See code: [src/commands/shane/project/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/project/create.ts)_
 
-## `sfdx shane:remotesite:create -u <url> -n <string> [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:remotesite:create -u <url> -n <string> [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 create a remote site setting in the local source. Push it when you're done
 
 ```
 USAGE
   $ sfdx shane:remotesite:create -u <url> -n <string> [-d <string>] [-t <directory>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --description=description                   [default: added from sfdx plugin] optional description so you can
-                                                  remember why you added this and what it's for
+  -d, --description=description                                                     [default: added from sfdx plugin]
+                                                                                    optional description so you can
+                                                                                    remember why you added this and what
+                                                                                    it's for
 
-  -n, --name=name                                 (required) name it (Salesforce API compliant name)
+  -n, --name=name                                                                   (required) name it (Salesforce API
+                                                                                    compliant name)
 
-  -t, --target=target                             [default: force-app/main/default] where to create the folder (if it
-                                                  doesn't exist already) and file...defaults to force-app/main/default
+  -t, --target=target                                                               [default: force-app/main/default]
+                                                                                    where to create the folder (if it
+                                                                                    doesn't exist already) and
+                                                                                    file...defaults to
+                                                                                    force-app/main/default
 
-  -u, --url=url                                   (required) url that you want to allow callouts to
+  -u, --url=url                                                                     (required) url that you want to
+                                                                                    allow callouts to
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:remotesite:create -n Test -u https://www.google.com
@@ -1809,33 +2293,41 @@ EXAMPLES
   // create a remote site setting in myOtherDirectory/main/default with a description
 ```
 
-_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/remotesite/create.ts)_
+_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/remotesite/create.ts)_
 
-## `sfdx shane:static:create -n <string> -y <string> [-d <string>] [-t <directory>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:static:create -n <string> -y <string> [-d <string>] [-t <directory>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 create a static resource locally
 
 ```
 USAGE
   $ sfdx shane:static:create -n <string> -y <string> [-d <string>] [-t <directory>] [-p] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --description=description                   [default: added from sfdx plugin] optional description so you can
-                                                  remember why you added this and what it's for
+  -d, --description=description                                                     [default: added from sfdx plugin]
+                                                                                    optional description so you can
+                                                                                    remember why you added this and what
+                                                                                    it's for
 
-  -n, --name=name                                 (required) name it (Salesforce API compliant name)
+  -n, --name=name                                                                   (required) name it (Salesforce API
+                                                                                    compliant name)
 
-  -p, --public                                    mark the cache control public
+  -p, --public                                                                      mark the cache control public
 
-  -t, --target=target                             [default: force-app/main/default] where to create the folder (if it
-                                                  doesn't exist already) and file...defaults to force-app/main/default
+  -t, --target=target                                                               [default: force-app/main/default]
+                                                                                    where to create the folder (if it
+                                                                                    doesn't exist already) and
+                                                                                    file...defaults to
+                                                                                    force-app/main/default
 
-  -y, --type=zip|css|js|text|xml                  (required) choose one of the following: zip, css, js, text, xml
+  -y, --type=zip|css|js|text|xml                                                    (required) choose one of the
+                                                                                    following: zip, css, js, text, xml
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:static:create -n myJSResource -y js
@@ -1845,50 +2337,65 @@ EXAMPLES
   // create an empty folder (zips when pushed), the meta.xml, with a description in a non-default directory.
 ```
 
-_See code: [src/commands/shane/static/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/static/create.ts)_
+_See code: [src/commands/shane/static/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/static/create.ts)_
 
-## `sfdx shane:theme:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:theme:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Activate a LightningExperienceTheme via Puppeteer/Chromium headless. Recommended: use shane:org:reuath -r to make darn sure that the domain is ready to open something
 
 ```
 USAGE
   $ sfdx shane:theme:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -b, --showbrowser                               show the browser...useful for local debugging
-  -n, --name=name                                 (required) name of the theme to activate
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -b, --showbrowser                                                                 show the browser...useful for local
+                                                                                    debugging
+
+  -n, --name=name                                                                   (required) name of the theme to
+                                                                                    activate
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 ```
 
-_See code: [src/commands/shane/theme/activate.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/theme/activate.ts)_
+_See code: [src/commands/shane/theme/activate.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/theme/activate.ts)_
 
-## `sfdx shane:tsp:username:update [-n <email>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:tsp:username:update [-n <email>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 change the username on all transaction security policies
 
 ```
 USAGE
   $ sfdx shane:tsp:username:update [-n <email>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --directory=directory                       [default: force-app/main/default] Where is all this metadata? defaults
-                                                  to force-app/main/default
+  -d, --directory=directory                                                         [default: force-app/main/default]
+                                                                                    Where is all this metadata? defaults
+                                                                                    to force-app/main/default
 
-  -n, --newusername=newusername                   manually specify the username, ignoring your default or any -u
+  -n, --newusername=newusername                                                     manually specify the username,
+                                                                                    ignoring your default or any -u
 
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
 
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:tsp:username:update -n newusername@example.com
@@ -1903,24 +2410,32 @@ EXAMPLES
   target org's username
 ```
 
-_See code: [src/commands/shane/tsp/username/update.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/tsp/username/update.ts)_
+_See code: [src/commands/shane/tsp/username/update.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/tsp/username/update.ts)_
 
-## `sfdx shane:uiapi:objectinfo [-o <string>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:uiapi:objectinfo [-o <string>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 get a ui api response from the objectinfo endpoint: https://developer.salesforce.com/docs/atlas.en-us.uiapi.meta/uiapi/ui_api_resources_object_info.htm
 
 ```
 USAGE
   $ sfdx shane:uiapi:objectinfo [-o <string>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -o, --object=object                             object api name
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
-  --outputfile=outputfile                         local path to save the output to
+  -o, --object=object                                                               object api name
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+
+  --outputfile=outputfile                                                           local path to save the output to
 
 EXAMPLES
   sfdx shane:uiapi:objectinfo -o Account --json
@@ -1930,36 +2445,43 @@ EXAMPLES
        // returns ui-api objectinfo for Account and saves it to a local file
 ```
 
-_See code: [src/commands/shane/uiapi/objectinfo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/uiapi/objectinfo.ts)_
+_See code: [src/commands/shane/uiapi/objectinfo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/uiapi/objectinfo.ts)_
 
-## `sfdx shane:uiapi:record -r <string> -f <array> [--optionalfields <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:uiapi:record -r <string> -f <array> [--optionalfields <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 get a ui api response from the getrecord endpoint: https://developer.salesforce.com/docs/atlas.en-us.uiapi.meta/uiapi/ui_api_resources_record_get.htm
 
 ```
 USAGE
   $ sfdx shane:uiapi:record -r <string> -f <array> [--optionalfields <array>] [--outputfile <filepath>] [-u <string>]
-  [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -f, --fields=fields                             (required) fields to return.  Specify with the object API name, like
-                                                  Account.Name, Account.Phone, etc.  If not visible to the running user,
-                                                  an error is thrown
+  -f, --fields=fields                                                               (required) fields to return.
+                                                                                    Specify with the object API name,
+                                                                                    like Account.Name, Account.Phone,
+                                                                                    etc.  If not visible to the running
+                                                                                    user, an error is thrown
 
-  -r, --recordid=recordid                         (required) single recordId to generate the data/metadata
+  -r, --recordid=recordid                                                           (required) single recordId to
+                                                                                    generate the data/metadata
 
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
 
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
-  --optionalfields=optionalfields                 optional fields to return.  If not visible to the running user, the
-                                                  field is just omitted
+  --optionalfields=optionalfields                                                   optional fields to return.  If not
+                                                                                    visible to the running user, the
+                                                                                    field is just omitted
 
-  --outputfile=outputfile                         local path to save the output to
+  --outputfile=outputfile                                                           local path to save the output to
 
 EXAMPLE
   sfdx shane:uiapi:record -r 001R0000003I6CoIAK -f Account.Name --optionalfields
@@ -1967,80 +2489,112 @@ EXAMPLE
   // default ui-api response for a getrecord.
 ```
 
-_See code: [src/commands/shane/uiapi/record.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/uiapi/record.ts)_
+_See code: [src/commands/shane/uiapi/record.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/uiapi/record.ts)_
 
-## `sfdx shane:uiapi:recordui [-r <string> | --recordids <array>] [-l <array>] [-m <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:uiapi:recordui [-r <string> | --recordids <array>] [-l <array>] [-m <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 get a ui api response from the record-ui endpoint: https://developer.salesforce.com/docs/atlas.en-us.uiapi.meta/uiapi/ui_api_resources_record_ui.htm
 
 ```
 USAGE
   $ sfdx shane:uiapi:recordui [-r <string> | --recordids <array>] [-l <array>] [-m <array>] [--outputfile <filepath>]
-  [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  [-u <string>] [--apiversion <string>] [--json] [--loglevel
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -l, --layouttypes=layouttypes                   which layout (Compact, Full or both)
-  -m, --modes=modes                               which mode (Create, Edit, View, or combo)
-  -r, --recordid=recordid                         single recordId to generate the data/metadata
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
-  --outputfile=outputfile                         local path to save the output to
-  --recordids=recordids                           array of recordIds to generate the data/metadata
+  -l, --layouttypes=layouttypes                                                     which layout (Compact, Full or both)
+
+  -m, --modes=modes                                                                 which mode (Create, Edit, View, or
+                                                                                    combo)
+
+  -r, --recordid=recordid                                                           single recordId to generate the
+                                                                                    data/metadata
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+
+  --outputfile=outputfile                                                           local path to save the output to
+
+  --recordids=recordids                                                             array of recordIds to generate the
+                                                                                    data/metadata
 
 EXAMPLE
   sfdx shane:uiapi:recordui -r 001R0000003I6CoIAK --json
   // default ui-api response for a single recordId
 ```
 
-_See code: [src/commands/shane/uiapi/recordui.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/uiapi/recordui.ts)_
+_See code: [src/commands/shane/uiapi/recordui.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/uiapi/recordui.ts)_
 
-## `sfdx shane:user:allPhotos [-r <url>] [-f <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:user:allPhotos [-r <url>] [-f <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 set the chatter photos of anyone who has not set theirs already to encourage them to do so
 
 ```
 USAGE
   $ sfdx shane:user:allPhotos [-r <url>] [-f <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -f, --folder=folder                             optional local folder of photos.  Overrides --repo
+  -f, --folder=folder                                                               optional local folder of photos.
+                                                                                    Overrides --repo
 
-  -r, --repo=repo                                 [default: https://github.com/mshanemc/badProfilePhotos] optional
-                                                  alternate repo of photos, which contains a folder of photos named /img
+  -r, --repo=repo                                                                   [default:
+                                                                                    https://github.com/mshanemc/badProfi
+                                                                                    lePhotos] optional alternate repo of
+                                                                                    photos, which contains a folder of
+                                                                                    photos named /img
 
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
 
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:user:allphotos -u someAlias
 ```
 
-_See code: [src/commands/shane/user/allPhotos.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/user/allPhotos.ts)_
+_See code: [src/commands/shane/user/allPhotos.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/user/allPhotos.ts)_
 
-## `sfdx shane:user:lightning:debug [-g <string>] [-l <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:user:lightning:debug [-g <string>] [-l <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 set the user to debug mode
 
 ```
 USAGE
   $ sfdx shane:user:lightning:debug [-g <string>] [-l <string>] [-u <string>] [--apiversion <string>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -g, --firstname=firstname                       first (given) name of the user--keeping -f for file for consistency
-  -l, --lastname=lastname                         last name of the user
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -g, --firstname=firstname                                                         first (given) name of the
+                                                                                    user--keeping -f for file for
+                                                                                    consistency
+
+  -l, --lastname=lastname                                                           last name of the user
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:user:lightning:debug
@@ -2050,23 +2604,30 @@ EXAMPLES
        // puts the named user in lightning debug mode
 ```
 
-_See code: [src/commands/shane/user/lightning/debug.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/user/lightning/debug.ts)_
+_See code: [src/commands/shane/user/lightning/debug.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/user/lightning/debug.ts)_
 
-## `sfdx shane:user:loginurl [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:user:loginurl [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 generate a long-lived shareable login url for the org
 
 ```
 USAGE
   $ sfdx shane:user:loginurl [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal]
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -p, --starturl=starturl                         url to open
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -p, --starturl=starturl                                                           url to open
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:user:loginurl
@@ -2076,82 +2637,112 @@ EXAMPLES
        // same, but sets the start url to ObjectManager
 ```
 
-_See code: [src/commands/shane/user/loginurl.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/user/loginurl.ts)_
+_See code: [src/commands/shane/user/loginurl.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/user/loginurl.ts)_
 
-## `sfdx shane:user:password:set -g <string> -l <string> -p <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:user:password:set -g <string> -l <string> -p <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Set the password for a user by first/last name
 
 ```
 USAGE
   $ sfdx shane:user:password:set -g <string> -l <string> -p <string> [-u <string>] [--apiversion <string>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -g, --firstname=firstname                       (required) first (given) name of the user--keeping -f for file for
-                                                  consistency
+  -g, --firstname=firstname                                                         (required) first (given) name of the
+                                                                                    user--keeping -f for file for
+                                                                                    consistency
 
-  -l, --lastname=lastname                         (required) last name of the user
+  -l, --lastname=lastname                                                           (required) last name of the user
 
-  -p, --password=password                         (required) local path of the photo to use
+  -p, --password=password                                                           (required) local path of the photo
+                                                                                    to use
 
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
 
-  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
 
-  --json                                          format output as json
+  --json                                                                            format output as json
 
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:user:password:set -p sfdx1234 -g User -l User
   // sets the password for User User to sfdx1234
 ```
 
-_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/user/password/set.ts)_
+_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/user/password/set.ts)_
 
-## `sfdx shane:user:permset:assign -l <string> -n <string> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:user:permset:assign -l <string> -n <string> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Assign a permset to a user by first/last name
 
 ```
 USAGE
   $ sfdx shane:user:permset:assign -l <string> -n <string> [-g <string>] [-u <string>] [--apiversion <string>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -g, --firstname=firstname                       first (given) name of the user--keeping -f for file for consistency
-  -l, --lastname=lastname                         (required) last name of the user
-  -n, --name=name                                 (required) the value of the permset name or label field
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -g, --firstname=firstname                                                         first (given) name of the
+                                                                                    user--keeping -f for file for
+                                                                                    consistency
+
+  -l, --lastname=lastname                                                           (required) last name of the user
+
+  -n, --name=name                                                                   (required) the value of the permset
+                                                                                    name or label field
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:user:permset:assign -n thePermSet -g User -l User
 ```
 
-_See code: [src/commands/shane/user/permset/assign.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/user/permset/assign.ts)_
+_See code: [src/commands/shane/user/permset/assign.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/user/permset/assign.ts)_
 
-## `sfdx shane:user:photo -l <string> [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:user:photo -l <string> [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Set the photo for a user by first/last name
 
 ```
 USAGE
   $ sfdx shane:user:photo -l <string> [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion
-  <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+  <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -b, --banner=banner                             local path of the chatter banner photo to use
-  -f, --file=file                                 local path of the photo to use
-  -g, --firstname=firstname                       first (given) name of the user--keeping -f for file for consistency
-  -l, --lastname=lastname                         (required) last name of the user
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -b, --banner=banner                                                               local path of the chatter banner
+                                                                                    photo to use
+
+  -f, --file=file                                                                   local path of the photo to use
+
+  -g, --firstname=firstname                                                         first (given) name of the
+                                                                                    user--keeping -f for file for
+                                                                                    consistency
+
+  -l, --lastname=lastname                                                           (required) last name of the user
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLES
   sfdx shane:user:photo -f ~/Downloads/King.png -g User -l User
@@ -2164,32 +2755,44 @@ EXAMPLES
   // sets the chatter banner photo AND user photo at the same time
 ```
 
-_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/user/photo.ts)_
+_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/user/photo.ts)_
 
-## `sfdx shane:user:psl -l <string> -n <filepath> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx shane:user:psl -l <string> -n <filepath> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Assign a permset license already in an org for a user
 
 ```
 USAGE
   $ sfdx shane:user:psl -l <string> -n <filepath> [-g <string>] [-u <string>] [--apiversion <string>] [--json]
-  [--loglevel trace|debug|info|warn|error|fatal]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -g, --firstname=firstname                       first (given) name of the user--keeping -f for file for consistency
-  -l, --lastname=lastname                         (required) last name of the user
-  -n, --name=name                                 (required) developer name or label of the PermSetLicense
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
+  -g, --firstname=firstname                                                         first (given) name of the
+                                                                                    user--keeping -f for file for
+                                                                                    consistency
+
+  -l, --lastname=lastname                                                           (required) last name of the user
+
+  -n, --name=name                                                                   (required) developer name or label
+                                                                                    of the PermSetLicense
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   sfdx shane:user:psl -n SomePSL -g User -l User
   // assign the PSL named 'somePSL' for the user named User User
 ```
 
-_See code: [src/commands/shane/user/psl.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/user/psl.ts)_
+_See code: [src/commands/shane/user/psl.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.22.0/src/commands/shane/user/psl.ts)_
 
 <!-- commandsstop -->
 
