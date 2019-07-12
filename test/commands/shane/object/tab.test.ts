@@ -9,7 +9,7 @@ import testutils = require('../../../helpers/testutils');
 
 const exec = util.promisify(child_process.exec);
 
-const testProjectName = 'tabTest';
+const testProjectName = 'testProjectTab';
 const api = 'Corgi__c';
 const label = 'Corgi';
 const plural = 'Corgi';

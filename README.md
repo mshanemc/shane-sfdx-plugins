@@ -4,7 +4,7 @@
 
 sfdx plugins:install shane-sfdx-plugins
 
-You'll be prompted that this, like any plugin, is not officially code-signed by Salesforce.  If that's annoying, you can [whitelist it](https://developer.salesforce.com/blogs/2017/10/salesforce-dx-cli-plugin-update.html)
+You'll be prompted that this, like any plugin, is not officially code-signed by Salesforce. If that's annoying, you can [whitelist it](https://developer.salesforce.com/blogs/2017/10/salesforce-dx-cli-plugin-update.html)
 
 ## docs
 
@@ -12,10 +12,16 @@ what all is in here and how does it work?
 
 install and run this `sfdx shane -h`
 
-but you like README, you say?  Good thing oclif auto-generates all this for me.  :)
+but you like README, you say? Good thing oclif auto-generates all this for me. :)
+
+## Contribute
+
+Way, way down [at the bottom](#How-to-Contribute).
 
 # Usage
+
 <!-- usage -->
+
 ```sh-session
 $ npm install -g shane-sfdx-plugins
 $ sfdx COMMAND
@@ -27,76 +33,80 @@ USAGE
   $ sfdx COMMAND
 ...
 ```
+
 <!-- usagestop -->
+
 # Commands
+
 <!-- commands -->
-* [`sfdx shane:analytics:app:share -n <string> [--allprm -c] [--allcsp undefined] [--org] [-t <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsappshare--n-string---allprm--c---allcsp-undefined---org--t-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:analytics:community:enable [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticscommunityenable--b--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:analytics:dataflow:start [-n <string>] [-i <id>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsdataflowstart--n-string--i-id--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:analytics:dataset:download [-i <id>] [-n <string>] [--versionid <string>] [-t <filepath>] [-r <number>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsdatasetdownload--i-id--n-string---versionid-string--t-filepath--r-number--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:analytics:dataset:list [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsdatasetlist--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:analytics:dataset:upload -n <string> -f <filepath> [-a <string>] [-m <filepath>] [--async] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsdatasetupload--n-string--f-filepath--a-string--m-filepath---async--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:cdc:create -d <directory> [--batchsize <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecdccreate--d-directory---batchsize-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:cdc:prep -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecdcprep--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:cdc:stream [-o <string>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecdcstream--o-string--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:communities:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecommunitiesactivate--n-string--b--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:communities:describe [--store] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecommunitiesdescribe---store--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:communities:publish [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecommunitiespublish--n-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:communities:url [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecommunitiesurl--p-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:connectedapp:uniquify -p <string> -a <filepath> [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneconnectedappuniquify--p-string--a-filepath---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:data:file:upload -f <filepath> [-c -p <id>] [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanedatafileupload--f-filepath--c--p-id--n-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:data:id:query -o <string> -w <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanedataidquery--o-string--w-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:data:tree:import -p <filepath> -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanedatatreeimport--p-filepath--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:github:package:install -g <string> -r <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanegithubpackageinstall--g-string--r-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:github:src:install -g <string> -r <string> [-p <directory>] [-k] [-c] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanegithubsrcinstall--g-string--r-string--p-directory--k--c--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:group:photo [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanegroupphoto--g-string--f-filepath---b-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:heroku:connect -a <string> -f <filepath> [-e <string>] [-p <string>] [-b] [-i] [-u <string>] [--apiversion <string>] [--verbose] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneherokuconnect--a-string--f-filepath--e-string--p-string--b--i--u-string---apiversion-string---verbose---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:heroku:repo:deploy -g <string> -r <string> [-n <string>] [-o <array>] [--envuser <string>] [--envpassword <string>] [-t <string>] [-d <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneherokurepodeploy--g-string--r-string--n-string--o-array---envuser-string---envpassword-string--t-string--d-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:iot:activation -n <string> [-r] [-d] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneiotactivation--n-string--r--d--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:label:add -t <string> [--bundle <string>] [-n <string>] [-d <string>] [--protected] [--categories <array>] [-l <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanelabeladd--t-string---bundle-string--n-string--d-string---protected---categories-array--l-string--t-directory---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:lwc:create -n <string> -d <directory> [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanelwccreate--n-string--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:lwc:css:merge -f <filepath> -c <directory> [-l <filepath>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanelwccssmerge--f-filepath--c-directory--l-filepath---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:mdapi:describe [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapidescribe--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:mdapi:list -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapilist--t-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:mdapi:package:get -p <string> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapipackageget--p-string--t-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:mdapi:package:xml -p <filepath> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapipackagexml--p-filepath--t-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:mdapi:pull [-c | --all] [-p | undefined] [--wave | undefined] [-s | undefined | -o <string>] [-i | undefined] [--reporting | undefined] [-t <string> | undefined] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapipull--c----all--p--undefined---wave--undefined--s--undefined---o-string--i--undefined---reporting--undefined--t-string--undefined--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:mdapi:push [-d <directory>] [-k] [-r <directory>] [-w <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapipush--d-directory--k--r-directory--w-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>] [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectcreate--t-string--l-string--a-string--p-string---description-string---enterprise---sharingmodel-string---activities---search---reports---history---feeds---nametype-string---namefieldlabel-string---autonumberformat-string--h--i--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:object:fat -o <string> [-m <integer>] [-y <integer>] [--description <string>] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectfat--o-string--m-integer--y-integer---description-string--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:object:field [-o <string>] [-n <string>] [-a <string>] [-t <string>] [--description <string>] [--default <string>] [-r] [-u] [--externalid] [--trackhistory] [--helptext <string>] [-l <integer>] [-s <integer>] [--precision <integer>] [--lookupobject <string>] [--relname <string>] [--indexposition <integer>] [--indexappend] [--indexdirection <string>] [--noindex] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectfield--o-string--n-string--a-string--t-string---description-string---default-string--r--u---externalid---trackhistory---helptext-string--l-integer--s-integer---precision-integer---lookupobject-string---relname-string---indexposition-integer---indexappend---indexdirection-string---noindex--i--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:object:fields:describe -o <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectfieldsdescribe--o-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:object:perms:align [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectpermsalign--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:object:powerofone -o <string> [-l <string>] [-a <string>] [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectpowerofone--o-string--l-string--a-string--d-string--t-directory---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:object:tab -o <string> -i <integer> [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjecttab--o-string--i-integer--t-directory---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:object:unperm -o <string> [-d <directory>] [-s <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectunperm--o-string--d-directory--s-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:org:componentlibrary [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgcomponentlibrary--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:org:create --userprefix <string> -o <string> [-i <string>] [-f <filepath>] [-a <string>] [-d <integer>] [--wait <integer>] [-c] [-n] [-s] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgcreate---userprefix-string--o-string--i-string--f-filepath--a-string--d-integer---wait-integer--c--n--s---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:org:delete [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgdelete--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:org:domain:verify [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgdomainverify--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:org:metadatacoverage [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgmetadatacoverage--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:org:reauth [-r] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgreauth--r--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:org:refreshtoken [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgrefreshtoken--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:package2:version:bump [-M | -m | -p] [-c] [-r] [-t <string>] [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanepackage2versionbump--m---m---p--c--r--t-string--v-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:permset:check -o <string> [-f <string>] [--users | --permsets | --profiles] [--fieldlevel <string>] [--objectlevel <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanepermsetcheck--o-string--f-string---users----permsets----profiles---fieldlevel-string---objectlevel-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:permset:create -n <string> [-f <string> -o <string>] [-d <directory>] [-t] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanepermsetcreate--n-string--f-string--o-string--d-directory--t---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:profile:convert -n <string> -p <string> [-d <directory>] [-e | -c] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneprofileconvert--n-string--p-string--d-directory--e---c---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:profile:whitelist -n <string> [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneprofilewhitelist--n-string--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:project:create -n <string> -g <string> [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneprojectcreate--n-string--g-string--v-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:remotesite:create -u <url> -n <string> [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneremotesitecreate--u-url--n-string--d-string--t-directory---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:static:create -n <string> -y <string> [-d <string>] [-t <directory>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanestaticcreate--n-string--y-string--d-string--t-directory--p---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:theme:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanethemeactivate--n-string--b--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:tsp:username:update [-n <email>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanetspusernameupdate--n-email--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:uiapi:objectinfo [-o <string>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuiapiobjectinfo--o-string---outputfile-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:uiapi:record -r <string> -f <array> [--optionalfields <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuiapirecord--r-string--f-array---optionalfields-array---outputfile-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:uiapi:recordui [-r <string> | --recordids <array>] [-l <array>] [-m <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuiapirecordui--r-string----recordids-array--l-array--m-array---outputfile-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:user:allPhotos [-r <url>] [-f <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserallphotos--r-url--f-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:user:lightning:debug [-g <string>] [-l <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserlightningdebug--g-string--l-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:user:loginurl [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserloginurl--p-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:user:password:set -g <string> -l <string> -p <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserpasswordset--g-string--l-string--p-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:user:permset:assign -l <string> -n <string> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserpermsetassign--l-string--n-string--g-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:user:photo -l <string> [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserphoto--l-string--g-string--f-filepath---b-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
-* [`sfdx shane:user:psl -l <string> -n <filepath> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserpsl--l-string--n-filepath--g-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+
+-   [`sfdx shane:analytics:app:share -n <string> [--allprm -c] [--allcsp undefined] [--org] [-t <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsappshare--n-string---allprm--c---allcsp-undefined---org--t-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:analytics:community:enable [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticscommunityenable--b--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:analytics:dataflow:start [-n <string>] [-i <id>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsdataflowstart--n-string--i-id--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:analytics:dataset:download [-i <id>] [-n <string>] [--versionid <string>] [-t <filepath>] [-r <number>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsdatasetdownload--i-id--n-string---versionid-string--t-filepath--r-number--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:analytics:dataset:list [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsdatasetlist--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:analytics:dataset:upload -n <string> -f <filepath> [-a <string>] [-m <filepath>] [--async] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneanalyticsdatasetupload--n-string--f-filepath--a-string--m-filepath---async--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:cdc:create -d <directory> [--batchsize <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecdccreate--d-directory---batchsize-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:cdc:prep -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecdcprep--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:cdc:stream [-o <string>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecdcstream--o-string--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:communities:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecommunitiesactivate--n-string--b--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:communities:describe [--store] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecommunitiesdescribe---store--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:communities:publish [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecommunitiespublish--n-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:communities:url [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanecommunitiesurl--p-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:connectedapp:uniquify -p <string> -a <filepath> [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneconnectedappuniquify--p-string--a-filepath---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:data:file:upload -f <filepath> [-c -p <id>] [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanedatafileupload--f-filepath--c--p-id--n-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:data:id:query -o <string> -w <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanedataidquery--o-string--w-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:data:tree:import -p <filepath> -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanedatatreeimport--p-filepath--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:github:package:install -g <string> -r <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanegithubpackageinstall--g-string--r-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:github:src:install -g <string> -r <string> [-p <directory>] [-k] [-c] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanegithubsrcinstall--g-string--r-string--p-directory--k--c--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:group:photo [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanegroupphoto--g-string--f-filepath---b-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:heroku:connect -a <string> -f <filepath> [-e <string>] [-p <string>] [-b] [-i] [-u <string>] [--apiversion <string>] [--verbose] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneherokuconnect--a-string--f-filepath--e-string--p-string--b--i--u-string---apiversion-string---verbose---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:heroku:repo:deploy -g <string> -r <string> [-n <string>] [-o <array>] [--envuser <string>] [--envpassword <string>] [-t <string>] [-d <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneherokurepodeploy--g-string--r-string--n-string--o-array---envuser-string---envpassword-string--t-string--d-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:iot:activation -n <string> [-r] [-d] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneiotactivation--n-string--r--d--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:label:add -t <string> [--bundle <string>] [-n <string>] [-d <string>] [--protected] [--categories <array>] [-l <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanelabeladd--t-string---bundle-string--n-string--d-string---protected---categories-array--l-string--t-directory---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:lwc:create -n <string> -d <directory> [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanelwccreate--n-string--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:lwc:css:merge -f <filepath> -c <directory> [-l <filepath>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanelwccssmerge--f-filepath--c-directory--l-filepath---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:mdapi:describe [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapidescribe--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:mdapi:list -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapilist--t-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:mdapi:package:get -p <string> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapipackageget--p-string--t-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:mdapi:package:xml -p <filepath> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapipackagexml--p-filepath--t-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:mdapi:pull [-c | --all] [-p | undefined] [--wave | undefined] [-s | undefined | -o <string>] [-i | undefined] [--reporting | undefined] [-t <string> | undefined] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapipull--c----all--p--undefined---wave--undefined--s--undefined---o-string--i--undefined---reporting--undefined--t-string--undefined--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:mdapi:push [-d <directory>] [-k] [-r <directory>] [-w <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanemdapipush--d-directory--k--r-directory--w-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>] [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectcreate--t-string--l-string--a-string--p-string---description-string---enterprise---sharingmodel-string---activities---search---reports---history---feeds---nametype-string---namefieldlabel-string---autonumberformat-string--h--i--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:fat -o <string> [-m <integer>] [-y <integer>] [--description <string>] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectfat--o-string--m-integer--y-integer---description-string--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:field [-o <string>] [-n <string>] [-a <string>] [-t <string>] [--description <string>] [--default <string>] [-r] [-u] [--externalid] [--trackhistory] [--helptext <string>] [-l <integer>] [-s <integer>] [--precision <integer>] [--lookupobject <string>] [--relname <string>] [--indexposition <integer>] [--indexappend] [--indexdirection <string>] [--noindex] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectfield--o-string--n-string--a-string--t-string---description-string---default-string--r--u---externalid---trackhistory---helptext-string--l-integer--s-integer---precision-integer---lookupobject-string---relname-string---indexposition-integer---indexappend---indexdirection-string---noindex--i--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:fields:describe -o <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectfieldsdescribe--o-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:perms:align [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectpermsalign--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:powerofone -o <string> [-l <string>] [-a <string>] [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectpowerofone--o-string--l-string--a-string--d-string--t-directory---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:tab -o <string> -i <integer> [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjecttab--o-string--i-integer--t-directory---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:unperm -o <string> [-d <directory>] [-s <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneobjectunperm--o-string--d-directory--s-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:componentlibrary [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgcomponentlibrary--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:create --userprefix <string> -o <string> [-i <string>] [-f <filepath>] [-a <string>] [-d <integer>] [--wait <integer>] [-c] [-n] [-s] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgcreate---userprefix-string--o-string--i-string--f-filepath--a-string--d-integer---wait-integer--c--n--s---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:delete [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgdelete--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:domain:verify [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgdomainverify--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:metadatacoverage [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgmetadatacoverage--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:reauth [-r] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgreauth--r--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:org:refreshtoken [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneorgrefreshtoken--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:package2:version:bump [-M | -m | -p] [-c] [-r] [-t <string>] [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanepackage2versionbump--m---m---p--c--r--t-string--v-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:permset:check -o <string> [-f <string>] [--users | --permsets | --profiles] [--fieldlevel <string>] [--objectlevel <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanepermsetcheck--o-string--f-string---users----permsets----profiles---fieldlevel-string---objectlevel-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:permset:create -n <string> [-f <string> -o <string>] [-d <directory>] [-t] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanepermsetcreate--n-string--f-string--o-string--d-directory--t---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:profile:convert -n <string> -p <string> [-d <directory>] [-e | -c] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneprofileconvert--n-string--p-string--d-directory--e---c---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:profile:whitelist -n <string> [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneprofilewhitelist--n-string--d-directory---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:project:create -n <string> -g <string> [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneprojectcreate--n-string--g-string--v-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:remotesite:create -u <url> -n <string> [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneremotesitecreate--u-url--n-string--d-string--t-directory---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:static:create -n <string> -y <string> [-d <string>] [-t <directory>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanestaticcreate--n-string--y-string--d-string--t-directory--p---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:theme:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanethemeactivate--n-string--b--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:tsp:username:update [-n <email>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shanetspusernameupdate--n-email--d-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:uiapi:objectinfo [-o <string>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuiapiobjectinfo--o-string---outputfile-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:uiapi:record -r <string> -f <array> [--optionalfields <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuiapirecord--r-string--f-array---optionalfields-array---outputfile-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:uiapi:recordui [-r <string> | --recordids <array>] [-l <array>] [-m <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuiapirecordui--r-string----recordids-array--l-array--m-array---outputfile-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:allPhotos [-r <url>] [-f <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserallphotos--r-url--f-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:lightning:debug [-g <string>] [-l <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserlightningdebug--g-string--l-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:loginurl [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserloginurl--p-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:password:set -g <string> -l <string> -p <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserpasswordset--g-string--l-string--p-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:permset:assign -l <string> -n <string> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserpermsetassign--l-string--n-string--g-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:photo -l <string> [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserphoto--l-string--g-string--f-filepath---b-filepath--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+-   [`sfdx shane:user:psl -l <string> -n <filepath> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-shaneuserpsl--l-string--n-filepath--g-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
 
 ## `sfdx shane:analytics:app:share -n <string> [--allprm -c] [--allcsp undefined] [--org] [-t <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
@@ -104,7 +114,7 @@ share an analytics app by name
 
 ```
 USAGE
-  $ sfdx shane:analytics:app:share -n <string> [--allprm -c] [--allcsp undefined] [--org] [-t <string>] [-u <string>] 
+  $ sfdx shane:analytics:app:share -n <string> [--allprm -c] [--allcsp undefined] [--org] [-t <string>] [-u <string>]
   [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -121,7 +131,7 @@ OPTIONS
 
 EXAMPLE
   sfdx shane:analytics:app:share -n SharedApp --allprm -c
-  // share the standard SharedApp with all partners view level perms (default) and check the "enable sharing with 
+  // share the standard SharedApp with all partners view level perms (default) and check the "enable sharing with
   communities" box for this app
 ```
 
@@ -133,7 +143,7 @@ Activate a community using a headless browser
 
 ```
 USAGE
-  $ sfdx shane:analytics:community:enable [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:analytics:community:enable [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -155,7 +165,7 @@ start an analytics dataflow by name/label/id
 
 ```
 USAGE
-  $ sfdx shane:analytics:dataflow:start [-n <string>] [-i <id>] [-u <string>] [--apiversion <string>] [--json] 
+  $ sfdx shane:analytics:dataflow:start [-n <string>] [-i <id>] [-u <string>] [--apiversion <string>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -168,7 +178,7 @@ OPTIONS
 
 EXAMPLE
   sfdx shane:analytics:dataflow:start -n MyDataFlowName
-  // enqueue a job for the the analytics dataflow with name/label MyDataFlowName (will not wait for completion of the 
+  // enqueue a job for the the analytics dataflow with name/label MyDataFlowName (will not wait for completion of the
   dataflow)
 ```
 
@@ -180,7 +190,7 @@ download a dataset as csv
 
 ```
 USAGE
-  $ sfdx shane:analytics:dataset:download [-i <id>] [-n <string>] [--versionid <string>] [-t <filepath>] [-r <number>] 
+  $ sfdx shane:analytics:dataset:download [-i <id>] [-n <string>] [--versionid <string>] [-t <filepath>] [-r <number>]
   [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -207,7 +217,7 @@ what analytics datasets are in my org?
 
 ```
 USAGE
-  $ sfdx shane:analytics:dataset:list [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:analytics:dataset:list [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -228,7 +238,7 @@ upload a dataset from csv
 
 ```
 USAGE
-  $ sfdx shane:analytics:dataset:upload -n <string> -f <filepath> [-a <string>] [-m <filepath>] [--async] [-u <string>] 
+  $ sfdx shane:analytics:dataset:upload -n <string> -f <filepath> [-a <string>] [-m <filepath>] [--async] [-u <string>]
   [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -258,7 +268,7 @@ _See code: [src/commands/shane/analytics/dataset/upload.ts](https://github.com/m
 
 ```
 USAGE
-  $ sfdx shane:cdc:create -d <directory> [--batchsize <integer>] [-u <string>] [--apiversion <string>] [--json] 
+  $ sfdx shane:cdc:create -d <directory> [--batchsize <integer>] [-u <string>] [--apiversion <string>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -276,7 +286,7 @@ _See code: [src/commands/shane/cdc/create.ts](https://github.com/mshanemc/shane-
 
 ```
 USAGE
-  $ sfdx shane:cdc:prep -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:cdc:prep -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -293,7 +303,7 @@ _See code: [src/commands/shane/cdc/prep.ts](https://github.com/mshanemc/shane-sf
 
 ```
 USAGE
-  $ sfdx shane:cdc:stream [-o <string>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:cdc:stream [-o <string>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -324,7 +334,7 @@ Activate a community using a headless browser
 
 ```
 USAGE
-  $ sfdx shane:communities:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:communities:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -344,7 +354,7 @@ tell me about the communities in the org, and optionally store the description
 
 ```
 USAGE
-  $ sfdx shane:communities:describe [--store] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:communities:describe [--store] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -366,7 +376,7 @@ Publish a community using a headless browser
 
 ```
 USAGE
-  $ sfdx shane:communities:publish [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:communities:publish [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -392,7 +402,7 @@ get me the login for a community from an org
 
 ```
 USAGE
-  $ sfdx shane:communities:url [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:communities:url [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -435,7 +445,7 @@ upload a file from local resources, optionally as a chatter post or attached fil
 
 ```
 USAGE
-  $ sfdx shane:data:file:upload -f <filepath> [-c -p <id>] [-n <string>] [-u <string>] [--apiversion <string>] [--json] 
+  $ sfdx shane:data:file:upload -f <filepath> [-c -p <id>] [-n <string>] [-u <string>] [--apiversion <string>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -451,15 +461,15 @@ OPTIONS
 EXAMPLES
   sfdx shane:data:file:upload -f ~/Downloads/King.png
        //uploads file from local filesystem as a file
-    
+
   sfdx shane:data:file:upload -f ~/Downloads/King.png -p 0011900000VkJgrAAF
        //uploads file from local filesystem as a file and attaches to a record
-    
+
   sfdx shane:data:file:upload -f ~/Downloads/King.png -p 0011900000VkJgrAAF -c
        //uploads and attaches it to the indicated record, but as a chatter file post
-    
+
   sfdx shane:data:file:upload -f ~/Downloads/King.png -p 0011900000VkJgrAAF -n CustomName -c
-       //uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same 
+       //uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same
   name as the local filesystem used
 ```
 
@@ -471,7 +481,7 @@ query some object and get back the id of the matching record
 
 ```
 USAGE
-  $ sfdx shane:data:id:query -o <string> -w <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:data:id:query -o <string> -w <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -483,7 +493,7 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
 
 EXAMPLE
-  sfdx shane:data:id:query -o User -u platformers -w "Firstname = 'Shane' and Lastname = 'McLaughlin' and username = 
+  sfdx shane:data:id:query -o User -u platformers -w "Firstname = 'Shane' and Lastname = 'McLaughlin' and username =
   'shane@platformers.org'"'
        // returns the id of the user. Use these ids between `` in other commands
 ```
@@ -492,11 +502,11 @@ _See code: [src/commands/shane/data/id/query.ts](https://github.com/mshanemc/sha
 
 ## `sfdx shane:data:tree:import -p <filepath> -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
-similr to the original tree:import, but handles more than 200 records at a go, while still preserving relationships.  Takes longer.
+similr to the original tree:import, but handles more than 200 records at a go, while still preserving relationships. Takes longer.
 
 ```
 USAGE
-  $ sfdx shane:data:tree:import -p <filepath> -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:data:tree:import -p <filepath> -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -508,7 +518,7 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
 
 EXAMPLE
-  sfdx shane:data:tree:import -p data/myPlan.json -d data/  // run all the data in the plan, and files mentioned are 
+  sfdx shane:data:tree:import -p data/myPlan.json -d data/  // run all the data in the plan, and files mentioned are
   relative to ./data
 ```
 
@@ -520,7 +530,7 @@ installs a package from github using the sfdx-project.json file (v43+) OR the la
 
 ```
 USAGE
-  $ sfdx shane:github:package:install -g <string> -r <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:github:package:install -g <string> -r <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -533,7 +543,7 @@ OPTIONS
 
 EXAMPLE
   sfdx shane:github:package:install -g someUser -r someRepo -u someOrg
-  // installs packageVersion (04t) from https://github.com/someUser/someRepo/sfdx-project.json or 
+  // installs packageVersion (04t) from https://github.com/someUser/someRepo/sfdx-project.json or
   https://github.com/someUser/someRepo/latestVersion.json
 ```
 
@@ -545,7 +555,7 @@ installs a package from github from mdapi src
 
 ```
 USAGE
-  $ sfdx shane:github:src:install -g <string> -r <string> [-p <directory>] [-k] [-c] [-u <string>] [--apiversion 
+  $ sfdx shane:github:src:install -g <string> -r <string> [-p <directory>] [-k] [-c] [-u <string>] [--apiversion
   <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -584,7 +594,7 @@ Set the photo for a user by first/last name
 
 ```
 USAGE
-  $ sfdx shane:group:photo [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] 
+  $ sfdx shane:group:photo [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -612,7 +622,7 @@ set up heroku connect on an existing app to an existing org (that you may have j
 
 ```
 USAGE
-  $ sfdx shane:heroku:connect -a <string> -f <filepath> [-e <string>] [-p <string>] [-b] [-i] [-u <string>] 
+  $ sfdx shane:heroku:connect -a <string> -f <filepath> [-e <string>] [-p <string>] [-b] [-i] [-u <string>]
   [--apiversion <string>] [--verbose] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -640,7 +650,7 @@ OPTIONS
 
 EXAMPLES
   sfdx shane:heroku:connect -a prosaic-samurai-4564 -f assets/myConfig.json
-  // auth the heroku app to the current default org, assuming password is available from force:org:display, then import 
+  // auth the heroku app to the current default org, assuming password is available from force:org:display, then import
   the json config file
 
   sfdx shane:heroku:connect -a prosaic-samurai-4564 -f assets/myConfig.json -p p455w0rd -u myother@scratch.org
@@ -655,8 +665,8 @@ deploy a heroku app that has a valid app.json.
 
 ```
 USAGE
-  $ sfdx shane:heroku:repo:deploy -g <string> -r <string> [-n <string>] [-o <array>] [--envuser <string>] [--envpassword 
-  <string>] [-t <string>] [-d <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:heroku:repo:deploy -g <string> -r <string> [-n <string>] [-o <array>] [--envuser <string>] [--envpassword
+  <string>] [-t <string>] [-d <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -701,7 +711,7 @@ Activate an iot orchestration by name
 
 ```
 USAGE
-  $ sfdx shane:iot:activation -n <string> [-r] [-d] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:iot:activation -n <string> [-r] [-d] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -725,11 +735,11 @@ _See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/sh
 
 ## `sfdx shane:label:add -t <string> [--bundle <string>] [-n <string>] [-d <string>] [--protected] [--categories <array>] [-l <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
-create a remote site setting in the local source.  Push it when you're done
+create a remote site setting in the local source. Push it when you're done
 
 ```
 USAGE
-  $ sfdx shane:label:add -t <string> [--bundle <string>] [-n <string>] [-d <string>] [--protected] [--categories 
+  $ sfdx shane:label:add -t <string> [--bundle <string>] [-n <string>] [-d <string>] [--protected] [--categories
   <array>] [-l <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -787,7 +797,7 @@ take css from existing file(s), extract component-level relevant selectors and s
 
 ```
 USAGE
-  $ sfdx shane:lwc:css:merge -f <filepath> -c <directory> [-l <filepath>] [--json] [--loglevel 
+  $ sfdx shane:lwc:css:merge -f <filepath> -c <directory> [-l <filepath>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -802,7 +812,7 @@ EXAMPLES
   // overwrites modules/namespace/myComp/myComp.css with relevant css selectors from big_file.css
 
   sfdx shane:lwc:css:merge -c modules/namespace/myComp -f some/big_file.css -l modules/namespace/myComp/local.css
-  // overwrites modules/namespace/myComp/myComp.css with relevant css selectors from big_file.css PLUS any relevant 
+  // overwrites modules/namespace/myComp/myComp.css with relevant css selectors from big_file.css PLUS any relevant
   selectors from modules/namespace/myComp/local.css
 ```
 
@@ -814,7 +824,7 @@ what's in the org?
 
 ```
 USAGE
-  $ sfdx shane:mdapi:describe [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:mdapi:describe [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -836,7 +846,7 @@ what's in the org?
 
 ```
 USAGE
-  $ sfdx shane:mdapi:list -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:mdapi:list -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -864,7 +874,7 @@ gets package from an org, converts, and merges it into the local source
 
 ```
 USAGE
-  $ sfdx shane:mdapi:package:get -p <string> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:mdapi:package:get -p <string> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -893,11 +903,11 @@ _See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc
 
 ## `sfdx shane:mdapi:package:xml -p <filepath> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
-DEPRECATED.  Use force:source:retrieve these days!  gets metadata form an org based on a local package.xml, converts, and merges it into the local source
+DEPRECATED. Use force:source:retrieve these days! gets metadata form an org based on a local package.xml, converts, and merges it into the local source
 
 ```
 USAGE
-  $ sfdx shane:mdapi:package:xml -p <filepath> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] 
+  $ sfdx shane:mdapi:package:xml -p <filepath> [-t <directory>] [-u <string>] [--apiversion <string>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -930,8 +940,8 @@ gets unpackaged metadata for you
 
 ```
 USAGE
-  $ sfdx shane:mdapi:pull [-c | --all] [-p | undefined] [--wave | undefined] [-s | undefined | -o <string>] [-i | 
-  undefined] [--reporting | undefined] [-t <string> | undefined] [-u <string>] [--apiversion <string>] [--json] 
+  $ sfdx shane:mdapi:pull [-c | --all] [-p | undefined] [--wave | undefined] [-s | undefined | -o <string>] [-i |
+  undefined] [--reporting | undefined] [-t <string> | undefined] [-u <string>] [--apiversion <string>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -984,7 +994,7 @@ convert and deploy the packaged source
 
 ```
 USAGE
-  $ sfdx shane:mdapi:push [-d <directory>] [-k] [-r <directory>] [-w <integer>] [-u <string>] [--apiversion <string>] 
+  $ sfdx shane:mdapi:push [-d <directory>] [-k] [-r <directory>] [-w <integer>] [-u <string>] [--apiversion <string>]
   [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1006,13 +1016,13 @@ _See code: [src/commands/shane/mdapi/push.ts](https://github.com/mshanemc/shane-
 
 ## `sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>] [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
-create an object in local source.  Only __c (limited support), __b (big objects) and events __e are currently supported
+create an object in local source. Only **c (limited support), **b (big objects) and events \_\_e are currently supported
 
 ```
 USAGE
-  $ sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>] 
-  [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype 
-  <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel 
+  $ sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>]
+  [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype
+  <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1076,11 +1086,11 @@ _See code: [src/commands/shane/object/create.ts](https://github.com/mshanemc/sha
 
 ## `sfdx shane:object:fat -o <string> [-m <integer>] [-y <integer>] [--description <string>] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
-add or update a field audit trail retention policy on an object.  Modifies local source--you still need to push/deploy
+add or update a field audit trail retention policy on an object. Modifies local source--you still need to push/deploy
 
 ```
 USAGE
-  $ sfdx shane:object:fat -o <string> [-m <integer>] [-y <integer>] [--description <string>] [-d <directory>] [--json] 
+  $ sfdx shane:object:fat -o <string> [-m <integer>] [-y <integer>] [--description <string>] [-d <directory>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1109,7 +1119,7 @@ EXAMPLES
   sfdx shane:object:fat -o Account -m 4 -y 5 -d myDir
   // same as 2nd example, except metadata is in myDir instead of the default force-app/main/default
 
-  sfdx shane:mdapi:pull -o Account -u realOrg && sfdx shane:object:fat -o Account -m 4 -y 5 -d myDir && sfdx 
+  sfdx shane:mdapi:pull -o Account -u realOrg && sfdx shane:object:fat -o Account -m 4 -y 5 -d myDir && sfdx
   shane:mdapi:push -u realOrg
   // get some object you don't have locally, create the policy, and push that back up to where it came from
 ```
@@ -1122,9 +1132,9 @@ create or add fields to an existing object
 
 ```
 USAGE
-  $ sfdx shane:object:field [-o <string>] [-n <string>] [-a <string>] [-t <string>] [--description <string>] [--default 
-  <string>] [-r] [-u] [--externalid] [--trackhistory] [--helptext <string>] [-l <integer>] [-s <integer>] [--precision 
-  <integer>] [--lookupobject <string>] [--relname <string>] [--indexposition <integer>] [--indexappend] 
+  $ sfdx shane:object:field [-o <string>] [-n <string>] [-a <string>] [-t <string>] [--description <string>] [--default
+  <string>] [-r] [-u] [--externalid] [--trackhistory] [--helptext <string>] [-l <integer>] [-s <integer>] [--precision
+  <integer>] [--lookupobject <string>] [--relname <string>] [--indexposition <integer>] [--indexappend]
   [--indexdirection <string>] [--noindex] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1190,9 +1200,9 @@ EXAMPLES
   sfdx shane:object:field --api My_Field__c -l 255 -n "My Field" -t Text -o  BigTest__b --noindex
   // create new text field called My Field (My_Field__c) on BigObject BigTest__b
 
-  sfdx shane:object:field --api My_Index_Field__c -l 255 -n "My Index Field" -t Text -o  BigTest__b --indexdirection ASC 
+  sfdx shane:object:field --api My_Index_Field__c -l 255 -n "My Index Field" -t Text -o  BigTest__b --indexdirection ASC
   --indexposition 1
-  // create new text field called My Field (My_Field__c) on BigObject BigTest__b, add it to the existing index as the 
+  // create new text field called My Field (My_Field__c) on BigObject BigTest__b, add it to the existing index as the
   second field
 
   sfdx shane:object:field --api My_Field__c -l 255 -n "My Field" -t Text -o  EventTest__e
@@ -1207,7 +1217,7 @@ what fields are on the object?
 
 ```
 USAGE
-  $ sfdx shane:object:fields:describe -o <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:object:fields:describe -o <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1239,7 +1249,7 @@ OPTIONS
 
 EXAMPLE
   sfdx shane:object:perms:align
-  // go through all the profiles/permsets in force-app/main/default and remove references to stuff that isn't in local 
+  // go through all the profiles/permsets in force-app/main/default and remove references to stuff that isn't in local
   source
 ```
 
@@ -1251,7 +1261,7 @@ add a "power of one" formula field to any object
 
 ```
 USAGE
-  $ sfdx shane:object:powerofone -o <string> [-l <string>] [-a <string>] [-d <string>] [-t <directory>] [--json] 
+  $ sfdx shane:object:powerofone -o <string> [-l <string>] [-a <string>] [-d <string>] [-t <directory>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1274,7 +1284,7 @@ OPTIONS
 
 EXAMPLE
   sfdx shane:object:powerofone -a Poo -l "Power of One" -o User
-  // create a field with api name Poo__c and label "Power of One" on the user object with the default description in the 
+  // create a field with api name Poo__c and label "Power of One" on the user object with the default description in the
   default folder
 ```
 
@@ -1286,7 +1296,7 @@ create a tab from a custom object, and you have to pick an
 
 ```
 USAGE
-  $ sfdx shane:object:tab -o <string> -i <integer> [-t <directory>] [--json] [--loglevel 
+  $ sfdx shane:object:tab -o <string> -i <integer> [-t <directory>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1315,7 +1325,7 @@ remove references to an object from profiles/permsets (all or a specific one)
 
 ```
 USAGE
-  $ sfdx shane:object:unperm -o <string> [-d <directory>] [-s <string>] [--json] [--loglevel 
+  $ sfdx shane:object:unperm -o <string> [-d <directory>] [-s <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1333,7 +1343,7 @@ OPTIONS
 
 EXAMPLE
   sfdx shane:object:unperm -o OpportunitySplit
-  // go through all the profiles/permsets in force-app/main/default and remove the object, field, recordtypes and layout 
+  // go through all the profiles/permsets in force-app/main/default and remove the object, field, recordtypes and layout
   assignments (profile only) for the named object
 ```
 
@@ -1345,7 +1355,7 @@ opens the lightning component library for the specified org
 
 ```
 USAGE
-  $ sfdx shane:org:componentlibrary [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:org:componentlibrary [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1366,11 +1376,11 @@ _See code: [src/commands/shane/org/componentlibrary.ts](https://github.com/mshan
 
 ## `sfdx shane:org:create --userprefix <string> -o <string> [-i <string>] [-f <filepath>] [-a <string>] [-d <integer>] [--wait <integer>] [-c] [-n] [-s] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
-create an org with a friendly username.  wraps force:org:create
+create an org with a friendly username. wraps force:org:create
 
 ```
 USAGE
-  $ sfdx shane:org:create --userprefix <string> -o <string> [-i <string>] [-f <filepath>] [-a <string>] [-d <integer>] 
+  $ sfdx shane:org:create --userprefix <string> -o <string> [-i <string>] [-f <filepath>] [-a <string>] [-d <integer>]
   [--wait <integer>] [-c] [-n] [-s] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1404,7 +1414,7 @@ OPTIONS
 
 EXAMPLES
   sfdx shane:org:create --userprefix shane -o org.test
-  // creates an org from the default project config/project-scratch-def.json but with username shane[i]@org.test where i 
+  // creates an org from the default project config/project-scratch-def.json but with username shane[i]@org.test where i
   is a unique sequence number for that -u/-o combination
 
   sfdx shane:org:create --userprefix shane -o org.test -a sydneyBristow -d 30 -v myOtherHub -f config/thatOtherFile.json
@@ -1415,7 +1425,7 @@ _See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-
 
 ## `sfdx shane:org:delete [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
-delete the default scratch org.  Won't prompt you for confirmation
+delete the default scratch org. Won't prompt you for confirmation
 
 ```
 USAGE
@@ -1443,7 +1453,7 @@ Verifies that a domain was successfully setup with MyDomain
 
 ```
 USAGE
-  $ sfdx shane:org:domain:verify [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:org:domain:verify [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1464,7 +1474,7 @@ opens the metadata coverage report page
 
 ```
 USAGE
-  $ sfdx shane:org:metadatacoverage [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:org:metadatacoverage [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1485,11 +1495,11 @@ _See code: [src/commands/shane/org/metadatacoverage.ts](https://github.com/mshan
 
 ## `sfdx shane:org:reauth [-r] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
-reauthenticates (generates a new authinfo) for a scratch org, optionally insisting on custom domain being ready.  Requires a hub
+reauthenticates (generates a new authinfo) for a scratch org, optionally insisting on custom domain being ready. Requires a hub
 
 ```
 USAGE
-  $ sfdx shane:org:reauth [-r] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:org:reauth [-r] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1503,7 +1513,7 @@ OPTIONS
 EXAMPLES
   sfdx shane:org:reauth
        // reauths, and takes what it can get
-    
+
   sfdx shane:org:reauth --requirecustomdomain
        // will try each minute, up to 60 minutes, until an org with a valid mydomain is ready
 ```
@@ -1512,11 +1522,11 @@ _See code: [src/commands/shane/org/reauth.ts](https://github.com/mshanemc/shane-
 
 ## `sfdx shane:org:refreshtoken [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
-Outputs a refresh token from an org that you've already auth'd sfdx to.  PLEASE BE CAREFUL WITH THIS AND TREAT IT AS A PASSWORD
+Outputs a refresh token from an org that you've already auth'd sfdx to. PLEASE BE CAREFUL WITH THIS AND TREAT IT AS A PASSWORD
 
 ```
 USAGE
-  $ sfdx shane:org:refreshtoken [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:org:refreshtoken [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1538,7 +1548,7 @@ bump the major/minor version number in the packageDirectory
 
 ```
 USAGE
-  $ sfdx shane:package2:version:bump [-M | -m | -p] [-c] [-r] [-t <string>] [-v <string>] [--apiversion <string>] 
+  $ sfdx shane:package2:version:bump [-M | -m | -p] [-c] [-r] [-t <string>] [-v <string>] [--apiversion <string>]
   [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1589,7 +1599,7 @@ who has access to what
 
 ```
 USAGE
-  $ sfdx shane:permset:check -o <string> [-f <string>] [--users | --permsets | --profiles] [--fieldlevel <string>] 
+  $ sfdx shane:permset:check -o <string> [-f <string>] [--users | --permsets | --profiles] [--fieldlevel <string>]
   [--objectlevel <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1620,12 +1630,12 @@ OPTIONS
 EXAMPLES
   sfdx shane:permset:check -o Project__c --profiles --permsets
        // list the profiles and permsets that have Read access to the object
-    
+
   sfdx shane:permset:check -o Project__c -f Due_Date__c --fieldlevel Edit --profiles --permsets
        // list the profiles and permsets that have Edit access to the field on the object
-    
+
   sfdx shane:permset:check -o Project__c -f Due_Date__c --users
-       // list the users that have Read access to the field on the object, and the profile/permset(s) that are granting 
+       // list the users that have Read access to the field on the object, and the profile/permset(s) that are granting
   it
 ```
 
@@ -1637,7 +1647,7 @@ create or add stuff to a permset with maximum access
 
 ```
 USAGE
-  $ sfdx shane:permset:create -n <string> [-f <string> -o <string>] [-d <directory>] [-t] [--json] [--loglevel 
+  $ sfdx shane:permset:create -n <string> [-f <string> -o <string>] [-d <directory>] [-t] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1671,7 +1681,7 @@ EXAMPLES
   // create a permset in force-app/main/default for every field on every object!
 
   sfdx shane:permset:create -n MyPermSet1 -t
-  // create a permset in force-app/main/default for every field on every object.  If there's a tab for any of those 
+  // create a permset in force-app/main/default for every field on every object.  If there's a tab for any of those
   objects, add that tab to the permset, too
 ```
 
@@ -1683,7 +1693,7 @@ convert a profile into a permset
 
 ```
 USAGE
-  $ sfdx shane:profile:convert -n <string> -p <string> [-d <directory>] [-e | -c] [--json] [--loglevel 
+  $ sfdx shane:profile:convert -n <string> -p <string> [-d <directory>] [-e | -c] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1707,12 +1717,12 @@ OPTIONS
 
 EXAMPLES
   sfdx shane:profile:convert -p Admin -n MyNewPermSet -e
-  // create a permset in force-app/main/default from the Admin profile (profiles/Admin).  If MyNewPermSet doesn't exist, 
+  // create a permset in force-app/main/default from the Admin profile (profiles/Admin).  If MyNewPermSet doesn't exist,
   it will be created.  Content is removed from Admin profile (-e)
 
   sfdx shane:profile:convert -p Admin -n MyNewPermSet -c
-  // create a permset in force-app/main/default from the Admin profile (profiles/Admin).  If MyNewPermSet doesn't exist, 
-  it will be created.  Leaves the original Admin profile and creates an Admin_Skinny profile that has everything in the 
+  // create a permset in force-app/main/default from the Admin profile (profiles/Admin).  If MyNewPermSet doesn't exist,
+  it will be created.  Leaves the original Admin profile and creates an Admin_Skinny profile that has everything in the
   permset removed (-c)
 ```
 
@@ -1749,7 +1759,7 @@ creates an sfdx project
 
 ```
 USAGE
-  $ sfdx shane:project:create -n <string> -g <string> [-v <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:project:create -n <string> -g <string> [-v <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1769,11 +1779,11 @@ _See code: [src/commands/shane/project/create.ts](https://github.com/mshanemc/sh
 
 ## `sfdx shane:remotesite:create -u <url> -n <string> [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
-create a remote site setting in the local source.  Push it when you're done
+create a remote site setting in the local source. Push it when you're done
 
 ```
 USAGE
-  $ sfdx shane:remotesite:create -u <url> -n <string> [-d <string>] [-t <directory>] [--json] [--loglevel 
+  $ sfdx shane:remotesite:create -u <url> -n <string> [-d <string>] [-t <directory>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1807,7 +1817,7 @@ create a static resource locally
 
 ```
 USAGE
-  $ sfdx shane:static:create -n <string> -y <string> [-d <string>] [-t <directory>] [-p] [--json] [--loglevel 
+  $ sfdx shane:static:create -n <string> -y <string> [-d <string>] [-t <directory>] [-p] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1839,11 +1849,11 @@ _See code: [src/commands/shane/static/create.ts](https://github.com/mshanemc/sha
 
 ## `sfdx shane:theme:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
-Activate a LightningExperienceTheme via Puppeteer/Chromium headless.  Recommended: use shane:org:reuath -r to make darn sure that the domain is ready to open something
+Activate a LightningExperienceTheme via Puppeteer/Chromium headless. Recommended: use shane:org:reuath -r to make darn sure that the domain is ready to open something
 
 ```
 USAGE
-  $ sfdx shane:theme:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:theme:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1863,7 +1873,7 @@ change the username on all transaction security policies
 
 ```
 USAGE
-  $ sfdx shane:tsp:username:update [-n <email>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] 
+  $ sfdx shane:tsp:username:update [-n <email>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1885,11 +1895,11 @@ EXAMPLES
   // updates the username for executionUser and all notifications in all transaction security policies
 
   sfdx shane:tsp:username:create
-  // updates the username for executionUser and all notifications in all transaction security policies to the default 
+  // updates the username for executionUser and all notifications in all transaction security policies to the default
   org's username
 
   sfdx shane:tsp:username:create -u someAlias
-  // updates the username for executionUser and all notifications in all transaction security policies to the specified 
+  // updates the username for executionUser and all notifications in all transaction security policies to the specified
   target org's username
 ```
 
@@ -1901,7 +1911,7 @@ get a ui api response from the objectinfo endpoint: https://developer.salesforce
 
 ```
 USAGE
-  $ sfdx shane:uiapi:objectinfo [-o <string>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] 
+  $ sfdx shane:uiapi:objectinfo [-o <string>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1915,7 +1925,7 @@ OPTIONS
 EXAMPLES
   sfdx shane:uiapi:objectinfo -o Account --json
        // returns ui-api objectinfo for Account
-    
+
   sfdx shane:uiapi:objectinfo -o Account --json --outputfile accountObjectInfo.json
        // returns ui-api objectinfo for Account and saves it to a local file
 ```
@@ -1928,7 +1938,7 @@ get a ui api response from the getrecord endpoint: https://developer.salesforce.
 
 ```
 USAGE
-  $ sfdx shane:uiapi:record -r <string> -f <array> [--optionalfields <array>] [--outputfile <filepath>] [-u <string>] 
+  $ sfdx shane:uiapi:record -r <string> -f <array> [--optionalfields <array>] [--outputfile <filepath>] [-u <string>]
   [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1952,7 +1962,7 @@ OPTIONS
   --outputfile=outputfile                         local path to save the output to
 
 EXAMPLE
-  sfdx shane:uiapi:record -r 001R0000003I6CoIAK -f Account.Name --optionalfields 
+  sfdx shane:uiapi:record -r 001R0000003I6CoIAK -f Account.Name --optionalfields
   Account.AnnualRevenue,AccountAccount.Number --json
   // default ui-api response for a getrecord.
 ```
@@ -1965,7 +1975,7 @@ get a ui api response from the record-ui endpoint: https://developer.salesforce.
 
 ```
 USAGE
-  $ sfdx shane:uiapi:recordui [-r <string> | --recordids <array>] [-l <array>] [-m <array>] [--outputfile <filepath>] 
+  $ sfdx shane:uiapi:recordui [-r <string> | --recordids <array>] [-l <array>] [-m <array>] [--outputfile <filepath>]
   [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -1992,7 +2002,7 @@ set the chatter photos of anyone who has not set theirs already to encourage the
 
 ```
 USAGE
-  $ sfdx shane:user:allPhotos [-r <url>] [-f <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:user:allPhotos [-r <url>] [-f <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -2021,7 +2031,7 @@ set the user to debug mode
 
 ```
 USAGE
-  $ sfdx shane:user:lightning:debug [-g <string>] [-l <string>] [-u <string>] [--apiversion <string>] [--json] 
+  $ sfdx shane:user:lightning:debug [-g <string>] [-l <string>] [-u <string>] [--apiversion <string>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -2035,7 +2045,7 @@ OPTIONS
 EXAMPLES
   sfdx shane:user:lightning:debug
        // puts the default user in lightning debug mode
-    
+
   sfdx shane:user:lightning:debug -g Sarah -l McLaughlin
        // puts the named user in lightning debug mode
 ```
@@ -2048,7 +2058,7 @@ generate a long-lived shareable login url for the org
 
 ```
 USAGE
-  $ sfdx shane:user:loginurl [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx shane:user:loginurl [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -2061,7 +2071,7 @@ OPTIONS
 EXAMPLES
   sfdx shane:user:loginurl
        // generates a url including un and pw query strings to simplify logging into the scratch org
-    
+
   sfdx shane:user:loginurl -p /lightning/setup/ObjectManager/home
        // same, but sets the start url to ObjectManager
 ```
@@ -2074,7 +2084,7 @@ Set the password for a user by first/last name
 
 ```
 USAGE
-  $ sfdx shane:user:password:set -g <string> -l <string> -p <string> [-u <string>] [--apiversion <string>] [--json] 
+  $ sfdx shane:user:password:set -g <string> -l <string> -p <string> [-u <string>] [--apiversion <string>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -2106,7 +2116,7 @@ Assign a permset to a user by first/last name
 
 ```
 USAGE
-  $ sfdx shane:user:permset:assign -l <string> -n <string> [-g <string>] [-u <string>] [--apiversion <string>] [--json] 
+  $ sfdx shane:user:permset:assign -l <string> -n <string> [-g <string>] [-u <string>] [--apiversion <string>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -2130,7 +2140,7 @@ Set the photo for a user by first/last name
 
 ```
 USAGE
-  $ sfdx shane:user:photo -l <string> [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion 
+  $ sfdx shane:user:photo -l <string> [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion
   <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -2162,7 +2172,7 @@ Assign a permset license already in an org for a user
 
 ```
 USAGE
-  $ sfdx shane:user:psl -l <string> -n <filepath> [-g <string>] [-u <string>] [--apiversion <string>] [--json] 
+  $ sfdx shane:user:psl -l <string> -n <filepath> [-g <string>] [-u <string>] [--apiversion <string>] [--json]
   [--loglevel trace|debug|info|warn|error|fatal]
 
 OPTIONS
@@ -2180,4 +2190,24 @@ EXAMPLE
 ```
 
 _See code: [src/commands/shane/user/psl.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.21.0/src/commands/shane/user/psl.ts)_
+
 <!-- commandsstop -->
+
+## How-to-Contribute
+
+I take PRs from users. CI tests are going to run with [heroku-ci](https://devcenter.heroku.com/articles/heroku-ci).
+
+If you want to run tests locally, you'll need a dev hub already auth'd, and also a heroku api key (you could avoid that last part by putting .skip on the whole heroku test I guess).
+
+Tests are really mostly integration tests, using jest. I'm as concerned about sfdx cli/mdapi bugs/changes as I am about your bugs and my bugs and that stuff is rather nasty (and somewhat pointless) to try to mock out. If you want to, that's cool.
+
+### Suggestions to test for...
+
+1. that your commands get all the parameters in, correctly
+2. if you modify sfdx source code, that whatever your plugin is making is still deployable
+3. that it properly returns both --json and non---json scenarios (I've forgotten this a few times and it's bit me)
+4. if you're calling Salesforce rest apis, that it works
+
+I had to use puppeteer inside some of the commands to get around non-api-enabled features, so feel free to use it in your tests it you want to open some org.
+
+Be sure to clean up after your tests (delete scratch orgs, etc).

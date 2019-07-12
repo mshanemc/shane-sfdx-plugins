@@ -1,131 +1,145 @@
 {
-  "name": "shane-sfdx-plugins",
-  "description": "sfdx plugins by Shane McLaughlin",
-  "version": "3.21.0",
-  "author": "@mshanemc",
-  "bugs": "https://github.com/mshanemc/shane-sfdx-plugins/issues",
-  "dependencies": {
-    "@oclif/command": "^1.5.12",
-    "@oclif/config": "^1.12.12",
-    "@oclif/errors": "^1.2.2",
-    "@oclif/parser": "^3.7.2",
-    "@salesforce/command": "^1.5.0",
-    "chalk": "^2.4.2",
-    "cli-ux": "^5.2.0",
-    "csv-split-stream": "^1.0.2",
-    "fs-extra": "^7.0.1",
-    "js2xmlparser": "^3.0.0",
-    "json2csv": "^4.3.5",
-    "lodash": "^4.17.13",
-    "npm": "^6.8.0",
-    "puppeteer": "^1.12.2",
-    "puppeteer-core": "^1.12.2",
-    "purify-css": "^1.2.5",
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
-    "stopword": "^0.1.13",
-    "strip-color": "^0.1.0",
-    "strip-css-comments": "^4.0.0",
-    "unzipper": "^0.9.11",
-    "xml2js": "^0.4.19"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.3.4",
-    "@babel/preset-env": "^7.3.4",
-    "@oclif/dev-cli": "1.22.0",
-    "@oclif/plugin-help": "^2.1.6",
-    "@oclif/test": "^1.2.4",
-    "@oclif/tslint": "^1.1.2",
-    "@salesforce/dev-config": "^1.4.4",
-    "@types/fs-extra": "^5.0.5",
-    "@types/jest": "^24.0.11",
-    "@types/jsforce": "^1.9.5",
-    "@types/lodash": "^4.14.121",
-    "@types/node": "^10.12.27",
-    "@types/puppeteer": "^1.12.1",
-    "@types/request-promise-native": "^1.0.15",
-    "@types/unzipper": "^0.9.1",
-    "jest": "^24.3.1",
-    "rimraf": "^2.6.3",
-    "ts-jest": "^24.0.0",
-    "ts-node": "^7.0.1",
-    "tslint": "^5.13.0",
-    "typescript": "^3.3.3333"
-  },
-  "files": [
-    ".oclif.manifest.json",
-    "/lib",
-    "/messages"
-  ],
-  "homepage": "https://github.com/mshanemc/shane-sfdx-plugins",
-  "keywords": [
-    "sfdx-plugin"
-  ],
-  "license": "MIT",
-  "oclif": {
-    "commands": "./lib/commands",
-    "topics": {
-      "shane:analytics": {
-        "description": "share apps, enable communities for analytics, start a dataflow, or download/upload/list datasets"
-      },
-      "shane:cdc": {
-        "description": "work with Change Data Capture streams"
-      },
-      "shane:communities": {
-        "description": "publish, activate, and query communities"
-      },
-      "shane:data": {
-        "description": "upload a file (optionally attached to record or in chatter feed) or query something to get its id"
-      },
-      "shane:github": {
-        "description": "install a package that's on github, using either the source OR a packaged version"
-      },
-      "shane:heroku": {
-        "description": "wait for success on heroku deployments and fully connect an org to Heroku Connect"
-      },
-      "shane:lwc": {
-        "description": "work with off-core (OSS) LWC locally, including creation and css extract/merge utilities"
-      },
-      "shane:mdapi": {
-        "description": "pull unpackaged or packaged source from an org, or push dx-formatted source to an org.  Also, list or describe the objects via mdapi"
-      },
-      "shane:object": {
-        "description": "create objects locally or add fields or retention policies to them.  Also, power of one, perm-align on all objects, and remove all perms on any object"
-      },
-      "shane:org": {
-        "description": "create an org with a friendly username or delete an org without a username, or open its componentLibrary or metadataCoverage page, or reauth to it, or get a refresh token on an auth'd org"
-      },
-      "shane:permset": {
-        "description": "get information about or create permsets from local source schema"
-      },
-      "shane:profile": {
-        "description": "convert (most) everything in a profile to a permset OR whitelist ip ranges"
-      },
-      "shane:uiapi": {
-        "description": "get record, recordinfo or recordui from ui-api (probably for LWC jest mocking)"
-      },
-      "shane:user": {
-        "description": "set a users password or their chatter profile/banner photo.  Or change all default chatter photos to annoying characters to encourage users to set their photo.  Or set a user to debug mode"
-      }
+    "name": "shane-sfdx-plugins",
+    "description": "sfdx plugins by Shane McLaughlin",
+    "version": "3.21.0",
+    "author": "@mshanemc",
+    "bugs": "https://github.com/mshanemc/shane-sfdx-plugins/issues",
+    "dependencies": {
+        "@oclif/command": "^1.5.12",
+        "@oclif/config": "^1.12.12",
+        "@oclif/errors": "^1.2.2",
+        "@oclif/parser": "^3.7.2",
+        "@salesforce/command": "2.0.0",
+        "chalk": "^2.4.2",
+        "cli-ux": "^5.2.0",
+        "csv-split-stream": "^1.0.2",
+        "fs-extra": "^7.0.1",
+        "js2xmlparser": "^3.0.0",
+        "json2csv": "^4.3.5",
+        "lodash": "^4.17.11",
+        "npm": "^6.8.0",
+        "puppeteer": "^1.12.2",
+        "puppeteer-core": "^1.12.2",
+        "purify-css": "^1.2.5",
+        "request": "^2.88.0",
+        "request-promise-native": "^1.0.7",
+        "stopword": "^0.1.13",
+        "strip-color": "^0.1.0",
+        "strip-css-comments": "^4.0.0",
+        "unzipper": "^0.9.11",
+        "xml2js": "^0.4.19"
     },
-    "bin": "sfdx",
-    "devPlugins": [
-      "@oclif/plugin-help"
-    ]
-  },
-  "repository": "mshanemc/shane-sfdx-plugins",
-  "scripts": {
-    "build": "rimraf -rf lib && tsc",
-    "clean": "rimraf -f .oclif.manifest.json",
-    "lint": "tsc -p test --noEmit && tslint -p test -t stylish",
-    "postpublish": "yarn run clean; git push; git push --tags",
-    "posttest": "",
-    "prepare": "yarn run build && oclif-dev manifest",
-    "prepublishOnly": "yarn run build && oclif-dev manifest",
-    "preversion": "yarn run clean",
-    "test": "yarn run prepare && jest --runInBand",
-    "test:parallel": "yarn run prepare && jest",
-    "test:watch": "yarn run prepare && jest --watch --runInBand",
-    "version": "oclif-dev readme && git add README.md"
-  }
+    "devDependencies": {
+        "@babel/core": "^7.3.4",
+        "@babel/preset-env": "^7.3.4",
+        "@oclif/dev-cli": "1.22.0",
+        "@oclif/plugin-help": "^2.1.6",
+        "@oclif/test": "^1.2.4",
+        "@oclif/tslint": "^1.1.2",
+        "@salesforce/dev-config": "^1.4.4",
+        "@types/fs-extra": "^5.0.5",
+        "@types/jest": "^24.0.11",
+        "@types/jsforce": "^1.9.5",
+        "@types/lodash": "^4.14.121",
+        "@types/node": "^10.12.27",
+        "@types/puppeteer": "^1.12.1",
+        "@types/request-promise-native": "^1.0.15",
+        "@types/unzipper": "^0.9.1",
+        "husky": ">=1",
+        "jest": "^24.3.1",
+        "lint-staged": ">=8",
+        "prettier": "^1.18.2",
+        "ts-jest": "^24.0.0",
+        "ts-node": "^7.0.1",
+        "tslint": "^5.13.0",
+        "typescript": "^3.3.3333"
+    },
+    "files": [
+        ".oclif.manifest.json",
+        "/lib",
+        "/messages"
+    ],
+    "homepage": "https://github.com/mshanemc/shane-sfdx-plugins",
+    "keywords": [
+        "sfdx-plugin"
+    ],
+    "license": "MIT",
+    "oclif": {
+        "commands": "./lib/commands",
+        "topics": {
+            "shane:analytics": {
+                "description": "share apps, enable communities for analytics, start a dataflow, or download/upload/list datasets"
+            },
+            "shane:cdc": {
+                "description": "work with Change Data Capture streams"
+            },
+            "shane:communities": {
+                "description": "publish, activate, and query communities"
+            },
+            "shane:data": {
+                "description": "upload a file (optionally attached to record or in chatter feed) or query something to get its id"
+            },
+            "shane:github": {
+                "description": "install a package that's on github, using either the source OR a packaged version"
+            },
+            "shane:heroku": {
+                "description": "wait for success on heroku deployments and fully connect an org to Heroku Connect"
+            },
+            "shane:lwc": {
+                "description": "work with off-core (OSS) LWC locally, including creation and css extract/merge utilities"
+            },
+            "shane:mdapi": {
+                "description": "pull unpackaged or packaged source from an org, or push dx-formatted source to an org.  Also, list or describe the objects via mdapi"
+            },
+            "shane:object": {
+                "description": "create objects locally or add fields or retention policies to them.  Also, power of one, perm-align on all objects, and remove all perms on any object"
+            },
+            "shane:org": {
+                "description": "create an org with a friendly username or delete an org without a username, or open its componentLibrary or metadataCoverage page, or reauth to it, or get a refresh token on an auth'd org"
+            },
+            "shane:permset": {
+                "description": "get information about or create permsets from local source schema"
+            },
+            "shane:profile": {
+                "description": "convert (most) everything in a profile to a permset OR whitelist ip ranges"
+            },
+            "shane:uiapi": {
+                "description": "get record, recordinfo or recordui from ui-api (probably for LWC jest mocking)"
+            },
+            "shane:user": {
+                "description": "set a users password or their chatter profile/banner photo.  Or change all default chatter photos to annoying characters to encourage users to set their photo.  Or set a user to debug mode"
+            }
+        },
+        "bin": "sfdx",
+        "devPlugins": [
+            "@oclif/plugin-help"
+        ]
+    },
+    "repository": "mshanemc/shane-sfdx-plugins",
+    "scripts": {
+        "build": "rm -rf lib && tsc",
+        "clean": "rm -f .oclif.manifest.json",
+        "lint": "tsc -p test --noEmit && tslint -p test -t stylish",
+        "postpublish": "yarn run clean; git push; git push --tags",
+        "posttest": "",
+        "prepare": "yarn run build && oclif-dev manifest",
+        "prepublishOnly": "yarn run build && oclif-dev manifest",
+        "preversion": "yarn run clean",
+        "test": "yarn run prepare && jest --runInBand",
+        "test:parallel": "yarn run prepare && jest",
+        "test:watch": "yarn run prepare && jest --watch --runInBand",
+        "version": "oclif-dev readme && git add README.md",
+        "prettier": "prettier --write"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,css,json,md}": [
+            "prettier --write",
+            "git add"
+        ]
+    }
 }
