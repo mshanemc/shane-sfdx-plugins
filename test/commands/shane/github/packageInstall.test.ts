@@ -2,7 +2,7 @@
 
 import fs = require('fs-extra');
 
-import { exec } from '../../../../src/shared/execProm';
+import { exec, exec2JSON } from '../../../../src/shared/execProm';
 import testutils = require('../../../helpers/testutils');
 
 const testProjectName = 'testProjectGithubPackageInstall';
@@ -20,15 +20,8 @@ describe('shane:github:package:install', () => {
 
         it('works with the old latestVersion.json format', async () => {
             const repo = 'lightningErrorHandler';
-            const results = await exec(`sfdx shane:github:package:install -g ${username} -r ${repo} --json`, { cwd: testProjectName });
-
-            // console.log(results);
-            expect(results).toBeTruthy();
-            expect(results.stdout).toBeTruthy();
-            const stdout = JSON.parse(results.stdout);
-            // console.log(stdout);
-            // console.log(stdout.status);
-            expect(stdout.status).toBe(0);
+            const results = await exec2JSON(`sfdx shane:github:package:install -g ${username} -r ${repo} --json`, { cwd: testProjectName });
+            expect(results.status).toBe(0);
         });
 
         afterAll(async () => {

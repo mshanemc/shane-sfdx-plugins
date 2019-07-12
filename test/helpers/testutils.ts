@@ -27,7 +27,6 @@ export async function itDeploys(testProjectName: string) {
 
     // push source
     const pushResult = await exec2JSON('sfdx force:source:push --json', { cwd: testProjectName });
-
     // destroy org
     await this.orgDelete(testProjectName);
 

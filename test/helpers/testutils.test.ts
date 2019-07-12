@@ -18,13 +18,13 @@ describe('tests testUtils', () => {
 
         test('creates an org', async () => {
             const createResult = await testutils.orgCreate(testProjectName);
-            expect(JSON.parse(createResult.stdout).status).toBe(0);
-            expect(JSON.parse(createResult.stdout).result.orgId).toBeTruthy();
+            expect(createResult.status).toBe(0);
+            expect(createResult.result.orgId).toBeTruthy();
         });
 
         test('deletes the org', async () => {
             const deleteResult = await testutils.orgDelete(testProjectName);
-            expect(JSON.parse(deleteResult.stdout).status).toBe(0);
+            expect(deleteResult.status).toBe(0);
         });
 
         afterAll(async () => {
