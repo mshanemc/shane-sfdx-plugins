@@ -1,12 +1,11 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import child_process = require('child_process');
 import fs = require('fs-extra');
 import request = require('request-promise-native');
 import { URL } from 'url';
-import util = require('util');
+
+import { exec } from '../../../shared/execProm';
 import localFile2CV = require('../../../shared/localFile2CV');
 import { QueryResult, Record } from './../../../shared/typeDefs';
-const exec = util.promisify(child_process.exec);
 
 import chalk from 'chalk';
 

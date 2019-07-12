@@ -1,12 +1,11 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { sleep } from '@salesforce/kit';
 import chalk from 'chalk';
-import child_process = require('child_process');
 import request = require('request-promise-native');
 import * as stripcolor from 'strip-color';
-import util = require('util');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../../shared/execProm';
+
 const pollingInterval = 2000; // ms polling when checking for app deployment
 const herokuAPIendpoint = 'https://api.heroku.com/app-setups';
 

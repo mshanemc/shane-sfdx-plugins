@@ -1,12 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import child_process = require('child_process');
 import cli from 'cli-ux';
 import fs = require('fs-extra');
 import * as stripcolor from 'strip-color';
-import util = require('util');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../../shared/execProm';
 
 const pkgVersionFileName = 'latestVersion.json';
 

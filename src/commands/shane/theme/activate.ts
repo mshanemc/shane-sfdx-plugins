@@ -1,12 +1,9 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import child_process = require('child_process');
 import * as puppeteer from 'puppeteer';
 import * as stripcolor from 'strip-color';
-import util = require('util');
 
+import { exec } from '../../../../src/shared/execProm';
 import { QueryResult } from './../../../shared/typeDefs';
-
-const exec = util.promisify(child_process.exec);
 
 export default class ThemeActivate extends SfdxCommand {
     public static description =

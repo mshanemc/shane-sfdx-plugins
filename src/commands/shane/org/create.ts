@@ -1,11 +1,9 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import * as child_process from 'child_process';
 import request = require('request-promise-native');
 import * as stripcolor from 'strip-color';
-import util = require('util');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../shared/execProm';
 
 const usernameURL = 'https://unique-username-generator.herokuapp.com/unique';
 

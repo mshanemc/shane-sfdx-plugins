@@ -1,10 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import child_process = require('child_process');
 import fs = require('fs-extra');
-import util = require('util');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../shared/execProm';
 
 export default class ProjectCreate extends SfdxCommand {
     public static description = 'creates an sfdx project';

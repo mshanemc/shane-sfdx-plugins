@@ -1,9 +1,7 @@
 import { SfdxCommand } from '@salesforce/command';
-import child_process = require('child_process');
 import * as stripcolor from 'strip-color';
-import util = require('util');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../shared/execProm';
 
 export default class ComponentLibrary extends SfdxCommand {
     public static description = 'opens the lightning component library for the specified org';

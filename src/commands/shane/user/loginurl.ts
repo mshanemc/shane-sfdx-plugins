@@ -1,10 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as assert from 'assert';
-import child_process = require('child_process');
 import * as stripcolor from 'strip-color';
-import util = require('util');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../shared/execProm';
 
 export default class LoginURL extends SfdxCommand {
     public static description = 'generate a long-lived shareable login url for the org';
@@ -25,9 +23,8 @@ export default class LoginURL extends SfdxCommand {
     // Comment this out if your command does not require an org username
     protected static requiresUsername = true;
 
+    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        // tslint:disable-next-line:no-any
-
         const auth = this.org.getConnection().getAuthInfoFields();
         // this.ux.logJson(auth);
         assert.ok(auth.password, 'No password is set...run sfdx shane:user:password:set first');

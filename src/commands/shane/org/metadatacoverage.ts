@@ -1,9 +1,7 @@
 import { SfdxCommand } from '@salesforce/command';
-import child_process = require('child_process');
 import * as stripcolor from 'strip-color';
-import util = require('util');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../shared/execProm';
 
 export default class MetadataCoverage extends SfdxCommand {
     public static description = 'opens the metadata coverage report page';

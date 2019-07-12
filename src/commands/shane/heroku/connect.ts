@@ -1,14 +1,13 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 // import chalk from 'chalk';
 
-import child_process = require('child_process');
 import * as fs from 'fs-extra';
 import * as puppeteer from 'puppeteer';
 import request = require('request-promise-native');
 import * as stripcolor from 'strip-color';
-import util = require('util');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../shared/execProm';
+
 // const herokuAPIendpoint = 'https://api.heroku.com';
 const HC_DiscoveryServiceEndpoint = 'https://hc-central.heroku.com';
 

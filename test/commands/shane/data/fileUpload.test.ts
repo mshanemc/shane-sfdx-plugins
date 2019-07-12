@@ -1,12 +1,10 @@
 /* tslint:disable:no-unused-expression */
+import fs = require('fs-extra');
 import * as stripcolor from 'strip-color';
 
-import child_process = require('child_process');
-import fs = require('fs-extra');
-import util = require('util');
+import { exec } from '../../../../src/shared/execProm';
 import testutils = require('../../../helpers/testutils');
 
-const exec = util.promisify(child_process.exec);
 const testProjectName = 'testProjectFileUpload';
 
 describe('shane:data:file:upload', () => {

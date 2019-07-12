@@ -1,11 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import child_process = require('child_process');
 import * as puppeteer from 'puppeteer';
 import * as stripcolor from 'strip-color';
-import util = require('util');
-// import { Record } from './../../../shared/typeDefs';
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../shared/execProm';
 
 export default class CommunityActivate extends SfdxCommand {
     public static description = 'Activate a community using a headless browser';

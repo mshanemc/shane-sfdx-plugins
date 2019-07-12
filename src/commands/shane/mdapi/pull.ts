@@ -1,13 +1,11 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import child_process = require('child_process');
 import fs = require('fs-extra');
-import util = require('util');
 
+import { exec } from '../../../shared/execProm';
 import * as options from '../../../shared/js2xmlStandardOptions';
 
 import jsToXml = require('js2xmlparser');
 
-const exec = util.promisify(child_process.exec);
 const retryLimit = 5;
 
 const booleanFlags = {

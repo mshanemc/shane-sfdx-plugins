@@ -1,10 +1,8 @@
 import { SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import child_process = require('child_process');
 import * as stripcolor from 'strip-color';
-import util = require('util');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../shared/execProm';
 
 export default class Delete extends SfdxCommand {
     public static description = "delete the default scratch org.  Won't prompt you for confirmation";

@@ -1,12 +1,9 @@
 /* tslint:disable:no-unused-expression */
-import child_process = require('child_process');
 import fs = require('fs-extra');
-import util = require('util');
 import testutils = require('../../../helpers/testutils');
 
+import { exec } from '../../../../src/shared/execProm';
 import { getExisting } from '../../../../src/shared/getExisting';
-
-const exec = util.promisify(child_process.exec);
 
 const profileName = 'Admin';
 const newPermSetName = 'TestNewPerm';

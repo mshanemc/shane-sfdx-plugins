@@ -1,12 +1,11 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { AuthInfo } from '@salesforce/core';
 import * as assert from 'assert';
-import child_process = require('child_process');
 import fs = require('fs-extra');
 import * as stripcolor from 'strip-color';
-import util = require('util');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../shared/execProm';
+
 const retrySeconds = 20;
 const maxTries = 120;
 

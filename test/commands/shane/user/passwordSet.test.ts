@@ -1,11 +1,9 @@
-import child_process = require('child_process');
 import fs = require('fs-extra');
 import * as stripcolor from 'strip-color';
-import util = require('util');
 
+import { exec } from '../../../../src/shared/execProm';
 import testutils = require('../../../helpers/testutils');
 
-const exec = util.promisify(child_process.exec);
 const testProjectName = 'testProjectUserPasswordSet';
 const maxBuffer = 1000 * 1024;
 

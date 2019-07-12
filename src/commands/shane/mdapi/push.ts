@@ -1,10 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
-import util = require('util');
 
-import child_process = require('child_process');
-
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../shared/execProm';
 
 export default class Push extends SfdxCommand {
     public static description = 'convert and deploy the packaged source';

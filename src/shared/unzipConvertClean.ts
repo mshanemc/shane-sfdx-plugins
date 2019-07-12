@@ -1,10 +1,8 @@
 import { UX } from '@salesforce/command';
-import child_process = require('child_process');
 import fs = require('fs-extra');
 import unzipper = require('unzipper');
-import util = require('util');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../shared/execProm';
 
 export async function retrieveUnzipConvertClean(tmpDir, retrieveCommand, target) {
     const ux = await UX.create();

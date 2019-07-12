@@ -1,10 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import child_process = require('child_process');
 import request = require('request-promise-native');
 import * as stripcolor from 'strip-color';
-import util = require('util');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../../../shared/execProm';
 
 export default class GithubPackageInstall extends SfdxCommand {
     public static description = 'installs a package from github using the sfdx-project.json file (v43+) OR the latestVersion.json file convention';

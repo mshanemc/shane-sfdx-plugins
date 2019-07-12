@@ -1,9 +1,7 @@
-import child_process = require('child_process');
 import fs = require('fs-extra');
-import util = require('util');
 import xml2js = require('xml2js');
 
-const exec = util.promisify(child_process.exec);
+import { exec } from '../../src/shared/execProm';
 
 // pass in a local path to mdapi xml, get back the json equivalent
 export async function getParsedXML(url: string) {
