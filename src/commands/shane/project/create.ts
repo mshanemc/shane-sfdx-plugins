@@ -29,27 +29,31 @@ export default class ProjectCreate extends SfdxCommand {
             await exec(`git remote add origin ${this.flags.gitremote}`, { cwd: this.flags.name });
         }
 
-        // folders I like to have
-        fs.ensureDirSync(`${this.flags.name}/scripts`); // place to hold apex scripts for executing on the server
-        fs.ensureDirSync(`${this.flags.name}/data`); // place to hold bulk upload stuff
-        fs.ensureDirSync(`${this.flags.name}/assets`); // place to hold images/files to upload, etc
-        fs.ensureDirSync(`${this.flags.name}/force-app/main/default/classes`); // you'll probably use apex!
-        fs.ensureDirSync(`${this.flags.name}/config/userDef`); // a place to put userDef files
+        await Promise.all([
+            // folders I like to have
+            fs.ensureDir(`${this.flags.name}/scripts`), // place to hold apex scripts for executing on the server
+            fs.ensureDir(`${this.flags.name}/data`), // place to hold bulk upload stuff
+            fs.ensureDir(`${this.flags.name}/assets`), // place to hold images/files to upload, etc
+            fs.ensureDir(`${this.flags.name}/force-app/main/default/classes`), // you'll probably use apex!
+            fs.ensureDir(`${this.flags.name}/config/userDef`), // a place to put userDef files
 
-        // files I like to have
-        fs.writeFileSync(`${this.flags.name}/orgInit.sh`, this.orgInit()); // basic init script
+            // files I like to have
+            fs.writeFile(`${this.flags.name}/orgInit.sh`, this.orgInit()), // basic init script
+            fs.writeFile(`${this.flags.name}/README.md`, ''), // blank the standard sfdx readme
+            fs.writeFile(`${this.flags.name}/.gitignore`, this.gitIgnore()), // basic git ignore
+            fs.writeFile(`${this.flags.name}/package.json`, this.packageJSON()), // basic git ignore
+            fs.writeFile(`${this.flags.name}/config/project-scratch-def.json`, this.scratchJSON()), // basic git ignore
+            fs.writeFile(`${this.flags.name}/sfdx-project.json`, this.projectJSON(await await this.hubOrg.retrieveMaxApiVersion())) // basic git ignore
+        ]);
+
+        await exec('sfdx shane:profile:whitelist -n Admin', { cwd: this.flags.name }); // whitelist the admin profile for everyone
         await exec('chmod +x orgInit.sh', { cwd: this.flags.name }); // make executable
-        await fs.writeFile(`${this.flags.name}/README.md`, ''); // blank the standard sfdx readme
-        fs.writeFileSync(`${this.flags.name}/.gitignore`, this.gitIgnore()); // basic git ignore
-        fs.writeFileSync(`${this.flags.name}/package.json`, this.packageJSON()); // basic git ignore
-        fs.writeFileSync(`${this.flags.name}/config/project-scratch-def.json`, this.scratchJSON()); // basic git ignore
-        fs.writeFileSync(`${this.flags.name}/sfdx-project.json`, this.projectJSON(await await this.hubOrg.retrieveMaxApiVersion())); // basic git ignore
 
         // commands to run
-        await exec('sfdx shane:profile:whitelist -n Admin', { cwd: this.flags.name }); // whitelist the admin profile for everyone
         await exec('npm install', { cwd: this.flags.name }); // whitelist the admin profile for everyone
 
         this.ux.log(chalk.green(`project created in /${this.flags.name}`));
+        return `project created in /${this.flags.name}`;
     }
 
     // everything below is the content of files I want to create
