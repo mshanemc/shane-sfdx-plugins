@@ -223,33 +223,46 @@ describe('shane:object:create (regular object flavor)', () => {
         await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
     });
 
-    // it('can build a permset', async () => {
-    //   const permSetName = 'MyEventPerm';
-    //   const permResult = await exec(`sfdx shane:permset:create -n ${permSetName} -o ${api}`, { cwd: testProjectName });
+    it('can build a permset', async () => {
+        const permSetName = 'MyEventPerm';
+        await exec(`sfdx shane:permset:create -n ${permSetName} -o ${api}`, { cwd: testProjectName });
 
-    //   expect(fs.existsSync(`${testProjectName}/force-app/main/default/permissionsets`)).toBe(true);
-    //   expect(fs.existsSync(`${testProjectName}/force-app/main/default/permissionsets/${permSetName}.permissionset-meta.xml`)).toBe(true);
+        expect(fs.existsSync(`${testProjectName}/force-app/main/default/permissionsets`)).toBe(true);
+        expect(fs.existsSync(`${testProjectName}/force-app/main/default/permissionsets/${permSetName}.permissionset-meta.xml`)).toBe(true);
 
-    //   // parse the permset
-    //   const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/permissionsets/${permSetName}.permissionset-meta.xml`);
+        // parse the permset
+        const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/permissionsets/${permSetName}.permissionset-meta.xml`);
 
-    //   // verify object
-    //   expect(parsed.PermissionSet).to.be.an('object');
-    //   expect(parsed.PermissionSet.objectPermissions).to.be.an('object');
-    //   expect(parsed.PermissionSet.objectPermissions.object).toBe(api);
+        // verify object
+        expect(parsed.PermissionSet).toBeTruthy();
+        expect(parsed.PermissionSet.objectPermissions).toBeTruthy();
+        expect(parsed.PermissionSet.objectPermissions.object).toBe(api);
 
-    //   expect(parsed.PermissionSet.fieldPermissions).to.be.an('array');
-    //   expect(parsed.PermissionSet.fieldPermissions.length).toBe(3);
+        expect(parsed.PermissionSet.fieldPermissions).toHaveLength(6);
 
-    //   // verify all the fields so far.  Required fields, and fileds required because they're indexed, shouldn't be included
+        // verify all the fields so far.  Required fields, and fileds required because they're indexed, shouldn't be included
 
-    //   expect(parsed.PermissionSet.fieldPermissions).to.deep.include({ readable: 'true', editable: 'true', field: `${api}.Number_Field__c` });
-    //   expect(parsed.PermissionSet.fieldPermissions).to.deep.include({ readable: 'true', editable: 'true', field: `${api}.Text_Field__c` });
-    //   expect(parsed.PermissionSet.fieldPermissions).to.deep.include({ readable: 'true', editable: 'true', field: `${api}.Checkbox_Field__c` });
+        expect(parsed.PermissionSet.fieldPermissions).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ readable: 'true', editable: 'true', field: `${api}.Text_Field__c` }),
+                expect.objectContaining({ readable: 'true', editable: 'true', field: `${api}.Email__c` }),
+                expect.objectContaining({ readable: 'true', editable: 'true', field: `${api}.Email__c` }),
+                expect.objectContaining({ readable: 'true', editable: 'true', field: `${api}.Text_Area_Field__c` }),
+                expect.objectContaining({ readable: 'true', editable: 'true', field: `${api}.Phone__c` }),
+                expect.objectContaining({ readable: 'true', editable: 'true', field: `${api}.Checkbox_Field__c` })
+            ])
+        );
 
-    //   expect(parsed.PermissionSet.fieldPermissions).to.not.deep.include({ readable: 'true', editable: 'true', field: `${api}.Required_Text_Field__c` });
-
-    // });
+        expect(parsed.PermissionSet.fieldPermissions).not.toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    readable: 'true',
+                    editable: 'true',
+                    field: `${api}.Required_Text_Field__c`
+                })
+            ])
+        );
+    });
 
     it('deploys as valid code', async () => {
         jest.setTimeout(testutils.remoteTimeout);
