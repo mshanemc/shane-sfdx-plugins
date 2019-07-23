@@ -1,8 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import request = require('request-promise-native');
-import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../../shared/execProm';
+import { exec2JSON } from '../../../../shared/execProm';
 
 export default class GithubPackageInstall extends SfdxCommand {
     public static description = 'installs a package from github using the sfdx-project.json file (v43+) OR the latestVersion.json file convention';
@@ -62,11 +61,13 @@ export default class GithubPackageInstall extends SfdxCommand {
             packageVersionId = result.SubscriberPackageVersionId;
             // install in the org
         }
-
-        const installResult = await exec(
-            `sfdx force:package:install --package ${packageVersionId} -r -u ${this.org.getUsername()} -w 20 --publishwait 20 --json`
+        const installResult = await exec2JSON(
+            `sfdx force:package:install --package ${packageVersionId} -r -u ${this.org.getUsername()} -w 20 --publishwait 20 --json`,
+            {}
         );
-        // this.ux.logJson(JSON.parse(installResult.stdout));
-        return JSON.parse(stripcolor(installResult.stdout));
+        if (!this.flags.json) {
+            this.ux.logJson(installResult);
+        }
+        return installResult;
     }
 }
