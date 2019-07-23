@@ -5,7 +5,7 @@ import * as util from 'util';
 const execProm = util.promisify(exec);
 
 // tslint:disable-next-line: no-any
-const exec2JSON = async (cmd: string, options): Promise<any> => {
+const exec2JSON = async (cmd: string, options = {}): Promise<any> => {
     try {
         const results = await execProm(cmd, options);
         return JSON.parse(stripcolor(results.stdout));
@@ -15,7 +15,8 @@ const exec2JSON = async (cmd: string, options): Promise<any> => {
     }
 };
 
-const exec2String = async (cmd: string, options): Promise<any> => {
+// tslint:disable-next-line: no-any
+const exec2String = async (cmd: string, options = {}): Promise<any> => {
     try {
         const results = await execProm(cmd, options);
         return results.stdout;
