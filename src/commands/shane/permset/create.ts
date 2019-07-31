@@ -12,7 +12,7 @@ import { getParsed } from '../../../shared/xml2jsAsync';
 import * as options from '../../../shared/js2xmlStandardOptions';
 
 let conn: Connection;
-let objectDescribe: Map<string, Map<string, Field>>;
+let objectDescribe: Map<string, Map<string, any>>;
 let resolvedDescribePromises = 0;
 
 export default class PermSetCreate extends SfdxCommand {
@@ -75,7 +75,7 @@ export default class PermSetCreate extends SfdxCommand {
             throw new SfdxError(`username is required when using --checkpermissionable`);
         }
 
-        objectDescribe = new Map<string, Map<string, Field>>();
+        objectDescribe = new Map<string, Map<string, any>>();
 
         // validations
         if (this.flags.field && !this.flags.object) {
@@ -249,8 +249,8 @@ export default class PermSetCreate extends SfdxCommand {
 
                     // Check we can add permission, for instance mandatory fields are readable and editable anyway
                     // Adding access rights to them will throw an error
-                    if (fieldDescribe.permissionable) {
-                        const editable = fieldDescribe.createable && fieldDescribe.updateable;
+                    if (fieldDescribe.IsPermissionable) {
+                        const editable = fieldDescribe.IsCreatable && fieldDescribe.IsUpdatable;
                         existing.fieldPermissions.push({
                             readable: 'true',
                             editable: `${editable}`,
@@ -349,10 +349,11 @@ export default class PermSetCreate extends SfdxCommand {
 
     public async getFieldsPermissions(objectName: string) {
         const fieldsPermissions: Map<string, Field> = new Map<string, Field>();
-        const describeResult = await conn.sobject(objectName).describe();
+        const describeQuery = `Select Name,IsPermissionable,IsCreatable,IsUpdatable from EntityParticle where EntityDefinition.QualifiedApiName = '${objectName}'`;
+        const describeResult = (await conn.tooling.query(describeQuery)).records as any[];
 
-        for (const field of describeResult.fields) {
-            fieldsPermissions.set(field.name, field);
+        for (const field of describeResult) {
+            fieldsPermissions.set(field.Name, field);
         }
 
         return fieldsPermissions;
