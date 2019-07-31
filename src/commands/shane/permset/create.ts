@@ -51,6 +51,11 @@ export default class PermSetCreate extends SfdxCommand {
             description: 'API name of an field to add perms for.  Required --object If blank, then you mean all the fields',
             dependsOn: ['object']
         }),
+        recordtype: flags.string({
+            char: 'r',
+            description: 'API name of a record type to add perms for.  Required --object If blank, then you mean all the record types',
+            dependsOn: ['object']
+        }),
         directory: flags.directory({
             char: 'd',
             default: 'force-app/main/default',
@@ -81,12 +86,23 @@ export default class PermSetCreate extends SfdxCommand {
         if (this.flags.field && !this.flags.object) {
             this.ux.error(chalk.red('If you say a field, you have to say the object'));
         }
+        if (this.flags.recordtype && !this.flags.object) {
+            this.ux.error(chalk.red('If you say a record type, you have to say the object'));
+        }
 
         const targetFilename = `${this.flags.directory}/permissionsets/${this.flags.name}.permissionset-meta.xml`;
         const targetLocationObjects = `${this.flags.directory}/objects`;
 
         if (this.flags.field && !fs.existsSync(`${targetLocationObjects}/${this.flags.object}/fields/${this.flags.field}.field-meta.xml`)) {
             this.ux.error(`Field does not exist: ${this.flags.fields}`);
+            return;
+        }
+
+        if (
+            this.flags.recordtype &&
+            !fs.existsSync(`${targetLocationObjects}/${this.flags.object}/recordTypes/${this.flags.recordtype}.recordType-meta.xml`)
+        ) {
+            this.ux.error(`Record type does not exist: ${this.flags.recordtype}`);
             return;
         }
 
@@ -169,6 +185,13 @@ export default class PermSetCreate extends SfdxCommand {
                 if (this.flags.tab && fs.existsSync(`${this.flags.directory}/tabs/${obj}.tab-meta.xml`)) {
                     // we're doing tabs, and there is one, so add it to the permset
                     existing = this.addTab(existing, obj);
+                }
+
+                if (this.flags.recordtype) {
+                    existing = await this.addRecordTypePerms(existing, this.flags.object, this.flags.recordtype);
+                } else {
+                    // all the fields
+                    existing = await this.addAllRecordTypePermissions(existing, obj);
                 }
             } else {
                 this.ux.error(chalk.red(`Couldn\'t find that object in ${targetLocationObjects}/${this.flags.object}`));
@@ -321,6 +344,49 @@ export default class PermSetCreate extends SfdxCommand {
         // iterate through the field builder thing
         for (const fieldFileName of fields) {
             existing = await this.addFieldPerms(existing, objectName, fieldFileName.split('.')[0]);
+        }
+
+        return existing;
+    }
+
+    public async addRecordTypePerms(existing, objectName: string, recordTypeName: string) {
+        if (
+            existing.recordTypeVisibilities &&
+            existing.recordTypeVisibilities.find(e => {
+                return e.recordType === `${objectName}.${recordTypeName}`;
+            })
+        ) {
+            this.ux.log(`Record type Permission already exists: ${objectName}.${recordTypeName}.  Nothing to add.`);
+            return existing;
+        } else {
+            existing = setupArray(existing, 'recordTypeVisibilities');
+
+            existing.recordTypeVisibilities.push({
+                recordType: `${objectName}.${recordTypeName}`,
+                visible: true
+            });
+
+            this.ux.log(`added record type permission for ${objectName}`);
+
+            return existing;
+        }
+    }
+
+    public async addAllRecordTypePermissions(existing, objectName: string) {
+        // get all the record types for that object
+        this.ux.log(`------ going to add all record types for ${objectName}`);
+        const recordTypesLocation = `${this.flags.directory}/objects/${objectName}/recordTypes`;
+
+        if (!fs.existsSync(recordTypesLocation)) {
+            this.ux.warn(chalk.yellow(`there is no recordTypes folder at ${recordTypesLocation}`));
+            return existing;
+        }
+
+        const recordTypes = fs.readdirSync(recordTypesLocation);
+
+        // iterate through the record types
+        for (const recordTypeFileName of recordTypes) {
+            existing = await this.addRecordTypePerms(existing, objectName, recordTypeFileName.replace('.recordType-meta.xml', ''));
         }
 
         return existing;
