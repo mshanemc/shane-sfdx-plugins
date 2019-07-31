@@ -98,14 +98,17 @@ export default class PermSetCreate extends SfdxCommand {
             label: this.flags.name
         });
 
-        const objectList: Set<string> = new Set<string>();
+        let objectList: Array<string> = new Array<string>();
 
         if (!this.flags.object) {
             const files = fs.readdirSync(targetLocationObjects);
-            files.forEach(file => objectList.add(file));
+            files.forEach(file => objectList.push(file));
         } else {
-            objectList.add(this.flags.object);
+            objectList.push(this.flags.object);
         }
+
+        // Make sure there is no duplicate
+        objectList = Array.from(new Set(objectList));
 
         this.ux.log(`Object list is ${objectList}`);
 
@@ -114,12 +117,12 @@ export default class PermSetCreate extends SfdxCommand {
 
             this.ux.startSpinner('Getting objects describe from org');
 
-            if (objectList.has('Activity')) {
+            if (objectList.includes('Activity')) {
                 // Describe call doesn't work with Activity, but works with Event & Task
                 // Both of them can be used for fieldPermissions
-                objectList.delete('Activity');
-                objectList.add('Event');
-                objectList.add('Task');
+                objectList.includes('Activity');
+                objectList.push('Event');
+                objectList.push('Task');
             }
 
             // Calling describe on all sObjects - don't think you can do this in only 1 call
@@ -131,7 +134,7 @@ export default class PermSetCreate extends SfdxCommand {
                         .then(result => {
                             objectDescribe.set(objectName, result);
                             resolvedDescribePromises++;
-                            this.ux.setSpinnerStatus(`${resolvedDescribePromises}/${objectList.size}`);
+                            this.ux.setSpinnerStatus(`${resolvedDescribePromises}/${objectList.length}`);
                         })
                         .catch(err => {
                             err.objectName = objectName;
