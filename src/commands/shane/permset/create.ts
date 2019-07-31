@@ -56,6 +56,10 @@ export default class PermSetCreate extends SfdxCommand {
             description: 'API name of a record type to add perms for.  Required --object If blank, then you mean all the record types',
             dependsOn: ['object']
         }),
+        application: flags.string({
+            char: 'a',
+            description: 'API name of an application to add perms for.  If blank, then you mean all the applications'
+        }),
         directory: flags.directory({
             char: 'd',
             default: 'force-app/main/default',
@@ -93,11 +97,13 @@ export default class PermSetCreate extends SfdxCommand {
         const targetFilename = `${this.flags.directory}/permissionsets/${this.flags.name}.permissionset-meta.xml`;
         const targetLocationObjects = `${this.flags.directory}/objects`;
 
+        // Validating passed field exists
         if (this.flags.field && !fs.existsSync(`${targetLocationObjects}/${this.flags.object}/fields/${this.flags.field}.field-meta.xml`)) {
             this.ux.error(`Field does not exist: ${this.flags.fields}`);
             return;
         }
 
+        // Validating passed record type exists
         if (
             this.flags.recordtype &&
             !fs.existsSync(`${targetLocationObjects}/${this.flags.object}/recordTypes/${this.flags.recordtype}.recordType-meta.xml`)
@@ -113,6 +119,19 @@ export default class PermSetCreate extends SfdxCommand {
             hasActivationRequired: 'false',
             label: this.flags.name
         });
+
+        // Adding applications access
+        if (this.flags.application) {
+            // Flag was passed, check that application exists
+            if (!fs.existsSync(`${this.flags.directory}/applications/${this.flags.application}.app-meta.xml`)) {
+                this.ux.error(`Application does not exist: ${this.flags.application}`);
+                return;
+            } else {
+                existing = await this.addApplicationPerms(existing, this.flags.application);
+            }
+        } else {
+            existing = await this.addAllApplicationPermissions(existing);
+        }
 
         let objectList: Array<string> = new Array<string>();
 
@@ -350,8 +369,9 @@ export default class PermSetCreate extends SfdxCommand {
     }
 
     public async addRecordTypePerms(existing, objectName: string, recordTypeName: string) {
+        existing = setupArray(existing, 'recordTypeVisibilities');
+
         if (
-            existing.recordTypeVisibilities &&
             existing.recordTypeVisibilities.find(e => {
                 return e.recordType === `${objectName}.${recordTypeName}`;
             })
@@ -387,6 +407,50 @@ export default class PermSetCreate extends SfdxCommand {
         // iterate through the record types
         for (const recordTypeFileName of recordTypes) {
             existing = await this.addRecordTypePerms(existing, objectName, recordTypeFileName.replace('.recordType-meta.xml', ''));
+        }
+
+        return existing;
+    }
+
+    public async addApplicationPerms(existing, applicationName: string) {
+        existing = setupArray(existing, 'applicationVisibilities');
+
+        if (
+            existing.applicationVisibilities.find(e => {
+                return e.application === `${applicationName}`;
+            })
+        ) {
+            this.ux.log(`Application Permission already exists: ${applicationName}.  Nothing to add.`);
+            return existing;
+        } else {
+            existing = setupArray(existing, 'applicationVisibilities');
+
+            existing.applicationVisibilities.push({
+                application: `${applicationName}`,
+                visible: true
+            });
+
+            this.ux.log(`added application permission for ${applicationName}`);
+
+            return existing;
+        }
+    }
+
+    public async addAllApplicationPermissions(existing) {
+        // get all the applications
+        this.ux.log(`------ going to add all applications`);
+        const applicationsLocation = `${this.flags.directory}/applications`;
+
+        if (!fs.existsSync(applicationsLocation)) {
+            this.ux.warn(chalk.yellow(`there is no applications folder at ${applicationsLocation}`));
+            return existing;
+        }
+
+        const applications = fs.readdirSync(applicationsLocation);
+
+        // iterate through the applications
+        for (const application of applications) {
+            existing = await this.addApplicationPerms(existing, application.replace('.app-meta.xml', ''));
         }
 
         return existing;
