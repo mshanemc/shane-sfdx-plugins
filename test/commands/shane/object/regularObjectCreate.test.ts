@@ -223,6 +223,23 @@ describe('shane:object:create (regular object flavor)', () => {
         await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
     });
 
+    it('can create a recordType on the object', async () => {
+        const rtLabel = 'MyRecordType';
+
+        await exec(`sfdx shane:object:recordtype --object ${api} --label ${rtLabel}`, {
+            cwd: testProjectName
+        });
+
+        const createdFile = `${testProjectName}/force-app/main/default/objects/${api}/recordTypes/${rtLabel}.recordType-meta.xml`;
+        expect(fs.existsSync(createdFile)).toBe(true);
+
+        const parsed = await testutils.getParsedXML(createdFile);
+
+        expect(parsed.RecordType.active).toBe('true');
+        expect(parsed.RecordType.label).toBe(rtLabel);
+        expect(parsed.CustomField.fullName).toBe(rtLabel);
+    });
+
     it('can build a permset', async () => {
         const permSetName = 'MyEventPerm';
         await exec(`sfdx shane:permset:create -n ${permSetName} -o ${api}`, { cwd: testProjectName });
@@ -262,6 +279,8 @@ describe('shane:object:create (regular object flavor)', () => {
                 })
             ])
         );
+
+        // TODO: verify recordType is correct in perm set
     });
 
     it('deploys as valid code', async () => {
