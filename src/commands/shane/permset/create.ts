@@ -10,8 +10,10 @@ import { setupArray } from '../../../shared/setupArray';
 import { getParsed } from '../../../shared/xml2jsAsync';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
+import { ToolingAPIDescribeQueryResult } from '../../../shared/typeDefs';
 
 let conn: Connection;
+// tslint:disable-next-line: no-any
 let objectDescribe: Map<string, Map<string, any>>;
 let resolvedDescribePromises = 0;
 
@@ -84,6 +86,7 @@ export default class PermSetCreate extends SfdxCommand {
             throw new SfdxError(`username is required when using --checkpermissionable`);
         }
 
+        // tslint:disable-next-line: no-any
         objectDescribe = new Map<string, Map<string, any>>();
 
         // validations
@@ -133,31 +136,29 @@ export default class PermSetCreate extends SfdxCommand {
             existing = await this.addAllApplicationPermissions(existing);
         }
 
-        let objectList: Array<string> = new Array<string>();
+        // let objectList: Array<string> = new Array<string>();
+        const objectList: Set<string> = new Set<string>();
 
         if (!this.flags.object) {
             const files = fs.readdirSync(targetLocationObjects);
-            files.forEach(file => objectList.push(file));
+            files.forEach(file => objectList.add(file));
         } else {
-            objectList.push(this.flags.object);
+            objectList.add(this.flags.object);
         }
 
-        // Make sure there is no duplicate
-        objectList = Array.from(new Set(objectList));
-
-        this.ux.log(`Object list is ${objectList}`);
+        this.ux.log(`Object list is ${Array.from(objectList)}`);
 
         if (this.flags.checkpermissionable) {
             conn = this.org.getConnection();
 
             this.ux.startSpinner('Getting objects describe from org');
 
-            if (objectList.includes('Activity')) {
+            if (objectList.has('Activity')) {
                 // Describe call doesn't work with Activity, but works with Event & Task
                 // Both of them can be used for fieldPermissions
-                objectList.includes('Activity');
-                objectList.push('Event');
-                objectList.push('Task');
+                objectList.delete('Activity');
+                objectList.add('Event');
+                objectList.add('Task');
             }
 
             // Calling describe on all sObjects - don't think you can do this in only 1 call
@@ -169,7 +170,7 @@ export default class PermSetCreate extends SfdxCommand {
                         .then(result => {
                             objectDescribe.set(objectName, result);
                             resolvedDescribePromises++;
-                            this.ux.setSpinnerStatus(`${resolvedDescribePromises}/${objectList.length}`);
+                            this.ux.setSpinnerStatus(`${resolvedDescribePromises}/${objectList.size}`);
                         })
                         .catch(err => {
                             err.objectName = objectName;
@@ -483,10 +484,10 @@ export default class PermSetCreate extends SfdxCommand {
     public async getFieldsPermissions(objectName: string) {
         const fieldsPermissions: Map<string, Field> = new Map<string, Field>();
         const describeQuery = `Select Name,IsPermissionable,IsCreatable,IsUpdatable from EntityParticle where EntityDefinition.QualifiedApiName = '${objectName}'`;
-        const describeResult = (await conn.tooling.query(describeQuery)).records as any[];
+        const describeResult: ToolingAPIDescribeQueryResult = await conn.tooling.query(describeQuery);
 
-        for (const field of describeResult) {
-            fieldsPermissions.set(field.Name, field);
+        for (const field of describeResult.records) {
+            fieldsPermissions.set(field.name, field);
         }
 
         return fieldsPermissions;
