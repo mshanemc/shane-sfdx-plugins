@@ -27,7 +27,7 @@ $ npm install -g shane-sfdx-plugins
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-shane-sfdx-plugins/3.24.0 darwin-x64 node-v12.4.0
+shane-sfdx-plugins/4.0.0 darwin-x64 node-v12.4.0
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -72,7 +72,7 @@ USAGE
 -   [`sfdx shane:mdapi:package:xml -p <filepath> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanemdapipackagexml--p-filepath--t-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 -   [`sfdx shane:mdapi:pull [-c | --all] [-p | undefined] [--wave | undefined] [-s | undefined | -o <string>] [-i | undefined] [--reporting | undefined] [-t <string> | undefined] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanemdapipull--c----all--p--undefined---wave--undefined--s--undefined---o-string--i--undefined---reporting--undefined--t-string--undefined--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 -   [`sfdx shane:mdapi:push [-d <directory>] [-k] [-r <directory>] [-w <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shanemdapipush--d-directory--k--r-directory--w-integer--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
--   [`sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>] [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjectcreate--t-string--l-string--a-string--p-string---description-string---enterprise---sharingmodel-string---activities---search---reports---history---feeds---nametype-string---namefieldlabel-string---autonumberformat-string--h--i--d-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+-   [`sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>] [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [--highvolume] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjectcreate--t-string--l-string--a-string--p-string---description-string---enterprise---sharingmodel-string---activities---search---reports---history---feeds---nametype-string---namefieldlabel-string---autonumberformat-string---highvolume--i--d-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 -   [`sfdx shane:object:fat -o <string> [-m <integer>] [-y <integer>] [--description <string>] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjectfat--o-string--m-integer--y-integer---description-string--d-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 -   [`sfdx shane:object:field [-o <string>] [-n <string>] [-a <string>] [-t <string>] [--description <string>] [--default <string>] [-r] [-u] [--externalid] [--trackhistory] [--helptext <string>] [-l <integer>] [-s <integer>] [--precision <integer>] [--lookupobject <string>] [--relname <string>] [--indexposition <integer>] [--indexappend] [--indexdirection <string>] [--noindex] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjectfield--o-string--n-string--a-string--t-string---description-string---default-string--r--u---externalid---trackhistory---helptext-string--l-integer--s-integer---precision-integer---lookupobject-string---relname-string---indexposition-integer---indexappend---indexdirection-string---noindex--i--d-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 -   [`sfdx shane:object:fields:describe -o <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-shaneobjectfieldsdescribe--o-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
@@ -146,7 +146,7 @@ EXAMPLE
   communities" box for this app
 ```
 
-_See code: [src/commands/shane/analytics/app/share.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/analytics/app/share.ts)_
+_See code: [src/commands/shane/analytics/app/share.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/analytics/app/share.ts)_
 
 ## `sfdx shane:analytics:community:enable [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -176,7 +176,7 @@ ALIASES
   $ sfdx shane:communities:analytics:enable
 ```
 
-_See code: [src/commands/shane/analytics/community/enable.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/analytics/community/enable.ts)_
+_See code: [src/commands/shane/analytics/community/enable.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/analytics/community/enable.ts)_
 
 ## `sfdx shane:analytics:dataflow:start [-n <string>] [-i <id>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -210,7 +210,7 @@ EXAMPLE
   dataflow)
 ```
 
-_See code: [src/commands/shane/analytics/dataflow/start.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/analytics/dataflow/start.ts)_
+_See code: [src/commands/shane/analytics/dataflow/start.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/analytics/dataflow/start.ts)_
 
 ## `sfdx shane:analytics:dataset:download [-i <id>] [-n <string>] [--versionid <string>] [-t <filepath>] [-r <number>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -248,7 +248,7 @@ EXAMPLES
   sfdx shane:analytics:dataset:download -i 0Fb6A000000gDFxSAM --versionid 0Fc6A000002d8GwSAI -t myLocalFolder -r 100
 ```
 
-_See code: [src/commands/shane/analytics/dataset/download.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/analytics/dataset/download.ts)_
+_See code: [src/commands/shane/analytics/dataset/download.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/analytics/dataset/download.ts)_
 
 ## `sfdx shane:analytics:dataset:list [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -275,7 +275,7 @@ EXAMPLE
   sfdx shane:analytics:dataset:list
 ```
 
-_See code: [src/commands/shane/analytics/dataset/list.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/analytics/dataset/list.ts)_
+_See code: [src/commands/shane/analytics/dataset/list.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/analytics/dataset/list.ts)_
 
 ## `sfdx shane:analytics:dataset:upload -n <string> -f <filepath> [-a <string>] [-m <filepath>] [--async] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -320,7 +320,7 @@ EXAMPLES
   sfdx shane:analytics:dataset:upload -n someName -f data/myFile.csv -m myMetaFile.json -a SharedApp  --async
 ```
 
-_See code: [src/commands/shane/analytics/dataset/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/analytics/dataset/upload.ts)_
+_See code: [src/commands/shane/analytics/dataset/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/analytics/dataset/upload.ts)_
 
 ## `sfdx shane:cdc:create -d <directory> [--batchsize <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -348,7 +348,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/shane/cdc/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/cdc/create.ts)_
+_See code: [src/commands/shane/cdc/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/cdc/create.ts)_
 
 ## `sfdx shane:cdc:prep -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -373,7 +373,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/shane/cdc/prep.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/cdc/prep.ts)_
+_See code: [src/commands/shane/cdc/prep.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/cdc/prep.ts)_
 
 ## `sfdx shane:cdc:stream [-o <string>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -407,7 +407,7 @@ EXAMPLES
   sfdx shane:cdc:stream -d myDir // stream change events to myDir/cdc, organized into folders by object api type
 ```
 
-_See code: [src/commands/shane/cdc/stream.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/cdc/stream.ts)_
+_See code: [src/commands/shane/cdc/stream.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/cdc/stream.ts)_
 
 ## `sfdx shane:communities:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -437,7 +437,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/shane/communities/activate.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/communities/activate.ts)_
+_See code: [src/commands/shane/communities/activate.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/communities/activate.ts)_
 
 ## `sfdx shane:communities:describe [--store] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -467,7 +467,7 @@ EXAMPLE
   sfdx shane:communities:describe
 ```
 
-_See code: [src/commands/shane/communities/describe.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/communities/describe.ts)_
+_See code: [src/commands/shane/communities/describe.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/communities/describe.ts)_
 
 ## `sfdx shane:communities:publish [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -501,7 +501,7 @@ EXAMPLES
   // finds a community named customer, publishes it.
 ```
 
-_See code: [src/commands/shane/communities/publish.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/communities/publish.ts)_
+_See code: [src/commands/shane/communities/publish.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/communities/publish.ts)_
 
 ## `sfdx shane:communities:url [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -531,7 +531,7 @@ EXAMPLE
   sfdx shane:communities:url --prefix dealers
 ```
 
-_See code: [src/commands/shane/communities/url.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/communities/url.ts)_
+_See code: [src/commands/shane/communities/url.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/communities/url.ts)_
 
 ## `sfdx shane:connectedapp:uniquify -p <string> -a <filepath> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -559,7 +559,7 @@ EXAMPLE
   // update the consumerKey of myConnectedApp to be unique, but start with 5h4n3
 ```
 
-_See code: [src/commands/shane/connectedapp/uniquify.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/connectedapp/uniquify.ts)_
+_See code: [src/commands/shane/connectedapp/uniquify.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/connectedapp/uniquify.ts)_
 
 ## `sfdx shane:data:file:upload -f <filepath> [-c -p <id>] [-n <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -608,7 +608,7 @@ EXAMPLES
   name as the local filesystem used
 ```
 
-_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/data/file/upload.ts)_
+_See code: [src/commands/shane/data/file/upload.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/data/file/upload.ts)_
 
 ## `sfdx shane:data:id:query -o <string> -w <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -642,7 +642,7 @@ EXAMPLE
        // returns the id of the user. Use these ids between `` in other commands
 ```
 
-_See code: [src/commands/shane/data/id/query.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/data/id/query.ts)_
+_See code: [src/commands/shane/data/id/query.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/data/id/query.ts)_
 
 ## `sfdx shane:data:tree:import -p <filepath> -d <directory> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -675,7 +675,7 @@ EXAMPLE
   relative to ./data
 ```
 
-_See code: [src/commands/shane/data/tree/import.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/data/tree/import.ts)_
+_See code: [src/commands/shane/data/tree/import.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/data/tree/import.ts)_
 
 ## `sfdx shane:github:package:install -g <string> -r <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -710,7 +710,7 @@ EXAMPLE
   https://github.com/someUser/someRepo/latestVersion.json
 ```
 
-_See code: [src/commands/shane/github/package/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/github/package/install.ts)_
+_See code: [src/commands/shane/github/package/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/github/package/install.ts)_
 
 ## `sfdx shane:github:src:install -g <string> -r <string> [-p <directory>] [-k] [-c] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -756,7 +756,7 @@ EXAMPLES
   // pulls mdapi-formatted code from https://github.com/someUser/someRepo/my/folder/tree and deploys to the org
 ```
 
-_See code: [src/commands/shane/github/src/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/github/src/install.ts)_
+_See code: [src/commands/shane/github/src/install.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/github/src/install.ts)_
 
 ## `sfdx shane:group:photo [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -795,7 +795,7 @@ EXAMPLES
   // sets the chatter banner photo for the group named AwesomePeople using the local file
 ```
 
-_See code: [src/commands/shane/group/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/group/photo.ts)_
+_See code: [src/commands/shane/group/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/group/photo.ts)_
 
 ## `sfdx shane:heroku:connect -a <string> -f <filepath> [-e <string>] [-p <string>] [-b] [-i] [-u <string>] [--apiversion <string>] [--verbose] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -851,7 +851,7 @@ EXAMPLES
   // same, but not the default org, with a specified password
 ```
 
-_See code: [src/commands/shane/heroku/connect.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/heroku/connect.ts)_
+_See code: [src/commands/shane/heroku/connect.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/heroku/connect.ts)_
 
 ## `sfdx shane:heroku:repo:deploy -g <string> -r <string> [-n <string>] [-o <array>] [--envuser <string>] [--envpassword <string>] [-t <string>] [-d <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -907,7 +907,7 @@ EXAMPLE
   // deploys code from https://github.com/someUser/someRepo that has a valid app.json
 ```
 
-_See code: [src/commands/shane/heroku/repo/deploy.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/heroku/repo/deploy.ts)_
+_See code: [src/commands/shane/heroku/repo/deploy.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/heroku/repo/deploy.ts)_
 
 ## `sfdx shane:iot:activation -n <string> [-r] [-d] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -946,7 +946,7 @@ EXAMPLES
   // deactivates the orchestration, without resetting all the instances
 ```
 
-_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/iot/activation.ts)_
+_See code: [src/commands/shane/iot/activation.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/iot/activation.ts)_
 
 ## `sfdx shane:label:add -t <string> [--bundle <string>] [-n <string>] [-d <string>] [--protected] [--categories <array>] [-l <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -991,7 +991,7 @@ EXAMPLE
   // create a custom label with the displayed text and all the defaults
 ```
 
-_See code: [src/commands/shane/label/add.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/label/add.ts)_
+_See code: [src/commands/shane/label/add.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/label/add.ts)_
 
 ## `sfdx shane:lwc:create -n <string> -d <directory> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1019,7 +1019,7 @@ EXAMPLE
   // creates lwc in the given folder path
 ```
 
-_See code: [src/commands/shane/lwc/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/lwc/create.ts)_
+_See code: [src/commands/shane/lwc/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/lwc/create.ts)_
 
 ## `sfdx shane:lwc:css:merge -f <filepath> -c <directory> [-l <filepath>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1054,7 +1054,7 @@ EXAMPLES
   selectors from modules/namespace/myComp/local.css
 ```
 
-_See code: [src/commands/shane/lwc/css/merge.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/lwc/css/merge.ts)_
+_See code: [src/commands/shane/lwc/css/merge.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/lwc/css/merge.ts)_
 
 ## `sfdx shane:mdapi:describe [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1082,7 +1082,7 @@ EXAMPLE
   // list the metadata available in the org
 ```
 
-_See code: [src/commands/shane/mdapi/describe.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/mdapi/describe.ts)_
+_See code: [src/commands/shane/mdapi/describe.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/mdapi/describe.ts)_
 
 ## `sfdx shane:mdapi:list -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1114,7 +1114,7 @@ EXAMPLE
   // what metadata exists for a specific type
 ```
 
-_See code: [src/commands/shane/mdapi/list.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/mdapi/list.ts)_
+_See code: [src/commands/shane/mdapi/list.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/mdapi/list.ts)_
 
 ## `sfdx shane:mdapi:package:get -p <string> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1152,7 +1152,7 @@ EXAMPLES
   // pulls a package from the org and converts/merges it into /someDir
 ```
 
-_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/mdapi/package/get.ts)_
+_See code: [src/commands/shane/mdapi/package/get.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/mdapi/package/get.ts)_
 
 ## `sfdx shane:mdapi:package:xml -p <filepath> [-t <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1190,7 +1190,7 @@ EXAMPLES
   // pulls a package from the org and converts/merges it into /someDir
 ```
 
-_See code: [src/commands/shane/mdapi/package/xml.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/mdapi/package/xml.ts)_
+_See code: [src/commands/shane/mdapi/package/xml.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/mdapi/package/xml.ts)_
 
 ## `sfdx shane:mdapi:pull [-c | --all] [-p | undefined] [--wave | undefined] [-s | undefined | -o <string>] [-i | undefined] [--reporting | undefined] [-t <string> | undefined] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1256,7 +1256,7 @@ EXAMPLES
   // pulls all the external data source metadata from the org and converts/merges it into your project's default pkgDir
 ```
 
-_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/mdapi/pull.ts)_
+_See code: [src/commands/shane/mdapi/pull.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/mdapi/pull.ts)_
 
 ## `sfdx shane:mdapi:push [-d <directory>] [-k] [-r <directory>] [-w <integer>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1296,9 +1296,9 @@ EXAMPLE
   // convert to mdapi format and push to the given org
 ```
 
-_See code: [src/commands/shane/mdapi/push.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/mdapi/push.ts)_
+_See code: [src/commands/shane/mdapi/push.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/mdapi/push.ts)_
 
-## `sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>] [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+## `sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>] [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [--highvolume] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 create an object in local source. Only **c (limited support), **b (big objects) and events \_\_e are currently supported
 
@@ -1306,8 +1306,8 @@ create an object in local source. Only **c (limited support), **b (big objects) 
 USAGE
   $ sfdx shane:object:create [-t <string>] [-l <string>] [-a <string>] [-p <string>] [--description <string>]
   [--enterprise] [--sharingmodel <string>] [--activities] [--search] [--reports] [--history] [--feeds] [--nametype
-  <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [-h] [-i] [-d <directory>] [--json] [--loglevel
-  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+  <string>] [--namefieldlabel <string>] [--autonumberformat <string>] [--highvolume] [-i] [-d <directory>] [--json]
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
   -a, --api=api                                                                     api name.  Ends with one of the
@@ -1318,9 +1318,6 @@ OPTIONS
                                                                                     doesn't exist already) and
                                                                                     file...defaults to
                                                                                     force-app/main/default
-
-  -h, --highvolume                                                                  high volume, valid only for platform
-                                                                                    events (__e)
 
   -i, --interactive                                                                 fully interactive--ask me every
                                                                                     possible question.
@@ -1346,6 +1343,9 @@ OPTIONS
 
   --feeds                                                                           the enableFeeds flag on an object
                                                                                     (invalid for __b, __e)
+
+  --highvolume                                                                      high volume, valid only for platform
+                                                                                    events (__e)
 
   --history                                                                         the enableHistory flag on an object
                                                                                     (invalid for __b, __e)
@@ -1382,7 +1382,7 @@ EXAMPLES
   // create a platform event
 ```
 
-_See code: [src/commands/shane/object/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/object/create.ts)_
+_See code: [src/commands/shane/object/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/object/create.ts)_
 
 ## `sfdx shane:object:fat -o <string> [-m <integer>] [-y <integer>] [--description <string>] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1430,7 +1430,7 @@ EXAMPLES
   // get some object you don't have locally, create the policy, and push that back up to where it came from
 ```
 
-_See code: [src/commands/shane/object/fat.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/object/fat.ts)_
+_See code: [src/commands/shane/object/fat.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/object/fat.ts)_
 
 ## `sfdx shane:object:field [-o <string>] [-n <string>] [-a <string>] [-t <string>] [--description <string>] [--default <string>] [-r] [-u] [--externalid] [--trackhistory] [--helptext <string>] [-l <integer>] [-s <integer>] [--precision <integer>] [--lookupobject <string>] [--relname <string>] [--indexposition <integer>] [--indexappend] [--indexdirection <string>] [--noindex] [-i] [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1536,7 +1536,7 @@ EXAMPLES
   // create new text field called My Field (My_Field__c) on Platform Event EventTest__e
 ```
 
-_See code: [src/commands/shane/object/field.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/object/field.ts)_
+_See code: [src/commands/shane/object/field.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/object/field.ts)_
 
 ## `sfdx shane:object:fields:describe -o <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1566,7 +1566,7 @@ EXAMPLE
   // list the fields (with type/label) on account
 ```
 
-_See code: [src/commands/shane/object/fields/describe.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/object/fields/describe.ts)_
+_See code: [src/commands/shane/object/fields/describe.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/object/fields/describe.ts)_
 
 ## `sfdx shane:object:perms:align [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1592,7 +1592,7 @@ EXAMPLE
   source
 ```
 
-_See code: [src/commands/shane/object/perms/align.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/object/perms/align.ts)_
+_See code: [src/commands/shane/object/perms/align.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/object/perms/align.ts)_
 
 ## `sfdx shane:object:powerofone -o <string> [-l <string>] [-a <string>] [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1635,7 +1635,7 @@ EXAMPLE
   default folder
 ```
 
-_See code: [src/commands/shane/object/powerofone.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/object/powerofone.ts)_
+_See code: [src/commands/shane/object/powerofone.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/object/powerofone.ts)_
 
 ## `sfdx shane:object:recordtype -o <string> -l <string> [-n <string>] [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1676,7 +1676,7 @@ EXAMPLE
   description in the default folder
 ```
 
-_See code: [src/commands/shane/object/recordtype.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/object/recordtype.ts)_
+_See code: [src/commands/shane/object/recordtype.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/object/recordtype.ts)_
 
 ## `sfdx shane:object:tab -o <string> -i <integer> [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1710,7 +1710,7 @@ EXAMPLE
   // create a tab for the object using icon #86 from https://lightningdesignsystem.com/icons/#custom
 ```
 
-_See code: [src/commands/shane/object/tab.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/object/tab.ts)_
+_See code: [src/commands/shane/object/tab.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/object/tab.ts)_
 
 ## `sfdx shane:object:unperm -o <string> [-d <directory>] [-s <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1743,7 +1743,7 @@ EXAMPLE
   assignments (profile only) for the named object
 ```
 
-_See code: [src/commands/shane/object/unperm.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/object/unperm.ts)_
+_See code: [src/commands/shane/object/unperm.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/object/unperm.ts)_
 
 ## `sfdx shane:org:componentlibrary [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1774,7 +1774,7 @@ EXAMPLES
   // opens library for specified org
 ```
 
-_See code: [src/commands/shane/org/componentlibrary.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/org/componentlibrary.ts)_
+_See code: [src/commands/shane/org/componentlibrary.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/org/componentlibrary.ts)_
 
 ## `sfdx shane:org:create --userprefix <string> -o <string> [-i <string>] [-f <filepath>] [-a <string>] [-d <integer>] [--wait <integer>] [-c] [-n] [-s] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1839,7 +1839,7 @@ EXAMPLES
   // above, but with an alias, a longer duration, and not the default hub, and not the default config file
 ```
 
-_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/org/create.ts)_
+_See code: [src/commands/shane/org/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/org/create.ts)_
 
 ## `sfdx shane:org:delete [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1870,7 +1870,7 @@ EXAMPLE
   // deletes the current default scratch org
 ```
 
-_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/org/delete.ts)_
+_See code: [src/commands/shane/org/delete.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/org/delete.ts)_
 
 ## `sfdx shane:org:domain:verify [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1897,7 +1897,7 @@ EXAMPLE
   sfdx shane:org:domain:verify
 ```
 
-_See code: [src/commands/shane/org/domain/verify.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/org/domain/verify.ts)_
+_See code: [src/commands/shane/org/domain/verify.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/org/domain/verify.ts)_
 
 ## `sfdx shane:org:metadatacoverage [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1928,7 +1928,7 @@ EXAMPLES
   // opens mdcoverage for specified org
 ```
 
-_See code: [src/commands/shane/org/metadatacoverage.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/org/metadatacoverage.ts)_
+_See code: [src/commands/shane/org/metadatacoverage.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/org/metadatacoverage.ts)_
 
 ## `sfdx shane:org:reauth [-r] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1965,7 +1965,7 @@ EXAMPLES
        // will try each minute, up to 60 minutes, until an org with a valid mydomain is ready
 ```
 
-_See code: [src/commands/shane/org/reauth.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/org/reauth.ts)_
+_See code: [src/commands/shane/org/reauth.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/org/reauth.ts)_
 
 ## `sfdx shane:org:refreshtoken [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -1993,7 +1993,7 @@ EXAMPLE
   // prints the refresh token for some org that you've already connected to
 ```
 
-_See code: [src/commands/shane/org/refreshtoken.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/org/refreshtoken.ts)_
+_See code: [src/commands/shane/org/refreshtoken.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/org/refreshtoken.ts)_
 
 ## `sfdx shane:package2:version:bump [-M | -m | -p] [-c] [-r] [-t <string>] [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2054,7 +2054,7 @@ EXAMPLES
   // bump the minor version up by one and create a new package2version, then set that as released
 ```
 
-_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/package2/version/bump.ts)_
+_See code: [src/commands/shane/package2/version/bump.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/package2/version/bump.ts)_
 
 ## `sfdx shane:permset:check -o <string> [-f <string>] [--users | --permsets | --profiles] [--fieldlevel <string>] [--objectlevel <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2108,7 +2108,7 @@ EXAMPLES
   it
 ```
 
-_See code: [src/commands/shane/permset/check.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/permset/check.ts)_
+_See code: [src/commands/shane/permset/check.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/permset/check.ts)_
 
 ## `sfdx shane:permset:create -n <string> [-f <string> -o <string>] [-r <string> undefined] [-a <string>] [-d <directory>] [-t] [-c] [-u <string>] [--apiversion <string>] [--verbose] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2191,7 +2191,7 @@ EXAMPLES
   are permissionable
 ```
 
-_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/permset/create.ts)_
+_See code: [src/commands/shane/permset/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/permset/create.ts)_
 
 ## `sfdx shane:profile:convert -n <string> -p <string> [-d <directory>] [-e | -c] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2240,7 +2240,7 @@ EXAMPLES
   permset removed (-c)
 ```
 
-_See code: [src/commands/shane/profile/convert.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/profile/convert.ts)_
+_See code: [src/commands/shane/profile/convert.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/profile/convert.ts)_
 
 ## `sfdx shane:profile:whitelist -n <string> [-d <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2268,7 +2268,7 @@ EXAMPLE
   // add loginIpRanges of 0.0.0.0 to 255.255.255.255 to an existing profile, or create one if it doesn't exist
 ```
 
-_See code: [src/commands/shane/profile/whitelist.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/profile/whitelist.ts)_
+_See code: [src/commands/shane/profile/whitelist.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/profile/whitelist.ts)_
 
 ## `sfdx shane:project:create -n <string> -g <string> [-v <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2302,7 +2302,7 @@ EXAMPLE
   // create a project in the folder with all the default structure
 ```
 
-_See code: [src/commands/shane/project/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/project/create.ts)_
+_See code: [src/commands/shane/project/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/project/create.ts)_
 
 ## `sfdx shane:remotesite:create -u <url> -n <string> [-d <string>] [-t <directory>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2344,7 +2344,7 @@ EXAMPLES
   // create a remote site setting in myOtherDirectory/main/default with a description
 ```
 
-_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/remotesite/create.ts)_
+_See code: [src/commands/shane/remotesite/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/remotesite/create.ts)_
 
 ## `sfdx shane:static:create -n <string> -y <string> [-d <string>] [-t <directory>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2388,7 +2388,7 @@ EXAMPLES
   // create an empty folder (zips when pushed), the meta.xml, with a description in a non-default directory.
 ```
 
-_See code: [src/commands/shane/static/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/static/create.ts)_
+_See code: [src/commands/shane/static/create.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/static/create.ts)_
 
 ## `sfdx shane:theme:activate -n <string> [-b] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2418,7 +2418,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/shane/theme/activate.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/theme/activate.ts)_
+_See code: [src/commands/shane/theme/activate.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/theme/activate.ts)_
 
 ## `sfdx shane:tsp:username:update [-n <email>] [-d <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2461,7 +2461,7 @@ EXAMPLES
   target org's username
 ```
 
-_See code: [src/commands/shane/tsp/username/update.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/tsp/username/update.ts)_
+_See code: [src/commands/shane/tsp/username/update.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/tsp/username/update.ts)_
 
 ## `sfdx shane:uiapi:objectinfo [-o <string>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2496,7 +2496,7 @@ EXAMPLES
        // returns ui-api objectinfo for Account and saves it to a local file
 ```
 
-_See code: [src/commands/shane/uiapi/objectinfo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/uiapi/objectinfo.ts)_
+_See code: [src/commands/shane/uiapi/objectinfo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/uiapi/objectinfo.ts)_
 
 ## `sfdx shane:uiapi:record -r <string> -f <array> [--optionalfields <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2540,7 +2540,7 @@ EXAMPLE
   // default ui-api response for a getrecord.
 ```
 
-_See code: [src/commands/shane/uiapi/record.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/uiapi/record.ts)_
+_See code: [src/commands/shane/uiapi/record.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/uiapi/record.ts)_
 
 ## `sfdx shane:uiapi:recordui [-r <string> | --recordids <array>] [-l <array>] [-m <array>] [--outputfile <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2582,7 +2582,7 @@ EXAMPLE
   // default ui-api response for a single recordId
 ```
 
-_See code: [src/commands/shane/uiapi/recordui.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/uiapi/recordui.ts)_
+_See code: [src/commands/shane/uiapi/recordui.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/uiapi/recordui.ts)_
 
 ## `sfdx shane:user:allPhotos [-r <url>] [-f <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2618,7 +2618,7 @@ EXAMPLE
   sfdx shane:user:allphotos -u someAlias
 ```
 
-_See code: [src/commands/shane/user/allPhotos.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/user/allPhotos.ts)_
+_See code: [src/commands/shane/user/allPhotos.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/user/allPhotos.ts)_
 
 ## `sfdx shane:user:lightning:debug [-g <string>] [-l <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2655,7 +2655,7 @@ EXAMPLES
        // puts the named user in lightning debug mode
 ```
 
-_See code: [src/commands/shane/user/lightning/debug.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/user/lightning/debug.ts)_
+_See code: [src/commands/shane/user/lightning/debug.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/user/lightning/debug.ts)_
 
 ## `sfdx shane:user:loginurl [-p <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2688,7 +2688,7 @@ EXAMPLES
        // same, but sets the start url to ObjectManager
 ```
 
-_See code: [src/commands/shane/user/loginurl.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/user/loginurl.ts)_
+_See code: [src/commands/shane/user/loginurl.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/user/loginurl.ts)_
 
 ## `sfdx shane:user:password:set -g <string> -l <string> -p <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2725,7 +2725,7 @@ EXAMPLE
   // sets the password for User User to sfdx1234
 ```
 
-_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/user/password/set.ts)_
+_See code: [src/commands/shane/user/password/set.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/user/password/set.ts)_
 
 ## `sfdx shane:user:permset:assign -l <string> -n <string> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2761,7 +2761,7 @@ EXAMPLE
   sfdx shane:user:permset:assign -n thePermSet -g User -l User
 ```
 
-_See code: [src/commands/shane/user/permset/assign.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/user/permset/assign.ts)_
+_See code: [src/commands/shane/user/permset/assign.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/user/permset/assign.ts)_
 
 ## `sfdx shane:user:photo -l <string> [-g <string>] [-f <filepath> | -b <filepath>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2806,7 +2806,7 @@ EXAMPLES
   // sets the chatter banner photo AND user photo at the same time
 ```
 
-_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/user/photo.ts)_
+_See code: [src/commands/shane/user/photo.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/user/photo.ts)_
 
 ## `sfdx shane:user:psl -l <string> -n <filepath> [-g <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -2843,7 +2843,7 @@ EXAMPLE
   // assign the PSL named 'somePSL' for the user named User User
 ```
 
-_See code: [src/commands/shane/user/psl.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v3.24.0/src/commands/shane/user/psl.ts)_
+_See code: [src/commands/shane/user/psl.ts](https://github.com/mshanemc/shane-sfdx-plugins/blob/v4.0.0/src/commands/shane/user/psl.ts)_
 
 <!-- commandsstop -->
 
