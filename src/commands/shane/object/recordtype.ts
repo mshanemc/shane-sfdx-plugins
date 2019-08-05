@@ -35,12 +35,12 @@ export default class PowerOfOne extends SfdxCommand {
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        if (fs.existsSync(`${this.flags.target}/objects/${this.flags.object}`)) {
+        if (!fs.existsSync(`${this.flags.target}/objects/${this.flags.object}`)) {
             throw new Error(`object does not exist at ${this.flags.target}/objects/${this.flags.object}`);
         }
 
         if (!this.flags.name) {
-            this.flags.name = this.flags.label;
+            this.flags.name = this.flags.label.replace(/\s/g, '');
         }
 
         if (this.flags.name.includes(' ')) {
@@ -58,7 +58,7 @@ export default class PowerOfOne extends SfdxCommand {
             '@': {
                 xmlns: 'http://soap.sforce.com/2006/04/metadata'
             },
-            fullName: this.flags.api,
+            fullName: this.flags.name,
             active: true,
             label: this.flags.label,
             description: this.flags.description
