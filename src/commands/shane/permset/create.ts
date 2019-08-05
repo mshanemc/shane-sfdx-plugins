@@ -10,9 +10,11 @@ import { setupArray } from '../../../shared/setupArray';
 import { getParsed } from '../../../shared/xml2jsAsync';
 
 import * as options from '../../../shared/js2xmlStandardOptions';
+import { ToolingAPIDescribeQueryResult } from '../../../shared/typeDefs';
 
 let conn: Connection;
-let objectDescribe: Map<string, Map<string, Field>>;
+// tslint:disable-next-line: no-any
+let objectDescribe: Map<string, Map<string, any>>;
 let resolvedDescribePromises = 0;
 
 export default class PermSetCreate extends SfdxCommand {
@@ -51,6 +53,15 @@ export default class PermSetCreate extends SfdxCommand {
             description: 'API name of an field to add perms for.  Required --object If blank, then you mean all the fields',
             dependsOn: ['object']
         }),
+        recordtype: flags.string({
+            char: 'r',
+            description: 'API name of a record type to add perms for.  Required --object If blank, then you mean all the record types',
+            dependsOn: ['object']
+        }),
+        application: flags.string({
+            char: 'a',
+            description: 'API name of an application to add perms for.  If blank, then you mean all the applications'
+        }),
         directory: flags.directory({
             char: 'd',
             default: 'force-app/main/default',
@@ -75,18 +86,32 @@ export default class PermSetCreate extends SfdxCommand {
             throw new SfdxError(`username is required when using --checkpermissionable`);
         }
 
-        objectDescribe = new Map<string, Map<string, Field>>();
+        // tslint:disable-next-line: no-any
+        objectDescribe = new Map<string, Map<string, any>>();
 
         // validations
         if (this.flags.field && !this.flags.object) {
             this.ux.error(chalk.red('If you say a field, you have to say the object'));
         }
+        if (this.flags.recordtype && !this.flags.object) {
+            this.ux.error(chalk.red('If you say a record type, you have to say the object'));
+        }
 
         const targetFilename = `${this.flags.directory}/permissionsets/${this.flags.name}.permissionset-meta.xml`;
         const targetLocationObjects = `${this.flags.directory}/objects`;
 
+        // Validating passed field exists
         if (this.flags.field && !fs.existsSync(`${targetLocationObjects}/${this.flags.object}/fields/${this.flags.field}.field-meta.xml`)) {
             this.ux.error(`Field does not exist: ${this.flags.fields}`);
+            return;
+        }
+
+        // Validating passed record type exists
+        if (
+            this.flags.recordtype &&
+            !fs.existsSync(`${targetLocationObjects}/${this.flags.object}/recordTypes/${this.flags.recordtype}.recordType-meta.xml`)
+        ) {
+            this.ux.error(`Record type does not exist: ${this.flags.recordtype}`);
             return;
         }
 
@@ -98,6 +123,20 @@ export default class PermSetCreate extends SfdxCommand {
             label: this.flags.name
         });
 
+        // Adding applications access
+        if (this.flags.application) {
+            // Flag was passed, check that application exists
+            if (!fs.existsSync(`${this.flags.directory}/applications/${this.flags.application}.app-meta.xml`)) {
+                this.ux.error(`Application does not exist: ${this.flags.application}`);
+                return;
+            } else {
+                existing = await this.addApplicationPerms(existing, this.flags.application);
+            }
+        } else {
+            existing = await this.addAllApplicationPermissions(existing);
+        }
+
+        // let objectList: Array<string> = new Array<string>();
         const objectList: Set<string> = new Set<string>();
 
         if (!this.flags.object) {
@@ -107,7 +146,7 @@ export default class PermSetCreate extends SfdxCommand {
             objectList.add(this.flags.object);
         }
 
-        this.ux.log(`Object list is ${objectList}`);
+        this.ux.log(`Object list is ${Array.from(objectList)}`);
 
         if (this.flags.checkpermissionable) {
             conn = this.org.getConnection();
@@ -166,6 +205,13 @@ export default class PermSetCreate extends SfdxCommand {
                 if (this.flags.tab && fs.existsSync(`${this.flags.directory}/tabs/${obj}.tab-meta.xml`)) {
                     // we're doing tabs, and there is one, so add it to the permset
                     existing = this.addTab(existing, obj);
+                }
+
+                if (this.flags.recordtype) {
+                    existing = await this.addRecordTypePerms(existing, this.flags.object, this.flags.recordtype);
+                } else {
+                    // all the fields
+                    existing = await this.addAllRecordTypePermissions(existing, obj);
                 }
             } else {
                 this.ux.error(chalk.red(`Couldn\'t find that object in ${targetLocationObjects}/${this.flags.object}`));
@@ -249,8 +295,8 @@ export default class PermSetCreate extends SfdxCommand {
 
                     // Check we can add permission, for instance mandatory fields are readable and editable anyway
                     // Adding access rights to them will throw an error
-                    if (fieldDescribe.permissionable) {
-                        const editable = fieldDescribe.createable && fieldDescribe.updateable;
+                    if (fieldDescribe.IsPermissionable) {
+                        const editable = fieldDescribe.IsCreatable && fieldDescribe.IsUpdatable;
                         existing.fieldPermissions.push({
                             readable: 'true',
                             editable: `${editable}`,
@@ -323,6 +369,94 @@ export default class PermSetCreate extends SfdxCommand {
         return existing;
     }
 
+    public async addRecordTypePerms(existing, objectName: string, recordTypeName: string) {
+        existing = setupArray(existing, 'recordTypeVisibilities');
+
+        if (
+            existing.recordTypeVisibilities.find(e => {
+                return e.recordType === `${objectName}.${recordTypeName}`;
+            })
+        ) {
+            this.ux.log(`Record type Permission already exists: ${objectName}.${recordTypeName}.  Nothing to add.`);
+            return existing;
+        } else {
+            existing = setupArray(existing, 'recordTypeVisibilities');
+
+            existing.recordTypeVisibilities.push({
+                recordType: `${objectName}.${recordTypeName}`,
+                visible: true
+            });
+
+            this.ux.log(`added record type permission for ${objectName}`);
+
+            return existing;
+        }
+    }
+
+    public async addAllRecordTypePermissions(existing, objectName: string) {
+        // get all the record types for that object
+        this.ux.log(`------ going to add all record types for ${objectName}`);
+        const recordTypesLocation = `${this.flags.directory}/objects/${objectName}/recordTypes`;
+
+        if (!fs.existsSync(recordTypesLocation)) {
+            this.ux.warn(chalk.yellow(`there is no recordTypes folder at ${recordTypesLocation}`));
+            return existing;
+        }
+
+        const recordTypes = fs.readdirSync(recordTypesLocation);
+
+        // iterate through the record types
+        for (const recordTypeFileName of recordTypes) {
+            existing = await this.addRecordTypePerms(existing, objectName, recordTypeFileName.replace('.recordType-meta.xml', ''));
+        }
+
+        return existing;
+    }
+
+    public async addApplicationPerms(existing, applicationName: string) {
+        existing = setupArray(existing, 'applicationVisibilities');
+
+        if (
+            existing.applicationVisibilities.find(e => {
+                return e.application === `${applicationName}`;
+            })
+        ) {
+            this.ux.log(`Application Permission already exists: ${applicationName}.  Nothing to add.`);
+            return existing;
+        } else {
+            existing = setupArray(existing, 'applicationVisibilities');
+
+            existing.applicationVisibilities.push({
+                application: `${applicationName}`,
+                visible: true
+            });
+
+            this.ux.log(`added application permission for ${applicationName}`);
+
+            return existing;
+        }
+    }
+
+    public async addAllApplicationPermissions(existing) {
+        // get all the applications
+        this.ux.log(`------ going to add all applications`);
+        const applicationsLocation = `${this.flags.directory}/applications`;
+
+        if (!fs.existsSync(applicationsLocation)) {
+            this.ux.warn(chalk.yellow(`there is no applications folder at ${applicationsLocation}`));
+            return existing;
+        }
+
+        const applications = fs.readdirSync(applicationsLocation);
+
+        // iterate through the applications
+        for (const application of applications) {
+            existing = await this.addApplicationPerms(existing, application.replace('.app-meta.xml', ''));
+        }
+
+        return existing;
+    }
+
     public addTab(existing, objectName: string) {
         // only __c and __x
 
@@ -349,9 +483,10 @@ export default class PermSetCreate extends SfdxCommand {
 
     public async getFieldsPermissions(objectName: string) {
         const fieldsPermissions: Map<string, Field> = new Map<string, Field>();
-        const describeResult = await conn.sobject(objectName).describe();
+        const describeQuery = `Select Name,IsPermissionable,IsCreatable,IsUpdatable from EntityParticle where EntityDefinition.QualifiedApiName = '${objectName}'`;
+        const describeResult: ToolingAPIDescribeQueryResult = await conn.tooling.query(describeQuery);
 
-        for (const field of describeResult.fields) {
+        for (const field of describeResult.records) {
             fieldsPermissions.set(field.name, field);
         }
 

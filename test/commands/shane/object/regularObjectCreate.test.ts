@@ -223,7 +223,45 @@ describe('shane:object:create (regular object flavor)', () => {
         await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
     });
 
+    it('can create a recordType on the object', async () => {
+        const rtLabel = 'MyRecordType';
+
+        await exec(`sfdx shane:object:recordtype --object ${api} --label ${rtLabel}`, {
+            cwd: testProjectName
+        });
+
+        const createdFile = `${testProjectName}/force-app/main/default/objects/${api}/recordTypes/${rtLabel}.recordType-meta.xml`;
+        expect(fs.existsSync(createdFile)).toBe(true);
+
+        const parsed = await testutils.getParsedXML(createdFile);
+
+        expect(parsed.RecordType.active).toBe('true');
+        expect(parsed.RecordType.label).toBe(rtLabel);
+        expect(parsed.RecordType.fullName).toBe(rtLabel);
+    });
+
+    it('can create a recordType on the object with special Label', async () => {
+        const rtLabel = 'RT With Spaced Label';
+        const rtName = 'RTWithSpacedLabel';
+
+        await exec(`sfdx shane:object:recordtype --object ${api} --label "${rtLabel}"`, {
+            cwd: testProjectName
+        });
+
+        const createdFile = `${testProjectName}/force-app/main/default/objects/${api}/recordTypes/${rtName}.recordType-meta.xml`;
+        expect(fs.existsSync(createdFile)).toBe(true);
+
+        const parsed = await testutils.getParsedXML(createdFile);
+
+        expect(parsed.RecordType.active).toBe('true');
+        expect(parsed.RecordType.label).toBe(rtLabel);
+        expect(parsed.RecordType.fullName).toBe(rtName);
+    });
+
     it('can build a permset', async () => {
+        const rtLabel = 'MyRecordType';
+        const rt2Name = 'RTWithSpacedLabel';
+
         const permSetName = 'MyEventPerm';
         await exec(`sfdx shane:permset:create -n ${permSetName} -o ${api}`, { cwd: testProjectName });
 
@@ -259,6 +297,19 @@ describe('shane:object:create (regular object flavor)', () => {
                     readable: 'true',
                     editable: 'true',
                     field: `${api}.Required_Text_Field__c`
+                })
+            ])
+        );
+
+        expect(parsed.PermissionSet.recordTypeVisibilities).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    recordType: `${api}.${rtLabel}`,
+                    visible: 'true'
+                }),
+                expect.objectContaining({
+                    recordType: `${api}.${rt2Name}`,
+                    visible: 'true'
                 })
             ])
         );

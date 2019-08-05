@@ -1,3 +1,5 @@
+import { Field } from 'jsforce/describe-result';
+
 interface Record {
     attributes: object;
     Id: string;
@@ -104,6 +106,13 @@ interface CommunitiesRestResult {
         }
     ];
 }
+
+interface ToolingAPIDescribeQueryResult {
+    totalSize: number;
+    done: boolean;
+    records: Field[];
+}
+
 export {
     Record,
     QueryResult,
@@ -113,5 +122,6 @@ export {
     WaveDatasetVersion,
     CDCEvent,
     WaveDataFlowListResponse,
-    CommunitiesRestResult
+    CommunitiesRestResult,
+    ToolingAPIDescribeQueryResult
 };
