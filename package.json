@@ -94,7 +94,7 @@
                 "description": "pull unpackaged or packaged source from an org, or push dx-formatted source to an org.  Also, list or describe the objects via mdapi"
             },
             "shane:object": {
-                "description": "create objects locally or add fields or retention policies to them.  Also, power of one, perm-align on all objects, and remove all perms on any object"
+                "description": "create objects locally or add fields or retention policies to them.  Also, power of one, perm-align on all objects, add a recordType, OR remove all perms on any object"
             },
             "shane:org": {
                 "description": "create an org with a friendly username or delete an org without a username, or open its componentLibrary or metadataCoverage page, or reauth to it, or get a refresh token on an auth'd org"
@@ -127,6 +127,8 @@
         "prepublishOnly": "yarn run build && oclif-dev manifest",
         "preversion": "yarn run clean",
         "test": "yarn run prepare && jest --runInBand",
+        "test:clean": "rm -rf testProject*",
+        "test:local": "LOCALONLY='true' yarn run prepare && jest --runInBand",
         "test:parallel": "yarn run prepare && jest",
         "test:watch": "yarn run prepare && jest --watch --runInBand",
         "version": "oclif-dev readme && git add README.md",
