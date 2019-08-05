@@ -70,7 +70,7 @@ export default class ObjectCreate extends SfdxCommand {
         namefieldlabel: flags.string({ description: 'the label for the name field', default: 'Name' }),
         autonumberformat: flags.string({ description: 'the display format for the autonumbering' }),
 
-        highvolume: flags.boolean({ char: 'h', description: 'high volume, valid only for platform events (__e)' }),
+        highvolume: flags.boolean({ description: 'high volume, valid only for platform events (__e)' }),
 
         // general command params
         interactive: flags.boolean({ char: 'i', description: 'fully interactive--ask me every possible question.' }),
