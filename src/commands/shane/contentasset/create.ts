@@ -17,7 +17,7 @@ export default class LabelAdd extends SfdxCommand {
     protected static flagsConfig = {
         file: flags.filepath({ required: true, char: 'f', description: 'the file you want to turn into an asset' }),
         name: flags.string({ required: true, char: 'n', description: 'api name for the contentAsset' }),
-        language: flags.string({ description: 'language code like en_US', default: 'en_US' }),
+        language: flags.string({ char: 'l', description: 'language code like en_US', default: 'en_US' }),
         target: flags.directory({
             char: 't',
             default: 'force-app/main/default',
