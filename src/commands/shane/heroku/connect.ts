@@ -87,7 +87,7 @@ export default class HerokuConnect extends SfdxCommand {
             this.ux.logJson(discoveryResult);
         }
 
-        const matchingApp = discoveryResult.connections.find(app => (app.app_name = this.flags.app));
+        const matchingApp = discoveryResult.connections.find(app => app.app_name === this.flags.app && app.resource_name);
 
         if (!this.flags.json && this.flags.verbose) {
             this.ux.log('this is the matching app');
