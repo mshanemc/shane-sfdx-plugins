@@ -1,8 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as puppeteer from 'puppeteer';
-import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../../src/shared/execProm';
+import { exec2JSON } from '../../../../src/shared/execProm';
 import { QueryResult } from './../../../shared/typeDefs';
 
 export default class ThemeActivate extends SfdxCommand {
@@ -39,8 +38,8 @@ export default class ThemeActivate extends SfdxCommand {
         const context = browser.defaultBrowserContext();
 
         // get the force-org-open url for your scratch org
-        const openResult = await exec('sfdx force:org:open -p /lightning/setup/ThemingAndBranding/home -r --json');
-        const url = JSON.parse(stripcolor(openResult.stdout)).result.url;
+        const openResponse = await exec2JSON('sfdx force:org:open -p /lightning/setup/ThemingAndBranding/home -r --json');
+        const url = openResponse.result.url;
 
         await context.overridePermissions(url, ['notifications']);
         const page = await browser.newPage();
