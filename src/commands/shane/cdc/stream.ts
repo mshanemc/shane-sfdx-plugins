@@ -16,8 +16,12 @@ export default class CDCStream extends SfdxCommand {
     ];
 
     protected static flagsConfig = {
-        object: flags.string({ char: 'o', description: 'subscribe to change events for only a single object (api name, including __c)' }),
-        dir: flags.directory({ char: 'd', description: 'stream the events to a folder instead of the console' })
+        object: flags.string({
+            char: 'o',
+            description: 'subscribe to change events for only a single object (api name, including __c)'
+        }),
+        dir: flags.directory({ char: 'd', description: 'stream the events to a folder instead of the console' }),
+        replay: flags.integer({ char: 'r', description: 'replay Id to begin from', default: -1 })
     };
 
     protected static requiresUsername = true;
@@ -41,6 +45,7 @@ export default class CDCStream extends SfdxCommand {
         options.apiVersion = await this.org.retrieveMaxApiVersion();
         // options.subscribeTimeout = new Duration(60 * 100);
         const client = await StreamingClient.create(options);
+        client.replay(this.flags.replay);
 
         await client.handshake();
         await client.subscribe(async () => {
