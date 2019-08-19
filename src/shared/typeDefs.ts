@@ -83,8 +83,7 @@ interface WaveDataSetListResponse {
     datasets: WaveDataset[];
 }
 
-interface CDCEvent {
-    schema: string;
+interface CDCEvent extends PlatformEvent {
     payload: {
         ChangeEventHeader: {
             entityName: string;
@@ -92,9 +91,15 @@ interface CDCEvent {
             recordIds: string[];
         };
     };
+}
+
+interface PlatformEvent {
+    schema: string;
+    payload: {};
     event: {
         replayId: number;
     };
+    channel: string;
 }
 
 interface CommunitiesRestResult {
@@ -123,5 +128,6 @@ export {
     CDCEvent,
     WaveDataFlowListResponse,
     CommunitiesRestResult,
-    ToolingAPIDescribeQueryResult
+    ToolingAPIDescribeQueryResult,
+    PlatformEvent
 };
