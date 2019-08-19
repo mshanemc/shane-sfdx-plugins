@@ -1,8 +1,7 @@
 /* tslint:disable:no-unused-expression */
 import fs = require('fs-extra');
-import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../../src/shared/execProm';
+import { exec, exec2JSON } from '../../../../src/shared/execProm';
 import testutils = require('../../../helpers/testutils');
 
 const testProjectName = 'mshanemc-custexp-1234567890';
@@ -38,30 +37,22 @@ describe('shane:heroku:connect', () => {
 
         it('sets up a heroku app with deploy', async () => {
             // sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t ci-tests
-            const results = await exec(
+            const results = await exec2JSON(
                 'sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t ci-tests --json',
                 { cwd: testProjectName, shell: '/bin/bash' }
             );
 
-            expect(results).toBeTruthy();
-            expect(results.stdout).toBeTruthy();
-            const stdout = JSON.parse(stripcolor(results.stdout));
-            expect(stdout.status).toBe(0);
+            expect(results.status).toBe(0);
         });
 
         it('configures connect with json response', async () => {
             // sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f assets/herokuConnect/electron-web.json
-            const results = await exec('sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f mapping.json -e custom --json', {
+            const results = await exec2JSON('sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f mapping.json -e custom --json', {
                 cwd: testProjectName,
                 shell: '/bin/bash'
             });
 
-            // console.log(results);
-            expect(results).toBeTruthy();
-            expect(results.stdout).toBeTruthy();
-            // console.log(results.stdout);
-            const stdout = JSON.parse(stripcolor(results.stdout));
-            expect(stdout.status).toBe(0);
+            expect(results.status).toBe(0);
         });
 
         afterAll(async () => {

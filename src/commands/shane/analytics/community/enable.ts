@@ -1,8 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as puppeteer from 'puppeteer';
-import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../../shared/execProm';
+import { exec2JSON } from '../../../../shared/execProm';
 
 export default class CommunityEnable extends SfdxCommand {
     public static description = 'Activate a community using a headless browser';
@@ -22,10 +21,10 @@ export default class CommunityEnable extends SfdxCommand {
         const context = browser.defaultBrowserContext();
 
         // // get the force-org-open url for your scratch org
-        const openResult = await exec('sfdx force:org:open -p /lightning/setup/InsightsSetupSettings/home -r --json');
+        const openResult = await exec2JSON('sfdx force:org:open -p /lightning/setup/InsightsSetupSettings/home -r --json');
         const iframeTitle = 'Get Started ~ Salesforce - Developer Edition';
 
-        const url = JSON.parse(stripcolor(openResult.stdout)).result.url;
+        const url = openResult.result.url;
 
         await context.overridePermissions(url, ['notifications']);
         const page = await browser.newPage();

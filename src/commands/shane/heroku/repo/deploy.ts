@@ -2,9 +2,8 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { sleep } from '@salesforce/kit';
 import chalk from 'chalk';
 import request = require('request-promise-native');
-import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../../shared/execProm';
+import { exec2JSON } from '../../../../shared/execProm';
 
 const pollingInterval = 2000; // ms polling when checking for app deployment
 const herokuAPIendpoint = 'https://api.heroku.com/app-setups';
@@ -74,8 +73,7 @@ export default class HerokuRepoDeploy extends SfdxCommand {
         }
 
         if (this.flags.envpassword) {
-            const displayResult = await exec('sfdx force:org:display --json');
-            const displayResultJSON = JSON.parse(stripcolor(displayResult.stdout));
+            const displayResultJSON = await exec2JSON('sfdx force:org:display --json');
             // this.ux.logJson(displayResultJSON);
             body.overrides.env[this.flags.envpassword] = displayResultJSON.result.password;
         }

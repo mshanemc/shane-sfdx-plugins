@@ -4,9 +4,8 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import * as fs from 'fs-extra';
 import * as puppeteer from 'puppeteer';
 import request = require('request-promise-native');
-import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../shared/execProm';
+import { exec2JSON } from '../../../shared/execProm';
 
 // const herokuAPIendpoint = 'https://api.heroku.com';
 const HC_DiscoveryServiceEndpoint = 'https://hc-central.heroku.com';
@@ -56,9 +55,9 @@ export default class HerokuConnect extends SfdxCommand {
         }
         // you didn't set it so we're going to get it from orgDisplay
         if (!this.flags.password) {
-            const result = await exec(`sfdx force:org:display --json -u ${this.org.getUsername()}`);
-            this.flags.password = JSON.parse(stripcolor(result.stdout)).result.password;
-            this.flags.instance = JSON.parse(stripcolor(result.stdout)).result.instanceUrl.replace('https://', '');
+            const displayResponse = await exec2JSON(`sfdx force:org:display --json -u ${this.org.getUsername()}`);
+            this.flags.password = displayResponse.result.password;
+            this.flags.instance = displayResponse.result.instanceUrl.replace('https://', '');
         }
 
         if (!this.flags.password) {

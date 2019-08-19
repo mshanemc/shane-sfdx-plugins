@@ -2,9 +2,8 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import cli from 'cli-ux';
 import fs = require('fs-extra');
-import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../../shared/execProm';
+import { exec, exec2JSON } from '../../../../shared/execProm';
 
 const pkgVersionFileName = 'latestVersion.json';
 
@@ -85,28 +84,17 @@ export default class Bump extends SfdxCommand {
 
         this.ux.log(chalk.green(`Updated sfdx-project.json for ${this.flags.target} to ${project.packageDirectories[targetDirIndex].versionNumber}`));
 
-        interface CreateResultI {
-            stdout: string;
-            stderr: string;
-        }
-
-        // interface actualResultI {
-        //   Package2VersionId: string;
-        //   SubscriberPackageVersionId: string;
-        //   Status: string;
-        // }
-
         // do we need to generate the new version?
         if (this.flags.create || this.flags.release) {
             try {
                 cli.action.start("Creating package version (this'll take a while)");
                 // createResult = <CreateResultI>await exec(`sfdx force:package2:version:create -d ${this.flags.target} -w 20 -v ${this.hubOrg.getUsername()} --json`);
-                const createResult = <CreateResultI>(
-                    await exec(`sfdx force:package:version:create -x -d ${this.flags.target} -w 20 -v ${this.hubOrg.getUsername()} --json`)
+                const createResult = await exec2JSON(
+                    `sfdx force:package:version:create -x -d ${this.flags.target} -w 20 -v ${this.hubOrg.getUsername()} --json`
                 );
                 cli.action.stop();
                 // this.ux.logJson(JSON.parse(createResult.stdout));
-                const actualResult = JSON.parse(stripcolor(createResult.stdout)).result;
+                const actualResult = createResult.result;
                 this.ux.logJson(actualResult);
 
                 await fs.writeFile(`${this.project.getPath()}/${pkgVersionFileName}`, JSON.stringify(actualResult, null, 2));

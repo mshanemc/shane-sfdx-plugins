@@ -1,8 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as puppeteer from 'puppeteer';
-import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../shared/execProm';
+import { exec2JSON } from '../../../shared/execProm';
 
 export default class CommunityActivate extends SfdxCommand {
     public static description = 'Activate a community using a headless browser';
@@ -23,8 +22,8 @@ export default class CommunityActivate extends SfdxCommand {
 
         // // get the force-org-open url for your scratch org
         // const openResult = await exec(`sfdx force:org:open -p /${this.flags.name}/communitySetup/cwApp.app#/c/page/settings -r --json`);
-        const openResult = await exec('sfdx force:org:open -p /lightning/setup/SetupNetworks/home -r --json');
-        const url = JSON.parse(stripcolor(openResult.stdout)).result.url;
+        const openResponse = await exec2JSON('sfdx force:org:open -p /lightning/setup/SetupNetworks/home -r --json');
+        const url = openResponse.result.url;
         const iframeTitle = 'Communities ~ Salesforce - Developer Edition';
         const workspacesLink = `a[title*="Workspaces"][title*="${this.flags.name}"]`;
         // await context.overridePermissions(url, ['notifications']);

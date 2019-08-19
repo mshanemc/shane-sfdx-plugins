@@ -1,9 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import request = require('request-promise-native');
-import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../shared/execProm';
+import { exec2JSON } from '../../../shared/execProm';
 
 const usernameURL = 'https://unique-username-generator.herokuapp.com/unique';
 
@@ -117,17 +116,9 @@ export default class CreateOrg extends SfdxCommand {
         }
         this.ux.log(`executing ${command}`);
 
-        const response = await exec(command);
-        if (response.stdout) {
-            const success = JSON.parse(stripcolor(response.stdout));
-            if (success.status === 0) {
-                this.ux.log(chalk.green(`Org created with id ${success.result.orgId} and username ${success.result.username} `));
-            } else {
-                this.ux.log(chalk.red(response.stderr));
-            }
-            return success.result;
-        } else {
-            return JSON.parse(response.stdout);
-        }
+        const response = await exec2JSON(command);
+
+        this.ux.log(chalk.green(`Org created with id ${response.result.orgId} and username ${response.result.username} `));
+        return response.result;
     }
 }

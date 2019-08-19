@@ -1,8 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as assert from 'assert';
-import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../shared/execProm';
+import { exec2JSON } from '../../../shared/execProm';
 
 export default class LoginURL extends SfdxCommand {
     public static description = 'generate a long-lived shareable login url for the org';
@@ -31,15 +30,7 @@ export default class LoginURL extends SfdxCommand {
 
         const username = this.org.getUsername();
 
-        const result = await exec(`sfdx force:org:display --json -u ${username}`);
-
-        let resultObject;
-
-        if (JSON.parse(stripcolor(result.stdout))) {
-            resultObject = JSON.parse(stripcolor(result.stdout));
-        } else if (JSON.parse(stripcolor(result.stderr))) {
-            resultObject = JSON.parse(stripcolor(result.stderr));
-        }
+        const resultObject = await exec2JSON(`sfdx force:org:display --json -u ${username}`);
 
         // this.ux.logJson(resultObject.result);
         let url = `${auth.loginUrl}/login.jsp?un=${encodeURIComponent(auth.username)}&pw=${encodeURIComponent(resultObject.result.password)}`;

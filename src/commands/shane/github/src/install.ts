@@ -1,8 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
-import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../../shared/execProm';
+import { exec, exec2JSON } from '../../../../shared/execProm';
 
 export default class GithubPackageInstall extends SfdxCommand {
     public static description = 'installs a package from github from mdapi src';
@@ -47,7 +46,7 @@ export default class GithubPackageInstall extends SfdxCommand {
         }
 
         // install in the org via mdapi
-        const installResult = await exec(
+        const installResult = await exec2JSON(
             `sfdx force:mdapi:deploy -d ${this.flags.repo}/${this.flags.path} -u ${this.org.getUsername()} -w 20 --json`
         );
         // this.ux.logJson(JSON.parse(installResult.stdout));
@@ -56,6 +55,6 @@ export default class GithubPackageInstall extends SfdxCommand {
             await fs.remove(this.flags.repo);
         }
 
-        return JSON.parse(stripcolor(installResult.stdout));
+        return installResult;
     }
 }
