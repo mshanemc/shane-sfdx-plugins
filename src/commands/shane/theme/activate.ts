@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as puppeteer from 'puppeteer';
 
-import { exec2JSON } from '../../../../src/shared/execProm';
+import { exec2JSON } from './../../../../src/shared/execProm';
 import { QueryResult } from './../../../shared/typeDefs';
 
 export default class ThemeActivate extends SfdxCommand {
