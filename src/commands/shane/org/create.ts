@@ -117,6 +117,7 @@ export default class CreateOrg extends SfdxCommand {
         this.ux.log(`executing ${command}`);
 
         const response = await exec2JSON(command);
+        console.error(response);
 
         this.ux.log(chalk.green(`Org created with id ${response.result.orgId} and username ${response.result.username} `));
         return response.result;
