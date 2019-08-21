@@ -18,6 +18,10 @@ but you like README, you say? Good thing oclif auto-generates all this for me. :
 
 Way, way down [at the bottom](#How-to-Contribute).
 
+## More plugins
+
+check out [this repo](https://github.com/mshanemc/awesome-sfdx-plugins) for other people's plugins (and share via PR if you've created one)
+
 # Usage
 
 <!-- usage -->
