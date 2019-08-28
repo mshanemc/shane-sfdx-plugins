@@ -67,9 +67,7 @@ export default class GithubPackageInstall extends SfdxCommand {
         }
 
         if (!this.flags.keeplocally) {
-            this.ux.startSpinner(`cleaning up local source`);
             await fs.remove(this.flags.repo);
-            this.ux.stopSpinner();
         }
 
         return installResult;
