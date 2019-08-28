@@ -49,7 +49,10 @@ export default class GithubPackageInstall extends SfdxCommand {
         const installResult = await exec2JSON(
             `sfdx force:mdapi:deploy -d ${this.flags.repo}/${this.flags.path} -u ${this.org.getUsername()} -w 20 --json`
         );
-        // this.ux.logJson(JSON.parse(installResult.stdout));
+
+        if (!this.flags.json) {
+            this.ux.logJson(installResult);
+        }
 
         if (!this.flags.keeplocally) {
             await fs.remove(this.flags.repo);
