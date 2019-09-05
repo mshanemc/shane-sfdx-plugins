@@ -5,8 +5,6 @@ import fs = require('fs-extra');
 
 import { exec, exec2JSON } from '../../../../shared/execProm';
 
-const pkgVersionFileName = 'latestVersion.json';
-
 export default class Bump extends SfdxCommand {
     public static description = 'bump the major/minor version number in the packageDirectory';
 
@@ -89,16 +87,21 @@ export default class Bump extends SfdxCommand {
             try {
                 cli.action.start("Creating package version (this'll take a while)");
                 // createResult = <CreateResultI>await exec(`sfdx force:package2:version:create -d ${this.flags.target} -w 20 -v ${this.hubOrg.getUsername()} --json`);
+                const packageCreationStart = new Date();
                 const createResult = await exec2JSON(
                     `sfdx force:package:version:create -x -d ${this.flags.target} -w 20 -v ${this.hubOrg.getUsername()} --json`
                 );
-                cli.action.stop();
-                // this.ux.logJson(JSON.parse(createResult.stdout));
-                const actualResult = createResult.result;
-                this.ux.logJson(actualResult);
+                const packageCreationEnd = new Date();
 
-                await fs.writeFile(`${this.project.getPath()}/${pkgVersionFileName}`, JSON.stringify(actualResult, null, 2));
-                this.ux.log(chalk.green(`Version Created with Id: ${actualResult.Package2VersionId}.  Details written to ${pkgVersionFileName}`));
+                cli.action.stop(`done in (${Math.round((packageCreationEnd.getTime() - packageCreationStart.getTime()) / 1000)} seconds)`);
+                const actualResult = createResult.result;
+
+                if (!this.flags.json) {
+                    this.ux.logJson(actualResult);
+                }
+
+                // await fs.writeFile(`${this.project.getPath()}/${pkgVersionFileName}`, JSON.stringify(actualResult, null, 2));
+                this.ux.log(chalk.green(`Version Created with Id: ${actualResult.Package2VersionId}`));
 
                 // now, are we publishing
                 if (this.flags.release) {
@@ -107,16 +110,15 @@ export default class Bump extends SfdxCommand {
                     );
                     await exec(`sfdx force:package:version:promote -n -p ${actualResult.Package2VersionId} -v ${this.hubOrg.getUsername()} --json`);
                     cli.action.stop();
+                    this.ux.log(`${chalk.green('Version released')}. May take several minutes to become available to destination org.`);
                     this.ux.log(
-                        chalk.green(
-                            `Version released. May take several minutes to become available to destination org.  Install with sfdx force:package:install -r -b 20 -w 20 -p ${actualResult.SubscriberPackageVersionId} -u destinationOrgAlias`
-                        )
+                        `Install with sfdx force:package:install -r -b 20 -w 20 -p ${actualResult.SubscriberPackageVersionId} -u destinationOrgAlias`
                     );
                 } else {
-                    return JSON.parse(createResult.stdout);
+                    return createResult.result;
                 }
             } catch (err) {
-                this.ux.error(chalk.red(JSON.parse(err.stderr).message));
+                this.ux.error(err);
                 cli.action.stop();
                 return err;
             }
