@@ -124,7 +124,9 @@ export default class PermSetConvert extends SfdxCommand {
         // we either write this file over existing profile, or to a new one.
         if (this.flags.editprofile || this.flags.skinnyclone) {
             // correct @ => $ issue
-            profile = await fixExistingDollarSign(profile);
+            // check for the special perms that will cause all the object/field stuff to get written back in
+
+            profile = await fixExistingDollarSign(stripViewModifyAll(profile));
 
             const profileXml = jsToXml.parse('Profile', profile, options.js2xmlStandardOptions);
 
@@ -149,5 +151,12 @@ const translateTabTypes = profileTabType => {
     if (profileTabType === 'DefaultOff') return 'Available';
     else if (profileTabType === 'DefaultOn') return 'Visible';
     else if (profileTabType === 'Hidden') return 'None';
+    else if (['Available', 'Visible', 'None'].includes(profileTabType)) return profileTabType;
     else throw new Error(`unmatched tab visibility type on profile: ${profileTabType}`);
+};
+
+const stripViewModifyAll = profile => {
+    const newProfile = { ...profile };
+    newProfile.userPermissions = newProfile.userPermissions.filter(perm => perm.name !== 'ModifyAllData' && perm.name !== 'ViewAllData');
+    return newProfile;
 };
