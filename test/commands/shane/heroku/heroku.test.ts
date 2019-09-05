@@ -6,7 +6,7 @@ import testutils = require('../../../helpers/testutils');
 
 const testProjectName = 'mshanemc-custexp-1234567890';
 
-describe.skip('shane:heroku:connect', () => {
+describe('shane:heroku:connect', () => {
     jest.setTimeout(testutils.remoteTimeout);
 
     if (!process.env.LOCALONLY) {
@@ -56,12 +56,12 @@ describe.skip('shane:heroku:connect', () => {
         });
 
         afterAll(async () => {
-            // await testutils.orgDelete(testProjectName);
-            // await exec('heroku destroy -a `basename "${PWD/mshanemc-/}"` -c `basename "${PWD/mshanemc-/}"`', {
-            //     cwd: testProjectName,
-            //     shell: '/bin/bash'
-            // });
-            // await fs.remove(testProjectName);
+            await testutils.orgDelete(testProjectName);
+            await exec('heroku destroy -a `basename "${PWD/mshanemc-/}"` -c `basename "${PWD/mshanemc-/}"`', {
+                cwd: testProjectName,
+                shell: '/bin/bash'
+            });
+            await fs.remove(testProjectName);
         });
 
         const testMapping = {
