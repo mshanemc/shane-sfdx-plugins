@@ -34,7 +34,6 @@ jobs:
                   sfdx update
                   sfdx force:auth:jwt:grant --clientid ${{ secrets.CONSUMERKEY }} --username ${{ secrets.HUB_USERNAME }} --jwtkeyfile server.key --setdefaultdevhubusername -a hub
                   yarn install
-                  yarn build
                   yarn test
               env:
                   CI: true
