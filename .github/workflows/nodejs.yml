@@ -15,7 +15,7 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [8.x, 10.x, 12.x]
+                node: [12]
                 os: [macOS-latest]
 
         steps:
@@ -25,6 +25,8 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
             - name: npm install, build, and test
+              timeout-minutes: 1000
+
               run: |
                   echo "${{ secrets.JWTKEY }}" > server.key
                   npm install sfdx-cli --global
