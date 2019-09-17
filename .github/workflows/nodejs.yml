@@ -5,7 +5,7 @@ on:
         branches:
             - master
     push:
-        paths:
+        branches:
             - '*'
 
 jobs:
