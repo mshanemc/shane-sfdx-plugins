@@ -1,41 +1,40 @@
 name: Node CI
-      
+
 on:
-  pull_request:
-    branches:
-    - master
-  push:
+    pull_request:
+        branches:
+            - master
+    push:
         paths:
             - '*'
-    
+
 jobs:
-  test:
-    name: Test on node ${{ matrix.node_version }} and ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    test:
+        name: Test from matrix on node ${{ matrix.node_version }} and ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
 
-    strategy:
-      matrix:
-        node-version: [8.x, 10.x, 12.x]
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        strategy:
+            matrix:
+                node-version: [8.x, 10.x, 12.x]
+                os: [ubuntu-latest, windows-latest, macOS-latest]
 
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
-      run: |
-        ${{ secrets.HUB_USERNAME }} > server.key
-        npm install sfdx-cli --global
-        export SFDX_LAZY_LOAD_MODULES=false
-        export SFDX_AUTOUPDATE_DISABLE=true
-        export SFDX_JSON_TO_STDOUT=true
-        sfdx update
-        sfdx force:auth:jwt:grant --clientid ${{ secrets.CONSUMERKEY }} --username ${{ secrets.HUB_USERNAME }} --jwtkeyfile server.key --setdefaultdevhubusername -a hub
-        yarn install
-        yarn build
-        yarn test
-      env:
-        CI: true
+        steps:
+            - uses: actions/checkout@v1
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - name: npm install, build, and test
+              run: |
+                  echo "${{ secrets.HUB_USERNAME }}" >> server.key
+                  npm install sfdx-cli --global
+                  export SFDX_LAZY_LOAD_MODULES=false
+                  export SFDX_AUTOUPDATE_DISABLE=true
+                  export SFDX_JSON_TO_STDOUT=true
+                  sfdx update
+                  sfdx force:auth:jwt:grant --clientid ${{ secrets.CONSUMERKEY }} --username ${{ secrets.HUB_USERNAME }} --jwtkeyfile server.key --setdefaultdevhubusername -a hub
+                  yarn install
+                  yarn build
+                  yarn test
+              env:
+                  CI: true
