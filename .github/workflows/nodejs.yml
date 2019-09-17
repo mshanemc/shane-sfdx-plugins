@@ -31,7 +31,6 @@ jobs:
                   export SFDX_LAZY_LOAD_MODULES=false
                   export SFDX_AUTOUPDATE_DISABLE=true
                   export SFDX_JSON_TO_STDOUT=true
-                  sfdx update
                   sfdx force:auth:jwt:grant --clientid ${{ secrets.CONSUMERKEY }} --username ${{ secrets.HUB_USERNAME }} --jwtkeyfile server.key --setdefaultdevhubusername -a hub
                   yarn install
                   yarn test
