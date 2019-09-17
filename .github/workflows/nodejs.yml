@@ -26,7 +26,7 @@ jobs:
                   node-version: ${{ matrix.node-version }}
             - name: npm install, build, and test
               run: |
-                  echo "${{ secrets.HUB_USERNAME }}" >> server.key
+                  echo "${{ secrets.JWTKEY }}" > server.key
                   npm install sfdx-cli --global
                   export SFDX_LAZY_LOAD_MODULES=false
                   export SFDX_AUTOUPDATE_DISABLE=true
