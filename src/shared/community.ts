@@ -5,7 +5,7 @@ interface ExternalAppsJSON {
     communities: any; // tslint:disable-line:no-any
 }
 
-export async function getExternalApps(conn: Connection): Promise<ExternalAppsJSON> {
+const getExternalApps = async (conn: Connection): Promise<ExternalAppsJSON> => {
     // get the domain
     const domains = await conn.query('select CnameTarget, Domain from Domain');
     // tslint:disable-next-line:no-any
@@ -24,4 +24,6 @@ export async function getExternalApps(conn: Connection): Promise<ExternalAppsJSO
     });
 
     return output;
-}
+};
+
+export { getExternalApps };

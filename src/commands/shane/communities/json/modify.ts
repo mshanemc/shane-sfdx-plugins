@@ -1,4 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+import { componentFinder, getByAddress, replaceProperty } from '../../../../shared/jsonSearch';
+
 import * as fs from 'fs-extra';
 
 export default class CommunityJSONModify extends SfdxCommand {
@@ -64,7 +66,17 @@ export default class CommunityJSONModify extends SfdxCommand {
             char: 't',
             description: 'using tooling api for query instead of normal sobjects',
             dependsOn: ['query'],
-            exclusive: ['value']
+            exclusive: ['value', 'analytics', 'variable']
+        }),
+        wavetype: flags.string({
+            description: 'part of the wave api endpoint',
+            exclusive: ['value', 'tooling', 'query', 'variable'],
+            options: ['dashboards']
+        }),
+        wavename: flags.string({
+            description: 'name to match from wave api',
+            exclusive: ['value', 'tooling', 'query', 'variable'],
+            dependsOn: ['wavetype']
         }),
         verbose: flags.builtin()
     };
@@ -75,7 +87,7 @@ export default class CommunityJSONModify extends SfdxCommand {
         const full = await fs.readJSON(this.flags.file);
 
         // find component
-        if (!this.flags.value && !this.flags.query && !this.flags.variable) {
+        if (!this.flags.value && !this.flags.query && !this.flags.variable && !this.flags.wavetype) {
             throw new Error('either query or value or variable has to be specified');
         }
 
@@ -83,17 +95,21 @@ export default class CommunityJSONModify extends SfdxCommand {
             this.flags.value = await this.query();
         }
 
+        if (this.flags.wavetype) {
+            this.flags.value = await this.waveQuery();
+        }
+
         if (this.flags.variable) {
             this.flags.value = await this.getVariable();
         }
 
-        const { matchedRegionIndex, matchedComponentIndex } = this.componentFinder(full);
+        const matchedComponentAddress = componentFinder(full, this.flags.id);
 
         let propertyReplacementValue = this.flags.value;
 
         // if necessary, cast subcomponent to json
         if (this.flags.subproperty) {
-            const existing = full.regions[matchedRegionIndex].components[matchedComponentIndex].componentAttributes[this.flags.property];
+            const existing = getByAddress(full, matchedComponentAddress, this.flags.property);
             if (this.flags.verbose) {
                 this.ux.log(`found existing value : ${existing}`);
                 this.ux.log('working on subproperty');
@@ -103,14 +119,17 @@ export default class CommunityJSONModify extends SfdxCommand {
             propertyReplacementValue = JSON.stringify(jsonProperty);
         }
 
-        full.regions[matchedRegionIndex].components[matchedComponentIndex].componentAttributes[this.flags.property] = propertyReplacementValue;
+        const fixed = replaceProperty(full, matchedComponentAddress, this.flags.property, propertyReplacementValue);
+
+        // full.regions[matchedRegionIndex].components[matchedComponentIndex].componentAttributes[this.flags.property] = propertyReplacementValue;
 
         // replace with new value
         if (this.flags.write) {
-            await fs.writeJSON(this.flags.file, full, { spaces: 2 });
-            this.ux.logJson(JSON.parse(full.regions[matchedRegionIndex].components[matchedComponentIndex].componentAttributes[this.flags.property]));
+            await fs.writeJSON(this.flags.file, fixed, { spaces: 2 });
+            this.ux.logJson(fixed);
         } else if (!this.flags.json) {
-            this.ux.logJson(full);
+            this.ux.log('would write the following file if you add --write');
+            this.ux.logJson(fixed);
         }
 
         return full;
@@ -144,6 +163,37 @@ export default class CommunityJSONModify extends SfdxCommand {
         }
     }
 
+    private async waveQuery(): Promise<string> {
+        const conn = this.org.getConnection();
+        const url = `${conn.baseUrl()}/wave/${this.flags.wavetype}`;
+
+        const results = await conn.request({
+            method: 'GET',
+            url
+        });
+        if (this.flags.queryfield === 'Id') {
+            this.flags.queryfield = 'id';
+        }
+
+        const match = results[this.flags.wavetype].find(item => item.name === this.flags.wavename);
+        if (!match) {
+            throw new Error(
+                `no matching ${this.flags.wavetype} for ${this.flags.wavename}.  Found: ${results[this.flags.wavetype].map(item => item.name)}`
+            );
+        }
+        if (this.flags.verbose && !this.flags.json) {
+            this.ux.log(`found matching wave ${this.flags.wavetype}...it's`);
+            this.ux.logJson(match);
+        } else {
+            this.ux.log(`matching value from wave api: ${match[this.flags.queryfield]}`);
+        }
+        if (this.flags.truncate) {
+            return match[this.flags.queryfield].substr(0, 15);
+        } else {
+            return match[this.flags.queryfield];
+        }
+    }
+
     private async getVariable(): Promise<string> {
         if (this.flags.variable === 'OrgId') {
             if (this.flags.truncate) {
@@ -156,36 +206,4 @@ export default class CommunityJSONModify extends SfdxCommand {
             return this.org.getConnection().instanceUrl.replace(/\/$/, '');
         }
     }
-
-    private componentFinder(full): IndexObject {
-        const output: IndexObject = {
-            matchedRegionIndex: -1
-        };
-
-        full.regions.forEach((region, regionIndex) => {
-            if (output.matchedRegionIndex === -1) {
-                if (this.flags.verbose) {
-                    this.ux.log(`searching in ${region.regionName}, which has components ${region.components.map(component => component.id)}`);
-                }
-                output.matchedComponentIndex = region.components.findIndex(component => component.id === this.flags.id);
-                if (output.matchedComponentIndex > -1) {
-                    output.matchedRegionIndex = regionIndex;
-                    return output;
-                } else {
-                    if (this.flags.verbose) {
-                        this.ux.log('no matching component found');
-                    }
-                }
-            }
-            if (output.matchedComponentIndex === -1) {
-                throw new Error('no component was found matching that id');
-            }
-        });
-        return output;
-    }
-}
-
-interface IndexObject {
-    matchedRegionIndex: number;
-    matchedComponentIndex?: number;
 }
