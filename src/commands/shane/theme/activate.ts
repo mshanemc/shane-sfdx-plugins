@@ -70,29 +70,36 @@ export default class ThemeActivate extends SfdxCommand {
 
         if (orgApiVersion >= 47) {
             await page.evaluate(localThemeId => {
-                const button: HTMLElement = document
+                const slot: HTMLSlotElement = document
                     .querySelector(`lightning-datatable`)
                     .shadowRoot.querySelector(`tr[data-row-key-value='${localThemeId}'] td:last-of-type lightning-primitive-cell-factory`)
                     .shadowRoot.querySelector('lightning-primitive-cell-wrapper')
-                    .shadowRoot.querySelector('div slot')
-                    .assignedNodes()[0]
-                    .shadowRoot.querySelector('lightning-primitive-cell-actions')
+                    .shadowRoot.querySelector('div slot');
+
+                const middle: HTMLElement = slot.assignedNodes()[0] as HTMLElement;
+
+                const buttonMenu: HTMLElement = middle.shadowRoot
+                    .querySelector('lightning-primitive-cell-actions')
                     .shadowRoot.querySelector('lightning-button-menu');
-                return button.click();
+                return buttonMenu.click();
             }, themeId);
 
             await page.evaluate(localThemeId => {
-                const link: HTMLElement = document
+                const slot: HTMLSlotElement = document
                     .querySelector(`lightning-datatable`)
                     .shadowRoot.querySelector(`tr[data-row-key-value='${localThemeId}'] td:last-of-type lightning-primitive-cell-factory`)
                     .shadowRoot.querySelector('lightning-primitive-cell-wrapper')
-                    .shadowRoot.querySelector('div slot')
-                    .assignedNodes()[0]
-                    .shadowRoot.querySelector('lightning-primitive-cell-actions')
+                    .shadowRoot.querySelector('div slot');
+
+                const middle: HTMLElement = slot.assignedNodes()[0] as HTMLElement;
+
+                const buttonMenu: HTMLSlotElement = middle.shadowRoot
+                    .querySelector('lightning-primitive-cell-actions')
                     .shadowRoot.querySelector('lightning-button-menu')
-                    .shadowRoot.querySelector(`div[role='menu'] slot`)
-                    .assignedNodes()[4]
-                    .shadowRoot.querySelector('a');
+                    .shadowRoot.querySelector(`div[role='menu'] slot`);
+
+                const menuItem: HTMLElement = buttonMenu.assignedNodes()[4] as HTMLElement;
+                const link = menuItem.shadowRoot.querySelector('a');
                 console.log(link);
                 link.click();
             }, themeId);
