@@ -19,6 +19,9 @@ export default class ThemeActivate extends SfdxCommand {
     public async run(): Promise<any> {
         // first, get the id of the theme
         const conn = this.org.getConnection();
+        const orgApiVersion = Number(await this.org.retrieveMaxApiVersion());
+        this.ux.log(`api versino is ${orgApiVersion}`);
+
         const results = <QueryResult>(
             await conn.query(
                 `select id from LightningExperienceTheme where DeveloperName = '${this.flags.name}' or MasterLabel = '${this.flags.name}'`
@@ -50,18 +53,50 @@ export default class ThemeActivate extends SfdxCommand {
         await page.waitForSelector(`tr[data-row-key-value='${themeId}'`, { visible: true });
 
         // open up the dropdown menu to populate the Activate link
-        await page.evaluate(localThemeId => {
-            const button: HTMLElement = document.querySelector(`tr[data-row-key-value='${localThemeId}'] td button`);
-            return button.click();
-        }, themeId);
+        if (orgApiVersion < 47) {
+            await page.evaluate(localThemeId => {
+                const button: HTMLElement = document.querySelector(`tr[data-row-key-value='${localThemeId}'] td button`);
+                return button.click();
+            }, themeId);
 
-        // actually activate the theme
-        await page.evaluate(localThemeId => {
-            const link: HTMLElement = Array.from(document.querySelectorAll(`tr[data-row-key-value='${localThemeId}'] td:last-of-type a`)).filter(
-                a => a.querySelector('span').innerHTML === 'Activate'
-            )[0] as HTMLElement;
-            link.click();
-        }, themeId);
+            // actually activate the theme
+            await page.evaluate(localThemeId => {
+                const link: HTMLElement = Array.from(document.querySelectorAll(`tr[data-row-key-value='${localThemeId}'] td:last-of-type a`)).filter(
+                    a => a.querySelector('span').innerHTML === 'Activate'
+                )[0] as HTMLElement;
+                link.click();
+            }, themeId);
+        }
+
+        if (orgApiVersion >= 47) {
+            await page.evaluate(localThemeId => {
+                const button: HTMLElement = document
+                    .querySelector(`lightning-datatable`)
+                    .shadowRoot.querySelector(`tr[data-row-key-value='${localThemeId}'] td:last-of-type lightning-primitive-cell-factory`)
+                    .shadowRoot.querySelector('lightning-primitive-cell-wrapper')
+                    .shadowRoot.querySelector('div slot')
+                    .assignedNodes()[0]
+                    .shadowRoot.querySelector('lightning-primitive-cell-actions')
+                    .shadowRoot.querySelector('lightning-button-menu');
+                return button.click();
+            }, themeId);
+
+            await page.evaluate(localThemeId => {
+                const link: HTMLElement = document
+                    .querySelector(`lightning-datatable`)
+                    .shadowRoot.querySelector(`tr[data-row-key-value='${localThemeId}'] td:last-of-type lightning-primitive-cell-factory`)
+                    .shadowRoot.querySelector('lightning-primitive-cell-wrapper')
+                    .shadowRoot.querySelector('div slot')
+                    .assignedNodes()[0]
+                    .shadowRoot.querySelector('lightning-primitive-cell-actions')
+                    .shadowRoot.querySelector('lightning-button-menu')
+                    .shadowRoot.querySelector(`div[role='menu'] slot`)
+                    .assignedNodes()[4]
+                    .shadowRoot.querySelector('a');
+                console.log(link);
+                link.click();
+            }, themeId);
+        }
 
         await browser.close();
         this.ux.stopSpinner(`Activated theme ${this.flags.name}`);
