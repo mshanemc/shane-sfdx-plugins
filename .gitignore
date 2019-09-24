@@ -8,3 +8,6 @@
 dump.rdb
 
 mshanemc-*
+
+# VS Code IDE Related
+.history/
