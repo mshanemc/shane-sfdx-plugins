@@ -129,7 +129,7 @@ sfdx force:org:open`;
             },
             homepage: this.flags.gitremote,
             devDependencies: {
-                nodemon: '^1.18.3'
+                nodemon: '^1.19.2'
             }
         };
 
