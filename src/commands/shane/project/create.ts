@@ -109,6 +109,7 @@ sfdx force:org:open`;
             scripts: {
                 test: 'echo "Error: no test specified" && exit 1',
                 build: 'sfdx shane:org:delete; ./orgInit.sh',
+                publish: `sfdx shane:package2:version:bump -m -r; git add sfdx-project.json; git commit -m 'package version bump'; git push origin master`,
                 reset: 'echo "sfdx force:apex:execute -f scripts/dataWipe.cls && sfdx force:apex:execute -f scripts/init.cls"'
             },
             nodemonConfig: {
