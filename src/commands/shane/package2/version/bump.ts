@@ -7,6 +7,7 @@ import { exec, exec2JSON } from '../../../../shared/execProm';
 
 export default class Bump extends SfdxCommand {
     public static description = 'bump the major/minor version number in the packageDirectory';
+    public static aliases = ['shane:package:version:bump'];
 
     public static examples = [
         `sfdx shane:package2:version:bump -m
@@ -30,7 +31,11 @@ export default class Bump extends SfdxCommand {
     ];
 
     protected static flagsConfig = {
-        major: flags.boolean({ char: 'M', description: 'Bump the major version by 1, sets minor,build to 0', exclusive: ['minor', 'patch'] }),
+        major: flags.boolean({
+            char: 'M',
+            description: 'Bump the major version by 1, sets minor,build to 0',
+            exclusive: ['minor', 'patch']
+        }),
         minor: flags.boolean({ char: 'm', description: 'Bump the minor version by 1', exclusive: ['major', 'patch'] }),
         patch: flags.boolean({ char: 'p', description: 'Bump the patch version by 1', exclusive: ['major', 'minor'] }),
         create: flags.boolean({ char: 'c', description: 'create a new packageVersion from the new versionNumber' }),
@@ -38,7 +43,11 @@ export default class Bump extends SfdxCommand {
             char: 'r',
             description: 'set the newly version as released (out of Beta).  Implies create whether you flag it or not :)'
         }),
-        target: flags.string({ char: 't', default: 'force-app', description: 'name of your package directory (defaults to force-app)' })
+        target: flags.string({
+            char: 't',
+            default: 'force-app',
+            description: 'name of your package directory (defaults to force-app)'
+        })
     };
 
     // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
