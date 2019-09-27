@@ -83,9 +83,6 @@ export default class CommunityJSONModify extends SfdxCommand {
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        // get file
-        const full = await fs.readJSON(this.flags.file);
-
         // find component
         if (!this.flags.value && !this.flags.query && !this.flags.variable && !this.flags.wavetype) {
             throw new Error('either query or value or variable has to be specified');
@@ -103,6 +100,11 @@ export default class CommunityJSONModify extends SfdxCommand {
             this.flags.value = await this.getVariable();
         }
 
+        // get file
+        const full = await fs.readJSON(this.flags.file);
+        if (this.flags.verbose && !this.flags.json) {
+            this.ux.logJson(full);
+        }
         const matchedComponentAddress = componentFinder(full, this.flags.id);
 
         let propertyReplacementValue = this.flags.value;
@@ -111,7 +113,8 @@ export default class CommunityJSONModify extends SfdxCommand {
         if (this.flags.subproperty) {
             const existing = getByAddress(full, matchedComponentAddress, this.flags.property);
             if (this.flags.verbose) {
-                this.ux.log(`found existing value : ${existing}`);
+                this.ux.log(`found existing value : ${existing} at address ${matchedComponentAddress}`);
+                this.ux.log(`will replace with ${propertyReplacementValue}`);
                 this.ux.log('working on subproperty');
             }
             const jsonProperty = JSON.parse(existing);

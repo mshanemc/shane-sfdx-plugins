@@ -5,10 +5,13 @@ import { multiLayer } from './multiLayer';
 
 describe('gets by address', () => {
     test('gets with size 2', () => {
-        expect(getByAddress(multiLayer, [0, 0], 'componentName')).toBe('forceCommunity:richTextInline');
+        expect(getByAddress(multiLayer, [0, 0], 'richTextValue')).toContain('<h1 style');
+    });
+    test('gets with size 2', () => {
+        expect(getByAddress(multiLayer, [2, 0], 'label')).toBe('Quick Create');
     });
     test('gets with size 4', () => {
-        expect(getByAddress(multiLayer, [1, 0, 0, 0], 'componentName')).toBe('forceCommunity:waveDashboard');
+        expect(getByAddress(multiLayer, [1, 0, 0, 0], 'dashboardId')).toBe('0FK0t000000CcxZGAS');
     });
 });
 

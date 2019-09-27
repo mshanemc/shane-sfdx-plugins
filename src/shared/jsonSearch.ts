@@ -86,8 +86,7 @@ const getByAddress = (full, address: number[], prop: string) => {
     for (let i = 0; i < address.length; i += 2) {
         input = input.regions[address[i + 0]].components[address[i + 1]];
     }
-
-    return input[prop];
+    return input.componentAttributes[prop];
 };
 
 interface RegionSearchOutput {
