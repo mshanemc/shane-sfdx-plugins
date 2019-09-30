@@ -51,7 +51,7 @@ export default class AllPhotos extends SfdxCommand {
             folderPath = this.flags.folder;
         } else {
             folderPath = `${tempRepo}/img`;
-            await exec(`git clone ${this.flags.repo} ${tempRepo}`);
+            await exec(`git clone ${this.flags.repo} ${tempRepo} --single-branch`);
         }
 
         photos = await fs.readdir(folderPath);

@@ -34,7 +34,7 @@ export default class GithubPackageInstall extends SfdxCommand {
         const repoUrl = `https://github.com/${this.flags.githubuser}/${this.flags.repo}`;
 
         this.ux.startSpinner(`cloning from ${repoUrl}`);
-        await exec(`git clone ${repoUrl}`);
+        await exec(`git clone ${repoUrl} --single-branch`);
         this.ux.stopSpinner();
 
         if (!fs.existsSync(`${this.flags.repo}/${this.flags.path}`)) {
