@@ -3,9 +3,13 @@ import { Field } from 'jsforce/describe-result';
 interface Record {
     attributes: object;
     Id: string;
+
     Name?: string;
 
     ContentDocumentId?: string;
+
+    LiveAgentChatUrl?: string;
+    LiveAgentContentUrl?: string;
 }
 
 interface QueryResult {

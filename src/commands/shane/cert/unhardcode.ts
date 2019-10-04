@@ -6,7 +6,7 @@ import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting'
 
 import * as options from '../../../shared/js2xmlStandardOptions';
 
-export default class XMLModify extends SfdxCommand {
+export default class CertUnHardCode extends SfdxCommand {
     public static description = 'modify local xml files with data from org to work around hardcoded metadata issues';
 
     protected static flagsConfig = {

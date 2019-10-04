@@ -129,8 +129,10 @@ export default class CommunityJSONModify extends SfdxCommand {
         // replace with new value
         if (this.flags.write) {
             await fs.writeJSON(this.flags.file, fixed, { spaces: 2 });
-            this.ux.logJson(fixed);
-        } else if (!this.flags.json) {
+            if (this.flags.verbose) {
+                this.ux.logJson(fixed);
+            }
+        } else if (!this.flags.json && this.flags.verbose) {
             this.ux.log('would write the following file if you add --write');
             this.ux.logJson(fixed);
         }
