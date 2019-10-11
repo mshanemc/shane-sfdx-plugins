@@ -137,7 +137,7 @@ export default class CommunityJSONModify extends SfdxCommand {
             this.ux.logJson(fixed);
         }
 
-        return full;
+        return fixed;
     }
 
     // queries either rest or tooling api to find the ids needed. Returns the id as a string
