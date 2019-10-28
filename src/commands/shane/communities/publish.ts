@@ -3,7 +3,15 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { CommunitiesRestResult } from './../../../shared/typeDefs';
 
 export default class CommunityPublish extends SfdxCommand {
-    public static description = 'Publish a community using a headless browser';
+    public static description = 'Publish a community';
+    public static examples = [
+        `sfdx shane:communities:publish
+// publishes all the communities in the org
+`,
+        `sfdx shane:communities:publish -n customer
+// finds a community named customer, publishes it.
+`
+    ];
 
     protected static requiresUsername = true;
 
@@ -13,15 +21,6 @@ export default class CommunityPublish extends SfdxCommand {
             description: 'name of the community to publish (case sensitive!)'
         })
     };
-
-    public static examples = [
-        `sfdx shane:communities:publish
-// publishes all the communities in the org
-`,
-        `sfdx shane:communities:publish -n customer
-// finds a community named customer, publishes it.
-`
-    ];
 
     // tslint:disable-next-line: no-any
     public async run(): Promise<any> {

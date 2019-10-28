@@ -1,9 +1,28 @@
 import { Connection } from '@salesforce/core';
+import { Duration, sleep } from '@salesforce/kit';
+import { JsonMap } from '@salesforce/ts-types';
+import { CommunitiesRestResult } from './typeDefs';
 
 interface ExternalAppsJSON {
     domain: string;
     communities: any; // tslint:disable-line:no-any
 }
+
+const ensureCommunity = async (conn: Connection, name: string): Promise<JsonMap> => {
+    let tries = 0;
+    let foundCommunity: JsonMap;
+
+    while (!foundCommunity) {
+        const communitiesList = <CommunitiesRestResult>(<unknown>await conn.request(`${conn.baseUrl()}/connect/communities/`));
+        foundCommunity = communitiesList.communities.find(c => c.name === name);
+        await sleep(Duration.seconds(5));
+        tries++;
+    }
+    if (tries > 100) {
+        throw new Error('Community not found');
+    }
+    return foundCommunity;
+};
 
 const getExternalApps = async (conn: Connection): Promise<ExternalAppsJSON> => {
     // get the domain
@@ -26,4 +45,4 @@ const getExternalApps = async (conn: Connection): Promise<ExternalAppsJSON> => {
     return output;
 };
 
-export { getExternalApps };
+export { getExternalApps, ensureCommunity };
