@@ -100,6 +100,11 @@ sfdx force:org:open`;
                 },
                 mobileSettings: {
                     enableS1EncryptedStoragePref2: false
+                },
+                securitySettings: {
+                    passwordPolicies: {
+                        enableSetPasswordInApi: true
+                    }
                 }
             }
         };
