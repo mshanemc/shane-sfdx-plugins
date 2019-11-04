@@ -89,11 +89,17 @@ sfdx force:org:open`;
             orgName: this.flags.name,
             edition: 'Developer',
             settings: {
-                orgPreferenceSettings: {
-                    networksEnabled: false,
-                    s1DesktopEnabled: true,
-                    pathAssistantsEnabled: true,
-                    s1EncryptedStoragePref2: false
+                communitiesSettings: {
+                    enableNetworksEnabled: false
+                },
+                lightningExperienceSettings: {
+                    enableS1DesktopEnabled: true
+                },
+                pathAssistantSettings: {
+                    pathAssistantEnabled: true
+                },
+                mobileSettings: {
+                    enableS1EncryptedStoragePref2: false
                 }
             }
         };
