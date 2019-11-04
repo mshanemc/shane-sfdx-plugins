@@ -16,10 +16,17 @@ export default class DatasetDownload extends SfdxCommand {
     ];
 
     protected static flagsConfig = {
-        name: flags.string({ char: 'n', description: 'dataset name', required: true }),
+        name: flags.string({ char: 'n', description: 'dataset name--no spaces, should be like an api name', required: true }),
         csvfile: flags.filepath({ char: 'f', description: 'local csv file containing the data', required: true }),
         app: flags.string({ char: 'a', description: 'app name' }),
         metajson: flags.filepath({ char: 'm', description: 'path to json file for describing your upload (highly recommended)' }),
+        operation: flags.string({
+            char: 'o',
+            description:
+                'what to do with the dataset if it already exists.  See https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_ext_data.meta/bi_dev_guide_ext_data/bi_ext_data_object_externaldata.htm',
+            options: ['Append', 'Overwrite', 'Upsert', 'Delete'],
+            default: 'Overwrite'
+        }),
         async: flags.boolean({
             description:
                 'do not wait for successful completion of the dataset upload...just return and hope for the best.  If omitted, will poll the analytics rest API for job processing status until complete'
@@ -36,9 +43,10 @@ export default class DatasetDownload extends SfdxCommand {
         // tslint:disable-next-line:no-any
         const body: any = {
             EdgemartLabel: this.flags.name,
+            EdgemartAlias: this.flags.name,
             FileName: 'sfdxPluginUpload',
             Format: 'Csv',
-            Operation: 'Overwrite',
+            Operation: this.flags.operation,
             NotificationSent: 'Never'
         };
 
