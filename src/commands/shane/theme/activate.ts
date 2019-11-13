@@ -50,7 +50,7 @@ export default class ThemeActivate extends SfdxCommand {
         await page.goto(url, {
             waitUntil: 'networkidle2'
         });
-        await page.waitForSelector(`tr[data-row-key-value='${themeId}'`, { visible: true });
+        await page.waitForSelector(`tr[data-row-key-value='${themeId}']`, { visible: true });
 
         // open up the dropdown menu to populate the Activate link
         if (orgApiVersion < 47) {
