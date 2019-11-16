@@ -65,7 +65,10 @@ sfdx force:org:open`;
     }
 
     public gitIgnore(): string {
-        return 'node_modules' + '\r\n' + '.vscode/settings.json';
+        return `node_modules
+.vscode/settings.json
+.localdevserver
+`;
     }
 
     public projectJSON(api): string {
