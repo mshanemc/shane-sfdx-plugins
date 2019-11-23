@@ -11,7 +11,7 @@ interface ContentDocument extends Record {
     LatestPublishedVersionId: string;
 }
 
-export default class Upload extends SfdxCommand {
+export default class DataFileDownload extends SfdxCommand {
     public static description = 'save a file from the org to the local filesystem';
 
     public static examples = [
@@ -26,13 +26,27 @@ export default class Upload extends SfdxCommand {
     ];
 
     protected static flagsConfig = {
-        documentid: flags.id({ char: 'd', description: 'optional ContentDocument ID that should be downloaded' }),
-        documentversionid: flags.id({ char: 'v', description: 'optional ContentVersion ID that should be downloaded' }),
-        outputpath: flags.filepath({
+        documentid: flags.id({
+            char: 'd',
+            description: 'optional ContentDocument ID that should be downloaded',
+            exclusive: ['documentversionid']
+        }),
+        documentversionid: flags.id({
+            char: 'v',
+            description: 'optional ContentVersion ID that should be downloaded',
+            exclusive: ['documentid']
+        }),
+        filename: flags.string({
+            char: 'n',
+            description: 'optional filename.  Defaults to the filename of the contentVersion to download'
+        }),
+        directory: flags.directory({
             char: 'o',
             description:
                 'optional output path to save the file, if ommitted will save to current directory, ' +
-                'if directory then it will keep the filename and save into that directory'
+                'if directory then it will keep the filename and save into that directory',
+            parse: input => input.replace(/\/$/, ''),
+            default: '.'
         })
     };
 
@@ -41,53 +55,41 @@ export default class Upload extends SfdxCommand {
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        return new Promise(async (resolve, reject) => {
-            if (this.flags.documentid && this.flags.documentversionid) {
-                reject('Please include either documentid or documentVerionId but not both');
-            }
-            if (!this.flags.documentid && !this.flags.documentversionid) {
-                reject('Please include one of documentid or documentVerionId');
-            }
+        if (!this.flags.documentid && !this.flags.documentversionid) {
+            throw new Error('Please include one of documentid or documentVersionId');
+        }
 
-            // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
-            const conn = this.org.getConnection();
-            // tslint:disable-next-line:prefer-const
-            let versionId = this.flags.documentversionid;
-            if (this.flags.documentid) {
-                versionId = (<ContentDocument>await conn.sobject('ContentDocument').retrieve(this.flags.documentid)).LatestPublishedVersionId;
-            }
+        // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
+        const conn = this.org.getConnection();
+        // tslint:disable-next-line:prefer-const
+        let versionId = this.flags.documentversionid;
+        if (this.flags.documentid) {
+            versionId = (<ContentDocument>await conn.sobject('ContentDocument').retrieve(this.flags.documentid)).LatestPublishedVersionId;
+        }
 
-            const version = <ContentVersion>await conn.sobject('ContentVersion').retrieve(versionId);
+        const version = <ContentVersion>await conn.sobject('ContentVersion').retrieve(versionId);
 
-            // Output starts are the files stored name and extention
-            // tslint:disable-next-line:prefer-const
-            let targetFilename = `${version.Title}.${version.FileExtension}`;
-            // If output path is specified then assign it
-            if (this.flags.outputpath) {
-                targetFilename = this.flags.outputpath;
-            }
-            // Try and test the path to see if it is a directory, if it is then merge it with the stored name
-            fs.stat(targetFilename, async (err, fStat) => {
-                if (!err && fStat.isDirectory()) {
-                    targetFilename = `${this.flags.outputpath}/${version.Title}.${version.FileExtension}`;
-                }
-                // later down the road we might add the ability to create the necessary folders to realize the path
+        // Output starts are the files stored name and extension
+        // tslint:disable-next-line:prefer-const
+        let targetFilename = this.flags.filename || `${version.Title}.${version.FileExtension}`;
+        // If output path is specified then assign it
+        if (this.flags.directory) {
+            await fs.ensureDir(this.flags.directory);
+        }
+        // Try and test the path to see if it is a directory, if it is then merge it with the stored name
 
-                this.ux.startSpinner(`Downloading from ContentVersionId: ${versionId} into ${targetFilename}`);
+        this.ux.startSpinner(`Downloading from ContentVersionId: ${versionId} into ${targetFilename}`);
 
-                // Setting encoding to null so that it will be true binary buffer and not mutilated by applying string encoding
-                // https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
-                // TODO: fix the types to achknowledge passing encoding as a property
-                // tslint:disable-next-line:no-any
-                const res = <Buffer>(<unknown>await conn.request(<any>{ url: version.VersionData, encoding: null }));
-                fs.writeFile(targetFilename, res, wferr => {
-                    this.ux.stopSpinner('Done!');
-                    if (wferr) {
-                        reject(wferr);
-                    }
-                    resolve();
-                });
-            });
-        });
+        // Setting encoding to null so that it will be true binary buffer and not mutilated by applying string encoding
+        // https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
+        // TODO: fix the types to acknowledge passing encoding as a property
+        // tslint:disable-next-line:no-any
+        const res = <Buffer>(<unknown>await conn.request(<any>{ url: version.VersionData, encoding: null }));
+        await fs.writeFile(`${this.flags.directory}/${targetFilename}`, res);
+        this.ux.stopSpinner('Done!');
+        // so programmatic users will know where it ended up going
+        return {
+            path: `${this.flags.directory}/${targetFilename}`
+        };
     }
 }
