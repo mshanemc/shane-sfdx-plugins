@@ -1,7 +1,7 @@
 {
     "name": "shane-sfdx-plugins",
     "description": "sfdx plugins by Shane McLaughlin",
-    "version": "4.9.4",
+    "version": "4.10.0",
     "author": "@mshanemc",
     "bugs": "https://github.com/mshanemc/shane-sfdx-plugins/issues",
     "dependencies": {
@@ -51,6 +51,7 @@
         "jest": "^24.3.1",
         "lint-staged": ">=8",
         "prettier": "^1.18.2",
+        "rimraf": "^3.0.0",
         "ts-jest": "^24.0.0",
         "ts-node": "^7.0.1",
         "tslint": "^5.13.0",
@@ -120,8 +121,8 @@
     },
     "repository": "mshanemc/shane-sfdx-plugins",
     "scripts": {
-        "build": "rm -rf lib && tsc",
-        "clean": "rm -f .oclif.manifest.json",
+        "build": "rimraf lib && tsc",
+        "clean": "rimraf .oclif.manifest.json",
         "postpublish": "yarn run clean; git push; git push --tags",
         "posttest": "",
         "prepare": "yarn run build && oclif-dev manifest",
