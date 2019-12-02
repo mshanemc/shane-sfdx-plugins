@@ -5,6 +5,7 @@ import fs = require('fs-extra');
 
 const startText = '<!-- launchButton -->';
 const stopText = '<!-- launchButtonStop -->';
+const regex = new RegExp(`(?<=${startText})(\n*.*\n*)(?=${stopText})`);
 
 export default class DeployButton extends SfdxCommand {
     public static description = 'modify your local readme file to include a deployer link/button';
@@ -38,28 +39,29 @@ export default class DeployButton extends SfdxCommand {
         }
         // read in the README
         let readmeContents = await fs.readFile('README.md', 'utf-8');
-        const buttonCode = this.stringBuilder(repoUrl, this.flags.deployer.toString());
         // check for existing button code, replace if found
-        if (readmeContents.includes(startText)) {
-            console.log('already has a button...will try to replace');
-            readmeContents = readmeContents.replace(
-                new RegExp(`(?<=${startText})(\n*.*\n*)(?=${stopText})`),
-                `
-${buttonCode}`
-            );
+        if (readmeContents.match(regex)) {
+            // console.log('already has a button...will try to replace');q
+            readmeContents = readmeContents.replace(regex, this.stringBuilder(repoUrl, this.flags.deployer.toString(), false));
         } else {
             // add code for button at top of repo
             readmeContents = `
-${startText}
-${buttonCode}
-${stopText}
+${this.stringBuilder(repoUrl, this.flags.deployer.toString(), true)}
 ${readmeContents}`;
         }
         await fs.writeFile('README.md', readmeContents);
     }
 
-    private stringBuilder = (repository: string, deployerURL: string) => {
-        return `[![Deploy](${this.flags.button})](${deployerURL}launch?template=${repository}) <${repository}>
+    private stringBuilder = (repository: string, deployerURL: string, full: boolean) => {
+        if (full) {
+            return `
+${startText}
+[![Deploy](${this.flags.button})](${deployerURL}launch?template=${repository}) <${repository}>
+${stopText}
+`;
+        }
+        return `
+[![Deploy](${this.flags.button})](${deployerURL}launch?template=${repository}) <${repository}>
 `;
     };
 }

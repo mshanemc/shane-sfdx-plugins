@@ -47,7 +47,7 @@ describe('tests jsonSearch', () => {
     test('tests single-region recursive search #1', () => {
         // wave dashboard, tab 1
         const result = searchRegion(multiLayer.regions[1], 'fa69a1ff-6738-4c1e-884a-e321fdbaba1c', [1]);
-        console.log(result);
+        // console.log(result);
         expect(result).toHaveProperty('matchedComponentIndex', 0);
         expect(result).toHaveProperty('accumulatedArray', [1, 0, 0, 0]);
     });
@@ -55,7 +55,7 @@ describe('tests jsonSearch', () => {
     test('tests single-region recursive search #2', () => {
         // news and updates, tab 2
         const result = searchRegion(multiLayer.regions[1], 'ce3e4eb2-2b16-4ccb-a483-e34415137c1a', [1]);
-        console.log(result);
+        // console.log(result);
         expect(result).toHaveProperty('matchedComponentIndex', 0);
         expect(result).toHaveProperty('accumulatedArray', [1, 0, 1, 0]);
     });
