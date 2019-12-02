@@ -2,7 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { URL } from 'url';
 
 import fs = require('fs-extra');
-import replaceInFile from 'replace-in-file';
+import * as replaceInFile from 'replace-in-file';
 
 const startText = '<!-- launchButton -->';
 const stopText = '<!-- launchButtonStop -->';
