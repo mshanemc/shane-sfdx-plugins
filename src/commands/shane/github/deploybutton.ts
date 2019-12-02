@@ -2,7 +2,6 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { URL } from 'url';
 
 import fs = require('fs-extra');
-import * as replaceInFile from 'replace-in-file';
 
 const startText = '<!-- launchButton -->';
 const stopText = '<!-- launchButtonStop -->';
@@ -43,21 +42,19 @@ export default class DeployButton extends SfdxCommand {
         // check for existing button code, replace if found
         if (readmeContents.includes(startText)) {
             console.log('already has a button...will try to replace');
-            const replaceResults = await replaceInFile({
-                files: 'README.md',
-                from: new RegExp(`(?<=${startText})(\n*.*\n*)(?=${stopText})`),
-                to: `
+            readmeContents = readmeContents.replace(
+                new RegExp(`(?<=${startText})(\n*.*\n*)(?=${stopText})`),
+                `
 ${buttonCode}`
-            });
-            return replaceResults;
-        }
-
-        // add code for button at top of repo
-        readmeContents = `
+            );
+        } else {
+            // add code for button at top of repo
+            readmeContents = `
 ${startText}
 ${buttonCode}
 ${stopText}
 ${readmeContents}`;
+        }
         await fs.writeFile('README.md', readmeContents);
     }
 
