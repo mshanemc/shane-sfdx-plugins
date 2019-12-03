@@ -33,6 +33,7 @@ export async function file2CV(conn: Connection, filepath: string, name?: string)
     const CV = <
         CreateResult // tslint:disable-next-line:no-any
     >(<unknown>await conn.request(<any>{ url: `/services/data/v${apiVersion}/sobjects/ContentVersion`, formData, method: 'POST' }));
+
     const result = <QueryResult>await conn.query(`Select Id, ContentDocumentId from ContentVersion where Id='${CV.id}'`);
     return result.records[0];
 }

@@ -1,20 +1,11 @@
 import { Connection } from '@salesforce/core';
-import { QueryResult, Record } from './../shared/typeDefs';
+import { singleRecordQuery } from './../shared/queries';
+import { Record } from './../shared/typeDefs';
 
 export async function getUserId(conn: Connection, lastname: string, firstname?: string): Promise<Record> {
-    let query;
+    let query = `Select Id, Username from User where LastName = '${lastname}'`;
     if (firstname) {
-        query = `Select Id, Username from User where LastName = '${lastname}' and FirstName = '${firstname}'`;
-    } else {
-        query = `Select Id, Username from User where LastName = '${lastname}'`;
+        query = `${query} and FirstName = '${firstname}'`;
     }
-
-    const users = <QueryResult>await conn.query(query);
-    if (users.totalSize > 1) {
-        throw new Error('There are more than 1 result for that name.');
-    } else if (users.totalSize === 0) {
-        throw new Error('User not found');
-    } else {
-        return users.records[0];
-    }
+    return await singleRecordQuery({ conn, query });
 }
