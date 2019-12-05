@@ -129,7 +129,7 @@
         "prepublishOnly": "yarn run build && oclif-dev manifest",
         "preversion": "yarn run clean",
         "test": "yarn run prepare && jest --runInBand",
-        "test:clean": "rm -rf testProject*",
+        "test:clean": "rimraf testProject*",
         "test:local": "LOCALONLY='true' yarn run prepare && jest --runInBand",
         "test:parallel": "yarn run prepare && jest",
         "test:watch": "yarn run prepare && jest --watch --runInBand",
