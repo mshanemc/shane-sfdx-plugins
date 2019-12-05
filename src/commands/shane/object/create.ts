@@ -125,7 +125,7 @@ export default class ObjectCreate extends SfdxCommand {
         }
 
         if (!this.flags.type) {
-            this.flags.type = await cli.prompt(`Object type [${typeDefinitions.map(td => td.type)}]`);
+            this.flags.type = await cli.prompt(`Object type [${typeDefinitions.map(td => td.type)}]`, { default: 'custom' });
         }
 
         if (!this.flags.label) {
@@ -209,7 +209,7 @@ export default class ObjectCreate extends SfdxCommand {
             }
 
             outputJSON.nameField = {
-                type: this.flags.nametype,
+                type: this.flags.nametype || 'Text',
                 label: this.flags.namefieldlabel
             };
 

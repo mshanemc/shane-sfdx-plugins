@@ -1,16 +1,19 @@
 {
     "buildpacks": [
         {
-            "url": "heroku/nodejs"
+            "url": "https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku-community/apt.tgz"
         },
         {
             "url": "https://buildpack-registry.s3.amazonaws.com/buildpacks/jontewks/puppeteer.tgz"
         },
         {
-            "url": "https://github.com/heroku/heroku-buildpack-cli#ff0bfe609b4618be16b5e446d623d0eabc1576cb"
+            "url": "heroku/nodejs"
         },
         {
             "url": "https://github.com/mshanemc/salesforce-cli-buildpack#456646ed76729bc4ef32db7a22758de5c217a7b8"
+        },
+        {
+            "url": "https://github.com/heroku/heroku-buildpack-cli#ff0bfe609b4618be16b5e446d623d0eabc1576cb"
         }
     ],
     "environments": {
