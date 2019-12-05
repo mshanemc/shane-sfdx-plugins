@@ -116,6 +116,26 @@ describe('shane:object:create (regular object flavor)', () => {
         await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
     });
 
+    it('creates a Currency field (18,0) on the Object', async () => {
+        const fieldAPI = 'Currency_Field__c';
+        const fieldLabel = 'Currency Field';
+
+        await exec(`sfdx shane:object:field --object ${api} --api ${fieldAPI} -n "${fieldLabel}" -t Currency  --scale 0 --precision 18`, {
+            cwd: testProjectName
+        });
+        expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).toBe(true);
+
+        const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
+
+        expect(parsed.CustomField.type).toBe('Currency');
+        expect(parsed.CustomField.label).toBe(fieldLabel);
+        expect(parsed.CustomField.fullName).toBe(fieldAPI);
+        expect(parsed.CustomField.precision).toBe('18');
+        expect(parsed.CustomField.scale).toBe('0');
+
+        await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    });
+
     it('creates a Text field on the Object', async () => {
         const fieldAPI = 'Text_Field__c';
         const fieldLabel = 'My Text Field';
@@ -276,7 +296,7 @@ describe('shane:object:create (regular object flavor)', () => {
         expect(parsed.PermissionSet.objectPermissions).toBeTruthy();
         expect(parsed.PermissionSet.objectPermissions.object).toBe(api);
 
-        expect(parsed.PermissionSet.fieldPermissions).toHaveLength(6);
+        expect(parsed.PermissionSet.fieldPermissions).toHaveLength(7);
 
         // verify all the fields so far.  Required fields, and fileds required because they're indexed, shouldn't be included
 

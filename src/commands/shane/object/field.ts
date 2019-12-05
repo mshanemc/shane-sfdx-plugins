@@ -10,7 +10,7 @@ import { getParsed } from '../../../shared/xml2jsAsync';
 
 const SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
 const SupportedTypes__e = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
-const SupportedTypes__c = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox', 'Url', 'Email', 'Phone'];
+const SupportedTypes__c = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox', 'Url', 'Email', 'Phone', 'Currency'];
 
 export default class FieldCreate extends SfdxCommand {
     public static description = 'create or add fields to an existing object';
@@ -182,7 +182,7 @@ export default class FieldCreate extends SfdxCommand {
             outputJSON.relationshipLabel = outputJSON.relationshipName;
         }
 
-        if (this.flags.type === 'Number') {
+        if (this.flags.type === 'Number' || this.flags.type === 'Currency') {
             if (this.flags.scale >= 0) {
                 outputJSON.scale = this.flags.scale;
             } else {
