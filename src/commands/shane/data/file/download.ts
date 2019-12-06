@@ -17,13 +17,15 @@ export default class DataFileDownload extends SfdxCommand {
 
     public static examples = [
         `sfdx shane:data:file:download -i 0691k000000MXfkAAG -o ./files/
-    //save a ContentDocument from the org to the files directory, keeping the existing filename`,
+    // save a ContentDocument from the org to the files directory, keeping the existing filename`,
         `sfdx shane:data:file:download -i 0691k000000MXfkAAG -o ./files/King.jpg
-    //save a ContentDocument from the org to files/King.jpg`,
+    // save a ContentDocument from the org to files/King.jpg`,
         `sfdx shane:data:file:download -i 0691k000000MXfkAAG
-    //save a ContentDocument from the org to the current working directory, keeping the existing filename`,
+    // save a ContentDocument from the org to the current working directory, keeping the existing filename`,
         `sfdx shane:data:file:download -i 0681k000000MXfkAAG -o ./files/King.jpg
-    //save a ContentVersion from the org to files/King.jpg`
+    // save a ContentVersion from the org to files/King.jpg`,
+        `sfdx shane:data:file:download -n King
+    // go find the file named kind and download the latest version of it.`
     ];
 
     protected static flagsConfig = {
