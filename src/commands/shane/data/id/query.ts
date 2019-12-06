@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { QueryResult } from './../../../../shared/typeDefs';
+import { singleRecordQuery } from './../../../../shared/queries';
 
 export default class IdQuery extends SfdxCommand {
     public static description = 'query some object and get back the id of the matching record';
@@ -24,16 +24,9 @@ export default class IdQuery extends SfdxCommand {
         const conn = this.org.getConnection();
         const query = `select id from ${this.flags.object} where ${this.flags.where}`;
 
-        const results = <QueryResult>await conn.query(query);
+        const foundRecord = await singleRecordQuery({ conn, query });
 
-        if (results.records.length > 1) {
-            throw new Error('There are more than 1 matching records');
-        } else if (results.records.length === 0) {
-            throw new Error('No records found');
-        } else {
-            // tslint:disable-next-line:no-any
-            this.ux.log(results.records[0].Id);
-            return results.records[0].Id;
-        }
+        this.ux.log(foundRecord.Id);
+        return foundRecord.Id;
     }
 }

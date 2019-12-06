@@ -1,5 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { componentFinder, getByAddress, replaceProperty } from '../../../../shared/jsonSearch';
+import { singleRecordQuery } from '../../../../shared/queries';
 
 import * as fs from 'fs-extra';
 
@@ -144,26 +145,15 @@ export default class CommunityJSONModify extends SfdxCommand {
     private async query(): Promise<string> {
         if (this.flags.query) {
             const conn = this.org.getConnection();
-            let queryResult;
-            if (this.flags.tooling) {
-                queryResult = await conn.tooling.query(this.flags.query);
-            } else {
-                queryResult = await conn.query(this.flags.query);
-            }
+            const queryResult = await singleRecordQuery({ conn, query: this.flags.query, tooling: this.flags.tooling });
+
             if (this.flags.verbose) {
                 this.ux.logJson(queryResult);
             }
 
-            if (queryResult.totalSize === 1) {
-                const result = queryResult.records[0][this.flags.queryfield];
-                if (this.flags.truncate) {
-                    return result.substr(0, 15);
-                }
-                return result;
-            } else if (queryResult.totalSize > 0) {
-                throw new Error('multiple records found...fix your query');
-            } else {
-                throw new Error('no records found for your query');
+            const result = queryResult[this.flags.queryfield];
+            if (this.flags.truncate) {
+                return result.substr(0, 15);
             }
         }
     }
