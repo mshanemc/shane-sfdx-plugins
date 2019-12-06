@@ -2,7 +2,8 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import request = require('request-promise-native');
 import localFile2CV = require('../../../shared/localFile2CV');
-import { QueryResult, Record } from './../../../shared/typeDefs';
+import { singleRecordQuery } from './../../../shared/queries';
+import { Record } from './../../../shared/typeDefs';
 
 export default class Photo extends SfdxCommand {
     public static description = 'Set the photo for a user by first/last name';
@@ -43,21 +44,7 @@ export default class Photo extends SfdxCommand {
         // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
         const conn = this.org.getConnection();
         // const query = 'Select Name, TrialExpirationDate from Organization';
-        let group;
-
-        try {
-            const groups = <QueryResult>await conn.query(`select id from CollaborationGroup where name = '${this.flags.group}'`);
-            if (groups.totalSize > 1) {
-                throw new Error('There are more than 1 result for that name.');
-            } else if (groups.totalSize === 0) {
-                throw new Error('Group not found');
-            } else {
-                group = groups.records[0];
-            }
-        } catch (e) {
-            this.ux.error(chalk.red(e));
-            throw new Error(e);
-        }
+        const group = await singleRecordQuery({ conn, query: `select id from CollaborationGroup where name = '${this.flags.group}'` });
 
         this.ux.log(`found group with id ${group.Id}`);
 
