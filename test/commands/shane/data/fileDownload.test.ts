@@ -71,7 +71,6 @@ describe('shane:data:file:download', () => {
                 }
             );
             expect(CD.status).toBe(0);
-            console.log(CD.result.records[0].Id);
             const result = await exec2JSON(`sfdx shane:data:file:download -i ${CD.result.records[0].Id} --json`, { cwd: testProjectName });
             expect(result.status).toBe(0);
 
@@ -87,7 +86,6 @@ describe('shane:data:file:download', () => {
                 }
             );
             expect(CD.status).toBe(0);
-            console.log(CD.result.records[0].LatestPublishedVersionId);
             expect(CD.result.records[0].LatestPublishedVersionId.startsWith('068')).toBe(true);
 
             await exec2String(`sfdx shane:data:file:download -i ${CD.result.records[0].LatestPublishedVersionId}`, { cwd: testProjectName });
