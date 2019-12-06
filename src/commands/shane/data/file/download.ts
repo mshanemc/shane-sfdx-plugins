@@ -1,5 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as fs from 'fs-extra';
+import { singleRecordQuery } from '../../../../shared/queries';
 import { Record } from '../../../../shared/typeDefs';
 
 interface ContentVersion extends Record {
@@ -15,29 +16,29 @@ export default class DataFileDownload extends SfdxCommand {
     public static description = 'save a file from the org to the local filesystem';
 
     public static examples = [
-        `sfdx shane:data:file:download -d 0691k000000MXfkAAG -o ./files/
+        `sfdx shane:data:file:download -i 0691k000000MXfkAAG -o ./files/
     //save a ContentDocument from the org to the files directory, keeping the existing filename`,
-        `sfdx shane:data:file:download -d 0691k000000MXfkAAG -o ./files/King.jpg
+        `sfdx shane:data:file:download -i 0691k000000MXfkAAG -o ./files/King.jpg
     //save a ContentDocument from the org to files/King.jpg`,
-        `sfdx shane:data:file:download -d 0691k000000MXfkAAG
+        `sfdx shane:data:file:download -i 0691k000000MXfkAAG
     //save a ContentDocument from the org to the current working directory, keeping the existing filename`,
-        `sfdx shane:data:file:download -v 0681k000000MXfkAAG -o ./files/King.jpg
+        `sfdx shane:data:file:download -i 0681k000000MXfkAAG -o ./files/King.jpg
     //save a ContentVersion from the org to files/King.jpg`
     ];
 
     protected static flagsConfig = {
-        documentid: flags.id({
-            char: 'd',
-            description: 'optional ContentDocument ID that should be downloaded',
-            exclusive: ['documentversionid']
+        name: flags.string({
+            char: 'n',
+            description: 'name of the file in Salesforce that you want to download',
+            exclusive: ['id']
         }),
-        documentversionid: flags.id({
-            char: 'v',
-            description: 'optional ContentVersion ID that should be downloaded',
-            exclusive: ['documentid']
+        id: flags.id({
+            char: 'i',
+            description: 'optional ContentDocument ID or ContentVersion ID that should be downloaded',
+            exclusive: ['name']
         }),
         filename: flags.string({
-            char: 'n',
+            char: 'f',
             description: 'optional filename.  Defaults to the filename of the contentVersion to download'
         }),
         directory: flags.directory({
@@ -55,16 +56,25 @@ export default class DataFileDownload extends SfdxCommand {
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        if (!this.flags.documentid && !this.flags.documentversionid) {
-            throw new Error('Please include one of documentid or documentVersionId');
-        }
-
         // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
         const conn = this.org.getConnection();
         // tslint:disable-next-line:prefer-const
-        let versionId = this.flags.documentversionid;
-        if (this.flags.documentid) {
-            versionId = (<ContentDocument>await conn.sobject('ContentDocument').retrieve(this.flags.documentid)).LatestPublishedVersionId;
+        let versionId: string;
+        if (this.flags.id) {
+            if (this.flags.id.startsWith('068')) {
+                versionId = this.flags.id;
+            } else if (this.flags.id.startsWith('069')) {
+                versionId = (<ContentDocument>await conn.sobject('ContentDocument').retrieve(this.flags.id)).LatestPublishedVersionId;
+            } else {
+                throw new Error('Id should start with 068 (ContentVersion) or 069 (ContentDocument)');
+            }
+        } else if (this.flags.name) {
+            versionId = (<ContentDocument>await singleRecordQuery({
+                conn,
+                query: `select id, LatestPublishedVersionId from ContentDocument where title='${this.flags.name}'`
+            })).LatestPublishedVersionId;
+        } else {
+            throw new Error('Please include one of: name, id');
         }
 
         const version = <ContentVersion>await conn.sobject('ContentVersion').retrieve(versionId);
@@ -85,6 +95,7 @@ export default class DataFileDownload extends SfdxCommand {
         // TODO: fix the types to acknowledge passing encoding as a property
         // tslint:disable-next-line:no-any
         const res = <Buffer>(<unknown>await conn.request(<any>{ url: version.VersionData, encoding: null }));
+        // const res = <Buffer>(<unknown>await conn.request(version.VersionData, { encoding: null }));
         await fs.writeFile(`${this.flags.directory}/${targetFilename}`, res);
         this.ux.stopSpinner('Done!');
         // so programmatic users will know where it ended up going
