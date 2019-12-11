@@ -1,4 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+// import * as core from 'src/localTypings';
 import { singleRecordQuery } from '../../../../shared/queries';
 import userIdLookup = require('../../../../shared/userIdLookup');
 
@@ -23,13 +24,17 @@ export default class UserPermsetSassign extends SfdxCommand {
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
-        const conn = this.org.getConnection();
+        // tslint:disable-next-line: no-any
+        const conn: any = <unknown>this.org.getConnection();
         let user;
         if (this.flags.lastname) {
             user = await userIdLookup.getUserId(conn, this.flags.lastname, this.flags.firstname);
         } else {
             // default to the user that you're connected as
-            user = await singleRecordQuery({ conn, query: `select id from User where username ='${conn.getUsername()}'` });
+            const username = (await conn.identity()).username;
+            console.log(`query is: select id from User where username ='${username}'`);
+
+            user = await singleRecordQuery({ conn, query: `select id from User where username ='${username}'` });
         }
 
         this.ux.log(`found user with id ${user.Id}`);
