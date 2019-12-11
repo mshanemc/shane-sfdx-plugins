@@ -8,8 +8,12 @@ export default class UserPermsetSassign extends SfdxCommand {
     public static examples = ['sfdx shane:user:permset:assign -n thePermSet -g User -l User'];
 
     protected static flagsConfig = {
-        firstname: flags.string({ char: 'g', description: 'first (given) name of the user--keeping -f for file for consistency' }),
-        lastname: flags.string({ char: 'l', required: true, description: 'last name of the user' }),
+        firstname: flags.string({
+            char: 'g',
+            description: 'first (given) name of the user--keeping -f for file for consistency',
+            dependsOn: ['lastname']
+        }),
+        lastname: flags.string({ char: 'l', description: 'last name of the user' }),
         name: flags.string({ char: 'n', required: true, description: 'the value of the permset name or label field' })
     };
 
@@ -20,7 +24,13 @@ export default class UserPermsetSassign extends SfdxCommand {
     public async run(): Promise<any> {
         // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
         const conn = this.org.getConnection();
-        const user = await userIdLookup.getUserId(conn, this.flags.lastname, this.flags.firstname);
+        let user;
+        if (this.flags.lastname) {
+            user = await userIdLookup.getUserId(conn, this.flags.lastname, this.flags.firstname);
+        } else {
+            // default to the user that you're connected as
+            user = await singleRecordQuery({ conn, query: `select id from User where username ='${conn.getUsername()}'` });
+        }
 
         this.ux.log(`found user with id ${user.Id}`);
 
