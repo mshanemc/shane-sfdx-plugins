@@ -3,7 +3,8 @@ import { singleRecordQuery } from '../../../../shared/queries';
 import userIdLookup = require('../../../../shared/userIdLookup');
 
 export default class UserPermsetAssign extends SfdxCommand {
-    public static description = 'Assign a permset to a user by first/last name';
+    public static description =
+        'Assign a permset to a user by first/last name, or just the default user.  Does not error if permset is already assigned';
 
     public static examples = ['sfdx shane:user:permset:assign -n thePermSet -g User -l User'];
 
