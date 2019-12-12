@@ -31,8 +31,6 @@ export default class UserPermsetAssign extends SfdxCommand {
         } else {
             // default to the user that you're connected as
             const username = (await conn.identity()).username;
-            console.log(`query is: select id from User where username ='${username}'`);
-
             user = await singleRecordQuery({ conn, query: `select id from User where username ='${username}'` });
         }
 
@@ -47,16 +45,20 @@ export default class UserPermsetAssign extends SfdxCommand {
 
         this.ux.log(`found permset with id ${permset.Id}`);
 
-        const result = await conn.create('PermissionSetAssignment', {
-            PermissionSetId: permset.Id,
-            AssigneeId: user.Id
-        });
-
-        this.ux.log(
-            `Assigned permset ${this.flags.name} (${permset.Id}) to user ${this.flags.firstname ? this.flags.firstname : ''} ${
-                this.flags.lastname
-            } (${user.Id})`
-        );
+        let result;
+        try {
+            result = await conn.create('PermissionSetAssignment', {
+                PermissionSetId: permset.Id,
+                AssigneeId: user.Id
+            });
+        } catch (result) {
+            if (result.name === 'DUPLICATE_VALUE') {
+                // that's ok...it was already done, and this command is meant to be idempotent.  If the org is as you asked it to be, that's ok.
+            } else {
+                throw new Error(result);
+            }
+        }
+        this.ux.log(`User ${user.Id} has been assigned permset ${this.flags.name} (${permset.Id})`);
 
         return result;
     }
