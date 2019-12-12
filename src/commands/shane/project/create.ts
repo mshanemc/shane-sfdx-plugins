@@ -68,6 +68,7 @@ sfdx force:org:open`;
         return `node_modules
 .vscode/settings.json
 .localdevserver
+.DS_Store
 `;
     }
 
