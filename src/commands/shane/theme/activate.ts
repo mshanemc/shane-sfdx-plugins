@@ -23,11 +23,12 @@ export default class ThemeActivate extends SfdxCommand {
         // first, get the id of the theme
         const conn = this.org.getConnection();
         const orgApiVersion = Number(await this.org.retrieveMaxApiVersion());
-        this.ux.log(`api version is ${orgApiVersion}`);
+        // this.ux.log(`api version is ${orgApiVersion}`);
 
         // open up the dropdown menu to populate the Activate link
         if (orgApiVersion >= 48) {
             // create a local metadata settings file in a tempDir
+            this.ux.startSpinner('creating local file');
             const tempDir = 'themeActivationTempFolder';
             await fs.ensureDir(`${tempDir}/main/default/settings`);
 
@@ -39,20 +40,25 @@ export default class ThemeActivate extends SfdxCommand {
             };
 
             await fs.writeFile(
-                `${tempDir}/main/default/settings/LightningExperienceSettings.settings`,
+                `${tempDir}/main/default/settings/LightningExperience.settings-meta.xml`,
                 jsToXml.parse('LightningExperienceSettings', metaJSON, options.js2xmlStandardOptions)
             );
 
+            this.ux.setSpinnerStatus('pushing to org');
             // deploy that to the org
             const deployResults = await exec2JSON(`sfdx force:source:deploy -p ${tempDir} --json`);
 
             // clean up local fs
-            this.ux.log('theme activated in org');
+            if (deployResults.status === 0) {
+                this.ux.stopSpinner('theme activated in org');
+            } else if (!this.flags.json) {
+                this.ux.logJson(deployResults);
+            }
             await fs.remove(tempDir);
             return deployResults;
         }
 
-        if (orgApiVersion >= 47) {
+        if (orgApiVersion === 47) {
             const results = <QueryResult>(
                 await conn.query(
                     `select id from LightningExperienceTheme where DeveloperName = '${this.flags.name}' or MasterLabel = '${this.flags.name}'`
