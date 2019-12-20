@@ -2,21 +2,12 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
-import * as _ from 'lodash';
+import { unionBy } from 'lodash';
+
 import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
 import * as options from '../../../shared/js2xmlStandardOptions';
+import { thingsThatMigrate } from '../../../shared/permsetProfileMetadata';
 import { setupArray } from '../../../shared/setupArray';
-
-const thingsThatMigrate = [
-    { profileType: 'applicationVisibilities', permSetType: 'applicationVisibilities', key: 'application' },
-    { profileType: 'classAccesses', permSetType: 'classAccesses', key: 'apexClass' },
-    { profileType: 'externalDataSourceAccesses', permSetType: 'externalDataSourceAccesses', key: 'externalDataSource' },
-    { profileType: 'fieldPermissions', permSetType: 'fieldPermissions', key: 'field' },
-    { profileType: 'objectPermissions', permSetType: 'objectPermissions', key: 'object' },
-    { profileType: 'pageAccesses', permSetType: 'pageAccesses', key: 'apexPage' },
-    { profileType: 'recordTypeVisibilities', permSetType: 'recordTypeVisibilities', key: 'recordType' },
-    { profileType: 'tabVisibilities', permSetType: 'tabSettings', key: 'tab' }
-];
 
 export default class PermSetConvert extends SfdxCommand {
     public static description = 'convert a profile into a permset';
@@ -83,7 +74,7 @@ export default class PermSetConvert extends SfdxCommand {
                 existing = setupArray(existing, item.permSetType);
 
                 this.ux.log(`copying ${item.profileType} to perm set`);
-                existing[item.permSetType] = _.unionBy(existing[item.permSetType], profile[item.profileType], item.key); // merge profile with existing permset array
+                existing[item.permSetType] = unionBy(existing[item.permSetType], profile[item.profileType], item.key); // merge profile with existing permset array
 
                 // special handling for applicationVisibility (default not allowed in permset)
                 if (item.permSetType === 'applicationVisibilities') {

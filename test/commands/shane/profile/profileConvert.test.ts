@@ -18,7 +18,8 @@ describe('profile convert (just create a permset from a profile)', () => {
     // get a clean copy of the original repo
     beforeEach(async () => {
         await fs.remove(testProjectName);
-        await exec(`git clone https://github.com/mshanemc/profile-example-for-conversion-testing ${testProjectName}`);
+        await fs.copy('test/golden-copy-test-repo', testProjectName);
+        // await exec(`git clone https://github.com/mshanemc/profile-example-for-conversion-testing ${testProjectName}`);
     });
 
     test('does a simple convert of the Admin profile', async () => {
