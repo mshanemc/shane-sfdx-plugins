@@ -1,11 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
 import jwt = require('jsonwebtoken');
-import keytar = require('keytar');
 
 import requestPromise = require('request-promise-native');
 
-import { baseUrl } from '../../../shared/aiConstants';
+import { aiServiceName, baseUrl, convertEmailToFilename, ShaneAIConfig } from '../../../shared/aiConstants';
 
 export default class EinsteinAIAuth extends SfdxCommand {
     public static description = 'get an access token from an email and a .pem file, either passed in or from environment variables';
@@ -60,10 +59,14 @@ export default class EinsteinAIAuth extends SfdxCommand {
         });
 
         const parsedResponse = JSON.parse(response);
-        await keytar.setPassword('einstein-ai', this.flags.email || process.env.EINSTEIN_EMAIL, parsedResponse.access_token);
-        this.ux.log(`Your access token is ${parsedResponse.access_token} and saved to your keychain`);
+        // this.ux.logJson(parsedResponse);
+        const config = await ShaneAIConfig.create({
+            filename: convertEmailToFilename(this.flags.email || process.env.EINSTEIN_EMAIL, aiServiceName),
+            isGlobal: true
+        });
+        await config.setToken(parsedResponse.access_token);
+        await this.ux.log(`Your access token is ${parsedResponse.access_token} and saved to your keychain`);
 
-        // const kca = new core.KeychainAccess();
         return parsedResponse;
     }
 }

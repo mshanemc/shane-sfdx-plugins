@@ -1,10 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import keytar = require('keytar');
+// import keytar = require('keytar');
 
 import { createReadStream, ReadStream } from 'fs-extra';
 import requestPromise = require('request-promise-native');
 
-import { baseUrl } from '../../../../shared/aiConstants';
+import { AITokenRetrieve, baseUrl } from '../../../../shared/aiConstants';
 
 export default class EinsteinAIUpload extends SfdxCommand {
     public static description = 'upload a dataset';
@@ -37,8 +37,8 @@ export default class EinsteinAIUpload extends SfdxCommand {
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        const token = await keytar.getPassword('einstein-ai', this.flags.email || process.env.EINSTEIN_EMAIL);
-        console.log(token);
+        // const token = await keytar.getPassword('einstein-ai', this.flags.email || process.env.EINSTEIN_EMAIL);
+        const token = await AITokenRetrieve(this.flags.email || process.env.EINSTEIN_EMAIL);
         const endpoint = `${baseUrl}/vision/datasets/upload`;
 
         const formData: DatasetCreateAsyncRequest = {

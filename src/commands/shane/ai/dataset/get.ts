@@ -1,9 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import keytar = require('keytar');
 
 import requestPromise = require('request-promise-native');
 
-import { baseUrl } from '../../../../shared/aiConstants';
+import { AITokenRetrieve, baseUrl } from '../../../../shared/aiConstants';
 
 export default class EinsteinAIGet extends SfdxCommand {
     public static description = 'get an access token from an email and a .pem file, either passed in or from environment variables';
@@ -15,13 +14,13 @@ export default class EinsteinAIGet extends SfdxCommand {
             char: 'n',
             required: true,
             description: 'dataset id'
-        })
+        }),
+        email: flags.email({ char: 'e', description: 'email address you used when you signed up for your einstein.ai account' })
     };
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        const token = await keytar.getPassword('einstein-ai', this.flags.email || process.env.EINSTEIN_EMAIL);
-        console.log(token);
+        const token = await AITokenRetrieve(this.flags.email || process.env.EINSTEIN_EMAIL);
         const endpoint = `${baseUrl}/vision/datasets/${this.flags.dataset}`;
 
         const response = await requestPromise(endpoint, {
