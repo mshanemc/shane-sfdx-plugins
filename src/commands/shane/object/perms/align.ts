@@ -168,7 +168,7 @@ export default class PermAlign extends SfdxCommand {
 
         // remove empty stuff
         for (const mdType of metadataTypes) {
-            if (existing[mdType[typeKey]].length === 0) {
+            if (existing[mdType[typeKey]] && existing[mdType[typeKey]].length === 0) {
                 delete existing[mdType[typeKey]];
             }
         }
