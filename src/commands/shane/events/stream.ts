@@ -10,7 +10,7 @@ const writeJSONOptions = {
 
 export default class EventStream extends SfdxCommand {
     public static examples = [
-        'sfdx shane:events:stream -e SomeEvent__e // subscibe to an event stream',
+        'sfdx shane:events:stream -e SomeEvent__e // subscribe to an event stream',
         'sfdx shane:events:stream -e SomeEvent__e -d myDir // stream events to myDir'
     ];
 

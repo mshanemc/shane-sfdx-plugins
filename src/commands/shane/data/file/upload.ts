@@ -27,13 +27,7 @@ export default class Upload extends SfdxCommand {
         name: flags.string({ char: 'n', description: 'set the name of the uploaded file' })
     };
 
-    // Comment this out if your command does not require an org username
     protected static requiresUsername = true;
-
-    // Comment this out if your command does not support a hub org username
-    // protected static supportsDevhubUsername = true;
-
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = false;
 
     // tslint:disable-next-line:no-any

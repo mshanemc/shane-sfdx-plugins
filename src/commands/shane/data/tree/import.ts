@@ -5,7 +5,7 @@ const rowLimit = 200;
 
 export default class DataTreeImport extends SfdxCommand {
     public static description =
-        'similr to the original tree:import, but handles more than 200 records at a go, while still preserving relationships.  Takes longer.';
+        'similar to the original tree:import, but handles more than 200 records at a go, while still preserving relationships.  Takes longer.';
     public static examples = [
         'sfdx shane:data:tree:import -p data/myPlan.json -d data/  // run all the data in the plan, and files mentioned are relative to ./data'
     ];

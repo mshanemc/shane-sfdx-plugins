@@ -32,7 +32,7 @@ describe('shane:user:permset:assign', () => {
             await exec(`sfdx force:project:create -n ${testProjectName}`);
             await testutils.orgCreate(testProjectName);
             await fs.ensureDir(`${testProjectName}/force-app/main/default/permissionsets`);
-            // conver to xml and write out the file
+            // convert to xml and write out the file
             const xml = jsToXml.parse('PermissionSet', permsetMeta, options.js2xmlStandardOptions);
             await fs.writeFile(`${testProjectName}/force-app/main/default/permissionsets/${permsetName}.permissionset-meta.xml`, xml);
             await exec(`sfdx force:source:push`, { cwd: testProjectName });

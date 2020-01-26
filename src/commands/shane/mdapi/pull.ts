@@ -176,7 +176,7 @@ export default class Pull extends SfdxCommand {
         // TODO: automation, security, reporting, i18n
         all: flags.boolean({
             description:
-                "Pulls just about everything.  Don't use this flag with any other subset of metadata.  Not recommended for really large metatadat orgs because it'll overflow stdout",
+                "Pulls just about everything.  Don't use this flag with any other subset of metadata.  Not recommended for really large metadata orgs because it'll overflow stdout",
             exclusive: ['code', 'perms', 'wave', 'schema', 'ui', 'object', 'type', 'reporting']
         })
     };
@@ -324,7 +324,7 @@ const localFilesystemBuild = async (mdType, apiversion, username) => {
 
     const retrieveCommand = `sfdx force:source:retrieve -x ${targetFolder}/package.xml -w 30 -u ${username} --json`;
 
-    // build in retry logic beause of flakiness on .sfdx/stash.json
+    // build in retry logic because of flakiness on .sfdx/stash.json
     let retries = 0;
     while (retries < retryLimit) {
         try {

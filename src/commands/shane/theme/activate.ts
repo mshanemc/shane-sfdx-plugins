@@ -9,7 +9,7 @@ import { QueryResult } from './../../../shared/typeDefs';
 import * as options from '../../../shared/js2xmlStandardOptions';
 export default class ThemeActivate extends SfdxCommand {
     public static description =
-        'Activate a LightningExperienceTheme via Puppeteer/Chromium headless.  Recommended: use shane:org:reuath -r to make darn sure that the domain is ready to open something';
+        'Activate a LightningExperienceTheme via Puppeteer/Chromium headless.  Recommended: use shane:org:reauth -r to make darn sure that the domain is ready to open something';
 
     protected static requiresUsername = true;
 

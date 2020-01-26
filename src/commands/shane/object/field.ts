@@ -352,7 +352,7 @@ export default class FieldCreate extends SfdxCommand {
 
             const position = this.flags.indexposition || existing.indexes[0].fields.length - 1;
 
-            // conver to xml and write out the file
+            // convert to xml and write out the file
             const objXml = jsToXml.parse('CustomObject', existing, options.js2xmlStandardOptions);
             fs.writeFileSync(filePath, objXml);
 

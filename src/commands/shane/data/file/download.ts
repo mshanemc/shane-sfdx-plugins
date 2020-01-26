@@ -46,7 +46,7 @@ export default class DataFileDownload extends SfdxCommand {
         directory: flags.directory({
             char: 'o',
             description:
-                'optional output path to save the file, if ommitted will save to current directory, ' +
+                'optional output path to save the file, if omitted will save to current directory, ' +
                 'if directory then it will keep the filename and save into that directory',
             parse: input => input.replace(/\/$/, ''),
             default: '.'
