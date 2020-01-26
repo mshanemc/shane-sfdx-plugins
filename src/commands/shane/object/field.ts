@@ -10,7 +10,7 @@ import { getParsed } from '../../../shared/xml2jsAsync';
 
 const SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
 const SupportedTypes__e = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
-const SupportedTypes__c = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox', 'Url', 'Email', 'Phone', 'Currency'];
+const SupportedTypes__c = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox', 'Url', 'Email', 'Phone', 'Currency', 'Picklist'];
 
 export default class FieldCreate extends SfdxCommand {
     public static description = 'create or add fields to an existing object';
@@ -42,7 +42,9 @@ export default class FieldCreate extends SfdxCommand {
             )}.  Regular Objects: ${SupportedTypes__c.join(',')}`
         }),
         description: flags.string({ description: "optional description for the field so you remember what it's for next year" }),
-        default: flags.string({ description: 'required for checkbox fields.  Express in Salesforce formula language (good luck with that!)' }),
+        default: flags.string({
+            description: 'required for checkbox fields.  Express in Salesforce formula language (good luck with that!)'
+        }),
         required: flags.boolean({ char: 'r', description: 'field is required' }),
         unique: flags.boolean({ char: 'u', description: 'field must be unique' }),
         externalid: flags.boolean({ description: 'use as an external id' }),
@@ -57,6 +59,8 @@ export default class FieldCreate extends SfdxCommand {
         lookupobject: flags.string({ description: 'API name of the object the lookup goes to' }),
         relname: flags.string({ description: 'API name for the lookup relationship' }),
 
+        picklistvalues: flags.array({ description: 'values for the picklist' }),
+        picklistdefaultfirst: flags.boolean({ description: 'use the first value in the picklist as the default' }),
         // big object index handling
         indexposition: flags.integer({
             description:
@@ -96,7 +100,9 @@ export default class FieldCreate extends SfdxCommand {
         }
 
         if (!this.flags.api) {
-            this.flags.api = await cli.prompt('API name for your new field?', { default: `${this.flags.name.replace(/ /g, '_')}__c` });
+            this.flags.api = await cli.prompt('API name for your new field?', {
+                default: `${this.flags.name.replace(/ /g, '_')}__c`
+            });
         }
 
         // be helpful
@@ -133,6 +139,18 @@ export default class FieldCreate extends SfdxCommand {
             referenceTo?: string;
             trackHistory?: boolean;
             visibleLines?: number;
+            valueSet?: { valueSetDefinition?: ValueSetDefinition };
+        }
+
+        interface ValueSetDefinition {
+            sorted: boolean;
+            value: Value[];
+        }
+
+        interface Value {
+            fullName: string;
+            default?: boolean;
+            label: string;
         }
 
         while (this.flags.object.endsWith('__b') && !SupportedTypes__b.includes(this.flags.type)) {
@@ -199,6 +217,41 @@ export default class FieldCreate extends SfdxCommand {
             }
         }
 
+        if (this.flags.type === 'Picklist') {
+            let values = [];
+            // let defaultValue;
+
+            if (this.flags.picklistvalues) {
+                values = this.flags.picklistvalues;
+            } else {
+                this.ux.log(`OK, let's build a picklist.  Values will appear in the order entered.`);
+                let keepAsking = true;
+                const stopWord = 'STAHP';
+                while (keepAsking) {
+                    const response = await cli.prompt(`Enter a value to add to picklist, or say ${stopWord} to stop`);
+                    if (response !== stopWord) {
+                        values.push(response);
+                    } else {
+                        keepAsking = false;
+                    }
+                }
+                if (!this.flags.picklistdefaultfirst) {
+                    this.flags.picklistdefaultfirst = await cli.confirm('use the first value as default? (y/n)');
+                }
+            }
+
+            outputJSON.valueSet = {
+                valueSetDefinition: {
+                    value: values.map((value, index) => ({
+                        fullName: value,
+                        label: value,
+                        default: this.flags.picklistdefaultfirst && index === 0
+                    })),
+                    sorted: true
+                }
+            };
+        }
+
         // optional stuff
         if (this.flags.required) {
             outputJSON.required = true;
@@ -221,7 +274,9 @@ export default class FieldCreate extends SfdxCommand {
         if (this.flags.description) {
             outputJSON.description = this.flags.description;
         } else if (this.flags.interactive) {
-            outputJSON.description = await cli.prompt('description?  Be nice to your future self!', { required: false });
+            outputJSON.description = await cli.prompt('description?  Be nice to your future self!', {
+                required: false
+            });
         }
 
         if (this.flags.helptext) {
@@ -277,7 +332,9 @@ export default class FieldCreate extends SfdxCommand {
             // we were told what to do
             while (this.flags.indexdirection !== 'ASC' && this.flags.indexdirection !== 'DESC') {
                 outputJSON.required = true;
-                this.flags.indexdirection = await cli.prompt('which direction should this index be sorted? (ASC, DESC)', { default: 'DESC' });
+                this.flags.indexdirection = await cli.prompt('which direction should this index be sorted? (ASC, DESC)', {
+                    default: 'DESC'
+                });
             }
 
             existing = await fixExistingDollarSign(existing);
