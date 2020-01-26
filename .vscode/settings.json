@@ -10,5 +10,23 @@
     },
     "files.exclude": {
         "node_modules": true
-    }
+    },
+    "cSpell.words": [
+        "STAHP",
+        "clientid",
+        "externalid",
+        "helptext",
+        "indexappend",
+        "indexdirection",
+        "indexposition",
+        "noancestors",
+        "noindex",
+        "picklistdefaultfirst",
+        "picklistvalues",
+        "reauth",
+        "relname",
+        "testutils",
+        "trackhistory",
+        "xmlparser"
+    ]
 }
