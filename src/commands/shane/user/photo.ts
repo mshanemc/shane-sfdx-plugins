@@ -43,9 +43,7 @@ export default class Photo extends SfdxCommand {
         // still here?  you must be doing an attachment
         const options = {
             method: 'POST',
-            uri: `${conn.instanceUrl}/services/data/v42.0/connect/user-profiles/${user.Id}/photo`,
             json: true,
-            body: {},
             headers: {
                 Authorization: `Bearer ${conn.accessToken}`
             }
