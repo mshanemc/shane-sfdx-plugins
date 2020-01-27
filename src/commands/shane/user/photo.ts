@@ -1,8 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import chalk from 'chalk';
-import request = require('request-promise-native');
-import localFile2CV = require('../../../shared/localFile2CV');
 import userIdLookup = require('../../../shared/userIdLookup');
+import { savePhotoForUser } from '../../../shared/userPhoto';
 
 export default class Photo extends SfdxCommand {
     public static description = 'Set the photo for a user by first/last name';
@@ -33,43 +31,18 @@ export default class Photo extends SfdxCommand {
     public async run(): Promise<any> {
         // potential errors
         if (!this.flags.file && !this.flags.banner) {
-            this.ux.error(chalk.red('you have to supply either --banner or --file'));
+            throw new Error('you have to supply either --banner or --file');
         }
 
         const conn = this.org.getConnection();
         const user = await userIdLookup.getUserId(conn, this.flags.lastname, this.flags.firstname);
         this.ux.log(`found user with id ${user.Id}`);
 
-        // still here?  you must be doing an attachment
-        const options = {
-            method: 'POST',
-            json: true,
-            headers: {
-                Authorization: `Bearer ${conn.accessToken}`
-            }
-        };
-
-        if (this.flags.file) {
-            // const photoCV = (await localFile2CV.file2CV(conn, this.flags.file)) as Record;
-            const photoCV = await localFile2CV.file2CV(conn, this.flags.file);
-            const photoResult = await request({
-                ...options,
-                uri: `${conn.instanceUrl}/services/data/v42.0/connect/user-profiles/${user.Id}/photo`,
-                body: {
-                    fileId: photoCV.ContentDocumentId
-                }
-            });
-            return photoResult;
-        } else if (this.flags.banner) {
-            const bannerCV = await localFile2CV.file2CV(conn, this.flags.banner);
-            const bannerResult = await request({
-                ...options,
-                uri: `${conn.instanceUrl}/services/data/v42.0/connect/user-profiles/${user.Id}/banner-photo`,
-                body: {
-                    fileId: bannerCV.ContentDocumentId
-                }
-            });
-            return bannerResult;
-        }
+        return await savePhotoForUser({
+            conn,
+            userId: user.Id,
+            filePath: this.flags.file ?? this.flags.banner,
+            isBanner: typeof this.flags.banner === 'string'
+        });
     }
 }

@@ -2,9 +2,10 @@ import { flags, SfdxCommand } from '@salesforce/command';
 // import keytar = require('keytar');
 
 import { createReadStream, ReadStream } from 'fs-extra';
-import requestPromise = require('request-promise-native');
 
 import { AITokenRetrieve, baseUrl } from '../../../../shared/aiConstants';
+
+import requestPromise = require('request-promise-native');
 
 export default class EinsteinAIUpload extends SfdxCommand {
     public static description = 'upload a dataset';
@@ -32,10 +33,9 @@ export default class EinsteinAIUpload extends SfdxCommand {
         }),
         async: flags.boolean({ char: 'a', description: 'keep polling until the dataset creation is done' }),
         email: flags.email({ char: 'e', description: 'email address you used when you signed up for your einstein.ai account' }),
-        wait: flags.integer({ char: 'w', description: 'how long to wait for this to proecess', default: 0 })
+        wait: flags.integer({ char: 'w', description: 'how long to wait for this to process', default: 0 })
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // const token = await keytar.getPassword('einstein-ai', this.flags.email || process.env.EINSTEIN_EMAIL);
         const token = await AITokenRetrieve(this.flags.email || process.env.EINSTEIN_EMAIL);

@@ -35,7 +35,6 @@
         "@oclif/dev-cli": "1.22.0",
         "@oclif/plugin-help": "^2.1.6",
         "@oclif/test": "^1.2.4",
-        "@oclif/tslint": "^1.1.2",
         "@salesforce/dev-config": "^1.4.4",
         "@types/fs-extra": "^5.0.5",
         "@types/jest": "^24.0.11",
@@ -48,7 +47,10 @@
         "@types/xml2js": "^0.4.4",
         "@typescript-eslint/eslint-plugin": "^2.17.0",
         "@typescript-eslint/parser": "^2.17.0",
+        "eslint": "^6.8.0",
         "eslint-config-airbnb-typescript": "^6.3.1",
+        "eslint-config-oclif": "^3.1.0",
+        "eslint-config-oclif-typescript": "^0.1.0",
         "eslint-config-prettier": "^6.9.0",
         "eslint-plugin-import": "^2.20.0",
         "eslint-plugin-prettier": "^3.1.2",
@@ -59,7 +61,6 @@
         "rimraf": "^3.0.0",
         "ts-jest": "^24.0.0",
         "ts-node": "^7.0.1",
-        "tslint-config-prettier": "^1.18.0",
         "typescript": "^3.3.3333"
     },
     "files": [

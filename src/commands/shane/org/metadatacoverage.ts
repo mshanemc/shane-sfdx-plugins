@@ -10,12 +10,11 @@ export default class MetadataCoverage extends SfdxCommand {
 // opens /mdcoverage/report.jsp on the default scratch org
 `,
         `sfdx shane:org:metadatacoverage -u someOrgAlias
-// opens mdcoverage for specified org
+// opens report for specified org
 `
     ];
 
     protected static flagsConfig = {};
-
     protected static requiresUsername = true;
 
     // tslint:disable-next-line:no-any

@@ -49,20 +49,24 @@ export default class PermCheck extends SfdxCommand {
         if (this.flags.field) {
             // tslint:disable-next-line:no-any
             withAccess = <any[]>(
-                (await conn.query(
-                    `select ParentId, Parent.Name, Parent.IsOwnedByProfile, Parent.ProfileId from FieldPermissions where ${levelTranlator(
-                        this.flags.fieldlevel
-                    )} = true and SobjectType = '${this.flags.object}' and Field = '${this.flags.object}.${this.flags.field}'`
-                )).records
+                (
+                    await conn.query(
+                        `select ParentId, Parent.Name, Parent.IsOwnedByProfile, Parent.ProfileId from FieldPermissions where ${levelTranslator(
+                            this.flags.fieldlevel
+                        )} = true and SobjectType = '${this.flags.object}' and Field = '${this.flags.object}.${this.flags.field}'`
+                    )
+                ).records
             );
         } else {
             // tslint:disable-next-line:no-any
             withAccess = <any[]>(
-                (await conn.query(
-                    `select ParentId, Parent.Name, Parent.IsOwnedByProfile, Parent.ProfileId from ObjectPermissions where ${levelTranlator(
-                        this.flags.objectlevel
-                    )} = true and SobjectType = '${this.flags.object}'`
-                )).records
+                (
+                    await conn.query(
+                        `select ParentId, Parent.Name, Parent.IsOwnedByProfile, Parent.ProfileId from ObjectPermissions where ${levelTranslator(
+                            this.flags.objectlevel
+                        )} = true and SobjectType = '${this.flags.object}'`
+                    )
+                ).records
             );
         }
 
@@ -147,7 +151,7 @@ export default class PermCheck extends SfdxCommand {
     }
 }
 
-const levelTranlator = objectlevel => {
+const levelTranslator = objectlevel => {
     if (objectlevel === 'Read') return 'PermissionsRead';
     if (objectlevel === 'Create') return 'PermissionsCreate';
     if (objectlevel === 'Edit') return 'PermissionsEdit';

@@ -1,5 +1,10 @@
 import { Field } from 'jsforce/describe-result';
 
+interface ContentVersionCreateRequest {
+    PathOnClient: string;
+    Title?: string;
+}
+
 interface FieldMeta {
     label: string;
     // tslint:disable-next-line:no-reserved-keywords
@@ -192,5 +197,6 @@ export {
     ToolingAPIDescribeQueryResult,
     PlatformEvent,
     ObjectConfig,
-    FieldMeta
+    FieldMeta,
+    ContentVersionCreateRequest
 };

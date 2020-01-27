@@ -1,10 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import fs = require('fs-extra');
-import jwt = require('jsonwebtoken');
-
-import requestPromise = require('request-promise-native');
 
 import { aiServiceName, baseUrl, convertEmailToFilename, ShaneAIConfig } from '../../../shared/aiConstants';
+
+import fs = require('fs-extra');
+import jwt = require('jsonwebtoken');
+import requestPromise = require('request-promise-native');
 
 export default class EinsteinAIAuth extends SfdxCommand {
     public static description = 'get an access token from an email and a .pem file, either passed in or from environment variables';
@@ -24,7 +24,6 @@ export default class EinsteinAIAuth extends SfdxCommand {
         tokentime: flags.integer({ char: 't', description: 'time in minutes that you want your token to be valid for', default: 1440 })
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         if (!this.flags.email && !process.env.EINSTEIN_EMAIL) {
             throw new Error('You have to have an email address, either --email or stored in the environment as EINSTEIN_EMAIL');
