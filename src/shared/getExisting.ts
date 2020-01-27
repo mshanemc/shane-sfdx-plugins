@@ -1,4 +1,3 @@
-import { AnyJson } from '@salesforce/ts-types';
 import fs = require('fs-extra');
 
 import { getParsed } from './xml2jsAsync';
@@ -13,13 +12,4 @@ export async function getExisting(targetFilename: string, subType: string, defau
     } else {
         throw new Error(`Not found: ${targetFilename}`);
     }
-}
-
-export function fixExistingDollarSign(existing: AnyJson) {
-    if (existing['$']) {
-        const temp = existing['$'];
-        delete existing['$'];
-        existing['@'] = temp;
-    }
-    return existing;
 }

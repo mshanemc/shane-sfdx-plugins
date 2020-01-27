@@ -1,5 +1,29 @@
 import { Field } from 'jsforce/describe-result';
 
+interface ObjectConfig {
+    '@': {};
+    deploymentStatus: string;
+    label: string;
+    pluralLabel: string;
+    indexes?: {};
+    eventType?: string;
+    description?: string;
+    nameField?: {
+        label: string;
+        type: string;
+        displayFormat?: string;
+    };
+    sharingModel?: string;
+    enableActivities?: boolean;
+    enableBulkApi?: boolean;
+    enableFeeds?: boolean;
+    enableHistory?: boolean;
+    enableReports?: boolean;
+    enableSearch?: boolean;
+    enableSharing?: boolean;
+    enableStreamingApi?: boolean;
+}
+
 interface Record {
     attributes: object;
     Id: string;
@@ -133,5 +157,6 @@ export {
     WaveDataFlowListResponse,
     CommunitiesRestResult,
     ToolingAPIDescribeQueryResult,
-    PlatformEvent
+    PlatformEvent,
+    ObjectConfig
 };

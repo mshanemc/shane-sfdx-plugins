@@ -2,9 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
 
 import { exec } from '../../../shared/execProm';
-import * as options from '../../../shared/js2xmlStandardOptions';
-
-import jsToXml = require('js2xmlparser');
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 const retryLimit = 5;
 
@@ -310,17 +308,17 @@ const localFilesystemBuild = async (mdType, apiversion, username) => {
     const targetFolder = `${pkgDir}/${mdType.name}`;
     await fs.ensureDir(targetFolder);
 
-    const packageJSON = {
-        '@': {
-            xmlns: 'http://soap.sforce.com/2006/04/metadata'
+    await writeJSONasXML({
+        path: `./${targetFolder}/package.xml`,
+        json: {
+            '@': {
+                xmlns: 'http://soap.sforce.com/2006/04/metadata'
+            },
+            types: Array.of({ name: mdType.name, members: mdType.members }),
+            version: apiversion
         },
-        types: Array.of({ name: mdType.name, members: mdType.members }),
-        version: apiversion
-    };
-
-    // create a packagexml for that type
-    const xml = jsToXml.parse('Package', packageJSON, options.js2xmlStandardOptions);
-    await fs.writeFile(`./${targetFolder}/package.xml`, xml);
+        type: 'Package'
+    });
 
     const retrieveCommand = `sfdx force:source:retrieve -x ${targetFolder}/package.xml -w 30 -u ${username} --json`;
 

@@ -4,7 +4,7 @@ import cli from 'cli-ux';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 
-import { fixExistingDollarSign } from '../../../shared/getExisting';
+import { fixExistingDollarSign } from '../../../shared/JSONXMLtools';
 import * as options from '../../../shared/js2xmlStandardOptions';
 import { getParsed } from '../../../shared/xml2jsAsync';
 

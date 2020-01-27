@@ -2,7 +2,7 @@ import { AnyJson } from '@salesforce/ts-types';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 import { IOptions } from 'js2xmlparser/lib/options';
-import { fixExistingDollarSign } from './getExisting';
+import { ObjectConfig } from './typeDefs';
 
 const standardOptions: IOptions = {
     declaration: {
@@ -22,8 +22,18 @@ const writeJSONasXML = async ({ path, json, type, options = standardOptions }: W
 
 interface WriteJSONasXMLInputs {
     path: string;
-    json: AnyJson;
+    json: AnyJson | ObjectConfig;
     type: string;
     options?: IOptions;
 }
-export { writeJSONasXML, standardOptions };
+
+const fixExistingDollarSign = (existing: WriteJSONasXMLInputs['json']) => {
+    if (existing['$']) {
+        const temp = existing['$'];
+        delete existing['$'];
+        existing['@'] = temp;
+    }
+    return existing;
+};
+
+export { writeJSONasXML, standardOptions, fixExistingDollarSign };

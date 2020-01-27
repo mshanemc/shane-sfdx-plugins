@@ -2,8 +2,9 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import cli from 'cli-ux';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
-import * as options from '../../../shared/js2xmlStandardOptions';
+
+import { ObjectConfig } from '../../../shared/typeDefs';
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 const typeDefinitions = [
     {
@@ -86,30 +87,6 @@ export default class ObjectCreate extends SfdxCommand {
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        interface ObjectConfig {
-            '@': {};
-            deploymentStatus: string;
-            label: string;
-            pluralLabel: string;
-            indexes?: {};
-            eventType?: string;
-            description?: string;
-            nameField?: {
-                label: string;
-                type: string;
-                displayFormat?: string;
-            };
-            sharingModel?: string;
-            enableActivities?: boolean;
-            enableBulkApi?: boolean;
-            enableFeeds?: boolean;
-            enableHistory?: boolean;
-            enableReports?: boolean;
-            enableSearch?: boolean;
-            enableSharing?: boolean;
-            enableStreamingApi?: boolean;
-        }
-
         const outputJSON = <ObjectConfig>{
             '@': {
                 xmlns: 'http://soap.sforce.com/2006/04/metadata'
@@ -247,24 +224,20 @@ export default class ObjectCreate extends SfdxCommand {
         }
 
         const objectsPath = `${this.flags.directory}/objects`;
-        const thisObjectFolder = `${this.flags.directory}/objects/${this.flags.api}`;
-        const metaFileLocation = `${this.flags.directory}/objects/${this.flags.api}/${this.flags.api}.object-meta.xml`;
+        const thisObjectFolder = `${objectsPath}/${this.flags.api}`;
+        const metaFileLocation = `${thisObjectFolder}/${this.flags.api}.object-meta.xml`;
 
-        fs.ensureDirSync(objectsPath);
-
-        if (!fs.existsSync(thisObjectFolder)) {
-            fs.mkdirSync(thisObjectFolder);
-        } else {
-            this.ux.error(`Object already exists: ${thisObjectFolder}`);
-            return;
+        if (fs.existsSync(thisObjectFolder)) {
+            throw new Error(`Object already exists: ${thisObjectFolder}`);
         }
+        await fs.ensureDir(thisObjectFolder);
 
         fs.ensureDirSync(`${objectsPath}/${this.flags.api}/fields`);
-
-        const xml = jsToXml.parse('CustomObject', outputJSON, options.js2xmlStandardOptions);
-
-        fs.writeFileSync(metaFileLocation, xml);
-
+        await writeJSONasXML({
+            type: 'CustomObject',
+            json: outputJSON,
+            path: metaFileLocation
+        });
         this.ux.log(`Created ${chalk.green(thisObjectFolder)}.  Add fields with ${chalk.cyan(`sfdx shane:object:field -o ${this.flags.api}`)}.`);
     }
 
