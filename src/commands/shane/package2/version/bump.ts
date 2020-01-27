@@ -57,17 +57,16 @@ export default class Bump extends SfdxCommand {
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         if ((this.flags.major && this.flags.minor) || (!this.flags.major && !this.flags.minor)) {
-            this.ux.error(chalk.red('You have to specify either --major or --minor but not both'));
+            this.ux.error(chalk.red('You have to specify either --major or --minor or --patch but not both'));
             return;
         }
 
         const projectFile = await this.project.retrieveSfdxProjectJson(false);
 
-        const project = JSON.parse(fs.readFileSync(projectFile.getPath(), 'UTF-8'));
+        // const project = JSON.parse(fs.readFileSync(projectFile.getPath(), 'UTF-8'));
+        const project = await fs.readJson(projectFile.getPath());
 
-        const targetDirIndex = project.packageDirectories.findIndex(i => {
-            return i.path === this.flags.target;
-        });
+        const targetDirIndex = project.packageDirectories.findIndex(i => i.path === this.flags.target);
 
         if (targetDirIndex < 0) {
             this.ux.error(`found nothing in packageDirectories matching path ${this.flags.path}`);
@@ -87,14 +86,15 @@ export default class Bump extends SfdxCommand {
         }
 
         project.packageDirectories[targetDirIndex].versionNumber = versionNumber.join('.');
-        await fs.writeFile(projectFile.getPath(), JSON.stringify(project, null, 2));
+        // await fs.writeFile(projectFile.getPath(), JSON.stringify(project, null, 2));
+        await fs.writeJSON(project.getPath(), project, { spaces: 2 });
 
         this.ux.log(chalk.green(`Updated sfdx-project.json for ${this.flags.target} to ${project.packageDirectories[targetDirIndex].versionNumber}`));
 
         // do we need to generate the new version?
         if (this.flags.create || this.flags.release) {
             try {
-                cli.action.start("Creating package version (this'll take a while)");
+                cli.action.start('Creating package version (this may take a while)');
                 // createResult = <CreateResultI>await exec(`sfdx force:package2:version:create -d ${this.flags.target} -w 20 -v ${this.hubOrg.getUsername()} --json`);
                 const packageCreationStart = new Date();
                 const createResult = await exec2JSON(

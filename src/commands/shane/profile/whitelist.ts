@@ -31,7 +31,7 @@ export default class ProfileWhitelist extends SfdxCommand {
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        fs.ensureDirSync(`${this.flags.directory}/profiles`); // create profiles locally if it doesn't exist already
+        await fs.ensureDir(`${this.flags.directory}/profiles`);
         const targetProfile = `${this.flags.directory}/profiles/${this.flags.name}.profile-meta.xml`;
 
         let existing = await getExisting(targetProfile, 'Profile', {
@@ -51,7 +51,7 @@ export default class ProfileWhitelist extends SfdxCommand {
 
         // convert to xml and write out the file
         const xml = jsToXml.parse('Profile', existing, options.js2xmlStandardOptions);
-        fs.writeFileSync(targetProfile, xml);
+        await fs.writeFile(targetProfile, xml);
 
         this.ux.log(chalk.green(`Whitelisted ${targetProfile} locally`) + '...next, push or deploy to an org.');
         return existing; // for someone who wants the JSON?
