@@ -2,7 +2,6 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import request = require('request-promise-native');
 import localFile2CV = require('../../../shared/localFile2CV');
-import { Record } from '../../../shared/typeDefs';
 import userIdLookup = require('../../../shared/userIdLookup');
 
 export default class Photo extends SfdxCommand {
@@ -53,7 +52,8 @@ export default class Photo extends SfdxCommand {
         };
 
         if (this.flags.file) {
-            const photoCV = <Record>await localFile2CV.file2CV(conn, this.flags.file);
+            // const photoCV = (await localFile2CV.file2CV(conn, this.flags.file)) as Record;
+            const photoCV = await localFile2CV.file2CV(conn, this.flags.file);
             const photoResult = await request({
                 ...options,
                 uri: `${conn.instanceUrl}/services/data/v42.0/connect/user-profiles/${user.Id}/photo`,
@@ -63,7 +63,7 @@ export default class Photo extends SfdxCommand {
             });
             return photoResult;
         } else if (this.flags.banner) {
-            const bannerCV = <Record>await localFile2CV.file2CV(conn, this.flags.banner);
+            const bannerCV = await localFile2CV.file2CV(conn, this.flags.banner);
             const bannerResult = await request({
                 ...options,
                 uri: `${conn.instanceUrl}/services/data/v42.0/connect/user-profiles/${user.Id}/banner-photo`,
