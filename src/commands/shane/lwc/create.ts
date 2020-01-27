@@ -2,6 +2,8 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
 
+import { removeTrailingSlash } from '../../../shared/flagParsing';
+
 export default class LWCCreate extends SfdxCommand {
     public static description = 'create a lwc locally without need for sfdx project';
 
@@ -13,16 +15,16 @@ export default class LWCCreate extends SfdxCommand {
 
     protected static flagsConfig = {
         name: flags.string({ char: 'n', required: true, description: 'name it headsDownCamelCase' }),
-        directory: flags.directory({ char: 'd', required: true, description: "where to create the new lwc's folder" })
+        directory: flags.directory({
+            char: 'd',
+            required: true,
+            description: "where to create the new lwc's folder",
+            parse: input => removeTrailingSlash(input)
+        })
     };
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        // remove trailing slash if someone entered it
-        if (this.flags.directory.endsWith('/')) {
-            this.flags.directory = this.flags.directory.substring(0, this.flags.directory.length - 1);
-        }
-
         const lwcPath = `${this.flags.directory}/${this.flags.name}`;
         await fs.mkdir(lwcPath);
 

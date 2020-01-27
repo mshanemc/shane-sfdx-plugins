@@ -1,9 +1,9 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 
-import * as options from '../../../shared/js2xmlStandardOptions';
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
+import { removeTrailingSlash } from '../../../shared/flagParsing';
 
 export default class PowerOfOne extends SfdxCommand {
     public static description = 'create a new record type for an object';
@@ -26,7 +26,8 @@ export default class PowerOfOne extends SfdxCommand {
         target: flags.directory({
             char: 't',
             default: 'force-app/main/default',
-            description: 'where to create the file...defaults to force-app/main/default'
+            description: 'where to create the file...defaults to force-app/main/default',
+            parse: input => removeTrailingSlash(input)
         })
     };
 
@@ -44,29 +45,24 @@ export default class PowerOfOne extends SfdxCommand {
         }
 
         if (this.flags.name.includes(' ')) {
-            this.ux.error(chalk.red('spaces are not allowed in the api name.  Specify a --name to use a label with spaces'));
+            throw new Error('spaces are not allowed in the api name.  Specify a --name to use a label with spaces');
         }
 
-        // remove trailing slash if someone entered it
-        if (this.flags.target.endsWith('/')) {
-            this.flags.target = this.flags.target.substring(0, this.flags.target.length - 1);
-        }
+        await fs.ensureDir(`${this.flags.target}/objects/${this.flags.object}/recordTypes`);
 
-        fs.ensureDirSync(`${this.flags.target}/objects/${this.flags.object}/recordTypes`);
-
-        const rtJSON = {
-            '@': {
-                xmlns: 'http://soap.sforce.com/2006/04/metadata'
-            },
-            fullName: this.flags.name,
-            active: true,
-            label: this.flags.label,
-            description: this.flags.description
-        };
-
-        const xml = jsToXml.parse('RecordType', rtJSON, options.js2xmlStandardOptions);
-
-        fs.writeFileSync(`${this.flags.target}/objects/${this.flags.object}/recordTypes/${this.flags.name}.recordType-meta.xml`, xml);
+        await writeJSONasXML({
+            path: `${this.flags.target}/objects/${this.flags.object}/recordTypes/${this.flags.name}.recordType-meta.xml`,
+            type: 'RecordType',
+            json: {
+                '@': {
+                    xmlns: 'http://soap.sforce.com/2006/04/metadata'
+                },
+                fullName: this.flags.name,
+                active: true,
+                label: this.flags.label,
+                description: this.flags.description
+            }
+        });
 
         this.ux.log(`${chalk.green('Record type created')}.  It's only local...push to deploy.`);
     }

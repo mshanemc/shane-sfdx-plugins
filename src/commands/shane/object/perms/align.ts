@@ -1,13 +1,11 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 
-import { fixExistingDollarSign, getExisting } from '../../../../shared/getExisting';
+import { getExisting } from '../../../../shared/getExisting';
 import { metadataTypes } from '../../../../shared/permsetProfileMetadata';
 import { setupArray } from '../../../../shared/setupArray';
-
-import * as options from '../../../../shared/js2xmlStandardOptions';
+import { writeJSONasXML } from '../../../../shared/JSONXMLtools';
 
 export default class PermAlign extends SfdxCommand {
     public static description = 'align profiles with ';
@@ -173,11 +171,11 @@ export default class PermAlign extends SfdxCommand {
             }
         }
 
-        existing = await fixExistingDollarSign(existing);
-        // this.ux.logJson(existing);
-
-        const outputXML = jsToXml.parse(profileOrPermset, existing, options.js2xmlStandardOptions);
-        fs.writeFileSync(targetFilename, outputXML);
+        await writeJSONasXML({
+            path: targetFilename,
+            type: profileOrPermset,
+            json: existing
+        });
         // this.ux.log(`removed ${objectBefore - existing.objectPermissions.length} objects, ${recordTypeBefore - existing.recordTypeVisibilities.length} recordTypes, ${layoutBefore - existing.layoutAssignments.length} layout, ${fieldBefore - existing.fieldPermissions.length} fields from ${this.flags.object} ${chalk.cyan(targetFilename)}`);
     }
 }

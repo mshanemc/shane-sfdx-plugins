@@ -2,7 +2,7 @@ import { AnyJson } from '@salesforce/ts-types';
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
 import { IOptions } from 'js2xmlparser/lib/options';
-import { ObjectConfig } from './typeDefs';
+import { ObjectConfig, FieldMeta } from './typeDefs';
 
 const standardOptions: IOptions = {
     declaration: {
@@ -22,7 +22,7 @@ const writeJSONasXML = async ({ path, json, type, options = standardOptions }: W
 
 interface WriteJSONasXMLInputs {
     path: string;
-    json: AnyJson | ObjectConfig;
+    json: AnyJson | ObjectConfig | FieldMeta;
     type: string;
     options?: IOptions;
 }

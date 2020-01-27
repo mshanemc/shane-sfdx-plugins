@@ -3,6 +3,8 @@ import fs = require('fs-extra');
 import * as purify from 'purify-css';
 import * as stripCssComments from 'strip-css-comments';
 
+import { removeTrailingSlash } from '../../../../shared/flagParsing';
+
 export default class LWCCreate extends SfdxCommand {
     public static description = "take css from existing file(s), extract component-level relevant selectors and save to a LWC's css file";
 
@@ -18,22 +20,21 @@ export default class LWCCreate extends SfdxCommand {
 
     protected static flagsConfig = {
         file: flags.filepath({ char: 'f', required: true, description: 'file containing all css selectors to select from' }),
-        component: flags.directory({ char: 'c', required: true, description: 'component directory where template and js live' }),
+        component: flags.directory({
+            char: 'c',
+            required: true,
+            description: 'component directory where template and js live',
+            parse: input => removeTrailingSlash(input)
+        }),
         localcss: flags.filepath({ char: 'l', description: 'local css file to merge with contents of --file' })
     };
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        // remove trailing slash if someone entered it
-        if (this.flags.component.endsWith('/')) {
-            this.flags.component = this.flags.component.substring(0, this.flags.component.length - 1);
-        }
-
         const output = `${this.flags.component}/${this.getComponentName(this.flags.component)}.css`;
         this.ux.log(`will write file to ${output}`);
 
         const filesGlob = [`${this.flags.component}/*.html`, `${this.flags.component}/*.js`];
-
         this.ux.logJson(filesGlob);
 
         const cssGlob = [this.flags.file];

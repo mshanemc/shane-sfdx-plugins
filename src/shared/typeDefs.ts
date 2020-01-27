@@ -1,5 +1,38 @@
 import { Field } from 'jsforce/describe-result';
 
+interface FieldMeta {
+    label: string;
+    // tslint:disable-next-line:no-reserved-keywords
+    type: string;
+    fullName: string;
+    defaultValue?: string;
+    description?: string;
+    inlineHelpText?: string;
+    required?: boolean;
+    unique?: boolean;
+    externalId?: boolean;
+    length?: number;
+    scale?: number;
+    precision?: number;
+    relationshipLabel?: string;
+    relationshipName?: string;
+    referenceTo?: string;
+    trackHistory?: boolean;
+    visibleLines?: number;
+    valueSet?: { valueSetDefinition?: ValueSetDefinition };
+}
+
+interface ValueSetDefinition {
+    sorted: boolean;
+    value: Value[];
+}
+
+interface Value {
+    fullName: string;
+    default?: boolean;
+    label: string;
+}
+
 interface ObjectConfig {
     '@': {};
     deploymentStatus: string;
@@ -158,5 +191,6 @@ export {
     CommunitiesRestResult,
     ToolingAPIDescribeQueryResult,
     PlatformEvent,
-    ObjectConfig
+    ObjectConfig,
+    FieldMeta
 };

@@ -2,11 +2,10 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import cli from 'cli-ux';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 
-import { fixExistingDollarSign } from '../../../shared/JSONXMLtools';
-import * as options from '../../../shared/js2xmlStandardOptions';
+import { fixExistingDollarSign, writeJSONasXML } from '../../../shared/JSONXMLtools';
 import { getParsed } from '../../../shared/xml2jsAsync';
+import { FieldMeta } from '../../../shared/typeDefs';
 
 const SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
 const SupportedTypes__e = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
@@ -118,39 +117,6 @@ export default class FieldCreate extends SfdxCommand {
         if (fs.existsSync(fieldMetaPath)) {
             this.ux.error(chalk.red(`field already exists ${fieldMetaPath}`));
             return;
-        }
-
-        interface FieldMeta {
-            label: string;
-            // tslint:disable-next-line:no-reserved-keywords
-            type: string;
-            fullName: string;
-            defaultValue?: string;
-            description?: string;
-            inlineHelpText?: string;
-            required?: boolean;
-            unique?: boolean;
-            externalId?: boolean;
-            length?: number;
-            scale?: number;
-            precision?: number;
-            relationshipLabel?: string;
-            relationshipName?: string;
-            referenceTo?: string;
-            trackHistory?: boolean;
-            visibleLines?: number;
-            valueSet?: { valueSetDefinition?: ValueSetDefinition };
-        }
-
-        interface ValueSetDefinition {
-            sorted: boolean;
-            value: Value[];
-        }
-
-        interface Value {
-            fullName: string;
-            default?: boolean;
-            label: string;
         }
 
         while (this.flags.object.endsWith('__b') && !SupportedTypes__b.includes(this.flags.type)) {
@@ -353,16 +319,22 @@ export default class FieldCreate extends SfdxCommand {
             const position = this.flags.indexposition || existing.indexes[0].fields.length - 1;
 
             // convert to xml and write out the file
-            const objXml = jsToXml.parse('CustomObject', existing, options.js2xmlStandardOptions);
-            fs.writeFileSync(filePath, objXml);
+            await writeJSONasXML({
+                type: 'CustomObject',
+                path: filePath,
+                json: existing
+            });
 
             this.ux.log(chalk.green(`Index for ${this.flags.api} added as [${position}] of ${existing.indexes[0].fields.length}`));
         }
 
         // write out the field xml
-        const xml = jsToXml.parse('CustomField', outputJSON, options.js2xmlStandardOptions);
-
-        fs.writeFileSync(fieldMetaPath, xml);
+        // const xml = jsToXml.parse('CustomField', outputJSON, options.js2xmlStandardOptions);
+        await writeJSONasXML({
+            type: 'CustomField',
+            path: fieldMetaPath,
+            json: outputJSON
+        });
 
         this.ux.log(
             `Created ${chalk.green(fieldMetaPath)}.  Add perms with ${chalk.cyan(

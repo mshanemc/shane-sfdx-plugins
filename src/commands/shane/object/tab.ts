@@ -1,6 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
+import { removeTrailingSlash } from '../../../shared/flagParsing';
 
 import chalk from 'chalk';
 
@@ -25,7 +26,8 @@ export default class ObjectTab extends SfdxCommand {
         target: flags.directory({
             char: 't',
             default: 'force-app/main/default',
-            description: "where to create the folder (if it doesn't exist already) and file...defaults to force-app/main/default"
+            description: "where to create the folder (if it doesn't exist already) and file...defaults to force-app/main/default",
+            parse: input => removeTrailingSlash(input)
         })
     };
 
@@ -34,11 +36,6 @@ export default class ObjectTab extends SfdxCommand {
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        // remove trailing slash if someone entered it
-        if (this.flags.target.endsWith('/')) {
-            this.flags.target = this.flags.target.substring(0, this.flags.target.length - 1);
-        }
-
         // make sure the tabs directory exists
         await fs.ensureDir(`${this.flags.target}/tabs`);
 

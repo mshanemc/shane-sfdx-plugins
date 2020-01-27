@@ -5,6 +5,7 @@ import fs = require('fs-extra');
 
 import { ObjectConfig } from '../../../shared/typeDefs';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
+import { removeTrailingSlash } from '../../../shared/flagParsing';
 
 const typeDefinitions = [
     {
@@ -78,7 +79,8 @@ export default class ObjectCreate extends SfdxCommand {
         directory: flags.directory({
             char: 'd',
             default: 'force-app/main/default',
-            description: "where to create the folder (if it doesn't exist already) and file...defaults to force-app/main/default"
+            description: "where to create the folder (if it doesn't exist already) and file...defaults to force-app/main/default",
+            parse: input => removeTrailingSlash(input)
         })
     };
 
@@ -95,11 +97,6 @@ export default class ObjectCreate extends SfdxCommand {
             label: '',
             pluralLabel: ''
         };
-
-        // remove trailing slash if someone entered it
-        if (this.flags.directory.endsWith('/')) {
-            this.flags.directory = this.flags.directory.substring(0, this.flags.directory.length - 1);
-        }
 
         if (!this.flags.type) {
             this.flags.type = await cli.prompt(`Object type [${typeDefinitions.map(td => td.type)}]`, { default: 'custom' });
@@ -120,7 +117,9 @@ export default class ObjectCreate extends SfdxCommand {
             } else if (this.flags.type === 'event') {
                 suffix = '__e';
             }
-            this.flags.api = await cli.prompt(`API name (ends with ${suffix}) ?`, { default: `${this.flags.label.replace(/ /g, '_')}${suffix}` });
+            this.flags.api = await cli.prompt(`API name (ends with ${suffix}) ?`, {
+                default: `${this.flags.label.replace(/ /g, '_')}${suffix}`
+            });
         }
 
         // checks and throws an error if types and params don't mix
@@ -173,7 +172,9 @@ export default class ObjectCreate extends SfdxCommand {
                 this.flags.activities = await cli.confirm('enable activities? (y/n)');
             }
             if (this.flags.interactive && !this.flags.namefieldlabel) {
-                this.flags.namefieldlabel = await cli.prompt('What do you want to call the name field?', { default: `${this.flags.label} Name` });
+                this.flags.namefieldlabel = await cli.prompt('What do you want to call the name field?', {
+                    default: `${this.flags.label} Name`
+                });
             }
             if (this.flags.interactive && !this.flags.sharing) {
                 this.flags.sharing = await cli.prompt('Sharing model? [ReadWrite, Read, Private]', { default: 'ReadWrite' });

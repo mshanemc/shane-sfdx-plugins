@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import fs = require('fs-extra');
 
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
+import { removeTrailingSlash } from '../../../shared/flagParsing';
 
 export default class RemoteSite extends SfdxCommand {
     public static description = "create a remote site setting in the local source.  Push it when you're done";
@@ -27,7 +28,8 @@ export default class RemoteSite extends SfdxCommand {
         target: flags.directory({
             char: 't',
             default: 'force-app/main/default',
-            description: "where to create the folder (if it doesn't exist already) and file...defaults to force-app/main/default"
+            description: "where to create the folder (if it doesn't exist already) and file...defaults to force-app/main/default",
+            parse: input => removeTrailingSlash(input)
         })
     };
 
@@ -38,11 +40,6 @@ export default class RemoteSite extends SfdxCommand {
     public async run(): Promise<any> {
         if (this.flags.name.includes(' ')) {
             throw new Error('spaces are not allowed in the name');
-        }
-
-        // remove trailing slash if someone entered it
-        if (this.flags.target.endsWith('/')) {
-            this.flags.target = this.flags.target.substring(0, this.flags.target.length - 1);
         }
 
         await fs.ensureDir(`${this.flags.target}/remoteSiteSettings`);
