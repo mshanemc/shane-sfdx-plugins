@@ -1,10 +1,9 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 
-import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
-import * as options from '../../../shared/js2xmlStandardOptions';
+import { getExisting } from '../../../shared/getExisting';
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 export default class FATUpdate extends SfdxCommand {
     public static description =
@@ -55,26 +54,22 @@ export default class FATUpdate extends SfdxCommand {
         }
 
         let existing = await getExisting(targetFilename, 'CustomObject');
-        existing.enableHistory = true;
+        existing = {
+            ...existing,
+            enableHistory: true,
+            historyRetentionPolicy: {
+                ...existing.historyRetentionPolicy,
+                archiveAfterMonths: this.flags.archiveaftermonths ?? existing.historyRetentionPolicy.archiveAfterMonths ?? undefined,
+                archiveRetentionYears: this.flags.archiveretentionyears ?? existing.historyRetentionPolicy.archiveRetentionYears ?? undefined,
+                description: this.flags.description ?? existing.historyRetentionPolicy.description ?? undefined
+            }
+        };
 
-        existing.historyRetentionPolicy = existing.historyRetentionPolicy || {};
-
-        if (this.flags.archiveaftermonths >= 0) {
-            existing.historyRetentionPolicy.archiveAfterMonths = this.flags.archiveaftermonths;
-        }
-        if (this.flags.archiveretentionyears >= 0) {
-            existing.historyRetentionPolicy.archiveRetentionYears = this.flags.archiveretentionyears;
-        }
-        if (this.flags.description) {
-            existing.historyRetentionPolicy.description = this.flags.description;
-        }
-
-        existing = await fixExistingDollarSign(existing);
-
-        // convert to xml and write out the file
-        const xml = jsToXml.parse('CustomObject', existing, options.js2xmlStandardOptions);
-        fs.writeFileSync(targetFilename, xml);
-
+        await writeJSONasXML({
+            json: existing,
+            path: targetFilename,
+            type: 'CustomObject'
+        });
         this.ux.log(chalk.green(`Updated ${targetFilename} in local source`));
         return existing;
     }
