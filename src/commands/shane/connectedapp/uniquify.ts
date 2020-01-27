@@ -39,3 +39,5 @@ export default class ConnectedAppUniquify extends SfdxCommand {
         this.ux.log(`${chalk.green('Connected app updated locally')}.  Consumer Key is now ${consumerKey}`);
     }
 }
+
+// Cannot read tslint configuration - 'Failed to load /Users/shane.mclaughlin/code/shane-sfdx-plugins/tslint.json: ENOENT: no such file or directory, open '/Users/shane.mclaughlin/code/shane-sfdx-plugins/node_modules/tslint/lib/configs/recommended.js''

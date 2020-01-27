@@ -1,11 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 import sw = require('stopword');
 
-import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
-import * as options from '../../../shared/js2xmlStandardOptions';
+import { getExisting } from '../../../shared/getExisting';
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 import { setupArray } from '../../../shared/setupArray';
 import { CustomLabel } from '../../../shared/typeDefs';
 
@@ -33,7 +32,6 @@ export default class LabelAdd extends SfdxCommand {
         })
     };
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = true;
 
     // tslint:disable-next-line:no-any
@@ -54,28 +52,27 @@ export default class LabelAdd extends SfdxCommand {
 
         const newLabel: CustomLabel = {
             fullName:
-                this.flags.name ||
+                this.flags.name ??
                 sw
                     .removeStopwords(this.flags.text.split(' '))
                     .join(' ')
                     .replace(/[^a-zA-Z0-9]/g, '')
                     .substring(0, 80),
             shortDescription:
-                this.flags.description ||
+                this.flags.description ??
                 sw
                     .removeStopwords(this.flags.text.split(' '))
                     .join(' ')
                     .replace(/[^a-zA-Z0-9]/g, '')
                     .substring(0, 80),
             language: this.flags.language,
-            protected: this.flags.protected || false,
+            protected: this.flags.protected ?? false,
             value: this.flags.text
         };
 
         if (this.flags.categories) {
             newLabel.categories = this.flags.categories.join(',');
         }
-        // console.log(existing);
 
         // verify label doesn't already exist
         if (existing.labels.filter(label => label.fullName === newLabel.fullName).length > 0) {
@@ -83,14 +80,12 @@ export default class LabelAdd extends SfdxCommand {
         }
 
         existing.labels.push(newLabel);
-        existing = await fixExistingDollarSign(existing);
 
-        // read the custom labels into json
-        // build the new label
-        // write it back
-        const xml = jsToXml.parse('CustomLabels', existing, options.js2xmlStandardOptions);
-        fs.writeFileSync(targetFilename, xml);
-
+        await writeJSONasXML({
+            path: targetFilename,
+            type: 'CustomLabels',
+            json: existing
+        });
         this.ux.log(chalk.green(`Added ${newLabel.fullName} to ${targetFilename} in local source`));
 
         return existing;

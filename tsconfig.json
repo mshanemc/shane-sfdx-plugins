@@ -2,7 +2,7 @@
     "extends": "./node_modules/@salesforce/dev-config/tsconfig",
     "compilerOptions": {
         "allowJs": false,
-        "lib": ["dom", "es2018"],
+        "lib": ["dom", "esNext"],
         "outDir": "./lib",
         "rootDirs": ["./src"],
         "baseUrl": "./",
