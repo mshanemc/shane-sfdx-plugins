@@ -20,9 +20,8 @@ export default class EinsteinAIDelete extends SfdxCommand {
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const token = await AITokenRetrieve(this.flags.email || process.env.EINSTEIN_EMAIL);
-        const endpoint = `${baseUrl}/vision/datasets/${this.flags.dataset}`;
 
-        const response = await requestPromise(endpoint, {
+        const response = await requestPromise(`${baseUrl}/vision/datasets/${this.flags.dataset}`, {
             method: 'DELETE',
             headers: {
                 'Cache-Control': 'no-cache',

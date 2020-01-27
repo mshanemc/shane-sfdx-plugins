@@ -14,7 +14,7 @@ export default class DomainCORS extends SfdxCommand {
 
     protected static flagsConfig = {
         all: flags.boolean({
-            description: "do all of Salesforce, not just this org's custom domain"
+            description: `do all of Salesforce, not just this org's custom domain`
         }),
         liveagent: flags.boolean({
             description: 'whitelist all of LiveAgent urls'
@@ -50,7 +50,7 @@ export default class DomainCORS extends SfdxCommand {
 
         const xml = jsToXml.parse('CorsWhitelistOrigin', metaJSON, options.js2xmlStandardOptions);
 
-        fs.writeFileSync(`${folder}/${name}.corsWhitelistOrigin-meta.xml`, xml);
+        await fs.writeFile(`${folder}/${name}.corsWhitelistOrigin-meta.xml`, xml);
         this.ux.log(`created new file for ${metaJSON.urlPattern} in ${folder}/${name}.corsWhitelistOrigin-meta.xml`);
         return {
             file: `${folder}/${name}.corsWhitelistOrigin-meta.xml`,
