@@ -28,23 +28,24 @@ export default class LWCCreate extends SfdxCommand {
         const lwcPath = `${this.flags.directory}/${this.flags.name}`;
         await fs.mkdir(lwcPath);
 
-        await fs.writeFile(`${lwcPath}/${this.flags.name}.css`, '');
-        await fs.writeFile(
-            `${lwcPath}/${this.flags.name}.html`,
-            `<template>
-
-</template>`
-        );
-        await fs.writeFile(
-            `${lwcPath}/${this.flags.name}.js`,
-
-            `import { LightningElement } from 'lwc';
-
-export default class ${this.flags.name.charAt(0).toUpperCase() + this.flags.name.slice(1)} extends LightningElement {
-
-}`
-        );
+        await Promise.all([
+            fs.writeFile(`${lwcPath}/${this.flags.name}.css`, ''),
+            fs.writeFile(`${lwcPath}/${this.flags.name}.html`, htmlFile),
+            fs.writeFile(`${lwcPath}/${this.flags.name}.js`, this.getJsFile())
+        ]);
 
         this.ux.log(chalk.green(`Empty LWC created at ${lwcPath}`));
     }
+
+    getJsFile() {
+        `import { LightningElement } from 'lwc';
+
+export default class ${this.flags.name.charAt(0).toUpperCase() + this.flags.name.slice(1)} extends LightningElement {
+
+}`;
+    }
 }
+
+const htmlFile = `<template>
+
+</template>`;
