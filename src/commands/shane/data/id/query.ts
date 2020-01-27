@@ -20,11 +20,10 @@ export default class IdQuery extends SfdxCommand {
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
-        const conn = this.org.getConnection();
-        const query = `select id from ${this.flags.object} where ${this.flags.where}`;
-
-        const foundRecord = await singleRecordQuery({ conn, query });
+        const foundRecord = await singleRecordQuery({
+            conn: this.org.getConnection(), // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
+            query: `select id from ${this.flags.object} where ${this.flags.where}`
+        });
 
         this.ux.log(foundRecord.Id);
         return foundRecord.Id;
