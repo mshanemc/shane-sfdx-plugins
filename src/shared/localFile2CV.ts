@@ -9,8 +9,6 @@ interface ContentVersionCreateRequest {
 }
 
 export async function file2CV(conn: Connection, filepath: string, name?: string): Promise<Record> {
-    const apiVersion = conn.getApiVersion();
-
     const cvcr = <ContentVersionCreateRequest>{
         PathOnClient: filepath,
         Title: name
@@ -32,7 +30,7 @@ export async function file2CV(conn: Connection, filepath: string, name?: string)
     // https://github.com/request/request#multipartform-data-multipart-form-uploads
     const CV = <
         CreateResult // tslint:disable-next-line:no-any
-    >(<unknown>await conn.request(<any>{ url: `/services/data/v${apiVersion}/sobjects/ContentVersion`, formData, method: 'POST' }));
+    >(<unknown>await conn.request(<any>{ url: `/services/data/v${conn.getApiVersion()}/sobjects/ContentVersion`, formData, method: 'POST' }));
 
     const result = <QueryResult>await conn.query(`Select Id, ContentDocumentId from ContentVersion where Id='${CV.id}'`);
     return result.records[0];
