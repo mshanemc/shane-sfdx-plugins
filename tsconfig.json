@@ -9,7 +9,7 @@
         "paths": {
             "*": ["./node_modules/@salesforce/core/typings/*"]
         },
-        "types": ["node", "jest", "fs-extra", "moment", "request", "request-promise-native"]
+        "types": ["node", "jest", "fs-extra", "moment", "request", "request-promise-native", "js2xmlparser"]
     },
     "include": ["./src/**/*"],
     "exclude": ["./test/**", "./testProject*/**/*", "./test/**/*", "./mshanemc-*/**/*"]

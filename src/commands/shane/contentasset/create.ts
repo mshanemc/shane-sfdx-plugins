@@ -1,9 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 
-import * as options from '../../../shared/js2xmlStandardOptions';
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 export default class LabelAdd extends SfdxCommand {
     public static description = 'create a ContentAsset from a local image file';
@@ -55,8 +54,7 @@ export default class LabelAdd extends SfdxCommand {
             ]
         };
 
-        const xml = jsToXml.parse('ContentAsset', newMeta, options.js2xmlStandardOptions);
-        await fs.writeFile(`${assetsFolder}/${this.flags.name}.asset-meta.xml`, xml);
+        await writeJSONasXML({ path: `${assetsFolder}/${this.flags.name}.asset-meta.xml`, json: newMeta, type: 'ContentAsset' });
 
         this.ux.log(chalk.green(`Added ${`${assetsFolder}/${this.flags.name}.asset`} in local source`));
         return newMeta;
