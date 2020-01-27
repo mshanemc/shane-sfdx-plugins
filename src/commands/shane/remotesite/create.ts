@@ -1,10 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
-
-import * as options from '../../../shared/js2xmlStandardOptions';
-
 import chalk from 'chalk';
+import fs = require('fs-extra');
+
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 export default class RemoteSite extends SfdxCommand {
     public static description = "create a remote site setting in the local source.  Push it when you're done";
@@ -39,7 +37,7 @@ export default class RemoteSite extends SfdxCommand {
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         if (this.flags.name.includes(' ')) {
-            this.ux.error(chalk.red('spaces are not allowed in the name'));
+            throw new Error('spaces are not allowed in the name');
         }
 
         // remove trailing slash if someone entered it
@@ -48,20 +46,19 @@ export default class RemoteSite extends SfdxCommand {
         }
 
         await fs.ensureDir(`${this.flags.target}/remoteSiteSettings`);
-
-        const settingJSON = {
-            '@': {
-                xmlns: 'http://soap.sforce.com/2006/04/metadata'
-            },
-            url: this.flags.url,
-            disableProtocolSecurity: false,
-            isActive: true,
-            description: this.flags.description
-        };
-
-        const xml = jsToXml.parse('RemoteSiteSetting', settingJSON, options.js2xmlStandardOptions);
-
-        fs.writeFileSync(`${this.flags.target}/remoteSiteSettings/${this.flags.name}.remoteSite-meta.xml`, xml);
+        await writeJSONasXML({
+            path: `${this.flags.target}/remoteSiteSettings/${this.flags.name}.remoteSite-meta.xml`,
+            type: 'RemoteSiteSetting',
+            json: {
+                '@': {
+                    xmlns: 'http://soap.sforce.com/2006/04/metadata'
+                },
+                url: this.flags.url,
+                disableProtocolSecurity: false,
+                isActive: true,
+                description: this.flags.description
+            }
+        });
 
         this.ux.log(chalk.green('Remote site created locally'));
     }

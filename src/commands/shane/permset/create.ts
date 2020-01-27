@@ -2,15 +2,14 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { Connection, SfdxError } from '@salesforce/core';
 import chalk from 'chalk';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 import { Field } from 'jsforce/describe-result';
 
-import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
+import { getExisting } from '../../../shared/getExisting';
 import { setupArray } from '../../../shared/setupArray';
 import { getParsed } from '../../../shared/xml2jsAsync';
 
-import * as options from '../../../shared/js2xmlStandardOptions';
 import { ToolingAPIDescribeQueryResult } from '../../../shared/typeDefs';
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 let conn: Connection;
 // tslint:disable-next-line: no-any
@@ -70,7 +69,7 @@ export default class PermSetCreate extends SfdxCommand {
         tab: flags.boolean({ char: 't', description: 'also add the tab for the specified object (or all objects if there is no specified objects)' }),
         checkpermissionable: flags.boolean({
             char: 'c',
-            description: "some fields'permissions can't be deducted from metadata, use describe on org to check if field is permissionable"
+            description: "some fields' permissions can't be deducted from metadata, use describe on org to check if field is permissionable"
         }),
         verbose: flags.builtin()
     };
@@ -89,21 +88,12 @@ export default class PermSetCreate extends SfdxCommand {
         // tslint:disable-next-line: no-any
         objectDescribe = new Map<string, Map<string, any>>();
 
-        // validations
-        if (this.flags.field && !this.flags.object) {
-            this.ux.error(chalk.red('If you say a field, you have to say the object'));
-        }
-        if (this.flags.recordtype && !this.flags.object) {
-            this.ux.error(chalk.red('If you say a record type, you have to say the object'));
-        }
-
         const targetFilename = `${this.flags.directory}/permissionsets/${this.flags.name}.permissionset-meta.xml`;
         const targetLocationObjects = `${this.flags.directory}/objects`;
 
         // Validating passed field exists
         if (this.flags.field && !fs.existsSync(`${targetLocationObjects}/${this.flags.object}/fields/${this.flags.field}.field-meta.xml`)) {
-            this.ux.error(`Field does not exist: ${this.flags.fields}`);
-            return;
+            throw new Error(`Field does not exist: ${this.flags.fields}`);
         }
 
         // Validating passed record type exists
@@ -111,8 +101,7 @@ export default class PermSetCreate extends SfdxCommand {
             this.flags.recordtype &&
             !fs.existsSync(`${targetLocationObjects}/${this.flags.object}/recordTypes/${this.flags.recordtype}.recordType-meta.xml`)
         ) {
-            this.ux.error(`Record type does not exist: ${this.flags.recordtype}`);
-            return;
+            throw new Error(`Record type does not exist: ${this.flags.recordtype}`);
         }
 
         let existing = await getExisting(targetFilename, 'PermissionSet', {
@@ -127,8 +116,7 @@ export default class PermSetCreate extends SfdxCommand {
         if (this.flags.application) {
             // Flag was passed, check that application exists
             if (!fs.existsSync(`${this.flags.directory}/applications/${this.flags.application}.app-meta.xml`)) {
-                this.ux.error(`Application does not exist: ${this.flags.application}`);
-                return;
+                throw new Error(`Application does not exist: ${this.flags.application}`);
             } else {
                 existing = await this.addApplicationPerms(existing, this.flags.application);
             }
@@ -218,14 +206,13 @@ export default class PermSetCreate extends SfdxCommand {
             }
         }
 
-        existing = await fixExistingDollarSign(existing);
+        await fs.ensureDir(`${this.flags.directory}/permissionsets`);
 
-        fs.ensureDirSync(`${this.flags.directory}/permissionsets`);
-
-        // conver to xml and write out the file
-        const xml = jsToXml.parse('PermissionSet', existing, options.js2xmlStandardOptions);
-        fs.writeFileSync(targetFilename, xml);
-
+        await writeJSONasXML({
+            path: targetFilename,
+            json: existing,
+            type: 'PermissionSet'
+        });
         this.ux.log(chalk.green(`Permissions added in ${targetFilename}`));
         return existing; // for someone who wants the JSON?
     }

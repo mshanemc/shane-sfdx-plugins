@@ -2,11 +2,10 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
 import * as puppeteer from 'puppeteer';
 
-import jsToXml = require('js2xmlparser');
 import { exec2JSON } from './../../../shared/execProm';
 import { QueryResult } from './../../../shared/typeDefs';
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
-import * as options from '../../../shared/js2xmlStandardOptions';
 export default class ThemeActivate extends SfdxCommand {
     public static description =
         'Activate a LightningExperienceTheme via Puppeteer/Chromium headless.  Recommended: use shane:org:reauth -r to make darn sure that the domain is ready to open something';
@@ -39,10 +38,11 @@ export default class ThemeActivate extends SfdxCommand {
                 activeThemeName: this.flags.name
             };
 
-            await fs.writeFile(
-                `${tempDir}/main/default/settings/LightningExperience.settings-meta.xml`,
-                jsToXml.parse('LightningExperienceSettings', metaJSON, options.js2xmlStandardOptions)
-            );
+            await writeJSONasXML({
+                path: `${tempDir}/main/default/settings/LightningExperience.settings-meta.xml`,
+                json: metaJSON,
+                type: 'LightningExperienceSettings'
+            });
 
             this.ux.setSpinnerStatus('pushing to org');
             // deploy that to the org

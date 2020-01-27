@@ -1,9 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 
-import { fixExistingDollarSign, getExisting } from '../../../../shared/getExisting';
-import * as options from '../../../../shared/js2xmlStandardOptions';
+import { getExisting } from '../../../../shared/getExisting';
+import { writeJSONasXML } from '../../../../shared/JSONXMLtools';
 
 import chalk from 'chalk';
 
@@ -38,22 +37,22 @@ export default class TSPUsernameUpdate extends SfdxCommand {
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const targetFolder = `${this.flags.directory}/transactionSecurityPolicies`;
-        const finalUsername = this.flags.newusername || this.org.getUsername();
+        const finalUsername = this.flags.newusername ?? this.org.getUsername();
         const output = [];
 
         if (!fs.existsSync(targetFolder)) {
-            this.ux.error(`Folder does not exist: ${targetFolder}`);
-            return;
+            throw new Error(`Folder does not exist: ${targetFolder}`);
         }
 
-        const tsps = fs.readdirSync(targetFolder);
+        const tsps = await fs.readdir(targetFolder);
+
         this.ux.log(`Updating ${tsps.length} transaction security policies`);
 
         // loop through the TSPs
         for (const tsp of tsps) {
             let existing = await getExisting(`${targetFolder}/${tsp}`, 'TransactionSecurityPolicy');
 
-            existing.executionUser = finalUsername;
+            existing = { ...existing, executionUser: finalUsername };
 
             if (Array.isArray(existing.action.notifications)) {
                 existing.action.notifications.forEach((notification, key) => {
@@ -63,12 +62,11 @@ export default class TSPUsernameUpdate extends SfdxCommand {
                 existing.action.notifications.user = finalUsername;
             }
 
-            existing = await fixExistingDollarSign(existing);
-
-            // convert to xml and write out the file
-            const xml = jsToXml.parse('TransactionSecurityPolicy', existing, options.js2xmlStandardOptions);
-            fs.writeFileSync(`${targetFolder}/${tsp}`, xml);
-
+            await writeJSONasXML({
+                type: 'TransactionSecurityPolicy',
+                path: `${targetFolder}/${tsp}`,
+                json: existing
+            });
             this.ux.log(chalk.green(`Updated ${tsp}`));
             output.push(existing);
         }

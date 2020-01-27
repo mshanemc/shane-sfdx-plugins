@@ -1,13 +1,12 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 import { unionBy } from 'lodash';
 
-import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
-import * as options from '../../../shared/js2xmlStandardOptions';
+import { getExisting } from '../../../shared/getExisting';
 import { thingsThatMigrate } from '../../../shared/permsetProfileMetadata';
 import { setupArray } from '../../../shared/setupArray';
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 export default class PermSetConvert extends SfdxCommand {
     public static description = 'convert a profile into a permset';
@@ -104,31 +103,36 @@ export default class PermSetConvert extends SfdxCommand {
             }
         });
 
-        existing = await fixExistingDollarSign(existing);
-
         fs.ensureDirSync(`${this.flags.directory}/permissionsets`);
 
         // convert to xml and write out the file
-        const permSetXml = jsToXml.parse('PermissionSet', existing, options.js2xmlStandardOptions);
-        fs.writeFileSync(targetFilename, permSetXml);
-
+        // const permSetXml = jsToXml.parse('PermissionSet', existing, options.js2xmlStandardOptions);
+        // fs.writeFileSync(targetFilename, permSetXml);
+        await writeJSONasXML({
+            path: targetFilename,
+            json: existing,
+            type: 'PermissionSet'
+        });
         // we either write this file over existing profile, or to a new one.
         if (this.flags.editprofile || this.flags.skinnyclone) {
             // correct @ => $ issue
             // check for the special perms that will cause all the object/field stuff to get written back in
-
-            profile = await fixExistingDollarSign(stripViewModifyAll(profile));
-
-            const profileXml = jsToXml.parse('Profile', profile, options.js2xmlStandardOptions);
-
             if (this.flags.editprofile) {
                 // edit the existing profile
-                fs.writeFileSync(targetProfile, profileXml);
+                await writeJSONasXML({
+                    path: targetProfile,
+                    json: stripViewModifyAll(profile),
+                    type: 'Profile'
+                });
                 this.ux.log(`Permissions removed from ${targetProfile}`);
             } else if (this.flags.skinnyclone) {
                 // save it as a new profile
                 const skinnyTarget = `${this.flags.directory}/profiles/${this.flags.profile}_Skinny.profile-meta.xml`;
-                fs.writeFileSync(skinnyTarget, profileXml);
+                await writeJSONasXML({
+                    path: skinnyTarget,
+                    json: stripViewModifyAll(profile),
+                    type: 'Profile'
+                });
                 this.ux.log(chalk.green(`Skinny version saved at ${skinnyTarget}`));
             }
         }

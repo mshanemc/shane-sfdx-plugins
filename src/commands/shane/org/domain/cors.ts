@@ -1,8 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 
-import * as options from '../../../../shared/js2xmlStandardOptions';
+import { writeJSONasXML } from '../../../../shared/JSONXMLtools';
 
 export default class DomainCORS extends SfdxCommand {
     public static description = "whitelist the org's domain as a CORS";
@@ -48,9 +47,11 @@ export default class DomainCORS extends SfdxCommand {
             urlPattern
         };
 
-        const xml = jsToXml.parse('CorsWhitelistOrigin', metaJSON, options.js2xmlStandardOptions);
-
-        await fs.writeFile(`${folder}/${name}.corsWhitelistOrigin-meta.xml`, xml);
+        writeJSONasXML({
+            path: `${folder}/${name}.corsWhitelistOrigin-meta.xml`,
+            type: 'CorsWhitelistOrigin',
+            json: metaJSON
+        });
         this.ux.log(`created new file for ${metaJSON.urlPattern} in ${folder}/${name}.corsWhitelistOrigin-meta.xml`);
         return {
             file: `${folder}/${name}.corsWhitelistOrigin-meta.xml`,

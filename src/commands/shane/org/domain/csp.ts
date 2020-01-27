@@ -1,8 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 
-import * as options from '../../../../shared/js2xmlStandardOptions';
+import { writeJSONasXML } from '../../../../shared/JSONXMLtools';
 
 export default class DomainCSP extends SfdxCommand {
     public static description = "whitelist the org's domain as a CSP Trusted Site";
@@ -41,19 +40,21 @@ export default class DomainCSP extends SfdxCommand {
     }
 
     public async writeOut(urlPattern: string, name: string, folder: string) {
-        const metaJSON = {
-            '@': {
-                xmlns: 'http://soap.sforce.com/2006/04/metadata'
-            },
-            endpointUrl: urlPattern,
-            isActive: true,
-            context: 'All'
-        };
-
-        const xml = jsToXml.parse('CspTrustedSite', metaJSON, options.js2xmlStandardOptions);
         const filename = `${folder}/${name}.cspTrustedSite-meta.xml`;
 
-        fs.writeFileSync(filename, xml);
+        await writeJSONasXML({
+            path: filename,
+            type: 'CspTrustedSite',
+            json: {
+                '@': {
+                    xmlns: 'http://soap.sforce.com/2006/04/metadata'
+                },
+                endpointUrl: urlPattern,
+                isActive: true,
+                context: 'All'
+            }
+        });
+
         this.ux.log(`created new file for ${urlPattern} in ${filename}`);
         return {
             filename,

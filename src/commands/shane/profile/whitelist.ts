@@ -1,12 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 
-import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
+import { getExisting } from '../../../shared/getExisting';
 import { setupArray } from '../../../shared/setupArray';
-
-import * as options from '../../../shared/js2xmlStandardOptions';
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 export default class ProfileWhitelist extends SfdxCommand {
     public static description = 'whitelist the whole internet for a profile (no ip verification or 2FA/OTP challenges in dev)';
@@ -34,24 +32,26 @@ export default class ProfileWhitelist extends SfdxCommand {
         await fs.ensureDir(`${this.flags.directory}/profiles`);
         const targetProfile = `${this.flags.directory}/profiles/${this.flags.name}.profile-meta.xml`;
 
-        let existing = await getExisting(targetProfile, 'Profile', {
-            '@': {
-                xmlns: 'http://soap.sforce.com/2006/04/metadata'
-            }
-        });
+        let existing = setupArray(
+            await getExisting(targetProfile, 'Profile', {
+                '@': {
+                    xmlns: 'http://soap.sforce.com/2006/04/metadata'
+                }
+            }),
+            'loginIpRanges'
+        );
 
-        existing = setupArray(existing, 'loginIpRanges');
         existing.loginIpRanges.push({
             description: 'the whole internet',
             startAddress: '0.0.0.0',
             endAddress: '255.255.255.255'
         });
 
-        existing = await fixExistingDollarSign(existing);
-
-        // convert to xml and write out the file
-        const xml = jsToXml.parse('Profile', existing, options.js2xmlStandardOptions);
-        await fs.writeFile(targetProfile, xml);
+        await writeJSONasXML({
+            type: 'Profile',
+            path: targetProfile,
+            json: existing
+        });
 
         this.ux.log(chalk.green(`Whitelisted ${targetProfile} locally`) + '...next, push or deploy to an org.');
         return existing; // for someone who wants the JSON?

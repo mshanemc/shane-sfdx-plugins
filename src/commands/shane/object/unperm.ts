@@ -1,12 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 
-import { fixExistingDollarSign, getExisting } from '../../../shared/getExisting';
+import { getExisting } from '../../../shared/getExisting';
 import { setupArray } from '../../../shared/setupArray';
-
-import * as options from '../../../shared/js2xmlStandardOptions';
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 export default class UnPerm extends SfdxCommand {
     public static description = 'remove references to an object from profiles/permsets (all or a specific one)';
@@ -88,10 +86,11 @@ export default class UnPerm extends SfdxCommand {
             item => item.tab !== this.flags.object && item.tab !== `standard-${this.flags.object}`
         );
 
-        existing = await fixExistingDollarSign(existing);
-
-        const outputXML = jsToXml.parse(metadataType, existing, options.js2xmlStandardOptions);
-        fs.writeFileSync(targetFilename, outputXML);
+        await writeJSONasXML({
+            path: targetFilename,
+            type: metadataType,
+            json: existing
+        });
         this.ux.log(
             `removed ${objectBefore - existing.objectPermissions.length} objects, ${recordTypeBefore -
                 existing.recordTypeVisibilities.length} recordTypes, ${layoutBefore - existing.layoutAssignments.length} layout, ${fieldBefore -

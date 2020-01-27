@@ -1,8 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
-
-import * as options from '../../../shared/js2xmlStandardOptions';
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 import chalk from 'chalk';
 
@@ -44,18 +42,17 @@ export default class ObjectTab extends SfdxCommand {
         // make sure the tabs directory exists
         await fs.ensureDir(`${this.flags.target}/tabs`);
 
-        const settingJSON = {
-            '@': {
-                xmlns: 'http://soap.sforce.com/2006/04/metadata'
-            },
-            customObject: true,
-            motif: tabDefs.find(tab => tab.includes(`Custom${this.flags.icon}:`))
-        };
-
-        const xml = jsToXml.parse('CustomTab', settingJSON, options.js2xmlStandardOptions);
-
-        await fs.writeFile(`${this.flags.target}/tabs/${this.flags.object}.tab-meta.xml`, xml);
-
+        await writeJSONasXML({
+            path: `${this.flags.target}/tabs/${this.flags.object}.tab-meta.xml`,
+            type: 'CustomTab',
+            json: {
+                '@': {
+                    xmlns: 'http://soap.sforce.com/2006/04/metadata'
+                },
+                customObject: true,
+                motif: tabDefs.find(tab => tab.includes(`Custom${this.flags.icon}:`))
+            }
+        });
         this.ux.log(chalk.green('Tab created locally.'));
     }
 }

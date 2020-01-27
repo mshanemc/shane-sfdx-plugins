@@ -1,9 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
 
-import * as options from '../../../shared/js2xmlStandardOptions';
+import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 export default class StaticCreate extends SfdxCommand {
     public static description = 'create a static resource locally';
@@ -92,19 +91,19 @@ export default class StaticCreate extends SfdxCommand {
                 this.ux.error(`unsupported file type ${this.flags.type}.  Valid are zip, text, js, xml, css`);
         }
 
-        const metaJSON = {
-            '@': {
-                xmlns: 'http://soap.sforce.com/2006/04/metadata'
-            },
-            cacheControl: this.flags.public ? 'Public' : 'Private',
-            contentType,
-            description: this.flags.description,
-            fullName: this.flags.name
-        };
-
-        const xml = jsToXml.parse('StaticResource', metaJSON, options.js2xmlStandardOptions);
-
-        fs.writeFileSync(metaPath, xml);
+        await writeJSONasXML({
+            path: metaPath,
+            type: 'StaticResource',
+            json: {
+                '@': {
+                    xmlns: 'http://soap.sforce.com/2006/04/metadata'
+                },
+                cacheControl: this.flags.public ? 'Public' : 'Private',
+                contentType,
+                description: this.flags.description,
+                fullName: this.flags.name
+            }
+        });
 
         if (this.flags.type === 'zip') {
             this.ux.log(chalk.green('Empty Static Resource folder created locally for you to fill with good things'));
