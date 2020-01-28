@@ -16,12 +16,8 @@ const singleRecordQuery = async ({
     choiceField = 'Name',
     tooling = false
 }: SingleRecordQueryInputs): Promise<Record> => {
-    let result;
-    if (tooling) {
-        result = <QueryResult>await conn.tooling.query(query);
-    } else {
-        result = <QueryResult>await conn.query(query);
-    }
+    const result = tooling ? ((await conn.tooling.query(query)) as QueryResult) : ((await conn.query(query)) as QueryResult);
+
     if (result.totalSize > 1) {
         if (returnChoices) {
             throw new Error(`multiple records found: ${result.records.map(record => record[choiceField]).join(',')}`);

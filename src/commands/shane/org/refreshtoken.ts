@@ -3,7 +3,7 @@ import chalk from 'chalk';
 
 export default class RefreshToken extends SfdxCommand {
     public static description =
-        "Outputs a refresh token from an org that you've already auth'd sfdx to.  PLEASE BE CAREFUL WITH THIS AND TREAT IT AS A PASSWORD";
+        "Outputs a refresh token from an org that you've already authenticated sfdx to.  PLEASE BE CAREFUL WITH THIS AND TREAT IT AS A PASSWORD";
 
     public static examples = [
         `sfdx shane:org:refreshtoken -u someAliasOrUsername

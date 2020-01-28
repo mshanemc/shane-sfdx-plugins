@@ -56,7 +56,7 @@ export default class StaticCreate extends SfdxCommand {
         if (this.flags.type === 'zip') {
             await fs.mkdir(`${staticPath}/${this.flags.name}`);
         } else {
-            await fs.writeFile(`${staticPath}/${this.flags.name}.${suffixMap.get(this.flags.type)}`, '');
+            await fs.writeFile(`${staticPath}/${this.flags.name}.${suffixMap.get(this.flags.type) ?? this.flags.type}`, '');
         }
         await writeJSONasXML({
             path: metaPath,
@@ -88,9 +88,4 @@ const contentTypeMap = new Map([
     ['xml', 'application/xml']
 ]);
 
-const suffixMap = new Map([
-    ['css', '.css'],
-    ['js', '.js'],
-    ['text', '.txt'],
-    ['xml', '.xml']
-]);
+const suffixMap = new Map([['text', 'txt']]);
