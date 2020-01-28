@@ -42,12 +42,12 @@ export default class TSPUsernameUpdate extends SfdxCommand {
             throw new Error(`Folder does not exist: ${targetFolder}`);
         }
 
-        const tsps = await fs.readdir(targetFolder);
+        const policies = await fs.readdir(targetFolder);
 
-        this.ux.log(`Updating ${tsps.length} transaction security policies`);
+        this.ux.log(`Updating ${policies.length} transaction security policies`);
 
-        // loop through the TSPs and do execution user modification on all of them
-        const UpdateResults = await Promise.all(tsps.map(tsp => this.updateTsp({ targetFolder, tsp, finalUsername })));
+        // loop through the policies and do execution user modification on all of them
+        const UpdateResults = await Promise.all(policies.map(tsp => this.updateTsp({ targetFolder, tsp, finalUsername })));
         return UpdateResults;
     }
 
