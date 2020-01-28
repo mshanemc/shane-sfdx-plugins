@@ -8,7 +8,7 @@ interface ExternalAppsJSON {
 const getExternalApps = async (conn: Connection): Promise<ExternalAppsJSON> => {
     // get the domain
     const domains = await conn.query('select CnameTarget, Domain from Domain');
-    // tslint:disable-next-line:no-any
+
     const mainDomain: any = domains.records.find((domain: any) => domain.CnameTarget === null);
     const output: ExternalAppsJSON = {
         domain: mainDomain.Domain,
@@ -18,7 +18,6 @@ const getExternalApps = async (conn: Connection): Promise<ExternalAppsJSON> => {
 
     const networks = await conn.query('select id, Name, status, UrlPathPrefix from Network where UrlPathPrefix != null');
 
-    // tslint:disable-next-line:no-any
     networks.records.forEach((network: any) => {
         output.communities[network.UrlPathPrefix] = network.Name;
     });

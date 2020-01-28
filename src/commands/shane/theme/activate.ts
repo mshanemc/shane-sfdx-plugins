@@ -1,10 +1,11 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import fs = require('fs-extra');
 import * as puppeteer from 'puppeteer';
 
-import { exec2JSON } from './../../../shared/execProm';
-import { QueryResult } from './../../../shared/typeDefs';
+import { exec2JSON } from '../../../shared/execProm';
+import { QueryResult } from '../../../shared/typeDefs';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
+
+import fs = require('fs-extra');
 
 export default class ThemeActivate extends SfdxCommand {
     public static description =
@@ -17,7 +18,6 @@ export default class ThemeActivate extends SfdxCommand {
         showbrowser: flags.boolean({ char: 'b', description: 'show the browser...useful for local debugging' })
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // first, get the id of the theme
         const conn = this.org.getConnection();
@@ -59,11 +59,9 @@ export default class ThemeActivate extends SfdxCommand {
         }
 
         if (orgApiVersion === 47) {
-            const results = <QueryResult>(
-                await conn.query(
-                    `select id from LightningExperienceTheme where DeveloperName = '${this.flags.name}' or MasterLabel = '${this.flags.name}'`
-                )
-            );
+            const results = (await conn.query(
+                `select id from LightningExperienceTheme where DeveloperName = '${this.flags.name}' or MasterLabel = '${this.flags.name}'`
+            )) as QueryResult;
 
             if (results.records.length > 1) {
                 throw new Error('There are more than 1 matching records');
@@ -79,7 +77,7 @@ export default class ThemeActivate extends SfdxCommand {
 
             // get the force-org-open url for your scratch org
             const openResponse = await exec2JSON('sfdx force:org:open -p /lightning/setup/ThemingAndBranding/home -r --json');
-            const url = openResponse.result.url;
+            const { url } = openResponse.result;
 
             await context.overridePermissions(url, ['notifications']);
             const page = await browser.newPage();

@@ -1,13 +1,14 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import fs = require('fs-extra');
 import json2csv from 'json2csv';
+
+// import { Transform } from 'Json2csv';
+import { WaveDataSetListResponse, WaveDatasetVersion } from '../../../../shared/typeDefs';
+
+import fs = require('fs-extra');
 import stream = require('stream');
 import util = require('util');
 
 const pipeline = util.promisify(stream.pipeline);
-
-// import { Transform } from 'Json2csv';
-import { WaveDataSetListResponse, WaveDatasetVersion } from './../../../../shared/typeDefs';
 
 export default class DatasetDownload extends SfdxCommand {
     public static description = 'download a dataset as csv';
@@ -27,7 +28,6 @@ export default class DatasetDownload extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const conn = this.org.getConnection();
 
@@ -35,10 +35,10 @@ export default class DatasetDownload extends SfdxCommand {
             throw new Error('you must specify either ID or name (not both).  Use shane:analytics:dataset:list for options');
         }
 
-        const results = <WaveDataSetListResponse>(<unknown>await conn.request({
+        const results = ((await conn.request({
             method: 'GET',
             url: `${conn.baseUrl()}/wave/datasets/`
-        }));
+        })) as unknown) as WaveDataSetListResponse;
         const matched = results.datasets.find(item => item.name === this.flags.name || item.id === this.flags.id);
         if (matched) {
             this.flags.id = matched.id;
@@ -51,10 +51,10 @@ export default class DatasetDownload extends SfdxCommand {
         }
 
         // get the requested datasetVersion
-        const datasetVersion = <WaveDatasetVersion>(<unknown>await conn.request({
+        const datasetVersion = ((await conn.request({
             method: 'GET',
             url: `${conn.baseUrl()}/wave/datasets/${this.flags.id}/versions/${this.flags.versionid}`
-        }));
+        })) as unknown) as WaveDatasetVersion;
 
         const fieldsFromDates = datasetVersion.xmdMain.dates.map(d => d.fields);
 
@@ -86,12 +86,11 @@ export default class DatasetDownload extends SfdxCommand {
         // console.log(query);
         // this.ux.log(query);
 
-        // tslint:disable-next-line:no-any
-        const queryResponse = <any>await conn.request({
+        const queryResponse = (await conn.request({
             method: 'POST',
             url: `${conn.baseUrl()}/wave/query`,
             body: JSON.stringify({ query })
-        });
+        })) as any;
 
         this.ux.log(`writing ${queryResponse.results.records.length} rows to ${this.flags.target}/${this.flags.name}`);
 

@@ -1,9 +1,9 @@
 /* tslint:disable:no-unused-expression */
-import fs = require('fs-extra');
-import testutils = require('../../../helpers/testutils');
-
 import { exec } from '../../../../src/shared/execProm';
 import { getExisting } from '../../../../src/shared/getExisting';
+
+import fs = require('fs-extra');
+import testutils = require('../../../helpers/testutils');
 
 const profileName = 'Admin';
 const newPermSetName = 'TestNewPerm';

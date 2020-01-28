@@ -1,15 +1,16 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import cli from 'cli-ux';
-import fs = require('fs-extra');
 
 import { fixExistingDollarSign, writeJSONasXML } from '../../../shared/JSONXMLtools';
 import { getParsed } from '../../../shared/xml2jsAsync';
 import { FieldMeta } from '../../../shared/typeDefs';
 
-const SupportedTypes__b = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
-const SupportedTypes__e = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
-const SupportedTypes__c = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox', 'Url', 'Email', 'Phone', 'Currency', 'Picklist'];
+import fs = require('fs-extra');
+
+const SupportedTypesB = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
+const SupportedTypesE = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
+const SupportedTypesC = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox', 'Url', 'Email', 'Phone', 'Currency', 'Picklist'];
 
 export default class FieldCreate extends SfdxCommand {
     public static description = 'create or add fields to an existing object';
@@ -36,9 +37,9 @@ export default class FieldCreate extends SfdxCommand {
         api: flags.string({ char: 'a', description: 'API name for the field' }),
         type: flags.string({
             char: 't',
-            description: `field type.  Big Objects: ${SupportedTypes__b.join(',')}.  Events: ${SupportedTypes__e.join(
+            description: `field type.  Big Objects: ${SupportedTypesB.join(',')}.  Events: ${SupportedTypesE.join(
                 ','
-            )}.  Regular Objects: ${SupportedTypes__c.join(',')}`
+            )}.  Regular Objects: ${SupportedTypesC.join(',')}`
         }),
         description: flags.string({ description: "optional description for the field so you remember what it's for next year" }),
         default: flags.string({
@@ -78,10 +79,8 @@ export default class FieldCreate extends SfdxCommand {
         })
     };
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         if (!this.flags.object) {
             this.flags.object = await cli.prompt('object API name?');
@@ -106,7 +105,7 @@ export default class FieldCreate extends SfdxCommand {
 
         // be helpful
         if (!this.flags.api.endsWith('__c')) {
-            this.flags.api = this.flags.api + '__c';
+            this.flags.api = `${this.flags.api}__c`;
         }
 
         const fieldsFolderPath = `${this.flags.directory}/objects/${this.flags.object}/fields`;
@@ -119,24 +118,27 @@ export default class FieldCreate extends SfdxCommand {
             return;
         }
 
-        while (this.flags.object.endsWith('__b') && !SupportedTypes__b.includes(this.flags.type)) {
-            this.flags.type = await cli.prompt(`Type (${SupportedTypes__b.join(',')})?`, { default: 'Text' });
+        while (this.flags.object.endsWith('__b') && !SupportedTypesB.includes(this.flags.type)) {
+            // eslint-disable-next-line no-await-in-loop
+            this.flags.type = await cli.prompt(`Type (${SupportedTypesB.join(',')})?`, { default: 'Text' });
         }
 
-        while (this.flags.object.endsWith('__e') && !SupportedTypes__e.includes(this.flags.type)) {
-            this.flags.type = await cli.prompt(`Type (${SupportedTypes__e.join(',')})?`, { default: 'Text' });
+        while (this.flags.object.endsWith('__e') && !SupportedTypesE.includes(this.flags.type)) {
+            // eslint-disable-next-line no-await-in-loop
+            this.flags.type = await cli.prompt(`Type (${SupportedTypesE.join(',')})?`, { default: 'Text' });
         }
 
-        while (this.flags.object.endsWith('__c') && !SupportedTypes__c.includes(this.flags.type)) {
-            this.flags.type = await cli.prompt(`Type (${SupportedTypes__c.join(',')})?`, { default: 'Text' });
+        while (this.flags.object.endsWith('__c') && !SupportedTypesC.includes(this.flags.type)) {
+            // eslint-disable-next-line no-await-in-loop
+            this.flags.type = await cli.prompt(`Type (${SupportedTypesC.join(',')})?`, { default: 'Text' });
         }
 
         // we have at least these two fields now
-        const outputJSON = <FieldMeta>{
+        const outputJSON = {
             label: this.flags.name,
             type: this.flags.type,
             fullName: this.flags.api
-        };
+        } as FieldMeta;
 
         // type specific values
         if (this.flags.type === 'Text') {
@@ -194,6 +196,7 @@ export default class FieldCreate extends SfdxCommand {
                 let keepAsking = true;
                 const stopWord = 'STAHP';
                 while (keepAsking) {
+                    // eslint-disable-next-line no-await-in-loop
                     const response = await cli.prompt(`Enter a value to add to picklist, or say ${stopWord} to stop`);
                     if (response !== stopWord) {
                         values.push(response);
@@ -272,6 +275,7 @@ export default class FieldCreate extends SfdxCommand {
             // this.ux.log(existing.indexes[0].fields);
 
             while (!(this.flags.indexposition > -1) && !this.flags.indexappend && !this.flags.noindex) {
+                // eslint-disable-next-line no-await-in-loop
                 const response = await cli.prompt(
                     `where in the big object index? Enter an array key (0 is first.  There are already ${existing.indexes[0].fields.length}) or the word LAST (add to the end) or NO (don't index this field)`,
                     { default: 'LAST' }
@@ -281,10 +285,8 @@ export default class FieldCreate extends SfdxCommand {
                     // this.flags.indexappend = true;
                 } else if (response === 'LAST') {
                     this.flags.indexappend = true;
-                } else {
-                    if (this.flags.indexposition >= 0) {
-                        this.flags.indexposition = response;
-                    }
+                } else if (this.flags.indexposition >= 0) {
+                    this.flags.indexposition = response;
                 }
             }
 
@@ -298,6 +300,7 @@ export default class FieldCreate extends SfdxCommand {
             // we were told what to do
             while (this.flags.indexdirection !== 'ASC' && this.flags.indexdirection !== 'DESC') {
                 outputJSON.required = true;
+                // eslint-disable-next-line no-await-in-loop
                 this.flags.indexdirection = await cli.prompt('which direction should this index be sorted? (ASC, DESC)', {
                     default: 'DESC'
                 });

@@ -1,5 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { singleRecordQuery } from '../../../../shared/queries';
+
 import userIdLookup = require('../../../../shared/userIdLookup');
 
 export default class UserPermsetAssign extends SfdxCommand {
@@ -19,9 +20,9 @@ export default class UserPermsetAssign extends SfdxCommand {
     };
 
     protected static requiresUsername = true;
+
     protected static requiresProject = false;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // tslint:disable-next-line: no-any
         const conn = this.org.getConnection() as any;
@@ -46,11 +47,11 @@ export default class UserPermsetAssign extends SfdxCommand {
                 PermissionSetId: permset.Id,
                 AssigneeId: user.Id
             })
-            .catch(e => {
-                if (e.name === 'DUPLICATE_VALUE') {
+            .catch(error => {
+                if (error.name === 'DUPLICATE_VALUE') {
                     // that's ok to swallow...it was already done, and this command is meant to be idempotent.  If the org is as you asked it to be, that's ok.
                 } else {
-                    throw new Error(e);
+                    throw new Error(error);
                 }
             });
         this.ux.log(`User ${user.Id} has been assigned permset ${this.flags.name} (${permset.Id})`);

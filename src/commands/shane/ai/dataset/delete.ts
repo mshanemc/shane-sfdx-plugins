@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import requestPromise = require('request-promise-native');
-
 import { AITokenRetrieve, baseUrl } from '../../../../shared/aiConstants';
+
+import requestPromise = require('request-promise-native');
 
 export default class EinsteinAIDelete extends SfdxCommand {
     public static description = 'delete a dataset';
@@ -17,7 +17,6 @@ export default class EinsteinAIDelete extends SfdxCommand {
         email: flags.email({ char: 'e', description: 'email address you used when you signed up for your einstein.ai account' })
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const token = await AITokenRetrieve(this.flags.email || process.env.EINSTEIN_EMAIL);
 

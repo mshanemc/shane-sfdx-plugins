@@ -1,5 +1,5 @@
 import { SfdxCommand } from '@salesforce/command';
-import { WaveDataSetListResponse } from './../../../../shared/typeDefs';
+import { WaveDataSetListResponse } from '../../../../shared/typeDefs';
 
 export default class DatasetList extends SfdxCommand {
     public static description = 'what analytics datasets are in my org?';
@@ -10,16 +10,15 @@ export default class DatasetList extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
         const conn = this.org.getConnection();
         const url = `${conn.baseUrl()}/wave/datasets`;
 
-        const results = <WaveDataSetListResponse>(<unknown>await conn.request({
+        const results = ((await conn.request({
             method: 'GET',
             url
-        }));
+        })) as unknown) as WaveDataSetListResponse;
 
         this.ux.table(results.datasets, ['name', 'id', 'createdBy.name', 'datasetType', 'currentVersionId']);
 

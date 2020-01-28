@@ -1,8 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import fs = require('fs-extra');
-
 import { exec } from '../../../shared/execProm';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
+
+import fs = require('fs-extra');
 
 const retryLimit = 5;
 
@@ -143,7 +143,7 @@ const StandardValueSets = [
     'WorkOrderStatus'
 ];
 
-const CrawlDown = [];
+// const CrawlDown = [];
 
 const pkgDir = 'pkgDirTemp';
 
@@ -170,7 +170,11 @@ export default class Pull extends SfdxCommand {
         reporting: flags.boolean({ description: booleanFlags.reporting.join(','), exclusive: ['all'] }),
 
         object: flags.string({ char: 'o', description: 'pull metadata for a single object', exclusive: ['all', 'schema'] }),
-        type: flags.string({ char: 't', description: 'pull only a specific type.  See the metadata api docs for type names', exclusive: ['all'] }),
+        type: flags.string({
+            char: 't',
+            description: 'pull only a specific type.  See the metadata api docs for type names',
+            exclusive: ['all']
+        }),
         // TODO: automation, security, reporting, i18n
         all: flags.boolean({
             description:
@@ -181,24 +185,24 @@ export default class Pull extends SfdxCommand {
 
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         if (!this.flags.apiversion) {
             this.flags.apiversion = await this.org.retrieveMaxApiVersion();
         }
 
-        fs.ensureDirSync(pkgDir);
-
         const conn = this.org.getConnection();
+        const [describeResult] = await Promise.all([conn.metadata.describe(this.flags.apiversion), fs.ensureDir(pkgDir)]);
 
-        const describeResult = await conn.metadata.describe(this.flags.apiversion);
-
-        const mdTypes = [];
         const requestedTypes = getTypeList(this.flags);
         if (this.flags.type && requestedTypes.includes(this.flags.type)) {
             this.ux.warn(`type ${this.flags.type} is already selected`);
         }
-        const all = describeResult.metadataObjects;
+
+        const mdTypes = await Promise.all(
+            describeResult.metadataObjects
+                .filter(item => this.flags.all || requestedTypes.includes(item.xmlName) || this.flags.type === item.xmlName)
+                .map(item => this.mdTypeFromItem(item))
+        );
 
         // special case
         if (this.flags.object) {
@@ -207,78 +211,6 @@ export default class Pull extends SfdxCommand {
                 name: 'CustomObject'
             });
         }
-
-        for (const item of all) {
-            // we actually want that time, OR we said we wanted it all
-            if (this.flags.all || requestedTypes.includes(item.xmlName) || this.flags.type === item.xmlName) {
-                // this.ux.logJson(item);
-                // special cases: objects that don't support *
-                if (item.xmlName === 'CustomObject') {
-                    mdTypes.push({
-                        members: standardObjects.concat(['*']),
-                        name: item.xmlName
-                    });
-                } else if (item.xmlName === 'StandardValueSet') {
-                    mdTypes.push({
-                        members: StandardValueSets,
-                        name: item.xmlName
-                    });
-                } else if (CrawlDown.includes(item.xmlName)) {
-                    for (const childName of item.childXmlNames) {
-                        await conn.metadata.list([{ type: childName, folder: null }], this.flags.apiversion);
-                        // console.log(parentList);
-                        // parentList.forEach( childItem => {
-                        //   this.ux.logJson(childItem);
-                        // });
-                    }
-                    // parentList.forEach( thing => this.ux.logJson(thing));
-                } else if (item.inFolder) {
-                    // get a list of all the folders for this type
-                    // this.ux.log(`checking item ${item.xmlName}`);
-                    const finalItemList = [];
-                    let folderListMetadata = await conn.metadata.list(
-                        [{ type: item.xmlName === 'EmailTemplate' ? 'EmailFolder' : `${item.xmlName}Folder`, folder: null }],
-                        this.flags.apiversion
-                    );
-
-                    if (folderListMetadata) {
-                        // correct in case it's single object instead of an array
-                        if (!Array.isArray(folderListMetadata)) {
-                            folderListMetadata = [folderListMetadata];
-                        }
-
-                        for (const folder of folderListMetadata) {
-                            finalItemList.push(folder.fullName);
-
-                            // this.ux.log(`looking in folder ${folder.fullName}`);
-                            const contents = await conn.metadata.list([{ type: item.xmlName, folder: folder.fullName }], this.flags.apiversion);
-                            if (contents && contents.length > 0) {
-                                contents.forEach(thing => {
-                                    // this.ux.logJson(thing);
-                                    finalItemList.push(thing.fullName);
-                                });
-                            } else {
-                                // this.ux.log(`no content for folder ${folder.fullName}`);
-                            }
-                        }
-
-                        // this.ux.logJson(finalItemList);
-
-                        mdTypes.push({
-                            members: finalItemList,
-                            name: item.xmlName
-                        });
-                    }
-                } else {
-                    mdTypes.push({
-                        members: '*',
-                        name: item.xmlName
-                    });
-                }
-            }
-        }
-
-        // this.ux.logJson(mdTypes);
 
         // in parallel, build out all the local package.xmls
         this.ux.log('Going to retrieve all the metadata you asked for...this could take a while');
@@ -299,6 +231,46 @@ export default class Pull extends SfdxCommand {
 
         await fs.remove(pkgDir);
         return retrieveResults;
+    }
+
+    async mdTypeFromItem(item): Promise<MdTypeForPackageXml> {
+        if (item.inFolder) {
+            // special handling for foldered items
+            const conn = this.org.getConnection();
+            let folderListMetadata = await conn.metadata.list(
+                [{ type: item.xmlName === 'EmailTemplate' ? 'EmailFolder' : `${item.xmlName}Folder`, folder: null }],
+                this.flags.apiversion
+            );
+            if (!Array.isArray(folderListMetadata)) {
+                folderListMetadata = [folderListMetadata];
+            }
+            const contentsOfEachFolder = (
+                await Promise.all(
+                    folderListMetadata.map(folder => conn.metadata.list([{ type: item.xmlName, folder: folder.fullName }], this.flags.apiversion))
+                )
+            )
+                .filter(contents => contents.length > 0)
+                .flat();
+
+            // return [...folderListMetadata.map(folder => folder.fullName), ...contentsOfEachFolder];
+            return {
+                name: item.xmlName,
+                members: [...folderListMetadata.map(folder => folder.fullName), ...contentsOfEachFolder.map(thing => thing.fullName)]
+            };
+        }
+        if (item.xmlName === 'CustomObject') {
+            return {
+                members: standardObjects.concat(['*']),
+                name: item.xmlName
+            };
+        }
+        if (item.xmlName === 'StandardValueSet') {
+            return {
+                members: StandardValueSets,
+                name: item.xmlName
+            };
+        }
+        return { members: '*', name: item.xmlName };
     }
 }
 
@@ -326,22 +298,32 @@ const localFilesystemBuild = async (mdType, apiversion, username) => {
     let retries = 0;
     while (retries < retryLimit) {
         try {
+            // eslint-disable-next-line no-await-in-loop
             await exec(retrieveCommand, { maxBuffer: 1000000 * 1024 });
             return { type: mdType.name, status: 'success' };
-        } catch (e) {
-            retries++;
+        } catch (error) {
+            retries += 1;
         }
     }
     return { type: mdType.name, status: 'failure' };
 };
 
 // takes the command flags and builds a list of the types that the user wants
-const getTypeList = theFlags => {
-    let outputTypes = [];
-    Object.keys(booleanFlags).forEach(flag => {
-        if (theFlags[flag]) {
-            outputTypes = [...outputTypes, ...booleanFlags[flag]];
-        }
-    });
-    return outputTypes;
+const getTypeList = (theFlags): string[] => {
+    // let outputTypes = [];
+    // Object.keys(booleanFlags).forEach(flag => {
+    //     if (theFlags[flag]) {
+    //         outputTypes = [...outputTypes, ...booleanFlags[flag]];
+    //     }
+    // });
+    // return outputTypes;
+    return Object.keys(booleanFlags)
+        .map(flag => (theFlags[flag] ? booleanFlags[flag] : []))
+        .flat()
+        .filter(item => item);
 };
+
+interface MdTypeForPackageXml {
+    name: string;
+    members: string | string[];
+}

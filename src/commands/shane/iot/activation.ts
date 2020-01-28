@@ -1,6 +1,7 @@
 /* tslint:disable no-var-requires */
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
+
 import request = require('request-promise-native');
 
 export default class Activation extends SfdxCommand {
@@ -22,12 +23,12 @@ export default class Activation extends SfdxCommand {
     };
 
     protected static requiresUsername = true;
+
     protected static requiresProject = false;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // hardcoded because I've been burned on this one before
-        const version = '44.0';
+        const version = this.flags.apiversion ?? '44.0';
         const conn = this.org.getConnection();
         const auth = {
             bearer: conn.accessToken
@@ -38,27 +39,22 @@ export default class Activation extends SfdxCommand {
         };
 
         // first, get the orchestration Id
-        const orchestrations = JSON.parse(
+        const { orchestrations } = JSON.parse(
             await request.get(`${conn.instanceUrl}/services/data/v${version}/iot/orchestrations`, {
                 auth
             })
-        ).orchestrations;
+        );
         // console.log(orchestrations);
 
         // find the matching orchestration by name
-        const thisOrch = orchestrations.find(i => {
-            return i.name === this.flags.name;
-        });
+        const thisOrch = orchestrations.find(i => i.name === this.flags.name);
 
         // didn't find a match.  Tell the user what's in there.
         if (!thisOrch) {
-            const orchNames = orchestrations.map(x => x.name);
-            this.ux.error(chalk.red(`No orchestration found matching that name.  Orchestrations found: ${orchNames.join(', ')}`));
-            return;
-        } else {
-            // this.ux.logJson(thisOrch);
-            this.ux.log(`found orchestration with id ${thisOrch.id}.  Will activate its context ${thisOrch.orchestrationContext.label}`);
+            throw new Error(`No orchestration found matching that name.  Orchestrations found: ${orchestrations.map(x => x.name).join(', ')}`);
         }
+        // this.ux.logJson(thisOrch);
+        this.ux.log(`found orchestration with id ${thisOrch.id}.  Will activate its context ${thisOrch.orchestrationContext.label}`);
 
         const contextActivationResult = await request.post({
             url: `${conn.instanceUrl}/services/data/v${version}/iot/contexts/${thisOrch.orchestrationContext.id}/activations`,
@@ -94,33 +90,32 @@ export default class Activation extends SfdxCommand {
             });
             this.ux.log(chalk.green('Orchestration deactivating.'));
             return deactivationResult;
-        } else {
-            const activationResult = await request.post({
-                url: `${conn.instanceUrl}/services/data/v42.0/iot/orchestrations/${thisOrch.id}/activations`,
-                body: {
-                    options
-                },
-                auth,
-                json: true
-            });
-            this.ux.log(chalk.green('Orchestration activating.'));
-            // wait for a sign that the context is active
-            let orchActive = false;
-            do {
-                const newOrch = JSON.parse(
-                    await request.get(`${conn.instanceUrl}/services/data/v${version}/iot/orchestrations/${thisOrch.id}`, {
-                        auth
-                    })
-                );
-                // this.ux.logJson(newOrch);
-                if (newOrch.status === 'Active') {
-                    orchActive = true;
-                    this.ux.log(chalk.green('Orchestration is active.'));
-                    return newOrch;
-                }
-            } while (!orchActive);
-
-            return activationResult;
         }
+        const activationResult = await request.post({
+            url: `${conn.instanceUrl}/services/data/v42.0/iot/orchestrations/${thisOrch.id}/activations`,
+            body: {
+                options
+            },
+            auth,
+            json: true
+        });
+        this.ux.log(chalk.green('Orchestration activating.'));
+        // wait for a sign that the context is active
+        let orchActive = false;
+        do {
+            const newOrch = JSON.parse(
+                await request.get(`${conn.instanceUrl}/services/data/v${version}/iot/orchestrations/${thisOrch.id}`, {
+                    auth
+                })
+            );
+            // this.ux.logJson(newOrch);
+            if (newOrch.status === 'Active') {
+                orchActive = true;
+                this.ux.log(chalk.green('Orchestration is active.'));
+                return newOrch;
+            }
+        } while (!orchActive);
+
+        return activationResult;
     }
 }

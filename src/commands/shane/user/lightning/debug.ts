@@ -1,6 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+import { QueryResult } from '../../../../shared/typeDefs';
+
 import userIdLookup = require('../../../../shared/userIdLookup');
-import { QueryResult } from './../../../../shared/typeDefs';
 
 export default class UserLightningDebug extends SfdxCommand {
     public static description = 'set the user to debug mode';
@@ -21,7 +22,6 @@ export default class UserLightningDebug extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
         const conn = this.org.getConnection();
@@ -31,7 +31,7 @@ export default class UserLightningDebug extends SfdxCommand {
             const user = await userIdLookup.getUserId(conn, this.flags.lastname, this.flags.firstname);
             userId = user.Id;
         } else {
-            const users = <QueryResult>await conn.query(`select id from user where username = '${this.org.getUsername()}'`);
+            const users = (await conn.query(`select id from user where username = '${this.org.getUsername()}'`)) as QueryResult;
             userId = users.records[0].Id;
         }
         const updateResult = await conn.sobject('User').update({

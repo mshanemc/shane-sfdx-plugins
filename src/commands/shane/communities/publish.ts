@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-expression */
 import { flags, SfdxCommand } from '@salesforce/command';
-import { CommunitiesRestResult } from './../../../shared/typeDefs';
+import { CommunitiesRestResult } from '../../../shared/typeDefs';
 
 export default class CommunityPublish extends SfdxCommand {
     public static description = 'Publish a community using a headless browser';
@@ -37,7 +37,7 @@ export default class CommunityPublish extends SfdxCommand {
             if (this.flags.name) {
                 commError = `No communities matching "${this.flags.name}" in found communities [${communitiesList.communities.map(c => c.name)}]`;
             }
-            throw Error(commError);
+            throw new Error(commError);
         }
 
         const promises = [];

@@ -1,11 +1,12 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import cli from 'cli-ux';
-import fs = require('fs-extra');
 
 import { ObjectConfig } from '../../../shared/typeDefs';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 import { removeTrailingSlash } from '../../../shared/flagParsing';
+
+import fs = require('fs-extra');
 
 const typeDefinitions = [
     {
@@ -84,19 +85,17 @@ export default class ObjectCreate extends SfdxCommand {
         })
     };
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        const outputJSON = <ObjectConfig>{
+        const outputJSON = {
             '@': {
                 xmlns: 'http://soap.sforce.com/2006/04/metadata'
             },
             deploymentStatus: 'Deployed',
             label: '',
             pluralLabel: ''
-        };
+        } as ObjectConfig;
 
         if (!this.flags.type) {
             this.flags.type = await cli.prompt(`Object type [${typeDefinitions.map(td => td.type)}]`, { default: 'custom' });

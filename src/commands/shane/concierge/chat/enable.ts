@@ -3,15 +3,17 @@ import { QueryResult } from '../../../../shared/typeDefs';
 
 export default class ConcerigeChatEnable extends SfdxCommand {
     public static description = 'Modify custom settings to enable live agent chat for Concierge';
+
     public static examples = [];
+
     protected static requiresUsername = true;
+
     protected static requiresProject = true;
 
     protected static flagsConfig = {
         verbose: flags.builtin()
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const conn = this.org.getConnection();
         const version = await this.org.retrieveMaxApiVersion();

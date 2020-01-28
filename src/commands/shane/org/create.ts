@@ -1,8 +1,9 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import request = require('request-promise-native');
 
 import { exec2JSON } from '../../../shared/execProm';
+
+import request = require('request-promise-native');
 
 const usernameURL = 'https://unique-username-generator.herokuapp.com/unique';
 
@@ -70,7 +71,6 @@ export default class CreateOrg extends SfdxCommand {
 
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // gets the unique username
         const usernameResult = await request.post({
@@ -87,37 +87,39 @@ export default class CreateOrg extends SfdxCommand {
 
         // optional value 	flags without defaults
         if (this.flags.clientid) {
-            command = command + ` -i ${this.flags.clientid}`;
+            command += ` -i ${this.flags.clientid}`;
         }
 
         if (this.flags.targetdevhubusername) {
-            command = command + ` -v ${this.flags.targetdevhubusername}`;
+            command += ` -v ${this.flags.targetdevhubusername}`;
         }
 
         if (this.flags.setalias) {
-            command = command + ` -a ${this.flags.setalias}`;
+            command += ` -a ${this.flags.setalias}`;
         }
 
         // optional boolean
         if (this.flags.noancestors) {
-            command = command + ' -c';
+            command += ' -c';
         }
 
         if (this.flags.nonamespace) {
-            command = command + ' -n';
+            command += ' -n';
         }
 
         if (this.flags.setdefaultusername) {
-            command = command + ' -s';
+            command += ' -s';
         }
 
         if (this.flags.setdefaultusername) {
-            command = command + ` username=${usernameResult.message}`;
+            command += ` username=${usernameResult.message}`;
         }
         this.ux.log(`executing ${command}`);
 
         const response = await exec2JSON(command);
-        console.error(response);
+        if (!this.flags.json) {
+            this.ux.logJson(response);
+        }
 
         this.ux.log(chalk.green(`Org created with id ${response.result.orgId} and username ${response.result.username} `));
         return response.result;

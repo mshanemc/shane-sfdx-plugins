@@ -8,5 +8,23 @@
         "node": true,
         "es6": true
     },
-    "rules": {}
+    "rules": {
+        "no-await-in-loop": "warn",
+        "no-plusplus": "warn",
+        "no-use-before-define": "off",
+        "import/prefer-default-export": "warn",
+        "@typescript-eslint/no-use-before-define": "off",
+        "@typescript-eslint/no-unused-expressions": [
+            "error",
+            {
+                "allowTernary": true
+            }
+        ],
+        "unicorn/filename-case": [
+            "error",
+            {
+                "case": "camelCase"
+            }
+        ]
+    }
 }

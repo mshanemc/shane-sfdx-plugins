@@ -1,7 +1,7 @@
 import xml2js = require('xml2js');
 
 // tslint:disable-next-line: no-any
-const getParsed = async (xmlToParse, explicitArray: boolean = false): Promise<any> => {
+const getParsed = async (xmlToParse, explicitArray = false): Promise<any> => {
     const parser = new xml2js.Parser({ explicitArray });
 
     return new Promise((resolve, reject) => {

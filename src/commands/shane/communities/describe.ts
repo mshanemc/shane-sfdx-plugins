@@ -1,6 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+import { getExternalApps } from '../../../shared/community';
+
 import fs = require('fs-extra');
-import { getExternalApps } from './../../../shared/community';
 
 export default class CommunityDescribe extends SfdxCommand {
     public static description = 'tell me about the communities in the org, and optionally store the description';
@@ -13,7 +14,6 @@ export default class CommunityDescribe extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const conn = await this.org.getConnection();
         const output = await getExternalApps(conn);

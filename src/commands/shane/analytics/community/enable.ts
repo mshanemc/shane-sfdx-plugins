@@ -5,6 +5,7 @@ import { exec2JSON } from '../../../../shared/execProm';
 
 export default class CommunityEnable extends SfdxCommand {
     public static description = 'Activate a community using a headless browser';
+
     public static aliases = ['shane:communities:analytics:enable'];
 
     protected static requiresUsername = true;
@@ -13,7 +14,6 @@ export default class CommunityEnable extends SfdxCommand {
         showbrowser: flags.boolean({ char: 'b', description: 'show the browser...useful for local debugging' })
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // this.ux.startSpinner('starting headless browser');
 
@@ -24,7 +24,7 @@ export default class CommunityEnable extends SfdxCommand {
         const openResult = await exec2JSON('sfdx force:org:open -p /lightning/setup/InsightsSetupSettings/home -r --json');
         const iframeTitle = 'Get Started ~ Salesforce - Developer Edition';
 
-        const url = openResult.result.url;
+        const { url } = openResult.result;
 
         await context.overridePermissions(url, ['notifications']);
         const page = await browser.newPage();

@@ -1,9 +1,9 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import fs = require('fs-extra');
+import chalk from 'chalk';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 import { removeTrailingSlash } from '../../../shared/flagParsing';
 
-import chalk from 'chalk';
+import fs = require('fs-extra');
 
 export default class ObjectTab extends SfdxCommand {
     public static description = 'create a tab from a custom object, and you have to pick an icon';
@@ -31,10 +31,8 @@ export default class ObjectTab extends SfdxCommand {
         })
     };
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // make sure the tabs directory exists
         await fs.ensureDir(`${this.flags.target}/tabs`);

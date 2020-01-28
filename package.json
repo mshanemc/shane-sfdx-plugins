@@ -4,11 +4,17 @@
     "version": "4.15.0",
     "author": "@mshanemc",
     "bugs": "https://github.com/mshanemc/shane-sfdx-plugins/issues",
+    "engines": {
+        "node": ">=7.0.0"
+    },
     "dependencies": {
         "@oclif/command": "^1.5.12",
         "@oclif/config": "^1.13.3",
         "@oclif/errors": "^1.2.2",
         "@salesforce/command": "2.1.0",
+        "@salesforce/core": "^2.1.6",
+        "@salesforce/kit": "^1.2.1",
+        "@salesforce/ts-types": "^1.2.1",
         "chalk": "^2.4.2",
         "cli-ux": "^5.2.0",
         "csv-split-stream": "^1.0.2",

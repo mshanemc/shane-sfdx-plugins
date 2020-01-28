@@ -1,9 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import fs = require('fs-extra');
 
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
-import { getExisting } from './../../../shared/getExisting';
+import { getExisting } from '../../../shared/getExisting';
+
+import fs = require('fs-extra');
 
 export default class ConnectedAppUniquify extends SfdxCommand {
     public static description = 'modify a clientId/consumerKey on a local connected app to guaranatee uniqueness';
@@ -21,7 +22,6 @@ export default class ConnectedAppUniquify extends SfdxCommand {
 
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         if (!(await fs.pathExists(this.flags.app))) {
             throw new Error(`file not found: ${this.flags.app}`);

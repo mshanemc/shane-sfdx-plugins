@@ -1,9 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import fs = require('fs-extra');
 
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 import { removeTrailingSlash } from '../../../shared/flagParsing';
+
+import fs = require('fs-extra');
 
 export default class PowerOfOne extends SfdxCommand {
     public static description = 'create a new record type for an object';
@@ -31,10 +32,8 @@ export default class PowerOfOne extends SfdxCommand {
         })
     };
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         if (!fs.existsSync(`${this.flags.target}/objects/${this.flags.object}`)) {
             throw new Error(`object does not exist at ${this.flags.target}/objects/${this.flags.object}`);

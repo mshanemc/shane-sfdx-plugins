@@ -1,10 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import fs = require('fs-extra');
 
+import chalk from 'chalk';
 import { getExisting } from '../../../../shared/getExisting';
 import { writeJSONasXML } from '../../../../shared/JSONXMLtools';
 
-import chalk from 'chalk';
+import fs = require('fs-extra');
 
 export default class TSPUsernameUpdate extends SfdxCommand {
     public static description = 'change the username on all transaction security policies';
@@ -30,15 +30,13 @@ export default class TSPUsernameUpdate extends SfdxCommand {
         })
     };
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = true;
+
     protected static supportsUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const targetFolder = `${this.flags.directory}/transactionSecurityPolicies`;
         const finalUsername = this.flags.newusername ?? this.org.getUsername();
-        const output = [];
 
         if (!fs.existsSync(targetFolder)) {
             throw new Error(`Folder does not exist: ${targetFolder}`);
@@ -48,29 +46,28 @@ export default class TSPUsernameUpdate extends SfdxCommand {
 
         this.ux.log(`Updating ${tsps.length} transaction security policies`);
 
-        // loop through the TSPs
-        for (const tsp of tsps) {
-            let existing = await getExisting(`${targetFolder}/${tsp}`, 'TransactionSecurityPolicy');
+        // loop through the TSPs and do execution user modification on all of them
+        const UpdateResults = await Promise.all(tsps.map(tsp => this.updateTsp({ targetFolder, tsp, finalUsername })));
+        return UpdateResults;
+    }
 
-            existing = { ...existing, executionUser: finalUsername };
+    async updateTsp({ targetFolder, tsp, finalUsername }) {
+        let existing = await getExisting(`${targetFolder}/${tsp}`, 'TransactionSecurityPolicy');
+        existing = { ...existing, executionUser: finalUsername };
 
-            if (Array.isArray(existing.action.notifications)) {
-                existing.action.notifications.forEach((notification, key) => {
-                    existing.action.notifications[key].user = finalUsername;
-                });
-            } else {
-                existing.action.notifications.user = finalUsername;
-            }
-
-            await writeJSONasXML({
-                type: 'TransactionSecurityPolicy',
-                path: `${targetFolder}/${tsp}`,
-                json: existing
+        if (Array.isArray(existing.action.notifications)) {
+            existing.action.notifications.forEach((notification, key) => {
+                existing.action.notifications[key].user = finalUsername;
             });
-            this.ux.log(chalk.green(`Updated ${tsp}`));
-            output.push(existing);
+        } else {
+            existing.action.notifications.user = finalUsername;
         }
-
-        return output;
+        await writeJSONasXML({
+            type: 'TransactionSecurityPolicy',
+            path: `${targetFolder}/${tsp}`,
+            json: existing
+        });
+        this.ux.log(chalk.green(`Updated ${tsp}`));
+        return existing;
     }
 }

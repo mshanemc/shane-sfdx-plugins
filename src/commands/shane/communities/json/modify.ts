@@ -1,11 +1,11 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+import * as fs from 'fs-extra';
 import { componentFinder, getByAddress, replaceProperty } from '../../../../shared/jsonSearch';
 import { singleRecordQuery } from '../../../../shared/queries';
 
-import * as fs from 'fs-extra';
-
 export default class CommunityJSONModify extends SfdxCommand {
     public static description = 'Manipulate community ExperienceBundle JSON files, using REST or Tooling queries to an org to get metadata IDs';
+
     public static examples = [
         `sfdx shane:communities:json:modify -f force-app/main/default/experiences/employeebots1/views/home.json -i 69c03077-932a-4c08-b932-46baec5a7c86 -p someProp  -v NewValue
 // find the component and set a new hardcoded value for the property but don't write to the file
@@ -17,7 +17,9 @@ export default class CommunityJSONModify extends SfdxCommand {
 // find the component and set a new value from a query onto a property contained within unconverted JSON using the tooling api and update file locally
 `
     ];
+
     protected static supportsUsername = true;
+
     protected static requiresProject = true;
 
     protected static flagsConfig = {
@@ -82,7 +84,6 @@ export default class CommunityJSONModify extends SfdxCommand {
         verbose: flags.builtin()
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // find component
         if (!this.flags.value && !this.flags.query && !this.flags.variable && !this.flags.wavetype) {
@@ -155,7 +156,9 @@ export default class CommunityJSONModify extends SfdxCommand {
             if (this.flags.truncate) {
                 return result.substr(0, 15);
             }
+            return result;
         }
+        return undefined;
     }
 
     private async waveQuery(): Promise<string> {
@@ -184,9 +187,8 @@ export default class CommunityJSONModify extends SfdxCommand {
         }
         if (this.flags.truncate) {
             return match[this.flags.queryfield].substr(0, 15);
-        } else {
-            return match[this.flags.queryfield];
         }
+        return match[this.flags.queryfield];
     }
 
     private async getVariable(): Promise<string> {
@@ -195,10 +197,14 @@ export default class CommunityJSONModify extends SfdxCommand {
                 return this.org.getOrgId().substr(0, 15);
             }
             return this.org.getOrgId();
-        } else if (this.flags.variable === 'Username') {
+        }
+        if (this.flags.variable === 'Username') {
             return this.org.getUsername();
-        } else if (this.flags.variable === 'InstanceUrl') {
+        }
+        if (this.flags.variable === 'InstanceUrl') {
             return this.org.getConnection().instanceUrl.replace(/\/$/, '');
         }
+        throw new Error('unknown variable');
+        // return undefined;
     }
 }

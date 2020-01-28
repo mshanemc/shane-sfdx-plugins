@@ -1,5 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 
+import { QueryResult } from '../../../shared/typeDefs';
 import { getExisting } from '../../../shared/getExisting';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
@@ -17,6 +18,7 @@ export default class CertUnHardCode extends SfdxCommand {
     };
 
     protected static requiresProject = true;
+
     protected static requiresUsername = true;
 
     // tslint:disable-next-line: no-any
@@ -30,7 +32,7 @@ export default class CertUnHardCode extends SfdxCommand {
         const conn = this.org.getConnection();
 
         // query org using tooling api
-        const queryResult = await conn.tooling.query(`select id from Certificate where MasterLabel='${this.flags.label}'`);
+        const queryResult = (await conn.tooling.query(`select id from Certificate where MasterLabel='${this.flags.label}'`)) as QueryResult;
         if (this.flags.verbose && !this.flags.json) {
             this.ux.logJson(queryResult);
         }
@@ -39,10 +41,10 @@ export default class CertUnHardCode extends SfdxCommand {
             path: this.flags.samlfile,
             json: {
                 ...parsed,
-                requestSigningCertId: queryResult.records[0]['Id'].substr(0, 15)
+                requestSigningCertId: queryResult.records[0].Id.substr(0, 15)
             },
             type: 'SamlSsoConfig'
         });
-        this.ux.log(`changed requestSigningCertId in ${this.flags.samlfile} to ${queryResult.records[0]['Id']}`);
+        this.ux.log(`changed requestSigningCertId in ${this.flags.samlfile} to ${queryResult.records[0].Id}`);
     }
 }

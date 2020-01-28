@@ -1,12 +1,13 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import fs = require('fs-extra');
-import sw = require('stopword');
 
 import { getExisting } from '../../../shared/getExisting';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 import { setupArray } from '../../../shared/setupArray';
 import { CustomLabel } from '../../../shared/typeDefs';
+
+import fs = require('fs-extra');
+import sw = require('stopword');
 
 export default class LabelAdd extends SfdxCommand {
     public static description = "create a remote site setting in the local source.  Push it when you're done";
@@ -34,7 +35,6 @@ export default class LabelAdd extends SfdxCommand {
 
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const labelsFolder = `${this.flags.target}/labels`;
         const targetFilename = `${labelsFolder}/${this.flags.bundle}.labels-meta.xml`;

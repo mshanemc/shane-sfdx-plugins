@@ -1,8 +1,9 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 // import { ux } from 'cli-ux';
 import * as fs from 'fs-extra';
-import request = require('request-promise-native');
 import { CDCEvent } from '../../../shared/typeDefs';
+
+import request = require('request-promise-native');
 
 const describes = {};
 let conn;
@@ -22,9 +23,9 @@ export default class CDCPrep extends SfdxCommand {
     };
 
     protected static requiresProject = true;
+
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // get each object
         conn = await this.org.getConnection();
@@ -51,10 +52,10 @@ export default class CDCPrep extends SfdxCommand {
 
 // converts a cdc item to a insertable record
 const cdcToArray = async (outputArray: SimpleRecord[], cdc: CDCEvent) => {
-    let modifiedArray: SimpleRecord[] = Array.from(outputArray);
+    let modifiedArray: SimpleRecord[] = [...outputArray];
     const cdcRecordIds = cdc.payload.ChangeEventHeader.recordIds;
     // const entityType = cdc.payload.ChangeEventHeader.entityType;
-    const changeType = cdc.payload.ChangeEventHeader.changeType;
+    const { changeType } = cdc.payload.ChangeEventHeader;
 
     if (changeType === 'CREATE') {
         const newRecord = await cdcToRecord(cdc);

@@ -1,8 +1,9 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import fs = require('fs-extra');
 
 import { exec } from '../../../shared/execProm';
+
+import fs = require('fs-extra');
 
 export default class ProjectCreate extends SfdxCommand {
     public static description = 'creates an sfdx project';
@@ -20,7 +21,6 @@ export default class ProjectCreate extends SfdxCommand {
         gitremote: flags.string({ char: 'g', required: true, description: 'full github url for the remote' })
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         await exec(`sfdx force:project:create -n ${this.flags.name}`);
         await exec('git init', { cwd: this.flags.name });
@@ -38,12 +38,12 @@ export default class ProjectCreate extends SfdxCommand {
             fs.ensureDir(`${this.flags.name}/config/userDef`), // a place to put userDef files
 
             // files I like to have
-            fs.writeFile(`${this.flags.name}/orgInit.sh`, this.orgInit()), // basic init script
+            fs.writeFile(`${this.flags.name}/orgInit.sh`, orgInit()), // basic init script
             fs.writeFile(`${this.flags.name}/README.md`, ''), // blank the standard sfdx readme
-            fs.writeFile(`${this.flags.name}/.gitignore`, this.gitIgnore()), // basic git ignore
+            fs.writeFile(`${this.flags.name}/.gitignore`, gitIgnore()), // basic git ignore
             fs.writeFile(`${this.flags.name}/package.json`, this.packageJSON()), // basic git ignore
             fs.writeFile(`${this.flags.name}/config/project-scratch-def.json`, this.scratchJSON()), // basic git ignore
-            fs.writeFile(`${this.flags.name}/sfdx-project.json`, this.projectJSON(await await this.hubOrg.retrieveMaxApiVersion())) // basic git ignore
+            fs.writeFile(`${this.flags.name}/sfdx-project.json`, projectJSON(await this.hubOrg.retrieveMaxApiVersion())) // basic git ignore
         ]);
 
         await exec('sfdx shane:profile:whitelist -n Admin', { cwd: this.flags.name }); // whitelist the admin profile for everyone
@@ -57,36 +57,6 @@ export default class ProjectCreate extends SfdxCommand {
     }
 
     // everything below is the content of files I want to create
-
-    public orgInit(): string {
-        return `sfdx force:org:create -f config/project-scratch-def.json -d 1 -s
-sfdx force:source:push
-sfdx force:org:open`;
-    }
-
-    public gitIgnore(): string {
-        return `node_modules
-.vscode/settings.json
-.localdevserver
-.DS_Store
-`;
-    }
-
-    public projectJSON(api): string {
-        const project = {
-            packageDirectories: [
-                {
-                    path: 'force-app',
-                    default: true
-                }
-            ],
-            namespace: '',
-            sfdcLoginUrl: 'https://login.salesforce.com',
-            sourceApiVersion: api
-        };
-
-        return JSON.stringify(project, null, 2);
-    }
 
     public scratchJSON(): string {
         const scratch = {
@@ -151,3 +121,33 @@ sfdx force:org:open`;
         return JSON.stringify(pkg, null, 2);
     }
 }
+
+const orgInit = (): string => {
+    return `sfdx force:org:create -f config/project-scratch-def.json -d 1 -s
+sfdx force:source:push
+sfdx force:org:open`;
+};
+
+const gitIgnore = (): string => {
+    return `node_modules
+.vscode/settings.json
+.localdevserver
+.DS_Store
+`;
+};
+
+const projectJSON = (api): string => {
+    const project = {
+        packageDirectories: [
+            {
+                path: 'force-app',
+                default: true
+            }
+        ],
+        namespace: '',
+        sfdcLoginUrl: 'https://login.salesforce.com',
+        sourceApiVersion: api
+    };
+
+    return JSON.stringify(project, null, 2);
+};

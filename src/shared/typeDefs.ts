@@ -1,5 +1,10 @@
 import { Field } from 'jsforce/describe-result';
 
+// import {Field } from '@'
+interface User extends Record {
+    Username?: string;
+}
+
 interface ContentVersionCreateRequest {
     PathOnClient: string;
     Title?: string;
@@ -198,5 +203,6 @@ export {
     PlatformEvent,
     ObjectConfig,
     FieldMeta,
-    ContentVersionCreateRequest
+    ContentVersionCreateRequest,
+    User
 };

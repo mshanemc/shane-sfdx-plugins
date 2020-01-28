@@ -934,7 +934,7 @@
     chalk "^2.4.2"
     cli-ux "^4.9.3"
 
-"@salesforce/core@^2.1.0":
+"@salesforce/core@^2.1.0", "@salesforce/core@^2.1.6":
   version "2.1.6"
   resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-2.1.6.tgz#ef24ed53a9dc9f7b2bd3f16abfe326565c45a4d0"
   integrity sha512-9Y2tk3KljwsSOIP7AyCJhaQoqzYRiJ7QMTdafxTWyvr9UPRu5lVILsEUb++8I3jUG4zRcUluwc9EVz2PESr/uw==
@@ -960,7 +960,7 @@
     tslint-microsoft-contrib "^5.2.1"
     typescript "~3.1.6"
 
-"@salesforce/kit@^1.0.0", "@salesforce/kit@^1.2.0":
+"@salesforce/kit@^1.0.0", "@salesforce/kit@^1.2.0", "@salesforce/kit@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@salesforce/kit/-/kit-1.2.1.tgz#123f0edad6a934848db054f51d6524a1e8419043"
   integrity sha512-ytpDL5TO4QAPcMl1flXXADMeBzARtoOZekWTMdL2O8PVdJo5Wbo9TNpJk0u6SN7qcxZvdbb6RAJpprp4qN2TZw==

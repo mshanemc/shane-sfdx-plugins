@@ -2,7 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { StreamingClient } from '@salesforce/core';
 // import { Duration } from '@salesforce/kit';
 import * as fs from 'fs-extra';
-import { CDCEvent } from './../../../shared/typeDefs';
+import { CDCEvent } from '../../../shared/typeDefs';
 
 const writeJSONOptions = {
     spaces: 2
@@ -26,7 +26,6 @@ export default class CDCStream extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const streamProcessor = message => {
             this.ux.logJson(message);

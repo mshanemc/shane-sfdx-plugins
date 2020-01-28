@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { getExternalApps } from './../../../shared/community';
+import { getExternalApps } from '../../../shared/community';
 
 export default class CommunityUrl extends SfdxCommand {
     public static description = 'get me the login for a community from an org';
@@ -12,7 +12,6 @@ export default class CommunityUrl extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const conn = this.org.getConnection();
 

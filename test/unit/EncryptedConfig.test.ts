@@ -1,7 +1,8 @@
-import fs = require('fs-extra');
 import { exec } from '../../src/shared/execProm';
 
 import { convertEmailToFilename, ShaneAIConfig } from '../../src/shared/aiConstants';
+
+import fs = require('fs-extra');
 
 const testProjectName = 'testProjectEncryptedConfig';
 

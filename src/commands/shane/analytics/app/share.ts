@@ -1,4 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+
 import request = require('request-promise-native');
 
 // import chalk from 'chalk';
@@ -21,10 +22,8 @@ export default class AnalyticsAppShare extends SfdxCommand {
         type: flags.string({ char: 't', default: 'View', description: 'access level', options: ['View', 'Edit', 'Manage'] })
     };
 
-    // Comment this out if your command does not require an org username
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const conn = this.org.getConnection();
         const defaultRequest = {
@@ -56,9 +55,8 @@ export default class AnalyticsAppShare extends SfdxCommand {
 
         // convert shareRepresentation to shareInputRepresentation
         let sharesToPatch = retrievedFolder.shares.map(share => {
-            delete share.sharedWithLabel;
-            delete share.imageUrl;
-            return share;
+            const { sharedwithLabel, imageUrl, ...newShare } = share;
+            return newShare;
         });
 
         if (this.flags.allprm) {

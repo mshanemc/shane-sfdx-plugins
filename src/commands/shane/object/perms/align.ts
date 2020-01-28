@@ -1,11 +1,12 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import fs = require('fs-extra');
 
 import { getExisting } from '../../../../shared/getExisting';
 import { metadataTypes } from '../../../../shared/permsetProfileMetadata';
 import { setupArray } from '../../../../shared/setupArray';
 import { writeJSONasXML } from '../../../../shared/JSONXMLtools';
+
+import fs = require('fs-extra');
 
 export default class PermAlign extends SfdxCommand {
     public static description = 'align profiles with ';
@@ -20,10 +21,8 @@ export default class PermAlign extends SfdxCommand {
         directory: flags.directory({ char: 'd', default: 'force-app/main/default', description: 'Where is all this metadata?' })
     };
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const profileDirectory = `${this.flags.directory}/profiles`;
         const permsetDirectory = `${this.flags.directory}/permissionsets`;
@@ -63,18 +62,6 @@ export default class PermAlign extends SfdxCommand {
         this.ux.log(chalk.green('Done!'));
     }
 
-    public checkTab(tabName: string, tabs: string[], objects: string[]): boolean {
-        const tabFileName = tabName + '.tab-meta.xml';
-        if (tabs.includes(tabFileName)) {
-            return true; // the tab is there locally, so include it in the profile
-        } else if (objects.includes(tabName.replace('standard-', ''))) {
-            return true; // the object is there locally, so include the tab
-        } else {
-            return false;
-        }
-    }
-
-    // tslint:disable-next-line:no-any
     public async removePerms(targetFilename: string, profileOrPermset: 'Profile' | 'PermissionSet'): Promise<any> {
         let existing = await getExisting(targetFilename, profileOrPermset);
 
@@ -96,70 +83,64 @@ export default class PermAlign extends SfdxCommand {
                 existing.objectPermissions = existing.objectPermissions.filter(item => {
                     if (objects.includes(item.object)) {
                         return true;
-                    } else {
-                        this.ux.log(`${chalk.cyan(targetFilename)}: removing object perm for ${item.object}`);
-                        return false;
                     }
+                    this.ux.log(`${chalk.cyan(targetFilename)}: removing object perm for ${item.object}`);
+                    return false;
                 });
             }
             if (mdType.key === 'field') {
                 // the object exists locally, and if so, the field does, too.
                 existing.fieldPermissions = existing.fieldPermissions.filter(item => {
                     const objectName = item.field.split('.')[0];
-                    const fieldName = item.field.split('.')[1] + '.field-meta.xml';
+                    const fieldName = `${item.field.split('.')[1]}.field-meta.xml`;
                     if (objects.includes(objectName) && fs.readdirSync(`${objDir}/${objectName}/fields`).includes(fieldName)) {
                         return true;
-                    } else {
-                        this.ux.log(`${chalk.cyan(targetFilename)}: removing field perm for ${item.field}`);
-                        return false;
                     }
+                    this.ux.log(`${chalk.cyan(targetFilename)}: removing field perm for ${item.field}`);
+                    return false;
                 });
             }
             if (mdType.key === 'layout') {
                 // the object exists AND so does the specified layout
                 existing.layoutAssignments = existing.layoutAssignments.filter(item => {
                     const objectName = item.layout.split('-')[0];
-                    if (objects.includes(objectName) && layouts.includes(item.layout + '.layout-meta.xml')) {
+                    if (objects.includes(objectName) && layouts.includes(`${item.layout}.layout-meta.xml`)) {
                         return true;
-                    } else {
-                        this.ux.log(`${chalk.cyan(targetFilename)}: removing layout assignment for ${item.layout}`);
-                        return false;
                     }
+                    this.ux.log(`${chalk.cyan(targetFilename)}: removing layout assignment for ${item.layout}`);
+                    return false;
                 });
             }
             if (mdType.key === 'recordType') {
                 existing.recordTypeVisibilities = existing.recordTypeVisibilities.filter(item => {
                     const objectName = item.recordType.split('.')[0];
-                    const recordTypeName = item.recordType.split('.')[1] + '.recordType-meta.xml';
+                    const recordTypeName = `${item.recordType.split('.')[1]}.recordType-meta.xml`;
                     if (objects.includes(objectName) && fs.readdirSync(`${objDir}/${objectName}/recordTypes`).includes(recordTypeName)) {
                         return true;
-                    } else {
-                        this.ux.log(`${chalk.cyan(targetFilename)}: removing recordTypeVisibility for ${item.recordType}`);
-                        return false;
                     }
+                    this.ux.log(`${chalk.cyan(targetFilename)}: removing recordTypeVisibility for ${item.recordType}`);
+                    return false;
                 });
             }
             if (mdType.key === 'tab') {
-                existing[mdType[typeKey]] = existing[mdType[typeKey]].filter(item => this.checkTab(item.tab, tabs, objects));
+                existing[mdType[typeKey]] = existing[mdType[typeKey]].filter(item => checkTab(item.tab, tabs, objects));
             }
             if (mdType.key === 'externalDataSource') {
                 existing.externalDataSourceAccesses = existing.externalDataSourceAccesses.filter(item => {
-                    if (dataSources.includes(item.externalDataSource + '.dataSource-meta.xml')) {
+                    if (dataSources.includes(`${item.externalDataSource}.dataSource-meta.xml`)) {
                         return true;
-                    } else {
-                        this.ux.log(`${chalk.cyan(targetFilename)}: removing external data source ${item.externalDataSource}`);
-                        return false;
                     }
+                    this.ux.log(`${chalk.cyan(targetFilename)}: removing external data source ${item.externalDataSource}`);
+                    return false;
                 });
             }
             if (mdType.key === 'application') {
                 existing.applicationVisibilities = existing.applicationVisibilities.filter(item => {
-                    if (applications.includes(item.application + '.app-meta.xml')) {
+                    if (applications.includes(`${item.application}.app-meta.xml`)) {
                         return true;
-                    } else {
-                        this.ux.log(`${chalk.cyan(targetFilename)}: removing app ${item.application}`);
-                        return false;
                     }
+                    this.ux.log(`${chalk.cyan(targetFilename)}: removing app ${item.application}`);
+                    return false;
                 });
             }
         }
@@ -179,3 +160,14 @@ export default class PermAlign extends SfdxCommand {
         // this.ux.log(`removed ${objectBefore - existing.objectPermissions.length} objects, ${recordTypeBefore - existing.recordTypeVisibilities.length} recordTypes, ${layoutBefore - existing.layoutAssignments.length} layout, ${fieldBefore - existing.fieldPermissions.length} fields from ${this.flags.object} ${chalk.cyan(targetFilename)}`);
     }
 }
+
+const checkTab = (tabName: string, tabs: string[], objects: string[]): boolean => {
+    const tabFileName = `${tabName}.tab-meta.xml`;
+    if (tabs.includes(tabFileName)) {
+        return true; // the tab is there locally, so include it in the profile
+    }
+    if (objects.includes(tabName.replace('standard-', ''))) {
+        return true; // the object is there locally, so include the tab
+    }
+    return false;
+};

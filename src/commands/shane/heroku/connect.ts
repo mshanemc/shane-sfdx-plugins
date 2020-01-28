@@ -3,9 +3,10 @@ import { flags, SfdxCommand } from '@salesforce/command';
 
 import * as fs from 'fs-extra';
 import * as puppeteer from 'puppeteer';
-import request = require('request-promise-native');
 
 import { exec2JSON } from '../../../shared/execProm';
+
+import request = require('request-promise-native');
 
 // const herokuAPIendpoint = 'https://api.heroku.com';
 const HC_DiscoveryServiceEndpoint = 'https://hc-central.heroku.com';
@@ -46,7 +47,6 @@ export default class HerokuConnect extends SfdxCommand {
         verbose: flags.builtin()
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         if (!process.env.HEROKU_API_KEY) {
             throw new Error(

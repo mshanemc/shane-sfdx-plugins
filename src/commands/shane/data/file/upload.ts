@@ -1,6 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+import { CreateResult, Record } from '../../../../shared/typeDefs';
+
 import localFile2CV = require('../../../../shared/localFile2CV');
-import { CreateResult, Record } from './../../../../shared/typeDefs';
 
 export default class Upload extends SfdxCommand {
     public static description = 'upload a file from local resources, optionally as a chatter post or attached file on a record';
@@ -28,9 +29,9 @@ export default class Upload extends SfdxCommand {
     };
 
     protected static requiresUsername = true;
+
     protected static requiresProject = false;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
         const conn = this.org.getConnection();
@@ -41,12 +42,13 @@ export default class Upload extends SfdxCommand {
             ShareType: string;
         }
 
-        const CV = <Record>await localFile2CV.file2CV(conn, this.flags.file, this.flags.name);
+        const CV = (await localFile2CV.file2CV(conn, this.flags.file, this.flags.name)) as Record;
 
         if (!this.flags.parentid) {
             this.ux.log(`created file with content document id ${CV.ContentDocumentId}`);
             return CV;
-        } else if (!this.flags.chatter) {
+        }
+        if (!this.flags.chatter) {
             // regular file attachment
             this.ux.log(`will create a regular file attachment on record ${this.flags.parentid}`);
 
@@ -63,21 +65,20 @@ export default class Upload extends SfdxCommand {
                 this.ux.error(CDLCreateResult.message);
             }
             return CDLCreateResult;
-        } else {
-            // chatter post
-            const feedItemRequest = {
-                RelatedRecordId: CV.Id,
-                ParentId: this.flags.parentid,
-                Type: 'ContentPost'
-            };
-
-            const feedItemCreateResult = (await conn.sobject('FeedItem').create(feedItemRequest)) as CreateResult;
-            if (feedItemCreateResult.success) {
-                this.ux.log(`created chatter file attachment on record ${this.flags.parentid}`);
-            } else {
-                this.ux.error(feedItemCreateResult.message);
-            }
-            return feedItemCreateResult;
         }
+        // chatter post
+        const feedItemRequest = {
+            RelatedRecordId: CV.Id,
+            ParentId: this.flags.parentid,
+            Type: 'ContentPost'
+        };
+
+        const feedItemCreateResult = (await conn.sobject('FeedItem').create(feedItemRequest)) as CreateResult;
+        if (feedItemCreateResult.success) {
+            this.ux.log(`created chatter file attachment on record ${this.flags.parentid}`);
+        } else {
+            this.ux.error(feedItemCreateResult.message);
+        }
+        return feedItemCreateResult;
     }
 }

@@ -1,9 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import fs = require('fs-extra');
 
 import { getExisting } from '../../../shared/getExisting';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
+
+import fs = require('fs-extra');
 
 export default class FATUpdate extends SfdxCommand {
     public static description =
@@ -38,19 +39,16 @@ export default class FATUpdate extends SfdxCommand {
 
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const targetFolder = `${this.flags.directory}/objects/${this.flags.object}`;
         const targetFilename = `${targetFolder}/${this.flags.object}.object-meta.xml`;
 
         if (!fs.existsSync(targetFolder)) {
-            this.ux.error(`Folder does not exist: ${targetFolder}.  Pull object schema using sfdx shane:mdapi:pull -o ${this.flags.object}`);
-            return;
+            throw new Error(`Folder does not exist: ${targetFolder}.  Pull object schema using sfdx shane:mdapi:pull -o ${this.flags.object}`);
         }
 
         if (!fs.existsSync(targetFilename)) {
-            this.ux.error(`Object does not exist in local source: ${targetFilename}.  Pull object schema using sfdx shane:mdapi:pull -s`);
-            return;
+            throw new Error(`Object does not exist in local source: ${targetFilename}.  Pull object schema using sfdx shane:mdapi:pull -s`);
         }
 
         let existing = await getExisting(targetFilename, 'CustomObject');

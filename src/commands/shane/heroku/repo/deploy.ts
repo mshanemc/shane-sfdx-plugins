@@ -1,9 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { sleep } from '@salesforce/kit';
 import chalk from 'chalk';
-import request = require('request-promise-native');
 
 import { exec2JSON } from '../../../../shared/execProm';
+
+import request = require('request-promise-native');
 
 const pollingInterval = 2000; // ms polling when checking for app deployment
 const herokuAPIendpoint = 'https://api.heroku.com/app-setups';
@@ -36,7 +37,6 @@ export default class HerokuRepoDeploy extends SfdxCommand {
 
     // protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         interface HerokuAppSetup {
             source_blob: {
@@ -63,6 +63,7 @@ export default class HerokuRepoDeploy extends SfdxCommand {
 
         // fs.ensureDirSync(tmpDir);
         if (this.flags.overrides) {
+            // body.overrides = this.flags.overrides.map( override => ())
             for (const override of this.flags.overrides) {
                 body.overrides.env[override.split('=')[0]] = override.split('=')[1];
             }
@@ -102,7 +103,7 @@ export default class HerokuRepoDeploy extends SfdxCommand {
             json: true
         });
 
-        let status = result.status;
+        let { status } = result;
         let statusResult;
 
         while (status === 'pending') {
@@ -128,7 +129,7 @@ export default class HerokuRepoDeploy extends SfdxCommand {
                     `App deployed, available at ${statusResult.resolved_success_url}. Delete by running heroku destroy -a ${statusResult.app.name} -c ${statusResult.app.name}`
                 )
             );
-            return statusResult;
         }
+        return statusResult;
     }
 }

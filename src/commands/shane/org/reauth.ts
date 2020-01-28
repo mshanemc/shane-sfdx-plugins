@@ -1,10 +1,11 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { AuthInfo } from '@salesforce/core';
 import * as assert from 'assert';
-import fs = require('fs-extra');
 import * as stripcolor from 'strip-color';
 
 import { exec } from '../../../shared/execProm';
+
+import fs = require('fs-extra');
 
 const retrySeconds = 20;
 const maxTries = 120;
@@ -27,9 +28,9 @@ export default class ScratchOrgReAuth extends SfdxCommand {
     };
 
     protected static requiresUsername = true;
+
     protected static requiresDevhubUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const username = await this.org.getUsername();
 
@@ -56,8 +57,8 @@ export default class ScratchOrgReAuth extends SfdxCommand {
                     `sfdx force:auth:jwt:grant --json --clientid ${hubInfo.clientId} --username ${username} --jwtkeyfile ${hubInfo.privateKey} --instanceurl https://test.salesforce.com -s`
                 );
                 hasError = false;
-            } catch (err) {
-                const parsedOut = JSON.parse(stripcolor(err.stdout));
+            } catch (error) {
+                const parsedOut = JSON.parse(stripcolor(error.stdout));
                 if (parsedOut.message.includes('This org appears to have a problem with its OAuth configuration')) {
                     this.ux.log('login not available yet.');
                     hasError = true;
@@ -79,7 +80,8 @@ export default class ScratchOrgReAuth extends SfdxCommand {
                 this.ux.log(`domain is ${authFields.instanceUrl}`);
                 keepTrying = false;
                 return authFields;
-            } else if (this.flags.requirecustomdomain) {
+            }
+            if (this.flags.requirecustomdomain) {
                 this.ux.log(
                     `domain was ${authFields.instanceUrl}.  Pausing to wait ${retrySeconds} seconds before checking domain again (${tryCounter}/${maxTries})`
                 );

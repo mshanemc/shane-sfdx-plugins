@@ -19,10 +19,8 @@ export default class LoginURL extends SfdxCommand {
         starturl: flags.string({ char: 'p', description: 'url to open' })
     };
 
-    // Comment this out if your command does not require an org username
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const auth = this.org.getConnection().getAuthInfoFields();
         // this.ux.logJson(auth);

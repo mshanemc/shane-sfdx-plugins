@@ -1,11 +1,10 @@
+/* eslint-disable no-await-in-loop */
 import { flags, SfdxCommand } from '@salesforce/command';
 import { sleep } from '@salesforce/kit';
-import csvSplitStream = require('csv-split-stream');
-import fs = require('fs-extra');
 import * as readline from 'readline';
 
-// import stream = require('stream');
-// import util = require('util');
+import csvSplitStream = require('csv-split-stream');
+import fs = require('fs-extra');
 
 export default class DatasetDownload extends SfdxCommand {
     public static description = 'upload a dataset from csv';
@@ -35,12 +34,11 @@ export default class DatasetDownload extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const tmpFolder = 'chunkFolder';
 
         const conn = this.org.getConnection();
-        // tslint:disable-next-line:no-any
+
         const body: any = {
             EdgemartLabel: this.flags.name,
             EdgemartAlias: this.flags.name,
@@ -58,18 +56,17 @@ export default class DatasetDownload extends SfdxCommand {
             body.EdgemartContainer = this.flags.app;
         }
 
-        // tslint:disable-next-line:no-any
-        const createUploadResult = <any>await conn.request({
+        const createUploadResult = (await conn.request({
             method: 'POST',
             url: `${conn.baseUrl()}/sobjects/InsightsExternalData`,
             body: JSON.stringify(body)
-        });
+        })) as any;
 
         // this.ux.logJson(createUploadResult);
 
         // chunking
         const { size } = await fs.stat(this.flags.csvfile);
-        const rowCount = <number>await countRows(this.flags.csvfile);
+        const rowCount = (await countRows(this.flags.csvfile)) as number;
         const chunks = Math.ceil(size / 800000);
         const chunkRows = Math.ceil(rowCount / chunks);
         this.ux.log(`file size is ${size} bytes, ${rowCount} rows, so ${chunks} chunks of ~${chunkRows} rows`);
@@ -84,8 +81,7 @@ export default class DatasetDownload extends SfdxCommand {
 
         await Promise.all(
             files.map(async (file, index) => {
-                // tslint:disable-next-line:no-any
-                const result = <any>await conn.request({
+                const result = (await conn.request({
                     method: 'POST',
                     url: `${conn.baseUrl()}/sobjects/InsightsExternalDataPart`,
                     body: JSON.stringify({
@@ -93,7 +89,7 @@ export default class DatasetDownload extends SfdxCommand {
                         InsightsExternalDataId: createUploadResult.id,
                         PartNumber: index + 1
                     })
-                });
+                })) as any;
                 if (result.success) {
                     this.ux.log(`file ${file} succeeded with id ${result.id}`);
                 }
@@ -122,11 +118,11 @@ export default class DatasetDownload extends SfdxCommand {
 
         while (!complete) {
             await sleep(1000);
-            // tslint:disable-next-line:no-any
-            const statusCheck = <any>await conn.request({
+
+            const statusCheck = (await conn.request({
                 method: 'GET',
                 url: `${conn.baseUrl()}/sobjects/InsightsExternalData/${createUploadResult.id}`
-            });
+            })) as any;
             if (['Completed', 'CompletedWithWarnings', 'Failed'].includes(statusCheck.Status)) {
                 complete = true;
                 this.ux.stopSpinner('Done!');
@@ -141,7 +137,7 @@ export default class DatasetDownload extends SfdxCommand {
 }
 
 const countRows = csv => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         let rowCount = 0;
         const lineReader = readline.createInterface({
             input: fs.createReadStream(csv)
@@ -149,7 +145,7 @@ const countRows = csv => {
 
         lineReader
             .on('line', () => {
-                rowCount++;
+                rowCount += 1;
             })
             .on('close', () => {
                 resolve(rowCount);

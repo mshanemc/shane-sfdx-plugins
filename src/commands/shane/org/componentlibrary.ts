@@ -18,7 +18,6 @@ export default class ComponentLibrary extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // required flags
         const command = `sfdx force:org:open --path /componentReference/suite.app --json -u ${this.org.getUsername()}`;

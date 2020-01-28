@@ -1,10 +1,11 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import fs = require('fs-extra');
 import { URL } from 'url';
 
 import { exec } from '../../../shared/execProm';
-import { QueryResult } from './../../../shared/typeDefs';
-import { savePhotoForUser } from '../../../shared/userPhoto';
+import { QueryResult } from '../../../shared/typeDefs';
+import { savePhotoForUserOrGroup } from '../../../shared/userPhoto';
+
+import fs = require('fs-extra');
 
 const tempRepo = 'tempRepo';
 const photoRepo = 'https://github.com/mshanemc/badProfilePhotos';
@@ -24,9 +25,9 @@ export default class AllPhotos extends SfdxCommand {
     };
 
     protected static requiresUsername = true;
+
     protected static requiresProject = false;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const conn = this.org.getConnection();
         let folderPath = this.flags.folder;
@@ -45,9 +46,9 @@ export default class AllPhotos extends SfdxCommand {
 
         const saveResults = await Promise.all(
             users.records.map((user, index) =>
-                savePhotoForUser({
+                savePhotoForUserOrGroup({
                     conn,
-                    userId: user.Id,
+                    userOrGroupId: user.Id,
                     filePath: photos[index % photos.length]
                 })
             )

@@ -15,7 +15,6 @@ export default class MetadataDescribe extends SfdxCommand {
 
     protected static requiresProject = false;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const conn = await this.org.getConnection();
         const metadata = await conn.metadata.describe(this.flags.apiversion || (await this.org.retrieveMaxApiVersion()));

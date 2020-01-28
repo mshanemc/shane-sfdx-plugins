@@ -1,8 +1,9 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import fs = require('fs-extra');
 
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
+
+import fs = require('fs-extra');
 
 export default class LabelAdd extends SfdxCommand {
     public static description = 'create a ContentAsset from a local image file';
@@ -24,10 +25,8 @@ export default class LabelAdd extends SfdxCommand {
         })
     };
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const assetsFolder = `${this.flags.target}/contentassets`;
 

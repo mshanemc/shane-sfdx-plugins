@@ -1,9 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import fs = require('fs-extra');
 
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 import { removeTrailingSlash } from '../../../shared/flagParsing';
+
+import fs = require('fs-extra');
 
 export default class PowerOfOne extends SfdxCommand {
     public static description = 'add a "power of one" formula field to any object';
@@ -35,10 +36,8 @@ export default class PowerOfOne extends SfdxCommand {
         })
     };
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         if (this.flags.api.includes(' ')) {
             this.ux.error(chalk.red('spaces are not allowed in the api name'));

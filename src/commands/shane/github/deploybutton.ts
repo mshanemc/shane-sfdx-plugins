@@ -28,7 +28,6 @@ export default class DeployButton extends SfdxCommand {
 
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // get repo url from package.json
         const repoUrl = (await fs.readJSON('package.json')).repository.url.replace('git+', '').replace('.git', '');

@@ -1,7 +1,8 @@
 import { Connection } from '@salesforce/core';
-import fs = require('fs-extra');
 
-import { CreateResult, QueryResult, Record, ContentVersionCreateRequest } from './../shared/typeDefs';
+import { CreateResult, QueryResult, Record, ContentVersionCreateRequest } from './typeDefs';
+
+import fs = require('fs-extra');
 
 export async function file2CV(conn: Connection, filepath: string, name?: string): Promise<Record> {
     const cvcr: ContentVersionCreateRequest = {

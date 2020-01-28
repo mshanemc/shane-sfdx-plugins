@@ -15,9 +15,9 @@ export default class MetadataCoverage extends SfdxCommand {
     ];
 
     protected static flagsConfig = {};
+
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // required flags
         const command = `sfdx force:org:open --path /mdcoverage/report.jsp --json -u ${this.org.getUsername()}`;

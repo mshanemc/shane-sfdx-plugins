@@ -16,16 +16,14 @@ export default class DataFlowStart extends SfdxCommand {
         id: flags.id({ char: 'i', description: 'the id of the dataflow' })
     };
 
-    // Comment this out if your command does not require an org username
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const conn = this.org.getConnection();
 
-        const dataflowsListResult = <WaveDataFlowListResponse>(<unknown>await conn.request({
+        const dataflowsListResult = ((await conn.request({
             url: `${conn.baseUrl()}/wave/dataflows`
-        }));
+        })) as unknown) as WaveDataFlowListResponse;
 
         // match the dataflow from the list
         const foundDataflow = dataflowsListResult.dataflows.find(

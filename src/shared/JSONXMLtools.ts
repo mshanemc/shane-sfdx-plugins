@@ -1,8 +1,10 @@
-import { AnyJson } from '@salesforce/ts-types';
-import fs = require('fs-extra');
-import jsToXml = require('js2xmlparser');
+// eslint-disable-next-line unicorn/filename-case
+import { JsonMap } from '@salesforce/ts-types';
 import { IOptions } from 'js2xmlparser/lib/options';
 import { ObjectConfig, FieldMeta } from './typeDefs';
+
+import fs = require('fs-extra');
+import jsToXml = require('js2xmlparser');
 
 const standardOptions: IOptions = {
     declaration: {
@@ -16,24 +18,25 @@ const standardOptions: IOptions = {
 };
 
 const writeJSONasXML = async ({ path, json, type, options = standardOptions }: WriteJSONasXMLInputs) => {
-    const xml = jsToXml.parse('ContentAsset', fixExistingDollarSign(json), options);
+    const xml = jsToXml.parse(type, fixExistingDollarSign(json), options);
     await fs.writeFile(path, xml);
 };
 
 interface WriteJSONasXMLInputs {
     path: string;
-    json: AnyJson | ObjectConfig | FieldMeta;
+    json: JsonMap | ObjectConfig | FieldMeta;
     type: string;
     options?: IOptions;
 }
 
 const fixExistingDollarSign = (existing: WriteJSONasXMLInputs['json']) => {
-    if (existing['$']) {
-        const temp = existing['$'];
-        delete existing['$'];
-        existing['@'] = temp;
+    const existingCopy = { ...existing } as any;
+    if (existingCopy.$) {
+        const temp = existingCopy.$;
+        delete existingCopy.$;
+        existingCopy['@'] = temp;
     }
-    return existing;
+    return existingCopy;
 };
 
 export { writeJSONasXML, standardOptions, fixExistingDollarSign };

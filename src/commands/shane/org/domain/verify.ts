@@ -9,7 +9,6 @@ export default class DomainVerify extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const authInfo = this.org.getConnection().getAuthInfoFields();
         this.ux.logJson(authInfo);

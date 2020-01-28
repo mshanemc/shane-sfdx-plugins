@@ -1,8 +1,9 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import fs = require('fs-extra');
 
 import { removeTrailingSlash } from '../../../shared/flagParsing';
+
+import fs = require('fs-extra');
 
 export default class LWCCreate extends SfdxCommand {
     public static description = 'create a lwc locally without need for sfdx project';
@@ -23,7 +24,6 @@ export default class LWCCreate extends SfdxCommand {
         })
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const lwcPath = `${this.flags.directory}/${this.flags.name}`;
         await fs.mkdir(lwcPath);
@@ -38,7 +38,7 @@ export default class LWCCreate extends SfdxCommand {
     }
 
     getJsFile() {
-        `import { LightningElement } from 'lwc';
+        return `import { LightningElement } from 'lwc';
 
 export default class ${this.flags.name.charAt(0).toUpperCase() + this.flags.name.slice(1)} extends LightningElement {
 

@@ -1,7 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import fs = require('fs-extra');
 
 import { exec, exec2JSON } from '../../../../shared/execProm';
+
+import fs = require('fs-extra');
 
 export default class GithubPackageInstall extends SfdxCommand {
     public static description = 'installs a package from github from mdapi src';
@@ -28,7 +29,6 @@ export default class GithubPackageInstall extends SfdxCommand {
 
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         await fs.remove(this.flags.repo);
         const repoUrl = `https://github.com/${this.flags.githubuser}/${this.flags.repo}`;

@@ -6,6 +6,7 @@ const rowLimit = 200;
 export default class DataTreeImport extends SfdxCommand {
     public static description =
         'similar to the original tree:import, but handles more than 200 records at a go, while still preserving relationships.  Takes longer.';
+
     public static examples = [
         'sfdx shane:data:tree:import -p data/myPlan.json -d data/  // run all the data in the plan, and files mentioned are relative to ./data'
     ];
@@ -16,9 +17,9 @@ export default class DataTreeImport extends SfdxCommand {
     };
 
     protected static requiresProject = true;
+
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // get each object
         const conn = await this.org.getConnection();
@@ -58,11 +59,11 @@ export default class DataTreeImport extends SfdxCommand {
 
             let recordCounter = 0;
             while (recordCounter < recordsToAdd.length) {
-                const saveResults = await (<SaveResult[]>(<unknown>conn.request({
+                const saveResults = (await (conn.request({
                     method: 'POST',
                     url: `${conn.baseUrl()}/composite/sobjects`,
                     body: JSON.stringify({ records: recordsToAdd.slice(recordCounter, recordCounter + rowLimit) })
-                })));
+                }) as unknown)) as SaveResult[];
 
                 saveResults.forEach((saveResult, index: number) => {
                     if (!saveResult.success && !this.flags.json) {
@@ -76,7 +77,7 @@ export default class DataTreeImport extends SfdxCommand {
 
                 output[planItem.sobject].success = output[planItem.sobject].success + saveResults.filter(item => item.success).length;
                 output[planItem.sobject].failures = [...output[planItem.sobject].failures, ...saveResults.filter(item => !item.success)];
-                recordCounter = recordCounter + rowLimit;
+                recordCounter += rowLimit;
             }
         }
         return output;

@@ -17,46 +17,40 @@ export default class FieldDescribe extends SfdxCommand {
 
     protected static requiresProject = false;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const conn = await this.org.getConnection();
         const metadata = await conn.sobject(this.flags.object).describe();
         // this.ux.logJson(metadata.fields);
 
-        const output = [];
-
-        for (const field of metadata.fields) {
-            const rewritten = {
-                name: field.name,
-                label: field.label,
-                type: typeTransform(field),
-                required: requiredTransform(field)
-            };
-            output.push(rewritten);
-        }
-
+        const output = metadata.fields.map(field => ({
+            name: field.name,
+            label: field.label,
+            type: typeTransform(field),
+            required: requiredTransform(field)
+        }));
         this.ux.table(output, ['name', 'label', 'required', 'type']);
 
         function typeTransform(field) {
             if (field.calculated) {
                 return `formula/${field.type}`;
-            } else if (field.type === 'double') {
-                return `${field.type} (${field.precision}, ${field.scale})`;
-            } else if (field.type === 'reference') {
-                return `${field.type} (${field.referenceTo})`;
-            } else if (field.type === 'picklist' || field.type === 'multipicklist ') {
-                return `${field.type}(${field.picklistValues.map(pLV => pLV.value)})`;
-            } else {
-                return field.type;
             }
+            if (field.type === 'double') {
+                return `${field.type} (${field.precision}, ${field.scale})`;
+            }
+            if (field.type === 'reference') {
+                return `${field.type} (${field.referenceTo})`;
+            }
+            if (field.type === 'picklist' || field.type === 'multipicklist ') {
+                return `${field.type}(${field.picklistValues.map(pLV => pLV.value)})`;
+            }
+            return field.type;
         }
 
         function requiredTransform(field) {
             if (field.type === 'boolean') {
                 return false;
-            } else {
-                return !field.nillable;
             }
+            return !field.nillable;
         }
     }
 }

@@ -1,7 +1,7 @@
-import fs = require('fs-extra');
-
 import { exec2JSON } from '../../src/shared/execProm';
 import { getParsed } from '../../src/shared/xml2jsAsync';
+
+import fs = require('fs-extra');
 
 // pass in a local path to mdapi xml, get back the json equivalent
 // tslint:disable-next-line: no-any

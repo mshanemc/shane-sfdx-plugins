@@ -1,7 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import request = require('request-promise-native');
 
 import { exec2JSON } from '../../../../shared/execProm';
+
+import request = require('request-promise-native');
 
 export default class GithubPackageInstall extends SfdxCommand {
     public static description = 'installs a package from github using the sfdx-project.json file (v43+) OR the latestVersion.json file convention';
@@ -22,7 +23,6 @@ export default class GithubPackageInstall extends SfdxCommand {
 
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         let packageVersionId;
 

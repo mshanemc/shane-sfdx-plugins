@@ -1,6 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { ux } from 'cli-ux';
 import * as fs from 'fs-extra';
+
 import request = require('request-promise-native');
 
 let conn;
@@ -24,9 +25,9 @@ export default class CDCCreate extends SfdxCommand {
     };
 
     protected static requiresProject = true;
+
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // get each object
         conn = await this.org.getConnection();

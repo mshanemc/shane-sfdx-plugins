@@ -1,4 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+
 import fs = require('fs-extra');
 import request = require('request-promise-native');
 
@@ -28,10 +29,8 @@ export default class RecordUI extends SfdxCommand {
         outputfile: flags.filepath({ description: 'local path to save the output to' })
     };
 
-    // Comment this out if your command does not require an org username
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const conn = this.org.getConnection();
 

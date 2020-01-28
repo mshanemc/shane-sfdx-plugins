@@ -39,7 +39,8 @@ const searchRegion = (region, id, accumulatedArray = []): RegionSearchOutput => 
                 matchedComponentIndex: currentComponentIndex,
                 accumulatedArray: [...accumulatedArray, currentComponentIndex]
             };
-        } else if (component.regions) {
+        }
+        if (component.regions) {
             // special case where components are nested in other components
             let currentRegionIndex = 0;
             for (const subregion of component.regions) {

@@ -1,8 +1,9 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import fs = require('fs-extra');
 
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 import { removeTrailingSlash } from '../../../shared/flagParsing';
+
+import fs = require('fs-extra');
 
 export default class StaticCreate extends SfdxCommand {
     public static description = 'create a static resource locally';
@@ -40,10 +41,8 @@ export default class StaticCreate extends SfdxCommand {
         // public: { type: 'boolean',  char: 'p', default: false, description: 'mark the cache control public' })
     };
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const staticPath = `${this.flags.target}/staticresources`;
         const metaPath = `${this.flags.target}/staticresources/${this.flags.name}.resource-meta.xml`;
@@ -54,10 +53,11 @@ export default class StaticCreate extends SfdxCommand {
         }
         await fs.ensureDir(staticPath);
 
-        this.flags.type === 'zip'
-            ? await fs.mkdir(`${staticPath}/${this.flags.name}`)
-            : await fs.writeFile(`${staticPath}/${this.flags.name}.${suffixMap.get(this.flags.type)}`, '');
-
+        if (this.flags.type === 'zip') {
+            await fs.mkdir(`${staticPath}/${this.flags.name}`);
+        } else {
+            await fs.writeFile(`${staticPath}/${this.flags.name}.${suffixMap.get(this.flags.type)}`, '');
+        }
         await writeJSONasXML({
             path: metaPath,
             type: 'StaticResource',

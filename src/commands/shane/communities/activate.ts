@@ -13,7 +13,6 @@ export default class CommunityActivate extends SfdxCommand {
         showbrowser: flags.boolean({ char: 'b', description: 'show the browser...useful for local debugging' })
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         this.ux.startSpinner('starting headless browser');
 
@@ -23,7 +22,7 @@ export default class CommunityActivate extends SfdxCommand {
         // // get the force-org-open url for your scratch org
         // const openResult = await exec(`sfdx force:org:open -p /${this.flags.name}/communitySetup/cwApp.app#/c/page/settings -r --json`);
         const openResponse = await exec2JSON('sfdx force:org:open -p /lightning/setup/SetupNetworks/home -r --json');
-        const url = openResponse.result.url;
+        const { url } = openResponse.result;
         const iframeTitle = 'Communities ~ Salesforce - Developer Edition';
         const workspacesLink = `a[title*="Workspaces"][title*="${this.flags.name}"]`;
         // await context.overridePermissions(url, ['notifications']);

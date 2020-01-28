@@ -1,9 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import fs = require('fs-extra');
 
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 import { removeTrailingSlash } from '../../../shared/flagParsing';
+
+import fs = require('fs-extra');
 
 export default class RemoteSite extends SfdxCommand {
     public static description = "create a remote site setting in the local source.  Push it when you're done";
@@ -33,10 +34,8 @@ export default class RemoteSite extends SfdxCommand {
         })
     };
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         if (this.flags.name.includes(' ')) {
             throw new Error('spaces are not allowed in the name');

@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-expression */
 
-import fs = require('fs-extra');
-
 import { exec } from '../../../../src/shared/execProm';
+
+import fs = require('fs-extra');
 import testutils = require('../../../helpers/testutils');
 
 const testProjectName = 'testProjectLabelAdd';

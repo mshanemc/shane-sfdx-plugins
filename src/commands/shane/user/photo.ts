@@ -1,6 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+import { savePhotoForUserOrGroup } from '../../../shared/userPhoto';
+
 import userIdLookup = require('../../../shared/userIdLookup');
-import { savePhotoForUser } from '../../../shared/userPhoto';
 
 export default class Photo extends SfdxCommand {
     public static description = 'Set the photo for a user by first/last name';
@@ -25,9 +26,9 @@ export default class Photo extends SfdxCommand {
     };
 
     protected static requiresUsername = true;
+
     protected static requiresProject = false;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // potential errors
         if (!this.flags.file && !this.flags.banner) {
@@ -38,9 +39,9 @@ export default class Photo extends SfdxCommand {
         const user = await userIdLookup.getUserId(conn, this.flags.lastname, this.flags.firstname);
         this.ux.log(`found user with id ${user.Id}`);
 
-        return await savePhotoForUser({
+        return savePhotoForUserOrGroup({
             conn,
-            userId: user.Id,
+            userOrGroupId: user.Id,
             filePath: this.flags.file ?? this.flags.banner,
             isBanner: typeof this.flags.banner === 'string'
         });

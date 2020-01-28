@@ -1,8 +1,9 @@
 import { Connection } from '@salesforce/core';
+
 import localFile2CV = require('./localFile2CV');
 import request = require('request-promise-native');
 
-const savePhotoForUser = async ({ conn, userId, filePath, isBanner }: PhotoSaveInput) => {
+const savePhotoForUserOrGroup = async ({ conn, userOrGroupId, filePath, isBanner, isGroup }: PhotoSaveInput) => {
     const options = {
         method: 'POST',
         json: true,
@@ -15,9 +16,9 @@ const savePhotoForUser = async ({ conn, userId, filePath, isBanner }: PhotoSaveI
 
     const savePhotResult = await request({
         ...options,
-        uri: isBanner
-            ? `${conn.instanceUrl}/services/data/v${conn.getApiVersion()}/connect/user-profiles/${userId}/banner-photo`
-            : `${conn.instanceUrl}/services/data/v${conn.getApiVersion()}/connect/user-profiles/${userId}/photo`,
+        uri: `${conn.instanceUrl}/services/data/v${conn.getApiVersion()}/${isGroup ? 'chatter/groups' : 'connect/user-profiles'}/${userOrGroupId}/${
+            isBanner ? 'banner-photo' : 'photo'
+        }`,
         body: {
             fileId: photoCV.ContentDocumentId
         }
@@ -27,9 +28,10 @@ const savePhotoForUser = async ({ conn, userId, filePath, isBanner }: PhotoSaveI
 
 interface PhotoSaveInput {
     conn: Connection;
-    userId: string;
+    userOrGroupId: string;
     filePath: string;
     isBanner?: boolean;
+    isGroup?: boolean;
 }
 
-export { savePhotoForUser };
+export { savePhotoForUserOrGroup };

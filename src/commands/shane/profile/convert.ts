@@ -1,12 +1,13 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import fs = require('fs-extra');
 import { unionBy } from 'lodash';
 
 import { getExisting } from '../../../shared/getExisting';
 import { thingsThatMigrate } from '../../../shared/permsetProfileMetadata';
 import { setupArray } from '../../../shared/setupArray';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
+
+import fs = require('fs-extra');
 
 export default class PermSetConvert extends SfdxCommand {
     public static description = 'convert a profile into a permset';
@@ -44,10 +45,8 @@ export default class PermSetConvert extends SfdxCommand {
         })
     };
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const targetFilename = `${this.flags.directory}/permissionsets/${this.flags.name}.permissionset-meta.xml`;
         const targetProfile = `${this.flags.directory}/profiles/${this.flags.profile}.profile-meta.xml`;
@@ -77,18 +76,17 @@ export default class PermSetConvert extends SfdxCommand {
 
                 // special handling for applicationVisibility (default not allowed in permset)
                 if (item.permSetType === 'applicationVisibilities') {
-                    existing.applicationVisibilities = existing.applicationVisibilities.map(aV => {
-                        delete aV.default;
-                        return aV;
-                    });
+                    existing.applicationVisibilities = existing.applicationVisibilities.map(aV => ({
+                        visible: aV.visible,
+                        application: aV.application
+                    }));
                 }
 
                 if (item.permSetType === 'recordTypeVisibilities') {
-                    existing.recordTypeVisibilities = existing.recordTypeVisibilities.map(rtV => {
-                        delete rtV.default;
-                        delete rtV.personAccountDefault;
-                        return rtV;
-                    });
+                    existing.recordTypeVisibilities = existing.recordTypeVisibilities.map(rtV => ({
+                        visible: rtV.visible,
+                        recordType: rtV.recordType
+                    }));
                 }
 
                 if (item.permSetType === 'tabSettings') {
@@ -103,7 +101,7 @@ export default class PermSetConvert extends SfdxCommand {
             }
         });
 
-        fs.ensureDirSync(`${this.flags.directory}/permissionsets`);
+        await fs.ensureDir(`${this.flags.directory}/permissionsets`);
 
         // convert to xml and write out the file
         // const permSetXml = jsToXml.parse('PermissionSet', existing, options.js2xmlStandardOptions);
@@ -144,10 +142,10 @@ export default class PermSetConvert extends SfdxCommand {
 
 const translateTabTypes = profileTabType => {
     if (profileTabType === 'DefaultOff') return 'Available';
-    else if (profileTabType === 'DefaultOn') return 'Visible';
-    else if (profileTabType === 'Hidden') return 'None';
-    else if (['Available', 'Visible', 'None'].includes(profileTabType)) return profileTabType;
-    else throw new Error(`unmatched tab visibility type on profile: ${profileTabType}`);
+    if (profileTabType === 'DefaultOn') return 'Visible';
+    if (profileTabType === 'Hidden') return 'None';
+    if (['Available', 'Visible', 'None'].includes(profileTabType)) return profileTabType;
+    throw new Error(`unmatched tab visibility type on profile: ${profileTabType}`);
 };
 
 const stripViewModifyAll = profile => {

@@ -1,7 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import fs = require('fs-extra');
 
 import { writeJSONasXML } from '../../../../shared/JSONXMLtools';
+
+import fs = require('fs-extra');
 
 export default class DomainCSP extends SfdxCommand {
     public static description = "whitelist the org's domain as a CSP Trusted Site";
@@ -9,6 +10,7 @@ export default class DomainCSP extends SfdxCommand {
     public static examples = ['sfdx shane:org:domain:cors'];
 
     protected static requiresUsername = true;
+
     protected static requiresProject = true;
 
     protected static flagsConfig = {
@@ -25,7 +27,6 @@ export default class DomainCSP extends SfdxCommand {
         })
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const folder = `${this.flags.target}/cspTrustedSites`;
         await fs.ensureDir(folder);

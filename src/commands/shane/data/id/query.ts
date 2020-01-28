@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { singleRecordQuery } from './../../../../shared/queries';
+import { singleRecordQuery } from '../../../../shared/queries';
 
 export default class IdQuery extends SfdxCommand {
     public static description = 'query some object and get back the id of the matching record';
@@ -16,9 +16,9 @@ export default class IdQuery extends SfdxCommand {
     };
 
     protected static requiresUsername = true;
+
     protected static requiresProject = false;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const foundRecord = await singleRecordQuery({
             conn: this.org.getConnection(), // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername

@@ -1,5 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { singleRecordQuery } from '../../../shared/queries';
+
 import userIdLookup = require('../../../shared/userIdLookup');
 
 export default class PSLAssign extends SfdxCommand {
@@ -17,16 +18,12 @@ export default class PSLAssign extends SfdxCommand {
         name: flags.filepath({ char: 'n', required: true, description: 'developer name or label of the PermSetLicense' })
     };
 
-    // Comment this out if your command does not require an org username
     protected static requiresUsername = true;
 
-    // Comment this out if your command does not support a hub org username
     // protected static supportsDevhubUsername = true;
 
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = false;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // const name = this.flags.name || 'world';
 

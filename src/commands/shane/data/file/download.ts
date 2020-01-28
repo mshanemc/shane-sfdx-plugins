@@ -53,10 +53,8 @@ export default class DataFileDownload extends SfdxCommand {
         })
     };
 
-    // Comment this out if your command does not require an org username
     protected static requiresUsername = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
         const conn = this.org.getConnection();
@@ -66,24 +64,24 @@ export default class DataFileDownload extends SfdxCommand {
             if (this.flags.id.startsWith('068')) {
                 versionId = this.flags.id;
             } else if (this.flags.id.startsWith('069')) {
-                versionId = (<ContentDocument>await conn.sobject('ContentDocument').retrieve(this.flags.id)).LatestPublishedVersionId;
+                versionId = ((await conn.sobject('ContentDocument').retrieve(this.flags.id)) as ContentDocument).LatestPublishedVersionId;
             } else {
                 throw new Error('Id should start with 068 (ContentVersion) or 069 (ContentDocument)');
             }
         } else if (this.flags.name) {
-            versionId = (<ContentDocument>await singleRecordQuery({
+            versionId = ((await singleRecordQuery({
                 conn,
                 query: `select id, LatestPublishedVersionId from ContentDocument where title='${this.flags.name}'`
-            })).LatestPublishedVersionId;
+            })) as ContentDocument).LatestPublishedVersionId;
         } else {
             throw new Error('Please include one of: name, id');
         }
 
-        const version = <ContentVersion>await conn.sobject('ContentVersion').retrieve(versionId);
+        const version = (await conn.sobject('ContentVersion').retrieve(versionId)) as ContentVersion;
 
         // Output starts are the files stored name and extension
         // tslint:disable-next-line:prefer-const
-        let targetFilename = this.flags.filename || `${version.Title}.${version.FileExtension}`;
+        const targetFilename = this.flags.filename || `${version.Title}.${version.FileExtension}`;
         // If output path is specified then assign it
         if (this.flags.directory) {
             await fs.ensureDir(this.flags.directory);
@@ -95,8 +93,8 @@ export default class DataFileDownload extends SfdxCommand {
         // Setting encoding to null so that it will be true binary buffer and not mutilated by applying string encoding
         // https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
         // TODO: fix the types to acknowledge passing encoding as a property
-        // tslint:disable-next-line:no-any
-        const res = <Buffer>(<unknown>await conn.request(<any>{ url: version.VersionData, encoding: null }));
+
+        const res = ((await conn.request({ url: version.VersionData, encoding: null } as any)) as unknown) as Buffer;
         // const res = <Buffer>(<unknown>await conn.request(version.VersionData, { encoding: null }));
         await fs.writeFile(`${this.flags.directory}/${targetFilename}`, res);
         this.ux.stopSpinner('Done!');

@@ -1,9 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import fs = require('fs-extra');
 import * as purify from 'purify-css';
 import * as stripCssComments from 'strip-css-comments';
 
 import { removeTrailingSlash } from '../../../../shared/flagParsing';
+
+import fs = require('fs-extra');
 
 export default class LWCCreate extends SfdxCommand {
     public static description = "take css from existing file(s), extract component-level relevant selectors and save to a LWC's css file";
@@ -29,7 +30,6 @@ export default class LWCCreate extends SfdxCommand {
         localcss: flags.filepath({ char: 'l', description: 'local css file to merge with contents of --file' })
     };
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const output = `${this.flags.component}/${this.getComponentName(this.flags.component)}.css`;
         this.ux.log(`will write file to ${output}`);

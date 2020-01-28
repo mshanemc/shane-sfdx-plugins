@@ -1,6 +1,6 @@
-import fs = require('fs-extra');
-
 import { exec2JSON, exec2String } from '../../../../src/shared/execProm';
+
+import fs = require('fs-extra');
 import testutils = require('../../../helpers/testutils');
 
 const testProjectName = 'testProjectProjectCreate';
