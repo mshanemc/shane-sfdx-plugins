@@ -30,8 +30,8 @@ describe('shane:user:permset:assign', () => {
         beforeAll(async () => {
             await fs.remove(testProjectName);
             await exec(`sfdx force:project:create -n ${testProjectName}`);
-            await testutils.orgCreate(testProjectName);
-            await fs.ensureDir(`${testProjectName}/force-app/main/default/permissionsets`);
+            await Promise.all([testutils.orgCreate(testProjectName), fs.ensureDir(`${testProjectName}/force-app/main/default/permissionsets`)]);
+
             // convert to xml and write out the file
             const xml = jsToXml.parse('PermissionSet', permsetMeta, options.js2xmlStandardOptions);
             await fs.writeFile(`${testProjectName}/force-app/main/default/permissionsets/${permsetName}.permissionset-meta.xml`, xml);
@@ -43,13 +43,14 @@ describe('shane:user:permset:assign', () => {
                 cwd: testProjectName,
                 maxBuffer
             });
-            expect(setResult.status).toBe(0);
+            expect(setResult).toEqual(expect.objectContaining({ status: 0 }));
+
             const delResult = await exec2JSON(`sfdx force:data:record:delete -s PermissionSetAssignment -i ${setResult.result.id} --json`, {
                 cwd: testProjectName,
                 maxBuffer
             });
 
-            expect(delResult.status).toBe(0);
+            expect(delResult).toEqual(expect.objectContaining({ status: 0 }));
         });
 
         it('assigns the permset with first/last name given', async () => {
@@ -57,7 +58,8 @@ describe('shane:user:permset:assign', () => {
                 cwd: testProjectName,
                 maxBuffer
             });
-            expect(setResult.status).toBe(0);
+            expect(setResult).toEqual(expect.objectContaining({ status: 0 }));
+
             // await exec(`sfdx force:data:record:delete -s PermissionSetAssignment -i ${setResult.result.id}`);
         });
 

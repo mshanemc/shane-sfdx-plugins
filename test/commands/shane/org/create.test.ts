@@ -1,4 +1,4 @@
-import { exec, exec2JSON } from '../../../../src/shared/execProm';
+import { exec, exec2JSON, exec2String } from '../../../../src/shared/execProm';
 
 import fs = require('fs-extra');
 import testutils = require('../../../helpers/testutils');
@@ -20,10 +20,10 @@ describe('shane:org:create', () => {
     });
 
     it('creates a org with file, not json', async () => {
-        const response = await exec('sfdx shane:org:create --userprefix shanetest -o jest.test -d 1 -s -f config/project-scratch-def.json', {
+        const response = await exec2String('sfdx shane:org:create --userprefix shanetest -o jest.test -d 1 -s -f config/project-scratch-def.json', {
             cwd: testProjectName
         });
-        expect(response.stdout).toContain('Org created with id');
+        expect(response).toContain('Org created with id');
     });
 
     it('creates a org with file, json', async () => {
@@ -31,7 +31,7 @@ describe('shane:org:create', () => {
             'sfdx shane:org:create --userprefix shanetest -o jest.test -d 1 -s -f config/project-scratch-def.json --json',
             { cwd: testProjectName }
         );
-        expect(results.status).toBe(0);
+        expect(results).toEqual(expect.objectContaining({ status: 0 }));
     });
 
     afterAll(async () => {

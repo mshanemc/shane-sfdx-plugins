@@ -6,6 +6,14 @@ import testutils = require('../../../helpers/testutils');
 const testProjectName = 'testProjectUserPasswordSet';
 const maxBuffer = 1000 * 1024;
 
+const password = 'thePassw0rd';
+const expectedMatch = {
+    status: 0,
+    result: {
+        password
+    }
+};
+
 describe('shane:user:password:set', () => {
     jest.setTimeout(testutils.remoteTimeout);
 
@@ -17,15 +25,14 @@ describe('shane:user:password:set', () => {
         });
 
         it('sets the password and verifies via force:org:display', async () => {
-            const password = 'thePassw0rd';
             const setResult = await exec2JSON(`sfdx shane:user:password:set -l User -g User -p ${password} --json`, {
                 cwd: testProjectName,
                 maxBuffer
             });
-            expect(setResult.result.password).toBe(password);
+            expect(setResult).toMatchObject(expectedMatch);
 
             const displayResult = await exec2JSON('sfdx force:org:display --json', { cwd: testProjectName, maxBuffer });
-            expect(displayResult.result.password).toBe(password);
+            expect(displayResult).toMatchObject(expectedMatch);
         });
 
         afterAll(async () => {

@@ -7,18 +7,18 @@ import fs = require('fs-extra');
 // tslint:disable-next-line: no-any
 export async function getParsedXML(url: string): Promise<any> {
     const xml = await fs.readFile(url);
-    return await getParsed(xml);
+    return getParsed(xml);
 }
 
 export async function orgCreate(testProjectName: string) {
     const createResult = await exec2JSON('sfdx force:org:create -f config/project-scratch-def.json -s -d 1 --json', { cwd: testProjectName });
-    expect(createResult.status).toBe(0);
+    expect(createResult).toEqual(expect.objectContaining({ status: 0 }));
     return createResult;
 }
 
 export async function orgDelete(testProjectName: string) {
     const deleteResult = await exec2JSON(`sfdx shane:org:delete --json`, { cwd: testProjectName });
-    expect(deleteResult.status).toBe(0);
+    expect(deleteResult).toEqual(expect.objectContaining({ status: 0 }));
     return deleteResult;
 }
 
@@ -30,7 +30,7 @@ export async function itDeploys(testProjectName: string) {
     if (pushResult.result[0]) {
         expect(pushResult.result[0].error).toBeFalsy();
     }
-    expect(pushResult).toHaveProperty('status', 0);
+    expect(pushResult).toEqual(expect.objectContaining({ status: 0 }));
     // destroy org
     await this.orgDelete(testProjectName);
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 /* tslint:disable:no-unused-expression */
 import { exec, exec2JSON } from '../../../../src/shared/execProm';
 
@@ -16,20 +17,21 @@ describe('shane:heroku:connect', () => {
             await exec(`sfdx force:project:create -n ${testProjectName}`);
 
             await testutils.orgCreate(testProjectName);
-            await exec('sfdx force:user:password:generate', { cwd: testProjectName });
+            await Promise.all([
+                exec('sfdx force:user:password:generate', { cwd: testProjectName }),
+                exec('sfdx shane:profile:whitelist -n Admin', { cwd: testProjectName }), // we can't handle 2FA challenges in a headless browser!
+                fs.writeJSON(`${testProjectName}/mapping.json`, testMapping)
+            ]);
 
-            // we can't handle 2FA challenges in a headless browser!
-            await exec('sfdx shane:profile:whitelist -n Admin', { cwd: testProjectName });
             await exec('sfdx force:source:push', { cwd: testProjectName });
             // create our test file
-            await fs.writeJSON(`${testProjectName}/mapping.json`, testMapping);
 
             try {
                 await exec('heroku destroy -a `basename "${PWD/mshanemc-/}"` -c `basename "${PWD/mshanemc-/}"`', {
                     cwd: testProjectName,
                     shell: '/bin/bash'
                 });
-            } catch (e) {
+            } catch (error) {
                 // it's ok....just wanted to make sure it's not there before trying to create it
             }
             // generate a password because we'll need it for heroku connect authing
@@ -42,7 +44,7 @@ describe('shane:heroku:connect', () => {
                 { cwd: testProjectName, shell: '/bin/bash' }
             );
 
-            expect(results.status).toBe(0);
+            expect(results).toEqual(expect.objectContaining({ status: 0 }));
         });
 
         it('configures connect with json response', async () => {
@@ -52,7 +54,7 @@ describe('shane:heroku:connect', () => {
                 shell: '/bin/bash'
             });
 
-            expect(results.status).toBe(0);
+            expect(results).toEqual(expect.objectContaining({ status: 0 }));
         });
 
         afterAll(async () => {
