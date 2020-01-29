@@ -55,7 +55,7 @@ export default class AnalyticsAppShare extends SfdxCommand {
 
         // convert shareRepresentation to shareInputRepresentation
         let sharesToPatch = retrievedFolder.shares.map(share => {
-            const { sharedwithLabel, imageUrl, ...newShare } = share;
+            const { sharedWithLabel, imageUrl, ...newShare } = share;
             return newShare;
         });
 
