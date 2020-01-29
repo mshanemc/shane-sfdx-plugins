@@ -9,7 +9,7 @@ export default class Photo extends SfdxCommand {
         `sfdx shane:group:photo -g AwesomePeople -f ~/Downloads/King.png
 // sets the chatter photo for the group named AwesomePeople using the local file
 `,
-        `sfdx shane:user:photo -b ~/Downloads/King.png -g AwesomePeople
+        `sfdx shane:group:photo -b ~/Downloads/King.png -g AwesomePeople
 // sets the chatter banner photo for the group named AwesomePeople using the local file
 `
     ];
@@ -39,7 +39,8 @@ export default class Photo extends SfdxCommand {
             conn,
             userOrGroupId: group.Id,
             filePath: this.flags.file ?? this.flags.banner,
-            isBanner: typeof this.flags.banner === 'string'
+            isBanner: typeof this.flags.banner === 'string',
+            isGroup: true
         });
     }
 }
