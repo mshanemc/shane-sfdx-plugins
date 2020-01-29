@@ -49,7 +49,7 @@ export default class AllPhotos extends SfdxCommand {
                 savePhotoForUserOrGroup({
                     conn,
                     userOrGroupId: user.Id,
-                    filePath: photos[index % photos.length]
+                    filePath: `${tempRepo}/img/${photos[index % photos.length]}`
                 })
             )
         );
