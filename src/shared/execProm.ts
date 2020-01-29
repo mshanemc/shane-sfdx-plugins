@@ -9,9 +9,9 @@ const exec2JSON = async (cmd: string, options = {}): Promise<any> => {
     try {
         const results = await execProm(cmd, options);
         return JSON.parse(stripcolor(results.stdout));
-    } catch (err) {
-        // console.log(err);
-        return JSON.parse(stripcolor(err.stdout));
+    } catch (error) {
+        // console.log(error);
+        return JSON.parse(stripcolor(error.stdout));
     }
 };
 
@@ -20,9 +20,9 @@ const exec2String = async (cmd: string, options = {}): Promise<any> => {
     try {
         const results = await execProm(cmd, options);
         return results.stdout.trim();
-    } catch (err) {
-        // console.log(err);
-        return err.stdout;
+    } catch (error) {
+        // console.log(error);
+        return error.stdout;
     }
 };
 

@@ -10,7 +10,7 @@ export default class ConnectedAppUniquify extends SfdxCommand {
     public static description = 'modify a clientId/consumerKey on a local connected app to guaranatee uniqueness';
 
     public static examples = [
-        `sfdx shane:connectedapp:uniquify -a force-app/main/default/connectedappmyConnectedApp -p 5h4n3
+        `sfdx shane:connectedapp:uniquify -a force-app/main/default/connectedApps/myConnectedApp.connectedApp-meta.xml -p 5h4n3
 // update the consumerKey of myConnectedApp to be unique, but start with 5h4n3
 `
     ];
@@ -39,5 +39,3 @@ export default class ConnectedAppUniquify extends SfdxCommand {
         this.ux.log(`${chalk.green('Connected app updated locally')}.  Consumer Key is now ${consumerKey}`);
     }
 }
-
-// Cannot read tslint configuration - 'Failed to load /Users/shane.mclaughlin/code/shane-sfdx-plugins/tslint.json: ENOENT: no such file or directory, open '/Users/shane.mclaughlin/code/shane-sfdx-plugins/node_modules/tslint/lib/configs/recommended.js''

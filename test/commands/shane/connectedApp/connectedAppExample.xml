@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>shane.mclaughlin@salesforce.com</contactEmail>
+    <contactPhone>8324728021</contactPhone>
+    <label>ExternalIdentity</label>
+    <oauthConfig>
+        <callbackUrl>http://localhost:3030/token</callbackUrl>
+        <consumerKey>solution2x1571770813706</consumerKey>
+        <consumerSecret>12345678abcdefg12345678abcdefg12345678</consumerSecret>
+        <scopes>Basic</scopes>
+        <scopes>Api</scopes>
+        <scopes>Web</scopes>
+    </oauthConfig>
+    <ipRanges>
+        <endAddress>255.255.255.255</endAddress>
+        <startAddress>0.0.0.0</startAddress>
+    </ipRanges>
+</ConnectedApp>
