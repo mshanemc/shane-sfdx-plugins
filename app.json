@@ -1,9 +1,6 @@
 {
     "buildpacks": [
         {
-            "url": "https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku-community/apt.tgz"
-        },
-        {
             "url": "https://buildpack-registry.s3.amazonaws.com/buildpacks/jontewks/puppeteer.tgz"
         },
         {
