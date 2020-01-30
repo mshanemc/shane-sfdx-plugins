@@ -1,16 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as fs from 'fs-extra';
 import { singleRecordQuery } from '../../../../shared/queries';
-import { Record } from '../../../../shared/typeDefs';
-
-interface ContentVersion extends Record {
-    Title: string;
-    FileExtension: string;
-    VersionData: string;
-}
-interface ContentDocument extends Record {
-    LatestPublishedVersionId: string;
-}
+import { ContentVersion, ContentDocument } from '../../../../shared/typeDefs';
 
 export default class DataFileDownload extends SfdxCommand {
     public static description = 'save a file from the org to the local filesystem';

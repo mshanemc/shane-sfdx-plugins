@@ -1,6 +1,8 @@
+/* eslint-disable import/prefer-default-export */
+// eslint-disable-next-line unicorn/filename-case
 import { Connection } from '@salesforce/core';
 
-import { CreateResult, QueryResult, Record, ContentVersionCreateRequest } from './typeDefs';
+import { CreateResult, QueryResult, Record, ContentVersionCreateRequest, ContentVersion } from './typeDefs';
 
 import fs = require('fs-extra');
 
@@ -31,5 +33,5 @@ export async function file2CV(conn: Connection, filepath: string, name?: string)
     } as any)) as unknown) as CreateResult;
 
     const result = (await conn.query(`Select Id, ContentDocumentId from ContentVersion where Id='${CV.id}'`)) as QueryResult;
-    return result.records[0];
+    return result.records[0] as ContentVersion;
 }

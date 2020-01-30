@@ -5,6 +5,17 @@ interface User extends Record {
     Username?: string;
 }
 
+interface ContentVersion extends Record {
+    Title: string;
+    FileExtension: string;
+    VersionData: string;
+    ContentDocumentId?: string;
+}
+
+interface ContentDocument extends Record {
+    LatestPublishedVersionId: string;
+}
+
 interface ContentVersionCreateRequest {
     PathOnClient: string;
     Title?: string;
@@ -191,6 +202,8 @@ interface ToolingAPIDescribeQueryResult {
 
 export {
     Record,
+    ContentVersion,
+    ContentDocument,
     QueryResult,
     CreateResult,
     CustomLabel,
