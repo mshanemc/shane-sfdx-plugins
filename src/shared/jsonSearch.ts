@@ -55,10 +55,10 @@ const searchRegion = (region, id, accumulatedArray = []): RegionSearchOutput => 
                         accumulatedArray: subRegionResult.accumulatedArray
                     };
                 }
-                currentRegionIndex++;
+                currentRegionIndex += 1;
             }
         } else {
-            currentComponentIndex++;
+            currentComponentIndex += 1;
         }
     }
     return {

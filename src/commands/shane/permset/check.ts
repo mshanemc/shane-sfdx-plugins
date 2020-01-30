@@ -48,7 +48,7 @@ export default class PermCheck extends SfdxCommand {
         if (this.flags.field) {
             withAccess = (
                 await conn.query(
-                    `select ParentId, Parent.Name, Parent.IsOwnedByProfile, Parent.ProfileId from FieldPermissions where ${levelTranslator(
+                    `select ParentId, Parent.Name, Parent.IsOwnedByProfile, Parent.ProfileId from FieldPermissions where ${levelMap.get(
                         this.flags.fieldlevel
                     )} = true and SobjectType = '${this.flags.object}' and Field = '${this.flags.object}.${this.flags.field}'`
                 )
@@ -56,7 +56,7 @@ export default class PermCheck extends SfdxCommand {
         } else {
             withAccess = (
                 await conn.query(
-                    `select ParentId, Parent.Name, Parent.IsOwnedByProfile, Parent.ProfileId from ObjectPermissions where ${levelTranslator(
+                    `select ParentId, Parent.Name, Parent.IsOwnedByProfile, Parent.ProfileId from ObjectPermissions where ${levelMap.get(
                         this.flags.objectlevel
                     )} = true and SobjectType = '${this.flags.object}'`
                 )
@@ -75,24 +75,21 @@ export default class PermCheck extends SfdxCommand {
         };
 
         if (this.flags.profiles || this.flags.users) {
-            const profiles = (await profilesById(profileswithAccess)) as any[];
-            profiles.forEach(profile => {
-                output.push({
-                    type: 'Profile',
-                    name: profile.Name,
-                    id: profile.Id
-                });
-            });
+            output.concat((await profilesById(profileswithAccess)) as any[]).map(profile => ({
+                type: 'Profile',
+                name: profile.Name,
+                id: profile.Id
+            }));
         }
 
         if (this.flags.permsets || this.flags.users) {
-            permsetswithAccess.forEach(ps => {
-                output.push({
+            output.concat(
+                permsetswithAccess.map(ps => ({
                     type: 'PermissionSet',
                     name: ps.Parent.Name,
                     id: ps.ParentId
-                });
-            });
+                }))
+            );
         }
 
         if (this.flags.users) {
@@ -102,8 +99,7 @@ export default class PermCheck extends SfdxCommand {
                 .map(profile => `'${profile.id}'`)
                 .join(',')})`;
 
-            const profileUsers = (await conn.query(query)).records as any[];
-            const userOutput = profileUsers.map(user => ({
+            const userOutput = ((await conn.query(query)).records as any[]).map(user => ({
                 userid: user.Id,
                 name: user.Name,
                 username: user.Username,
@@ -141,11 +137,11 @@ export default class PermCheck extends SfdxCommand {
     }
 }
 
-const levelTranslator = objectlevel => {
-    if (objectlevel === 'Read') return 'PermissionsRead';
-    if (objectlevel === 'Create') return 'PermissionsCreate';
-    if (objectlevel === 'Edit') return 'PermissionsEdit';
-    if (objectlevel === 'Delete') return 'PermissionsDelete';
-    if (objectlevel === 'ViewAll') return 'PermissionsViewAllRecords';
-    if (objectlevel === 'ModifyAll') return 'PermissionsModifyAllRecords';
-};
+const levelMap = new Map([
+    ['Read', 'PermissionsRead'],
+    ['Create', 'PermissionsCreate'],
+    ['Edit', 'PermissionsEdit'],
+    ['Delete', 'PermissionsDelete'],
+    ['ViewAll', 'PermissionsViewAllRecords'],
+    ['ModifyAll', 'PermissionsModifyAllRecords']
+]);
