@@ -38,8 +38,8 @@ describe('shane:user:permset:assign', () => {
             await exec(`sfdx force:source:push`, { cwd: testProjectName });
         });
 
-        it('assigns the permset with no name given', async () => {
-            const setResult = await exec2JSON(`sfdx shane:user:permset:assign -n ${permsetName} --json`, {
+        it('assigns the permset with first/last name given', async () => {
+            const setResult = await exec2JSON(`sfdx shane:user:permset:assign -n ${permsetName} -g Integration -l User --json`, {
                 cwd: testProjectName,
                 maxBuffer
             });
@@ -53,14 +53,12 @@ describe('shane:user:permset:assign', () => {
             expect(delResult).toEqual(expect.objectContaining({ status: 0 }));
         });
 
-        it('assigns the permset with first/last name given', async () => {
-            const setResult = await exec2JSON(`sfdx shane:user:permset:assign -n ${permsetName} -g Integration -l User --json`, {
+        it('assigns the permset with no name given', async () => {
+            const setResult = await exec2JSON(`sfdx shane:user:permset:assign -n ${permsetName} --json`, {
                 cwd: testProjectName,
                 maxBuffer
             });
             expect(setResult).toEqual(expect.objectContaining({ status: 0 }));
-
-            // await exec(`sfdx force:data:record:delete -s PermissionSetAssignment -i ${setResult.result.id}`);
         });
 
         afterAll(async () => {

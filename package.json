@@ -8,6 +8,7 @@
         "node": ">=8.0.0"
     },
     "dependencies": {
+        "@lifeomic/attempt": "^3.0.0",
         "@oclif/command": "^1.5.12",
         "@oclif/config": "^1.13.3",
         "@oclif/errors": "^1.2.2",

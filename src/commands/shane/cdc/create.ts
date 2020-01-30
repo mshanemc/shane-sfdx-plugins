@@ -60,7 +60,7 @@ export default class CDCCreate extends SfdxCommand {
                         idMap[originals[start + index].Id] = result.id;
                     }
                 }
-                batchesCompleted++;
+                batchesCompleted += 1;
             }
         }
     }
