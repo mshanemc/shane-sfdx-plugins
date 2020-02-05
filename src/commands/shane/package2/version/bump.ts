@@ -86,7 +86,7 @@ export default class Bump extends SfdxCommand {
 
         project.packageDirectories[targetDirIndex].versionNumber = versionNumber.join('.');
         // await fs.writeFile(projectFile.getPath(), JSON.stringify(project, null, 2));
-        await fs.writeJSON(project.getPath(), project, { spaces: 2 });
+        await fs.writeJSON(projectFile.getPath(), project, { spaces: 2 });
 
         this.ux.log(chalk.green(`Updated sfdx-project.json for ${this.flags.target} to ${project.packageDirectories[targetDirIndex].versionNumber}`));
 
