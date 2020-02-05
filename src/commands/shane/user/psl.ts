@@ -41,7 +41,9 @@ export default class PSLAssign extends SfdxCommand {
             AssigneeId: user.Id,
             PermissionSetLicenseId: PSL.Id
         });
-        this.ux.logJson(createResult);
+        if (!this.flags.json) {
+            this.ux.logJson(createResult);
+        }
         return createResult;
     }
 }
