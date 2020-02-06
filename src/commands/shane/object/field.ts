@@ -10,7 +10,7 @@ import fs = require('fs-extra');
 
 const SupportedTypesB = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
 const SupportedTypesE = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
-const SupportedTypesC = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox', 'Url', 'Email', 'Phone', 'Currency', 'Picklist'];
+const SupportedTypesC = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox', 'Url', 'Email', 'Phone', 'Currency', 'Picklist', 'Html'];
 
 export default class FieldCreate extends SfdxCommand {
     public static description = 'create or add fields to an existing object';
@@ -89,8 +89,7 @@ export default class FieldCreate extends SfdxCommand {
         const objectMetaPath = `${this.flags.directory}/objects/${this.flags.object}/${this.flags.object}.object-meta.xml`;
         // does it exist?
         if (!fs.existsSync(objectMetaPath)) {
-            this.ux.error(chalk.red(`object not found: ${objectMetaPath}`));
-            return;
+            throw new Error(`object not found: ${objectMetaPath}`);
         }
 
         if (!this.flags.name) {
@@ -109,9 +108,9 @@ export default class FieldCreate extends SfdxCommand {
         }
 
         const fieldsFolderPath = `${this.flags.directory}/objects/${this.flags.object}/fields`;
-        const fieldMetaPath = `${this.flags.directory}/objects/${this.flags.object}/fields/${this.flags.api}.field-meta.xml`;
+        const fieldMetaPath = `${fieldsFolderPath}/${this.flags.api}.field-meta.xml`;
 
-        fs.ensureDirSync(fieldsFolderPath);
+        await fs.ensureDir(fieldsFolderPath);
 
         if (fs.existsSync(fieldMetaPath)) {
             this.ux.error(chalk.red(`field already exists ${fieldMetaPath}`));
@@ -142,11 +141,7 @@ export default class FieldCreate extends SfdxCommand {
 
         // type specific values
         if (this.flags.type === 'Text') {
-            if (this.flags.length >= 0) {
-                outputJSON.length = this.flags.length;
-            } else {
-                outputJSON.length = await cli.prompt('Length? (Max 255)', { default: '255' });
-            }
+            outputJSON.length = this.flags.length >= 0 ? this.flags.length : await cli.prompt('Length? (Max 255)', { default: '255' });
         }
 
         if (this.flags.type === 'Checkbox') {
@@ -154,12 +149,13 @@ export default class FieldCreate extends SfdxCommand {
         }
 
         if (this.flags.type === 'LongTextArea') {
-            if (this.flags.length >= 0) {
-                outputJSON.length = this.flags.length;
-            } else {
-                outputJSON.length = await cli.prompt('Length? (Max 131072)', { default: '131072' });
-            }
+            outputJSON.length = this.flags.length >= 0 ? this.flags.length : await cli.prompt('Length? (Max 131072)', { default: '131072' });
             outputJSON.visibleLines = 3;
+        }
+
+        if (this.flags.type === 'Html') {
+            outputJSON.length = this.flags.length >= 0 ? this.flags.length : await cli.prompt('Length? (Max 131072)', { default: '131072' });
+            outputJSON.visibleLines = 5;
         }
 
         if (this.flags.type === 'Lookup') {
@@ -169,20 +165,16 @@ export default class FieldCreate extends SfdxCommand {
         }
 
         if (this.flags.type === 'Number' || this.flags.type === 'Currency') {
-            if (this.flags.scale >= 0) {
-                outputJSON.scale = this.flags.scale;
-            } else {
-                outputJSON.scale = await cli.prompt('how many decimal places (scale)?', { default: '0' });
-            }
-
-            if (this.flags.precision >= 0) {
-                outputJSON.precision = this.flags.precision;
-            } else {
-                outputJSON.precision = await cli.prompt(
-                    `how many total digits, including those ${outputJSON.scale} decimal places? (precision, MAX ${18 - outputJSON.scale})?`,
-                    { default: `${18 - outputJSON.scale}` }
-                );
-            }
+            outputJSON.scale = this.flags.scale >= 0 ? this.flags.scale : await cli.prompt('how many decimal places (scale)?', { default: '0' });
+            outputJSON.precision =
+                this.flags.precision >= 0
+                    ? this.flags.precision
+                    : await cli.prompt(
+                          `how many total digits, including those ${outputJSON.scale} decimal places? (precision, MAX ${18 - outputJSON.scale})?`,
+                          {
+                              default: `${18 - outputJSON.scale}`
+                          }
+                      );
         }
 
         if (this.flags.type === 'Picklist') {
