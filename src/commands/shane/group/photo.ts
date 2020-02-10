@@ -22,8 +22,6 @@ export default class Photo extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    protected static requiresProject = false;
-
     public async run(): Promise<any> {
         // potential errors
         if (!this.flags.file && !this.flags.banner) {

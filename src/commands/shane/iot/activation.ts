@@ -24,8 +24,6 @@ export default class Activation extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    protected static requiresProject = false;
-
     public async run(): Promise<any> {
         // hardcoded because I've been burned on this one before
         const version = this.flags.apiversion ?? '44.0';

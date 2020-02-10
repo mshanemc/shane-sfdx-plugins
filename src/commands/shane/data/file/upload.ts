@@ -30,8 +30,6 @@ export default class Upload extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    protected static requiresProject = false;
-
     public async run(): Promise<any> {
         // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
         const conn = this.org.getConnection();

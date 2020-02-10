@@ -15,8 +15,6 @@ export default class MetadataDescribe extends SfdxCommand {
         type: flags.string({ required: true, char: 't', description: 'pull only a specific type.  See the metadata api docs for type names' })
     };
 
-    protected static requiresProject = false;
-
     public async run(): Promise<any> {
         const conn = await this.org.getConnection();
         const apiVersion = this.flags.apiversion || (await this.org.retrieveMaxApiVersion());

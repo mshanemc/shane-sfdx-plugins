@@ -26,8 +26,6 @@ export default class AllPhotos extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    protected static requiresProject = false;
-
     public async run(): Promise<any> {
         const conn = this.org.getConnection();
         let folderPath = this.flags.folder;

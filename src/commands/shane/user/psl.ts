@@ -20,8 +20,6 @@ export default class PSLAssign extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    protected static requiresProject = false;
-
     public async run(): Promise<any> {
         // const name = this.flags.name || 'world';
 

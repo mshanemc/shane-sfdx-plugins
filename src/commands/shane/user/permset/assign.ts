@@ -21,8 +21,6 @@ export default class UserPermsetAssign extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    protected static requiresProject = false;
-
     public async run(): Promise<any> {
         // tslint:disable-next-line: no-any
         const conn = this.org.getConnection() as any;

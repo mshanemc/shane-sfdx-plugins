@@ -15,8 +15,6 @@ export default class FieldDescribe extends SfdxCommand {
         object: flags.string({ required: true, char: 'o', description: 'the object to describe' })
     };
 
-    protected static requiresProject = false;
-
     public async run(): Promise<any> {
         const conn = await this.org.getConnection();
         const metadata = await conn.sobject(this.flags.object).describe();

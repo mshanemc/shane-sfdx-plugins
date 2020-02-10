@@ -37,8 +37,6 @@ export default class AIPlaygroundSetup extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    protected static requiresProject = false;
-
     public async run(): Promise<any> {
         const conn = this.org.getConnection();
         this.ux.startSpinner('uploading the pem file');

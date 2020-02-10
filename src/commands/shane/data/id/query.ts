@@ -17,8 +17,6 @@ export default class IdQuery extends SfdxCommand {
 
     protected static requiresUsername = true;
 
-    protected static requiresProject = false;
-
     public async run(): Promise<any> {
         const foundRecord = await singleRecordQuery({
             conn: this.org.getConnection(), // this.org is guaranteed because requiresUsername=true, as opposed to supportsUsername
