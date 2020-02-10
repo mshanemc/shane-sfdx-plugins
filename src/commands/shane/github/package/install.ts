@@ -28,12 +28,11 @@ export default class GithubPackageInstall extends SfdxCommand {
 
         // first, look in the sfdx-project.json file, using the packaging output from v43
         let url = `https://raw.githubusercontent.com/${this.flags.githubuser}/${this.flags.repo}/master/sfdx-project.json`;
+        this.ux.startSpinner('getting package info from github');
         const primaryResult = await request.get({
             url,
             json: true
         });
-
-        // this.ux.log(`file at ${url} says:`);
 
         if (primaryResult.packageAliases) {
             // grab the last package version unless a version is specified
@@ -41,7 +40,7 @@ export default class GithubPackageInstall extends SfdxCommand {
             // this.ux.log(`packages are ${packages}`);
             packageVersionId = packages[packages.length - 1];
             if (packageVersionId.startsWith('04t')) {
-                this.ux.log(`found packageVersionId ${packageVersionId} in the sfdx-project.json file`);
+                this.ux.setSpinnerStatus(`found packageVersionId ${packageVersionId} in the sfdx-project.json file`);
             } else {
                 throw new Error('no package version id found');
             }
@@ -61,10 +60,12 @@ export default class GithubPackageInstall extends SfdxCommand {
             packageVersionId = result.SubscriberPackageVersionId;
             // install in the org
         }
+        this.ux.setSpinnerStatus(`installing package ${packageVersionId}`);
         const installResult = await exec2JSON(
             `sfdx force:package:install --package ${packageVersionId} -r -u ${this.org.getUsername()} -w 20 --publishwait 20 --json`,
             {}
         );
+        this.ux.stopSpinner();
         if (!this.flags.json) {
             this.ux.logJson(installResult);
         }
