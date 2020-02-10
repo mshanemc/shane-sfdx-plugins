@@ -19,10 +19,19 @@ export default class Push extends SfdxCommand {
         convertedfolder: flags.directory({ char: 'd', description: 'where to store the mdapi-converted source', default: 'mdapiout' }),
         keepconverted: flags.boolean({ char: 'k', description: "Don't automatically delete the converted source" }),
         source: flags.directory({ char: 'r', default: 'force-app', description: "deploy a specific folder that's not force-app" }),
-        deploymenttimelimit: flags.integer({ char: 'w', description: 'How many minutes to wait for the deployment to finish', default: 200 })
+        deploymenttimelimit: flags.integer({
+            char: 'w',
+            description: 'How many minutes to wait for the deployment to finish',
+            default: 200
+        })
     };
 
     protected static requiresProject = true;
+
+    protected static deprecated = {
+        version: 43,
+        to: 'sfdx force:source:deploy'
+    };
 
     public async run(): Promise<any> {
         if (!fs.existsSync(this.flags.source)) {

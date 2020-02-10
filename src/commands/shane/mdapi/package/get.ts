@@ -5,7 +5,7 @@ import ucc = require('../../../../shared/unzipConvertClean');
 const tmpDir = 'mdapiout';
 
 export default class Get extends SfdxCommand {
-    public static description = 'gets package from an org, converts, and merges it into the local source';
+    public static description = 'Gets package from an org, converts, and merges it into the local source';
 
     public static examples = [
         `sfdx shane:mdapi:package:get -p MyPkg -u someOrg
@@ -20,10 +20,19 @@ export default class Get extends SfdxCommand {
 
     protected static flagsConfig = {
         packagename: flags.string({ required: true, char: 'p', description: 'the name of the package you want to retrieve' }),
-        target: flags.directory({ char: 't', default: 'force-app', description: 'where to convert the result to...defaults to force-app' })
+        target: flags.directory({
+            char: 't',
+            default: 'force-app',
+            description: 'where to convert the result to...defaults to force-app'
+        })
     };
 
     protected static requiresProject = true;
+
+    protected static deprecated = {
+        version: 44,
+        to: 'Use sfdx force:source:retrieve'
+    };
 
     public async run(): Promise<any> {
         const retrieveCommand = `sfdx force:mdapi:retrieve -s -p "${this.flags.packagename}" -u ${this.org.getUsername()}  -r ./${tmpDir} -w 30`;

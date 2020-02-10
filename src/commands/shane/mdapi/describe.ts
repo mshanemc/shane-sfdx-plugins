@@ -13,12 +13,15 @@ export default class MetadataDescribe extends SfdxCommand {
 
     protected static flagsConfig = {};
 
-    protected static requiresProject = false;
+    protected static deprecated = {
+        version: 43,
+        to: 'sfdx force:mdapi:describemetadata'
+    };
 
     public async run(): Promise<any> {
         const conn = await this.org.getConnection();
         const metadata = await conn.metadata.describe(this.flags.apiversion || (await this.org.retrieveMaxApiVersion()));
-        this.ux.logJson(metadata);
+        // this.ux.logJson(metadata);
         return metadata;
     }
 }
