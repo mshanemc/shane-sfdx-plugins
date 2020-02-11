@@ -17,7 +17,7 @@ export default class ObjectInfo extends SfdxCommand {
     ];
 
     protected static flagsConfig = {
-        object: flags.string({ char: 'o', description: 'object api name' }),
+        object: flags.string({ char: 'o', description: 'object api name', required: true }),
         outputfile: flags.filepath({ description: 'local path to save the output to' })
     };
 
@@ -41,7 +41,7 @@ export default class ObjectInfo extends SfdxCommand {
         if (this.flags.outputfile) {
             await fs.outputJSON(this.flags.outputfile, result);
         } else {
-            this.ux.log('did you forget the outputfile');
+            this.ux.warn('did you forget the outputfile');
         }
 
         return result;
