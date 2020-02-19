@@ -5,7 +5,7 @@
     "author": "@mshanemc",
     "bugs": "https://github.com/mshanemc/shane-sfdx-plugins/issues",
     "engines": {
-        "node": ">=8.0.0"
+        "node": ">=11.15.0"
     },
     "dependencies": {
         "@lifeomic/attempt": "^3.0.0",
