@@ -1,4 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
+import { retry } from '@lifeomic/attempt';
 import { exec } from '../../../shared/execProm';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
@@ -189,7 +190,7 @@ export default class Pull extends SfdxCommand {
         if (!this.flags.apiversion) {
             this.flags.apiversion = await this.org.retrieveMaxApiVersion();
         }
-
+        this.ux.startSpinner('asking your org about its metadata');
         const conn = this.org.getConnection();
         const [describeResult] = await Promise.all([conn.metadata.describe(this.flags.apiversion), fs.ensureDir(pkgDir)]);
 
@@ -213,19 +214,21 @@ export default class Pull extends SfdxCommand {
         }
 
         // in parallel, build out all the local package.xmls
-        this.ux.log('Going to retrieve all the metadata you asked for...this could take a while');
+        this.ux.setSpinnerStatus('Going to retrieve all the metadata you asked for...this could take a while');
 
         const retrieveResults = await Promise.all(mdTypes.map(mdType => localFilesystemBuild(mdType, this.flags.apiversion, this.org.getUsername())));
         this.ux.log(
             `Success: ${retrieveResults
                 .filter(result => result.status === 'success')
                 .map(result => result.type)
+                .sort()
                 .join(',')}`
         );
         this.ux.log(
             `Failure: ${retrieveResults
                 .filter(result => result.status === 'failure')
                 .map(result => result.type)
+                .sort()
                 .join(',')}`
         );
 
@@ -235,21 +238,23 @@ export default class Pull extends SfdxCommand {
 
     async mdTypeFromItem(item): Promise<MdTypeForPackageXml> {
         if (item.inFolder) {
-            // special handling for foldered items
+            // special handling for items in folders
             const conn = this.org.getConnection();
             let folderListMetadata = await conn.metadata.list(
                 [{ type: item.xmlName === 'EmailTemplate' ? 'EmailFolder' : `${item.xmlName}Folder`, folder: null }],
                 this.flags.apiversion
             );
-            if (!Array.isArray(folderListMetadata)) {
-                folderListMetadata = [folderListMetadata];
-            }
+            // force it to be an array with no undefined
+            folderListMetadata = !Array.isArray(folderListMetadata) ? [folderListMetadata].filter(i => i) : folderListMetadata;
+
             const contentsOfEachFolder = (
                 await Promise.all(
-                    folderListMetadata.map(folder => conn.metadata.list([{ type: item.xmlName, folder: folder.fullName }], this.flags.apiversion))
+                    folderListMetadata.map(async folder =>
+                        conn.metadata.list([{ type: item.xmlName, folder: folder.fullName }], this.flags.apiversion)
+                    )
                 )
             )
-                .filter(contents => contents.length > 0)
+                .filter(contents => contents && contents.length > 0)
                 .flat();
 
             // return [...folderListMetadata.map(folder => folder.fullName), ...contentsOfEachFolder];
@@ -295,28 +300,22 @@ const localFilesystemBuild = async (mdType, apiversion, username) => {
     const retrieveCommand = `sfdx force:source:retrieve -x ${targetFolder}/package.xml -w 30 -u ${username} --json`;
 
     // build in retry logic because of flakiness on .sfdx/stash.json
-    let retries = 0;
-    while (retries < retryLimit) {
-        try {
-            // eslint-disable-next-line no-await-in-loop
+    return retry(
+        async () => {
             await exec(retrieveCommand, { maxBuffer: 1000000 * 1024 });
             return { type: mdType.name, status: 'success' };
-        } catch (error) {
-            retries += 1;
+        },
+        {
+            maxAttempts: retryLimit,
+            async handleTimeout() {
+                return { type: mdType.name, status: 'failure' };
+            }
         }
-    }
-    return { type: mdType.name, status: 'failure' };
+    );
 };
 
 // takes the command flags and builds a list of the types that the user wants
 const getTypeList = (theFlags): string[] => {
-    // let outputTypes = [];
-    // Object.keys(booleanFlags).forEach(flag => {
-    //     if (theFlags[flag]) {
-    //         outputTypes = [...outputTypes, ...booleanFlags[flag]];
-    //     }
-    // });
-    // return outputTypes;
     return Object.keys(booleanFlags)
         .map(flag => (theFlags[flag] ? booleanFlags[flag] : []))
         .flat()
