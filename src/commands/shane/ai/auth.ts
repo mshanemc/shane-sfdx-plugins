@@ -12,9 +12,6 @@ export default class EinsteinAIAuth extends SfdxCommand {
     public static examples = [
         `sfdx shane:ai:auth -e shane.mclaughlin@salesforce.com -f ~/code/certs/einstein_platform.pem
     // reauths, and takes what it can get
-    `,
-        `sfdx shane:org:reauth --requirecustomdomain
-    // will try each minute, up to 60 minutes, until an org with a valid mydomain is ready
     `
     ];
 
