@@ -1,7 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { AITokenRetrieve, baseUrl } from '../../../../shared/ai/aiConstants';
-
-import requestPromise = require('request-promise-native');
+import { datasetGet } from '../../../../shared/ai/datasetGet';
 
 export default class EinsteinAIGet extends SfdxCommand {
     public static description = 'get an access token from an email and a .pem file, either passed in or from environment variables';
@@ -14,22 +12,18 @@ export default class EinsteinAIGet extends SfdxCommand {
             required: true,
             description: 'dataset id'
         }),
-        email: flags.email({ char: 'e', description: 'email address you used when you signed up for your einstein.ai account' })
+        language: flags.boolean({ char: 'l', description: 'use the language endpoint instead of vision' }),
+        email: flags.email({ char: 'e', description: 'email address you used when you signed up for your einstein.ai account' }),
+        poll: flags.boolean({ char: 'p', description: 'poll for the status to be completed' })
     };
 
     public async run(): Promise<any> {
-        const token = await AITokenRetrieve(this.flags.email || process.env.EINSTEIN_EMAIL);
-        const endpoint = `${baseUrl}/vision/datasets/${this.flags.dataset}`;
-
-        const response = await requestPromise(endpoint, {
-            method: 'GET',
-            headers: {
-                'Cache-Control': 'no-cache',
-                Authorization: `Bearer ${token}`
-            }
+        const parsedResponse = await datasetGet({
+            email: this.flags.email || process.env.EINSTEIN_EMAIL,
+            isLanguage: this.flags.language,
+            poll: this.flags.poll,
+            dataset: this.flags.dataset
         });
-
-        const parsedResponse = JSON.parse(response);
         if (!this.flags.json) {
             this.ux.logJson(parsedResponse);
         }

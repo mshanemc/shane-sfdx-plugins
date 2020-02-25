@@ -9,6 +9,7 @@ import testutils = require('../../../helpers/testutils');
 const testProjectName = 'testProjectEndToEndAI';
 const EVLPGPackageVersionId = '04t0b000001oXW0';
 const herokuAppName = 'int-test-ai-shane-plugin';
+
 describe('shane:ai:tests', () => {
     if (!process.env.LOCALONLY) {
         jest.setTimeout(testutils.remoteTimeout);
@@ -35,7 +36,7 @@ describe('shane:ai:tests', () => {
 
         it('can upload, get, delete a dataset', async () => {
             const datasetCreateResult = await exec2JSON(
-                'sfdx shane:ai:dataset:upload -n test --async -f ~/code/campground/df19/electron-super/imageClassification.zip --json',
+                'sfdx shane:ai:dataset:upload -n test -f ~/code/campground/df19/electron-super/imageClassification.zip --json',
                 { cwd: testProjectName }
             );
             expect(datasetCreateResult).toEqual(expect.objectContaining({ status: 0 }));
@@ -43,7 +44,7 @@ describe('shane:ai:tests', () => {
             const datasetGetResult = await exec2JSON(`sfdx shane:ai:dataset:get -n ${datasetCreateResult.result.id} --json`, {
                 cwd: testProjectName
             });
-            console.log(datasetGetResult);
+            // console.log(datasetGetResult);
             expect(datasetGetResult).toEqual(expect.objectContaining({ status: 0 }));
 
             const datasetDeleteResult = await retry(
