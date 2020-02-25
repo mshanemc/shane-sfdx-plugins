@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { PlaygroundSetup } from '../../../../shared/aiPlaygroundSetup';
+import { PlaygroundSetup } from '../../../../shared/ai/aiPlaygroundSetup';
 
 const envVarKey = 'AI_PLAYGROUND_SETUP_KEY';
 const envVarEmail = 'EINSTEIN_EMAIL';
@@ -7,20 +7,7 @@ const envVarEmail = 'EINSTEIN_EMAIL';
 export default class AIPlaygroundSetup extends SfdxCommand {
     public static description = 'upload .pem file from local encrypted copy, setup username and secret key in custom setting';
 
-    public static examples = [
-        `sfdx shane:data:file:upload -f ~/Downloads/King.png
-    //uploads file from local filesystem as a file
-    `,
-        `sfdx shane:data:file:upload -f ~/Downloads/King.png -p 0011900000VkJgrAAF
-    //uploads file from local filesystem as a file and attaches to a record
-    `,
-        `sfdx shane:data:file:upload -f ~/Downloads/King.png -p 0011900000VkJgrAAF -c
-    //uploads and attaches it to the indicated record, but as a chatter file post
-    `,
-        `sfdx shane:data:file:upload -f ~/Downloads/King.png -p 0011900000VkJgrAAF -n CustomName -c
-    //uploads and attaches it to the indicated record, but as a chatter file post with a name that's not the same name as the local filesystem used
-    `
-    ];
+    public static examples = [`sfdx shane:ai:playground:setup -f my.pem -e shane.mclaughlin@salesforce.com -k yay9HVn68GzXrqhT0HWkoQ==`];
 
     protected static flagsConfig = {
         file: flags.filepath({ char: 'f', description: 'encrypted file from local filesystem', required: true }),

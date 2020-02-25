@@ -2,7 +2,9 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { retry } from '@lifeomic/attempt';
 import * as fs from 'fs-extra';
 
-import { PlaygroundSetup } from '../../../../shared/aiPlaygroundSetup';
+import { PlaygroundSetup } from '../../../../shared/ai/aiPlaygroundSetup';
+import { authJwt } from '../../../../shared/ai/aiAuth';
+import { ShaneAIConfig, convertEmailToFilename } from '../../../../shared/ai/aiConstants';
 
 import crypto = require('crypto');
 import aesjs = require('aes-js');
@@ -39,6 +41,7 @@ export default class AIPlaygroundSetupHeroku extends SfdxCommand {
     protected static flagsConfig = {
         app: flags.string({ char: 'a', description: 'name of the heroku app that we attach add-ons to' }),
         create: flags.boolean({ char: 'c', description: 'create the app' }),
+        keepauth: flags.boolean({ char: 'k', description: 'save the refresh token for einstein.ai to the local sfdx store for future cli use' }),
         verbose: flags.builtin()
     };
 
@@ -116,6 +119,18 @@ export default class AIPlaygroundSetupHeroku extends SfdxCommand {
             key: encryptionKey.toString('base64')
         });
 
+        if (this.flags.keepauth) {
+            this.ux.setSpinnerStatus('authing to einstein.ai for future local cli use');
+            const tokenResponse = await authJwt({
+                cert: specificKey,
+                email: specificEmail
+            });
+            const config = await ShaneAIConfig.create({
+                filename: convertEmailToFilename(),
+                isGlobal: false
+            });
+            await config.setToken(tokenResponse);
+        }
         await fs.remove(tempFileName); // delete the key file
 
         return playgroundResult;

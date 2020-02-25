@@ -4,6 +4,9 @@
     "version": "4.18.0",
     "author": "@mshanemc",
     "bugs": "https://github.com/mshanemc/shane-sfdx-plugins/issues",
+    "engines": {
+        "node": ">=8.0.0"
+    },
     "dependencies": {
         "@lifeomic/attempt": "^3.0.0",
         "@oclif/command": "^1.5.12",
@@ -22,6 +25,7 @@
         "json2csv": "^4.3.5",
         "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.11",
+        "moment": "^2.24.0",
         "npm": "^6.8.0",
         "puppeteer": "^1.12.2",
         "puppeteer-core": "^1.12.2",
@@ -46,6 +50,7 @@
         "@types/jest": "^24.0.11",
         "@types/jsforce": "^1.9.5",
         "@types/lodash": "^4.14.121",
+        "@types/moment": "^2.13.0",
         "@types/node": "^10.12.27",
         "@types/puppeteer": "^1.12.1",
         "@types/request-promise-native": "^1.0.15",
