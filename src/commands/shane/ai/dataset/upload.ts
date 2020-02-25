@@ -3,7 +3,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 
 import { createReadStream, ReadStream } from 'fs-extra';
 
-import { AITokenRetrieve, baseUrl } from '../../../../shared/aiConstants';
+import { AITokenRetrieve, baseUrl } from '../../../../shared/ai/aiConstants';
 
 import requestPromise = require('request-promise-native');
 
@@ -37,7 +37,6 @@ export default class EinsteinAIUpload extends SfdxCommand {
     };
 
     public async run(): Promise<any> {
-        // const token = await keytar.getPassword('einstein-ai', this.flags.email || process.env.EINSTEIN_EMAIL);
         const token = await AITokenRetrieve(this.flags.email || process.env.EINSTEIN_EMAIL);
         const endpoint = `${baseUrl}/vision/datasets/upload`;
 
@@ -54,11 +53,9 @@ export default class EinsteinAIUpload extends SfdxCommand {
         if (this.flags.name) {
             formData.name = this.flags.name;
         }
-        // console.log(formData);
 
         const response = await requestPromise(endpoint, {
             method: 'POST',
-            // body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${assertion}`,
             formData,
             headers: {
                 'Content-type': 'multipart/form-data',
@@ -68,12 +65,10 @@ export default class EinsteinAIUpload extends SfdxCommand {
         });
 
         const parsedResponse = JSON.parse(response);
-        this.ux.logJson(parsedResponse);
+        if (!this.flags.json) {
+            this.ux.logJson(parsedResponse);
+        }
         this.ux.log(`check the status using sfdx shane:ai:dataset:get -n ${parsedResponse.id}`);
-        // await keytar.setPassword('einstein-ai', this.flags.email || process.env.EINSTEIN_EMAIL, parsedResponse.access_token);
-        // this.ux.log(`Your access token is ${parsedResponse.access_token} and saved to your keychain`);
-
-        // const kca = new core.KeychainAccess();
         return parsedResponse;
     }
 }

@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { AITokenRetrieve, baseUrl } from '../../../../shared/aiConstants';
+import { AITokenRetrieve, baseUrl } from '../../../../shared/ai/aiConstants';
 
 import requestPromise = require('request-promise-native');
 
@@ -29,7 +29,9 @@ export default class EinsteinAIDelete extends SfdxCommand {
         });
 
         const parsedResponse = JSON.parse(response);
-        this.ux.logJson(parsedResponse);
+        if (!this.flags.json) {
+            this.ux.logJson(parsedResponse);
+        }
         return parsedResponse;
     }
 }

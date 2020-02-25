@@ -200,6 +200,13 @@ interface ToolingAPIDescribeQueryResult {
     records: Field[];
 }
 
+interface AiAuthResponse {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    refresh_token?: string;
+}
+
 export {
     Record,
     ContentVersion,
@@ -217,5 +224,6 @@ export {
     ObjectConfig,
     FieldMeta,
     ContentVersionCreateRequest,
-    User
+    User,
+    AiAuthResponse
 };
