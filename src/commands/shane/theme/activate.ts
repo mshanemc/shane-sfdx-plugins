@@ -10,8 +10,7 @@ export default class ThemeActivate extends SfdxCommand {
     protected static requiresUsername = true;
 
     protected static flagsConfig = {
-        name: flags.string({ char: 'n', required: true, description: 'name of the theme to activate' }),
-        showbrowser: flags.boolean({ char: 'b', description: 'show the browser...useful for local debugging' })
+        name: flags.string({ char: 'n', required: true, description: 'name of the theme to activate' })
     };
 
     public async run(): Promise<any> {
