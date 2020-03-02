@@ -132,7 +132,12 @@ export default class AIPlaygroundSetupHeroku extends SfdxCommand {
             await config.setToken(tokenResponse);
         }
         await fs.remove(tempFileName); // delete the key file
+        if (this.flags.verbose) {
+            this.ux.log(`email: ${specificEmail}`);
+            this.ux.log(`key:
+            ${specificKey}`);
+        }
 
-        return playgroundResult;
+        return { ...playgroundResult, credentials: { email: specificEmail, pem: specificKey } };
     }
 }
