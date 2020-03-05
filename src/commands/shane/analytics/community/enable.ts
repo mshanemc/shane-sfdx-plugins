@@ -10,6 +10,8 @@ export default class CommunityEnable extends SfdxCommand {
 
     protected static requiresUsername = true;
 
+    public static hidden;
+
     protected static deprecated = {
         version: 47,
         message: `This command is no longer needed because your scratch def file can use
