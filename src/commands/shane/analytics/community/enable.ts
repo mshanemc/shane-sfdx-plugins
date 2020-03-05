@@ -10,6 +10,16 @@ export default class CommunityEnable extends SfdxCommand {
 
     protected static requiresUsername = true;
 
+    protected static deprecated = {
+        version: 47,
+        message: `This command is no longer needed because your scratch def file can use
+
+"analyticsSettings": {
+    "canShareAppsWithCommunities": true,
+    "enableAnalyticsSharingEnable": true
+}`
+    };
+
     protected static flagsConfig = {
         showbrowser: flags.boolean({ char: 'b', description: 'show the browser...useful for local debugging' })
     };
