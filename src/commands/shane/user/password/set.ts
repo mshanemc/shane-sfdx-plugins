@@ -17,7 +17,7 @@ export default class Set extends SfdxCommand {
     protected static flagsConfig = {
         firstname: flags.string({ char: 'g', required: true, description: 'first (given) name of the user--keeping -f for file for consistency' }),
         lastname: flags.string({ char: 'l', required: true, description: 'last name of the user' }),
-        password: flags.string({ char: 'p', required: true, description: 'local path of the photo to use' })
+        password: flags.string({ char: 'p', required: true, description: 'the password you want the user to have' })
     };
 
     protected static requiresUsername = true;
