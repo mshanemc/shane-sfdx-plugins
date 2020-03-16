@@ -76,6 +76,7 @@ interface ObjectConfig {
     enableSearch?: boolean;
     enableSharing?: boolean;
     enableStreamingApi?: boolean;
+    visibility?: string;
 }
 
 interface Record {

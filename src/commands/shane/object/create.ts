@@ -17,6 +17,12 @@ const typeDefinitions = [
         ending: '__c'
     },
     {
+        type: 'cmdt',
+        forbidden: ['activities', 'autonumberformat', 'enterprise', 'feeds', 'highvolume', 'history', 'nametype', 'reports', 'search', 'sharing'],
+        specificRequired: ['visibility'],
+        ending: '__mdt'
+    },
+    {
         type: 'big',
         forbidden: ['highvolume', 'activities', 'sharing', 'search', 'feeds'],
         specificOptions: [],
@@ -72,7 +78,11 @@ export default class ObjectCreate extends SfdxCommand {
         nametype: flags.string({ description: 'name field type', options: ['Text', 'AutoNumber'] }),
         namefieldlabel: flags.string({ description: 'the label for the name field', default: 'Name' }),
         autonumberformat: flags.string({ description: 'the display format for the autonumbering' }),
-
+        visibility: flags.string({
+            description: 'visibility for custom metadata types',
+            options: ['Public', 'Protected', 'PackageProtected'],
+            default: 'Public'
+        }),
         highvolume: flags.boolean({ description: 'high volume, valid only for platform events (__e)' }),
 
         // general command params
@@ -88,15 +98,6 @@ export default class ObjectCreate extends SfdxCommand {
     protected static requiresProject = true;
 
     public async run(): Promise<any> {
-        const outputJSON = {
-            '@': {
-                xmlns: 'http://soap.sforce.com/2006/04/metadata'
-            },
-            deploymentStatus: 'Deployed',
-            label: '',
-            pluralLabel: ''
-        } as ObjectConfig;
-
         if (!this.flags.type) {
             this.flags.type = await cli.prompt(`Object type [${typeDefinitions.map(td => td.type)}]`, { default: 'custom' });
         }
@@ -110,12 +111,7 @@ export default class ObjectCreate extends SfdxCommand {
         }
 
         if (!this.flags.api) {
-            let suffix = '__c';
-            if (this.flags.type === 'big') {
-                suffix = '__b';
-            } else if (this.flags.type === 'event') {
-                suffix = '__e';
-            }
+            const suffix = typeDefinitions.find(def => def.type === this.flags.type).ending;
             this.flags.api = await cli.prompt(`API name (ends with ${suffix}) ?`, {
                 default: `${this.flags.label.replace(/ /g, '_')}${suffix}`
             });
@@ -124,6 +120,15 @@ export default class ObjectCreate extends SfdxCommand {
         // checks and throws an error if types and params don't mix
         this.validate(this.flags.type);
 
+        const outputJSON = {
+            '@': {
+                xmlns: 'http://soap.sforce.com/2006/04/metadata'
+            },
+            deploymentStatus: 'Deployed',
+            label: this.flags.label,
+            pluralLabel: this.flags.plural
+        } as ObjectConfig;
+
         if (this.flags.type === 'big') {
             outputJSON.indexes = {
                 fullName: `${this.flags.api.replace('__b', '')}Index`,
@@ -131,18 +136,18 @@ export default class ObjectCreate extends SfdxCommand {
                 fields: []
             };
         }
-
-        outputJSON.label = this.flags.label;
-        outputJSON.pluralLabel = this.flags.plural;
-
-        // optional attributes for all types
         if (this.flags.description) {
+            // optional attributes for all types
             outputJSON.description = this.flags.description;
         } else if (this.flags.interactive) {
             outputJSON.description = await cli.prompt('description?  Be nice to your future self!', { required: false });
         }
 
         // type specific attributes
+        if (this.flags.type === 'cmdt') {
+            delete outputJSON.deploymentStatus;
+            outputJSON.visibility = this.flags.visibility;
+        }
         if (this.flags.type === 'event') {
             if (this.flags.interactive && !this.flags.highvolume) {
                 this.flags.highvolume = await cli.confirm('High Volume (y/n)');
