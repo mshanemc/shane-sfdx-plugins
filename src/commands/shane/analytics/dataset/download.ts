@@ -8,14 +8,12 @@ import fs = require('fs-extra');
 import stream = require('stream');
 import util = require('util');
 
-const pipeline = util.promisify(stream.pipeline);
-
 export default class DatasetDownload extends SfdxCommand {
     public static description = 'download a dataset as csv';
 
     public static examples = [
         'sfdx shane:analytics:dataset:download -n YourDataSetName -t myLocalFolder',
-        'sfdx shane:analytics:dataset:download -i 0Fb6A000000gDFxSAM --versionid 0Fc6A000002d8GwSAI -t myLocalFolder -r 100'
+        'sfdx shane:analytics:dataset:download -i 0Fb6A000000gDFxSAM --versionid 0Fc6A000002d8GwSAI -t myLocalFolder -r 10000 -b 5000'
     ];
 
     protected static flagsConfig = {
@@ -23,7 +21,9 @@ export default class DatasetDownload extends SfdxCommand {
         name: flags.string({ char: 'n', description: 'dataset name' }),
         versionid: flags.string({ description: 'specify a version' }),
         target: flags.filepath({ char: 't', description: 'where you want to save the file', default: '.' }),
-        rows: flags.number({ char: 'r', default: 1000000000, description: 'how many rows?' })
+        rows: flags.number({ char: 'r', default: 1000000000, description: 'how many rows?' }),
+        offset: flags.number({ char: 'o', default: 0, description: 'offset for rows' }),
+        batchsize: flags.number({ char: 'b', default: 1000000000, description: 'maximum batchsize. Splits query in parts of this size.' })
     };
 
     protected static requiresUsername = true;
@@ -80,29 +80,37 @@ export default class DatasetDownload extends SfdxCommand {
         });
         // this.ux.logJson(fieldNames);
 
-        const query = `q = load "${this.flags.id}/${this.flags.versionid}"; q = foreach q generate ${fieldNames
+        const baseQuery = `q = load "${this.flags.id}/${this.flags.versionid}"; q = foreach q generate ${fieldNames
             .map(name => `'${name}' as '${name}'`)
-            .join(', ')}; q = limit q ${this.flags.rows}`;
-        // console.log(query);
-        // this.ux.log(query);
+            .join(', ')};`;
 
-        const queryResponse = (await conn.request({
-            method: 'POST',
-            url: `${conn.baseUrl()}/wave/query`,
-            body: JSON.stringify({ query })
-        })) as any;
-
-        this.ux.log(`writing ${queryResponse.results.records.length} rows to ${this.flags.target}/${this.flags.name}`);
-
+        // pipe parts for streaming result to file
         const input = new stream.Readable({ objectMode: true, read() {} });
+        const outStream = fs.createWriteStream(`${this.flags.target}/${this.flags.name}.csv`, { encoding: 'utf8' });
+        const csvTransform = new json2csv.Transform({ fields: fieldNames }, { objectMode: true });
+        input.pipe(csvTransform).pipe(outStream);
 
-        queryResponse.results.records.forEach(record => input.push(record));
+        let currentOffset = this.flags.offset;
+        let moreRows = true;
+        while (currentOffset < this.flags.rows && moreRows) {
+            // for the last batch, we reduce the currentLimit to the global limit
+            let currentLimit = Math.min(this.flags.batchsize, this.flags.rows - currentOffset, this.flags.rows);
+            const query = baseQuery + ` q = offset q ${currentOffset}; q = limit q ${currentLimit}`;
+            this.ux.log(`query with offset: ${currentOffset} and limit ${currentLimit}`);
+            // console.log(query);
+            // this.ux.log(query);
+            const queryResponse = (await conn.request({
+                method: 'POST',
+                url: `${conn.baseUrl()}/wave/query`,
+                body: JSON.stringify({ query })
+            })) as any;
+
+            this.ux.log(`writing ${queryResponse.results.records.length} rows to ${this.flags.target}/${this.flags.name}`);
+            moreRows = queryResponse.results.records.length != 0;
+            currentOffset += currentLimit;
+
+            queryResponse.results.records.forEach(record => input.push(record));
+        }
         input.push(null);
-
-        await pipeline(
-            input,
-            new json2csv.Transform({ fields: fieldNames }, { objectMode: true }),
-            fs.createWriteStream(`${this.flags.target}/${this.flags.name}.csv`, { encoding: 'utf8' })
-        );
     }
 }
