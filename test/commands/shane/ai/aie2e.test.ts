@@ -7,7 +7,7 @@ import fs = require('fs-extra');
 import testutils = require('../../../helpers/testutils');
 
 const testProjectName = 'testProjectEndToEndAI';
-const EVLPGPackageVersionId = '04t0b000001oXW0';
+const EVLPGPackageVersionId = '04t0b000001oXug';
 const herokuAppName = 'int-test-ai-shane-plugin';
 
 describe('shane:ai:tests', () => {
