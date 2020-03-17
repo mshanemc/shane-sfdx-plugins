@@ -1,6 +1,6 @@
 import { exec } from '../../src/shared/execProm';
 
-import { convertEmailToFilename, ShaneAIConfig } from '../../src/shared/aiConstants';
+import { convertEmailToFilename, ShaneAIConfig } from '../../src/shared/ai/aiConstants';
 
 import fs = require('fs-extra');
 
@@ -16,7 +16,7 @@ describe('test encryptedConfigAccessHelper', () => {
         const token = 'abcdefg12345';
         const config = await ShaneAIConfig.create({ filename: convertEmailToFilename('unit.whatever@test.com'), rootFolder: testProjectName });
         expect(await config.exists()).toBe(false);
-        await config.setToken(token);
+        await config.setToken({ access_token: token, token_type: 'test', expires_in: 2000 });
         expect(await config.exists()).toBe(true);
         expect(await config.getToken()).toBe(token);
     });
@@ -30,11 +30,15 @@ describe('test encryptedConfigAccessHelper', () => {
 
     it('handles various email/service structures', () => {
         expect(convertEmailToFilename('unit.whatever@test.com').includes('@')).toBe(false);
-        expect(convertEmailToFilename('unit.whatever@test.com').includes('.')).toBe(false);
+        expect(
+            convertEmailToFilename('unit.whatever@test.com')
+                .replace('.json', '')
+                .includes('.')
+        ).toBe(false);
 
         const serviceResult = convertEmailToFilename('unit.whatever@test.com', 'aitest');
         expect(serviceResult.includes('@')).toBe(false);
-        expect(serviceResult.includes('.')).toBe(false);
+        expect(serviceResult.replace('.json', '').includes('.')).toBe(false);
         expect(serviceResult.startsWith('aitest-')).toBe(true);
     });
 

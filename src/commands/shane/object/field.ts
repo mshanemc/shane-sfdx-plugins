@@ -11,6 +11,7 @@ import fs = require('fs-extra');
 const SupportedTypesB = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
 const SupportedTypesE = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
 const SupportedTypesC = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox', 'Url', 'Email', 'Phone', 'Currency', 'Picklist', 'Html'];
+const SupportedTypesMDT = ['Text', 'Number', 'DateTime', 'Date', 'Checkbox', 'Url', 'Email', 'Phone', 'Picklist'];
 
 export default class FieldCreate extends SfdxCommand {
     public static description = 'create or add fields to an existing object';
@@ -115,6 +116,11 @@ export default class FieldCreate extends SfdxCommand {
         if (fs.existsSync(fieldMetaPath)) {
             this.ux.error(chalk.red(`field already exists ${fieldMetaPath}`));
             return;
+        }
+
+        while (this.flags.object.endsWith('__mdt') && !SupportedTypesMDT.includes(this.flags.type)) {
+            // eslint-disable-next-line no-await-in-loop
+            this.flags.type = await cli.prompt(`Type (${SupportedTypesMDT.join(',')})?`, { default: 'Text' });
         }
 
         while (this.flags.object.endsWith('__b') && !SupportedTypesB.includes(this.flags.type)) {

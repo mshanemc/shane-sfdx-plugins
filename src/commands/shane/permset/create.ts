@@ -217,12 +217,11 @@ export default class PermSetCreate extends SfdxCommand {
     public addObjectPerms(existing, objectName: string) {
         // make sure it the parent level objectPermissions[] exists
 
-        const existingClone = setupArray(existing, 'objectPermissions');
+        const existingClone = setupArray(setupArray(existing, 'objectPermissions'), 'customMetadataTypeAccesses');
 
         if (
-            existingClone.objectPermissions.find(e => {
-                return e.object === objectName;
-            })
+            existingClone.objectPermissions.find(e => e.object === objectName) ||
+            existingClone.customMetadataTypeAccesses.find(e => e.name === objectName)
         ) {
             this.ux.log(`Object Permission already exists: ${objectName}.  Nothing to add.`);
             return existingClone;
@@ -251,6 +250,12 @@ export default class PermSetCreate extends SfdxCommand {
                 allowCreate: 'true',
                 allowRead: 'true',
                 object: objectName
+            });
+        } else if (objectName.endsWith('__mdt')) {
+            this.ux.log(`Added cmdt perms for ${objectName}`);
+            existingClone.customMetadataTypeAccesses.push({
+                enabled: 'true',
+                name: objectName
             });
         }
         return existingClone;
