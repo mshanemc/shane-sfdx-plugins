@@ -6,7 +6,6 @@ import { WaveDataSetListResponse, WaveDatasetVersion } from '../../../../shared/
 
 import fs = require('fs-extra');
 import stream = require('stream');
-import util = require('util');
 
 export default class DatasetDownload extends SfdxCommand {
     public static description = 'download a dataset as csv';
@@ -94,11 +93,9 @@ export default class DatasetDownload extends SfdxCommand {
         let moreRows = true;
         while (currentOffset < this.flags.rows && moreRows) {
             // for the last batch, we reduce the currentLimit to the global limit
-            let currentLimit = Math.min(this.flags.batchsize, this.flags.rows - currentOffset, this.flags.rows);
-            const query = baseQuery + ` q = offset q ${currentOffset}; q = limit q ${currentLimit}`;
+            const currentLimit = Math.min(this.flags.batchsize, this.flags.rows - currentOffset, this.flags.rows);
+            const query = `${baseQuery} q = offset q ${currentOffset}; q = limit q ${currentLimit}`;
             this.ux.log(`query with offset: ${currentOffset} and limit ${currentLimit}`);
-            // console.log(query);
-            // this.ux.log(query);
             const queryResponse = (await conn.request({
                 method: 'POST',
                 url: `${conn.baseUrl()}/wave/query`,
@@ -106,7 +103,7 @@ export default class DatasetDownload extends SfdxCommand {
             })) as any;
 
             this.ux.log(`writing ${queryResponse.results.records.length} rows to ${this.flags.target}/${this.flags.name}`);
-            moreRows = queryResponse.results.records.length != 0;
+            moreRows = queryResponse.results.records.length !== 0;
             currentOffset += currentLimit;
 
             queryResponse.results.records.forEach(record => input.push(record));
