@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 
-import { exec } from '../../../shared/execProm';
+import { exec, exec2String } from '../../../shared/execProm';
 
 import fs = require('fs-extra');
 
@@ -18,16 +18,23 @@ export default class ProjectCreate extends SfdxCommand {
 
     protected static flagsConfig = {
         name: flags.string({ char: 'n', required: true, description: 'name and path for the project' }),
-        gitremote: flags.string({ char: 'g', required: true, description: 'full github url for the remote' })
+        gitremote: flags.string({
+            char: 'g',
+            description: 'full github url for the remote...overrides the default generated from git config user.name and project name'
+        })
     };
 
     public async run(): Promise<any> {
+        this.ux.startSpinner('running core project:create command');
         await exec(`sfdx force:project:create -n ${this.flags.name}`);
+
+        this.ux.startSpinner('git setup');
         await exec('git init', { cwd: this.flags.name });
 
-        if (this.flags.gitremote) {
-            await exec(`git remote add origin ${this.flags.gitremote}`, { cwd: this.flags.name });
-        }
+        this.flags.gitremote = this.flags.gitremote ?? `https://github.com/${await exec2String(`git config user.name`)}/${this.flags.name}`;
+        await exec(`git remote add origin ${this.flags.gitremote}`, { cwd: this.flags.name });
+
+        this.ux.startSpinner('modifying base project files');
 
         await Promise.all([
             // folders I like to have
@@ -40,18 +47,25 @@ export default class ProjectCreate extends SfdxCommand {
             // files I like to have
             fs.writeFile(`${this.flags.name}/orgInit.sh`, orgInit()), // basic init script
             fs.writeFile(`${this.flags.name}/README.md`, ''), // blank the standard sfdx readme
-            fs.writeFile(`${this.flags.name}/.gitignore`, gitIgnore()), // basic git ignore
-            fs.writeFile(`${this.flags.name}/package.json`, this.packageJSON()), // basic git ignore
-            fs.writeFile(`${this.flags.name}/config/project-scratch-def.json`, this.scratchJSON()), // basic git ignore
-            fs.writeFile(`${this.flags.name}/sfdx-project.json`, projectJSON(await this.hubOrg.retrieveMaxApiVersion())) // basic git ignore
+            fs.writeFile(`${this.flags.name}/package.json`, await this.packageJSON()), // modify default packageJSON
+            fs.writeFile(`${this.flags.name}/.prettierrc`, await this.prettier()), // modify default prettier (ex: singleQuote)
+            fs.writeFile(`${this.flags.name}/config/project-scratch-def.json`, this.scratchJSON()) // basic git ignore
         ]);
 
-        await exec('sfdx shane:profile:whitelist -n Admin', { cwd: this.flags.name }); // whitelist the admin profile for everyone
-        await exec('chmod +x orgInit.sh', { cwd: this.flags.name }); // make executable
+        this.ux.startSpinner('modifying admin profile and orgInit.sh');
+        await Promise.all([
+            exec('sfdx shane:profile:whitelist -n Admin', { cwd: this.flags.name }), // whitelist the admin profile for everyone
+            exec('chmod +x orgInit.sh', { cwd: this.flags.name }) // make orgInit executable
+        ]);
 
         // commands to run
-        await exec('npm install', { cwd: this.flags.name }); // whitelist the admin profile for everyone
+        this.ux.startSpinner('installing dependencies');
+        await exec('yarn install', { cwd: this.flags.name }); // whitelist the admin profile for everyone
 
+        this.ux.startSpinner('first git commit');
+
+        await exec(`git add .`, { cwd: this.flags.name });
+        await exec(`git commit -m 'init'`, { cwd: this.flags.name });
         this.ux.log(chalk.green(`project created in /${this.flags.name}`));
         return `project created in /${this.flags.name}`;
     }
@@ -61,6 +75,7 @@ export default class ProjectCreate extends SfdxCommand {
     public scratchJSON(): string {
         const scratch = {
             orgName: this.flags.name,
+            adminEmail: 'sfdx@mailinator.com',
             edition: 'Developer',
             settings: {
                 communitiesSettings: {
@@ -86,39 +101,43 @@ export default class ProjectCreate extends SfdxCommand {
         return JSON.stringify(scratch, null, 2);
     }
 
-    public packageJSON(): string {
-        const pkg = {
+    public async prettier(): Promise<string> {
+        const existing = await fs.readJson(`${this.flags.name}/.prettierrc`);
+        return JSON.stringify(
+            {
+                ...existing,
+                singleQuote: true
+            },
+            null,
+            2
+        );
+    }
+
+    public async packageJSON(): Promise<string> {
+        const existing = await fs.readJson(`${this.flags.name}/package.json`);
+        const packageJSON = {
+            ...existing,
             name: this.flags.name,
             version: '0.0.1',
             description: '',
             scripts: {
-                test: 'echo "Error: no test specified" && exit 1',
+                ...existing.scripts,
                 build: 'sfdx shane:org:delete; ./orgInit.sh',
-                publish: `sfdx shane:package2:version:bump -m -r; git add sfdx-project.json; git commit -m 'package version bump'; git push origin master`,
-                reset: 'echo "sfdx force:apex:execute -f scripts/dataWipe.cls && sfdx force:apex:execute -f scripts/init.cls"'
-            },
-            nodemonConfig: {
-                watch: ['force-app'],
-                exec: 'sfdx force:source:push',
-                ext: 'cls,xml,json,js,trigger,cmp,css,design,svg,html',
-                delay: '2500'
+                publish: `sfdx shane:package2:version:bump -m -r; git add sfdx-project.json; git commit -m 'package version bump'; git push origin master`
             },
             repository: {
                 type: 'git',
                 url: `git+${this.flags.gitremote}.git`
             },
-            author: 'Shane McLaughlin',
-            license: 'ISC',
             bugs: {
                 url: `${this.flags.gitremote}/issues`
             },
-            homepage: this.flags.gitremote,
-            devDependencies: {
-                nodemon: '^1.19.2'
-            }
+            homepage: this.flags.gitremote
         };
 
-        return JSON.stringify(pkg, null, 2);
+        existing.scripts = { ...existing.scripts };
+
+        return JSON.stringify(packageJSON, null, 2);
     }
 }
 
@@ -126,28 +145,4 @@ const orgInit = (): string => {
     return `sfdx force:org:create -f config/project-scratch-def.json -d 1 -s
 sfdx force:source:push
 sfdx force:org:open`;
-};
-
-const gitIgnore = (): string => {
-    return `node_modules
-.vscode/settings.json
-.localdevserver
-.DS_Store
-`;
-};
-
-const projectJSON = (api): string => {
-    const project = {
-        packageDirectories: [
-            {
-                path: 'force-app',
-                default: true
-            }
-        ],
-        namespace: '',
-        sfdcLoginUrl: 'https://login.salesforce.com',
-        sourceApiVersion: api
-    };
-
-    return JSON.stringify(project, null, 2);
 };
