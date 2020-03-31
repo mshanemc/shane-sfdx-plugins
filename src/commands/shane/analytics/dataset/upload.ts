@@ -36,7 +36,7 @@ export default class DatasetDownload extends SfdxCommand {
         uploadinterval: flags.integer({
             char: 'd',
             description: 'milliseconds between uploaded chunks...increase this if you get strange errors during file uploads like "write EPIPE"',
-            default: 1000,
+            default: 500,
             min: 0
         })
     };
@@ -70,7 +70,7 @@ export default class DatasetDownload extends SfdxCommand {
         })) {
             counter += 1;
             progress.setTotal(counter);
-            sleep(this.flags.uploadinterval);
+            await sleep(this.flags.uploadinterval);
             uploads.push(
                 conn
                     .request({
