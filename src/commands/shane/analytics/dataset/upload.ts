@@ -53,8 +53,6 @@ export default class DatasetDownload extends SfdxCommand {
         })) as any;
         this.ux.stopSpinner();
 
-        // this.ux.startSpinner('uploading data');
-
         let counter = 0;
         let completeCounter = 0;
         const progress = cli.progress({
@@ -88,13 +86,10 @@ export default class DatasetDownload extends SfdxCommand {
                     .then(() => {
                         completeCounter += 1;
                         progress.update(completeCounter);
-                        // this.ux.setSpinnerStatus(`uploading data [complete: ${completeCounter}/${counter}]`);
                     })
             );
-            // this.ux.setSpinnerStatus(`uploading data [complete: ${completeCounter}/${counter}]`);
         }
         await Promise.all(uploads);
-        // this.ux.stopSpinner(`data upload complete (${counter} chunks)`);
         progress.stop();
 
         this.ux.startSpinner('Starting the data processing');
