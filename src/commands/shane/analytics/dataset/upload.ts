@@ -1,10 +1,11 @@
 /* eslint-disable no-await-in-loop */
 import { flags, SfdxCommand } from '@salesforce/command';
-import { sleep } from '@salesforce/kit';
-import * as readline from 'readline';
+import { retry } from '@lifeomic/attempt';
 
-import csvSplitStream = require('csv-split-stream');
 import fs = require('fs-extra');
+
+const byteLimit = 10000000;
+const pollTimeSeconds = 10;
 
 export default class DatasetDownload extends SfdxCommand {
     public static description = 'upload a dataset from csv';
@@ -35,68 +36,37 @@ export default class DatasetDownload extends SfdxCommand {
     protected static requiresUsername = true;
 
     public async run(): Promise<any> {
-        const tmpFolder = 'chunkFolder';
-
         const conn = this.org.getConnection();
-
-        const body: any = {
-            EdgemartLabel: this.flags.name,
-            EdgemartAlias: this.flags.name,
-            FileName: 'sfdxPluginUpload',
-            Format: 'Csv',
-            Operation: this.flags.operation,
-            NotificationSent: 'Never'
-        };
-
-        if (this.flags.metajson) {
-            body.MetadataJson = await fs.readFile(this.flags.metajson, { encoding: 'base64' });
-        }
-
-        if (this.flags.app) {
-            body.EdgemartContainer = this.flags.app;
-        }
-
+        this.ux.startSpinner('Creating the job');
         const createUploadResult = (await conn.request({
             method: 'POST',
             url: `${conn.baseUrl()}/sobjects/InsightsExternalData`,
-            body: JSON.stringify(body)
+            body: JSON.stringify(await this.getUploadBody())
         })) as any;
+        this.ux.stopSpinner();
 
-        // this.ux.logJson(createUploadResult);
+        this.ux.startSpinner('uploading data');
+        let counter = 0;
+        // eslint-disable-next-line no-restricted-syntax
+        for await (const chunk of fs.createReadStream(this.flags.csvfile, {
+            highWaterMark: byteLimit,
+            encoding: 'base64'
+        })) {
+            counter += 1;
+            await conn.request({
+                method: 'POST',
+                url: `${conn.baseUrl()}/sobjects/InsightsExternalDataPart`,
+                body: JSON.stringify({
+                    DataFile: chunk,
+                    InsightsExternalDataId: createUploadResult.id,
+                    PartNumber: counter
+                })
+            });
+            this.ux.setSpinnerStatus(`uploading data [${counter} chunks so far]`);
+        }
+        this.ux.stopSpinner(`data upload complete (${counter} chunks)`);
 
-        // chunking
-        const { size } = await fs.stat(this.flags.csvfile);
-        const rowCount = (await countRows(this.flags.csvfile)) as number;
-        const chunks = Math.ceil(size / 800000);
-        const chunkRows = Math.ceil(rowCount / chunks);
-        this.ux.log(`file size is ${size} bytes, ${rowCount} rows, so ${chunks} chunks of ~${chunkRows} rows`);
-
-        await fs.ensureDir(tmpFolder);
-        await csvSplitStream.split(fs.createReadStream(this.flags.csvfile), { lineLimit: chunkRows }, index =>
-            fs.createWriteStream(`${tmpFolder}/file-${index}.csv`)
-        );
-
-        // then add the data
-        const files = await fs.readdir(tmpFolder);
-
-        await Promise.all(
-            files.map(async (file, index) => {
-                const result = (await conn.request({
-                    method: 'POST',
-                    url: `${conn.baseUrl()}/sobjects/InsightsExternalDataPart`,
-                    body: JSON.stringify({
-                        DataFile: await fs.readFile(`${tmpFolder}/${file}`, { encoding: 'base64' }),
-                        InsightsExternalDataId: createUploadResult.id,
-                        PartNumber: index + 1
-                    })
-                })) as any;
-                if (result.success) {
-                    this.ux.log(`file ${file} succeeded with id ${result.id}`);
-                }
-            })
-        );
-
-        // then start the job by changing its status
+        this.ux.startSpinner('Starting the data processing');
         const processRequestResult = await conn.request({
             method: 'PATCH',
             url: `${conn.baseUrl()}/sobjects/InsightsExternalData/${createUploadResult.id}`,
@@ -107,48 +77,45 @@ export default class DatasetDownload extends SfdxCommand {
 
         if (this.flags.async) {
             await fs.remove('chunkFolder');
-            this.ux.log(`job started with id ${createUploadResult.id}`);
+            this.ux.log(`job started with id ${createUploadResult.id}.  Not waiting for it because you said --async`);
             return processRequestResult;
         }
 
-        // ping for completion
-        let complete = false;
-        this.ux.startSpinner('Starting the data processing');
-        let finalResult;
-
-        while (!complete) {
-            await sleep(1000);
-
-            const statusCheck = (await conn.request({
-                method: 'GET',
-                url: `${conn.baseUrl()}/sobjects/InsightsExternalData/${createUploadResult.id}`
-            })) as any;
-            if (['Completed', 'CompletedWithWarnings', 'Failed'].includes(statusCheck.Status)) {
-                complete = true;
-                this.ux.stopSpinner('Done!');
-                finalResult = statusCheck;
+        this.ux.setSpinnerStatus('Waiting for job to complete');
+        const finalResult = await retry(
+            async () => {
+                const potentialResult = (await conn.request({
+                    method: 'GET',
+                    url: `${conn.baseUrl()}/sobjects/InsightsExternalData/${createUploadResult.id}`
+                })) as any;
+                this.ux.setSpinnerStatus(`Waiting for job to complete [Status = ${potentialResult.Status}]`);
+                if (['Completed', 'CompletedWithWarnings', 'Failed'].includes(potentialResult.Status)) {
+                    this.ux.setSpinnerStatus(`Waiting for job to complete [Status = ${potentialResult.Status}]`);
+                    return potentialResult;
+                }
+                throw new Error('Still pending');
+            },
+            {
+                maxAttempts: 300,
+                delay: 1000 * pollTimeSeconds
             }
-        }
+        );
 
         // clean up
         await fs.remove('chunkFolder');
         return finalResult;
     }
+
+    private async getUploadBody(): Promise<any> {
+        return {
+            EdgemartLabel: this.flags.name,
+            EdgemartAlias: this.flags.name,
+            FileName: 'sfdxPluginUpload',
+            Format: 'Csv',
+            Operation: this.flags.operation,
+            NotificationSent: 'Never',
+            EdgemartContainer: this.flags.app,
+            MetadataJson: this.flags.metajson ? await fs.readFile(this.flags.metajson, { encoding: 'base64' }) : undefined
+        };
+    }
 }
-
-const countRows = csv => {
-    return new Promise(resolve => {
-        let rowCount = 0;
-        const lineReader = readline.createInterface({
-            input: fs.createReadStream(csv)
-        });
-
-        lineReader
-            .on('line', () => {
-                rowCount += 1;
-            })
-            .on('close', () => {
-                resolve(rowCount);
-            });
-    });
-};
