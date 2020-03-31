@@ -1,10 +1,12 @@
 /* eslint-disable no-await-in-loop */
 import { flags, SfdxCommand } from '@salesforce/command';
 import { retry } from '@lifeomic/attempt';
+import { sleep } from '@salesforce/kit';
+import cli from 'cli-ux';
 
 import fs = require('fs-extra');
 
-const byteLimit = 10000000;
+const byteLimit = 10000000; // per the API docs https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_ext_data.meta/bi_dev_guide_ext_data/bi_ext_data_object_externaldatapart.htm
 const pollTimeSeconds = 10;
 
 export default class DatasetDownload extends SfdxCommand {
@@ -30,6 +32,12 @@ export default class DatasetDownload extends SfdxCommand {
         async: flags.boolean({
             description:
                 'do not wait for successful completion of the dataset upload...just return and hope for the best.  If omitted, will poll the analytics rest API for job processing status until complete'
+        }),
+        uploadinterval: flags.integer({
+            char: 'd',
+            description: 'milliseconds between uploaded chunks...increase this if you get strange errors during file uploads like "write EPIPE"',
+            default: 1000,
+            min: 0
         })
     };
 
@@ -45,26 +53,49 @@ export default class DatasetDownload extends SfdxCommand {
         })) as any;
         this.ux.stopSpinner();
 
-        this.ux.startSpinner('uploading data');
+        // this.ux.startSpinner('uploading data');
+
         let counter = 0;
+        let completeCounter = 0;
+        const progress = cli.progress({
+            format: `Chunk and upload ${this.flags.csvfile} | {bar} | {value}/{total} Chunks | ETA: {eta_formatted} | Elapsed: {duration_formatted}`,
+            barCompleteChar: '\u2588',
+            barIncompleteChar: '\u2591'
+        });
+        progress.start();
+
+        const uploads = [];
         // eslint-disable-next-line no-restricted-syntax
         for await (const chunk of fs.createReadStream(this.flags.csvfile, {
             highWaterMark: byteLimit,
             encoding: 'base64'
         })) {
             counter += 1;
-            await conn.request({
-                method: 'POST',
-                url: `${conn.baseUrl()}/sobjects/InsightsExternalDataPart`,
-                body: JSON.stringify({
-                    DataFile: chunk,
-                    InsightsExternalDataId: createUploadResult.id,
-                    PartNumber: counter
-                })
-            });
-            this.ux.setSpinnerStatus(`uploading data [${counter} chunks so far]`);
+            progress.setTotal(counter);
+            sleep(this.flags.uploadinterval);
+            uploads.push(
+                conn
+                    .request({
+                        method: 'POST',
+                        url: `${conn.baseUrl()}/sobjects/InsightsExternalDataPart`,
+                        body: JSON.stringify({
+                            DataFile: chunk,
+                            InsightsExternalDataId: createUploadResult.id,
+                            PartNumber: counter
+                        })
+                    })
+                    // eslint-disable-next-line no-loop-func
+                    .then(() => {
+                        completeCounter += 1;
+                        progress.update(completeCounter);
+                        // this.ux.setSpinnerStatus(`uploading data [complete: ${completeCounter}/${counter}]`);
+                    })
+            );
+            // this.ux.setSpinnerStatus(`uploading data [complete: ${completeCounter}/${counter}]`);
         }
-        this.ux.stopSpinner(`data upload complete (${counter} chunks)`);
+        await Promise.all(uploads);
+        // this.ux.stopSpinner(`data upload complete (${counter} chunks)`);
+        progress.stop();
 
         this.ux.startSpinner('Starting the data processing');
         const processRequestResult = await conn.request({
@@ -77,7 +108,7 @@ export default class DatasetDownload extends SfdxCommand {
 
         if (this.flags.async) {
             await fs.remove('chunkFolder');
-            this.ux.log(`job started with id ${createUploadResult.id}.  Not waiting for it because you said --async`);
+            this.ux.stopSpinner(`job started with id ${createUploadResult.id}.  Not waiting for it because you said --async`);
             return processRequestResult;
         }
 
