@@ -4,7 +4,6 @@ import { retry } from '@lifeomic/attempt';
 import { sleep } from '@salesforce/kit';
 import cli from 'cli-ux';
 import { createGzip } from 'zlib';
-import { promises } from 'dns';
 
 import fs = require('fs-extra');
 
