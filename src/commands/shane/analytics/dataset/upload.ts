@@ -3,11 +3,14 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { retry } from '@lifeomic/attempt';
 import { sleep } from '@salesforce/kit';
 import cli from 'cli-ux';
+import { createGzip } from 'zlib';
+import { promises } from 'dns';
 
 import fs = require('fs-extra');
 
 const byteLimit = 10000000; // per the API docs https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_ext_data.meta/bi_dev_guide_ext_data/bi_ext_data_object_externaldatapart.htm
 const pollTimeSeconds = 10;
+const tempFileName = 'gzippedUpload.tmp.gz';
 
 export default class DatasetDownload extends SfdxCommand {
     public static description = 'upload a dataset from csv';
@@ -38,7 +41,8 @@ export default class DatasetDownload extends SfdxCommand {
             description: 'milliseconds between uploaded chunks...increase this if you get strange errors during file uploads like "write EPIPE"',
             default: 500,
             min: 0
-        })
+        }),
+        serial: flags.boolean({ description: 'chunks are uploaded with no parallelization to prevent locking issues' })
     };
 
     protected static requiresUsername = true;
@@ -53,43 +57,64 @@ export default class DatasetDownload extends SfdxCommand {
         })) as any;
         this.ux.stopSpinner();
 
+        this.ux.startSpinner('Compressing the file');
+        await zip(this.flags.csvfile, tempFileName);
+        this.ux.stopSpinner();
+
         let counter = 0;
         let completeCounter = 0;
         const progress = cli.progress({
-            format: `Chunk and upload ${this.flags.csvfile} | {bar} | {value}/{total} Chunks | ETA: {eta_formatted} | Elapsed: {duration_formatted}`,
+            format: `Chunk and upload ${this.flags.csvfile}${
+                this.flags.serial ? '(serial mode)' : ''
+            }| {bar} | {value}/{total} Chunks | ETA: {eta_formatted} | Elapsed: {duration_formatted}`,
             barCompleteChar: '\u2588',
             barIncompleteChar: '\u2591'
         });
         progress.start();
 
         const uploads = [];
-        // eslint-disable-next-line no-restricted-syntax
-        for await (const chunk of fs.createReadStream(this.flags.csvfile, {
+
+        const stream = fs.createReadStream(tempFileName, {
             highWaterMark: byteLimit,
             encoding: 'base64'
-        })) {
+        });
+        // eslint-disable-next-line no-restricted-syntax
+        for await (const chunk of stream) {
+            await sleep(this.flags.uploadinterval);
             counter += 1;
             progress.setTotal(counter);
-            await sleep(this.flags.uploadinterval);
-            uploads.push(
-                conn
-                    .request({
-                        method: 'POST',
-                        url: `${conn.baseUrl()}/sobjects/InsightsExternalDataPart`,
-                        body: JSON.stringify({
-                            DataFile: chunk,
-                            InsightsExternalDataId: createUploadResult.id,
-                            PartNumber: counter
+            const requestObject = {
+                method: 'POST',
+                url: `${conn.baseUrl()}/sobjects/InsightsExternalDataPart`,
+                body: JSON.stringify({
+                    DataFile: chunk,
+                    InsightsExternalDataId: createUploadResult.id,
+                    PartNumber: counter
+                })
+            };
+            if (this.flags.serial) {
+                await conn.request(requestObject);
+                completeCounter += 1;
+                progress.update(completeCounter);
+            } else {
+                uploads.push(
+                    conn
+                        .request(requestObject)
+                        // eslint-disable-next-line no-loop-func
+                        .then(() => {
+                            completeCounter += 1;
+                            progress.update(completeCounter);
                         })
-                    })
-                    // eslint-disable-next-line no-loop-func
-                    .then(() => {
-                        completeCounter += 1;
-                        progress.update(completeCounter);
-                    })
-            );
+                );
+            }
         }
-        await Promise.all(uploads);
+        // also clean up the compressed file while we're waiting
+        uploads.push(fs.remove(tempFileName));
+
+        await Promise.all(uploads).catch(error => {
+            this.ux.error(error);
+            throw new Error(error);
+        });
         progress.stop();
 
         this.ux.startSpinner('Starting the data processing');
@@ -145,3 +170,17 @@ export default class DatasetDownload extends SfdxCommand {
         };
     }
 }
+
+const zip = (inputFile: string, outputFile: string) => {
+    return new Promise((resolve, reject) => {
+        const fileContents = fs.createReadStream(inputFile, { encoding: 'base64' });
+        const writeStream = fs.createWriteStream(outputFile);
+        fileContents
+            .pipe(createGzip())
+            .pipe(writeStream)
+            .on('finish', err => {
+                if (err) return reject(err);
+                return resolve();
+            });
+    });
+};
