@@ -65,7 +65,8 @@ export default class CreateOrg extends SfdxCommand {
         setdefaultusername: flags.boolean({
             char: 's',
             description: 'set the created org as the default username'
-        })
+        }),
+        verbose: flags.builtin()
         // targetdevhubusername: flags.boolean({description: 'username or alias for the dev hub org; overrides default dev hub org' })
     };
 
@@ -117,11 +118,13 @@ export default class CreateOrg extends SfdxCommand {
         this.ux.log(`executing ${command}`);
 
         const response = await exec2JSON(command);
-        if (!this.flags.json) {
+        if (!this.flags.json && this.flags.verbose) {
             this.ux.logJson(response);
         }
-
-        this.ux.log(chalk.green(`Org created with id ${response.result.orgId} and username ${response.result.username} `));
-        return response.result;
+        if (response.status === 0) {
+            this.ux.log(chalk.green(`Org created with id ${response.result.orgId} and username ${response.result.username} `));
+            return response.result;
+        }
+        throw new Error(response.message);
     }
 }
