@@ -7,9 +7,12 @@ import { exec2JSON } from '../../../shared/execProm';
 import fs = require('fs-extra');
 
 export default class ConnectedAppAttributes extends SfdxCommand {
-    public static description = 'Activate a community using a headless browser';
+    public static description =
+        'Set attributes on a connected app.  Attributes for salesforce mobile app at https://github.com/gabesumner/mobile-security/blob/master/customAttributes.json';
 
     protected static requiresUsername = true;
+
+    public static examples = ['sfdx shane:connectedapp:attributes -n AppAPIName -a attributes.json'];
 
     protected static flagsConfig = {
         name: flags.string({ char: 'n', description: 'name of the connected app', required: true }),
