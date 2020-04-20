@@ -8,6 +8,8 @@ import request = require('request-promise-native');
 export default class Favorite extends SfdxCommand {
     public static description = 'query records and set the match as a favorite';
 
+    public static aliases = ['shane:data:favourite'];
+
     public static examples = [
         `sfdx shane:data:favorite -o Account -w "name='Salesforce.com'"
 // finds the matching record and adds it to the end of the favorites menu
@@ -24,7 +26,10 @@ export default class Favorite extends SfdxCommand {
 
     public async run(): Promise<any> {
         const conn = this.org.getConnection();
-        const matchedRecord = await singleRecordQuery({ conn, query: `select id from ${this.flags.object} where ${this.flags.where}` });
+        const matchedRecord = await singleRecordQuery({
+            conn,
+            query: `select id from ${this.flags.object} where ${this.flags.where}`
+        });
 
         this.flags.apiversion = this.flags.apiversion || (await conn.retrieveMaxApiVersion());
         let uri = `${conn.instanceUrl}/services/data/v${this.flags.apiversion}/ui-api/favorites/?target=${matchedRecord.Id}&targetType=Record`;
