@@ -1923,7 +1923,7 @@ bunyan-sfdx-no-dtrace@1.8.2:
     mv "~2"
     safe-json-stringify "~1"
 
-byline@5.0.0, byline@^5.0.0:
+byline@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/byline/-/byline-5.0.0.tgz#741c5216468eadc457b03410118ad77de8c1ddb1"
   integrity sha1-dBxSFkaOrcRXsDQQEYrXfejB3bE=
@@ -2549,12 +2549,10 @@ csv-parse@^4.6.3:
   resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-4.8.6.tgz#e3e01c2c9593194f1b7aae6291c65304b35022c8"
   integrity sha512-rSJlpgAjrB6pmlPaqiBAp3qVtQHN07VxI+ozs+knMsNvgh4bDQgENKLFYLFMvT+jn/wr/zvqsd7IVZ7Txdkr7w==
 
-csv-split-stream@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/csv-split-stream/-/csv-split-stream-1.0.2.tgz#d80613d839ab68372ea97fe7e30fb54be12c497c"
-  integrity sha1-2AYT2DmraDcuqX/n4w+1S+EsSXw=
-  dependencies:
-    byline "5.0.0"
+csv-parse@^4.9.0:
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-4.9.0.tgz#a947c66d8ab31207f4933170064dd8268c511e99"
+  integrity sha512-SaFMvRWzobY9z0Nxg+q5pXvU2JY7p++icb1Bb/ZwGSLv058cLabhGg3YNpLPI2KALtZnoe/oNBCfWX9xgTkcaA==
 
 csv-stringify@^1.0.4:
   version "1.1.2"

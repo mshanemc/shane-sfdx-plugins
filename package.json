@@ -19,7 +19,7 @@
         "aes-js": "^3.1.2",
         "chalk": "^2.4.2",
         "cli-ux": "^5.2.0",
-        "csv-split-stream": "^1.0.2",
+        "csv-parse": "^4.9.0",
         "fs-extra": "^7.0.1",
         "js2xmlparser": "^3.0.0",
         "json2csv": "^4.3.5",
