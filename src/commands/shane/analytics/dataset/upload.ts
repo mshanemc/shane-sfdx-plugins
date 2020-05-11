@@ -151,6 +151,13 @@ export default class DatasetDownload extends SfdxCommand {
             }
         );
 
+        if (finalResult.Status === 'Failed') {
+            throw new Error(`Job failed: ${finalResult.statusMessage}`);
+        }
+
+        if (finalResult.Status === 'CompletedWithWarnings') {
+            this.ux.warn(`${finalResult.Status}: ${finalResult.statusMessage}`);
+        }
         // clean up
         await fs.remove('chunkFolder');
         return finalResult;
