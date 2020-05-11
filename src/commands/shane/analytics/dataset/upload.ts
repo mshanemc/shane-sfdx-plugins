@@ -9,7 +9,7 @@ import fs = require('fs-extra');
 
 const byteLimit = 10000000; // per the API docs https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_ext_data.meta/bi_dev_guide_ext_data/bi_ext_data_object_externaldatapart.htm
 const pollTimeSeconds = 10;
-const tempFileName = 'gzippedUpload.tmp.gz';
+const tempFileName = 'gzippedUpload.csv.gz';
 
 export default class DatasetDownload extends SfdxCommand {
     public static description = 'upload a dataset from csv';
@@ -172,8 +172,8 @@ export default class DatasetDownload extends SfdxCommand {
 
 const zip = (inputFile: string, outputFile: string) => {
     return new Promise((resolve, reject) => {
-        const fileContents = fs.createReadStream(inputFile, { encoding: 'base64' });
-        const writeStream = fs.createWriteStream(outputFile);
+        const fileContents = fs.createReadStream(inputFile, { encoding: 'utf8' });
+        const writeStream = fs.createWriteStream(outputFile, { encoding: 'base64' });
         fileContents
             .pipe(createGzip())
             .pipe(writeStream)
