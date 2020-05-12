@@ -9,7 +9,7 @@ import { exec2JSON } from '../../../shared/execProm';
 import request = require('request-promise-native');
 
 // const herokuAPIendpoint = 'https://api.heroku.com';
-const HC_DiscoveryServiceEndpoint = 'https://hc-central.heroku.com';
+const hcDiscoveryServiceEndpoint = 'https://hc-central.heroku.com';
 
 export default class HerokuConnect extends SfdxCommand {
     public static description = 'set up heroku connect on an existing app to an existing org (that you may have just created)';
@@ -75,10 +75,10 @@ export default class HerokuConnect extends SfdxCommand {
             json: true
         };
 
-        this.ux.log(`getting connections url from ${HC_DiscoveryServiceEndpoint}/auth/${this.flags.app}`);
+        this.ux.log(`getting connections url from ${hcDiscoveryServiceEndpoint}/auth/${this.flags.app}`);
         const discoveryResult = await request.post({
             ...defaultHerokuRequest,
-            url: `${HC_DiscoveryServiceEndpoint}/auth/${this.flags.app}`
+            url: `${hcDiscoveryServiceEndpoint}/auth/${this.flags.app}`
         });
 
         if (!this.flags.json && this.flags.verbose) {
