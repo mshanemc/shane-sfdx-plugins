@@ -181,7 +181,7 @@ export default class HerokuConnect extends SfdxCommand {
             await page.waitForSelector('input#oaapprove');
             await page.click('input#oaapprove');
             await page.waitFor(1000);
-        } catch (e) {
+        } catch (error) {
             this.ux.log('no connection approval page');
         }
 
