@@ -141,7 +141,10 @@ export default class HerokuConnect extends SfdxCommand {
             }
         });
 
-        if (!this.flags.json && this.flags.verbose) this.ux.logJson(patchResults);
+        if (!this.flags.json && this.flags.verbose) {
+            this.ux.log('this is the pathResult');
+            this.ux.logJson(patchResults);
+        }
 
         // let's find out where to authenticate
 
@@ -154,7 +157,10 @@ export default class HerokuConnect extends SfdxCommand {
             }
         });
 
-        if (!this.flags.json && this.flags.verbose) this.ux.logJson(sfdcAuthUrlResp);
+        if (!this.flags.json && this.flags.verbose) {
+            this.ux.log('this is the auth URL response');
+            this.ux.logJson(sfdcAuthUrlResp);
+        }
         const sfdcAuthUrl = sfdcAuthUrlResp.redirect;
 
         const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
