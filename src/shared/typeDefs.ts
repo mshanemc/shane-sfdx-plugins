@@ -41,6 +41,7 @@ interface FieldMeta {
     trackHistory?: boolean;
     visibleLines?: number;
     valueSet?: { valueSetDefinition?: ValueSetDefinition };
+    displayLocationInDecimal?: boolean;
 }
 
 interface ValueSetDefinition {
