@@ -10,7 +10,21 @@ import fs = require('fs-extra');
 
 const SupportedTypesB = ['Text', 'Number', 'DateTime', 'Lookup', 'LongTextArea'];
 const SupportedTypesE = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox'];
-const SupportedTypesC = ['Text', 'Number', 'DateTime', 'Date', 'LongTextArea', 'Checkbox', 'Url', 'Email', 'Phone', 'Currency', 'Picklist', 'Html'];
+const SupportedTypesC = [
+    'Text',
+    'Number',
+    'DateTime',
+    'Date',
+    'LongTextArea',
+    'Checkbox',
+    'Url',
+    'Email',
+    'Phone',
+    'Currency',
+    'Picklist',
+    'Html',
+    'Location'
+];
 const SupportedTypesMDT = ['Text', 'Number', 'DateTime', 'Date', 'Checkbox', 'Url', 'Email', 'Phone', 'Picklist'];
 
 export default class FieldCreate extends SfdxCommand {
@@ -181,6 +195,11 @@ export default class FieldCreate extends SfdxCommand {
                               default: `${18 - outputJSON.scale}`
                           }
                       );
+        }
+
+        if (this.flags.type === 'Location') {
+            outputJSON.scale = this.flags.scale >= 0 ? this.flags.scale : await cli.prompt('how many decimal places (scale)?', { default: '4' });
+            outputJSON.displayLocationInDecimal = true;
         }
 
         if (this.flags.type === 'Picklist') {
