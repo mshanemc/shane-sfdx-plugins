@@ -231,7 +231,7 @@ export default class FieldCreate extends SfdxCommand {
                     value: values.map((value, index) => ({
                         fullName: value,
                         label: value,
-                        default: this.flags.picklistdefaultfirst && index === 0
+                        default: ((this.flags.picklistdefaultfirst ?? false) && index === 0) ?? false
                     })),
                     sorted: true
                 }
