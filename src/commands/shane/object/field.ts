@@ -25,7 +25,7 @@ const SupportedTypesC = [
     'Html',
     'Location'
 ];
-const SupportedTypesMDT = ['Text', 'Number', 'DateTime', 'Date', 'Checkbox', 'Url', 'Email', 'Phone', 'Picklist'];
+const SupportedTypesMDT = ['Text', 'LongTextArea', 'Number', 'DateTime', 'Date', 'Checkbox', 'Url', 'Email', 'Phone', 'Picklist'];
 
 export default class FieldCreate extends SfdxCommand {
     public static description = 'create or add fields to an existing object';
