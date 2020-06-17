@@ -243,6 +243,35 @@ describe('shane:object:create (regular object flavor)', () => {
         await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
     });
 
+    it('can create a lookup to Account', async () => {
+        const fieldAPI = 'Account__c';
+        const fieldLabel = 'Account Lookup';
+        const lookupobject = 'Account';
+        const relname = 'Kids';
+        const rellabel = 'The Kids';
+        const deleteconstraint = 'SetNull';
+        await exec(
+            `sfdx shane:object:field --object ${api} --api ${fieldAPI} -n "${fieldLabel}" -t Lookup --lookupobject ${lookupobject} --relname ${relname} --rellabel "${rellabel}" --deleteconstraint ${deleteconstraint}`,
+            {
+                cwd: testProjectName
+            }
+        );
+
+        expect(fs.existsSync(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`)).toBe(true);
+
+        const parsed = await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/fields/${fieldAPI}.field-meta.xml`);
+
+        expect(parsed.CustomField.type).toBe('Lookup');
+        expect(parsed.CustomField.label).toBe(fieldLabel);
+        expect(parsed.CustomField.fullName).toBe(fieldAPI);
+        expect(parsed.CustomField.referenceTo).toBe(lookupobject);
+        expect(parsed.CustomField.relationshipLabel).toBe(rellabel);
+        expect(parsed.CustomField.relationshipName).toBe(relname);
+        expect(parsed.CustomField.deleteConstraint).toBe(deleteconstraint);
+
+        await testutils.getParsedXML(`${testProjectName}/force-app/main/default/objects/${api}/${api}.object-meta.xml`);
+    });
+
     it('can create a recordType on the object', async () => {
         const rtLabel = 'MyRecordType';
 
@@ -296,7 +325,7 @@ describe('shane:object:create (regular object flavor)', () => {
         expect(parsed.PermissionSet.objectPermissions).toBeTruthy();
         expect(parsed.PermissionSet.objectPermissions.object).toBe(api);
 
-        expect(parsed.PermissionSet.fieldPermissions).toHaveLength(7);
+        expect(parsed.PermissionSet.fieldPermissions).toHaveLength(8);
 
         // verify all the fields so far.  Required fields, and fileds required because they're indexed, shouldn't be included
 
@@ -307,7 +336,8 @@ describe('shane:object:create (regular object flavor)', () => {
                 expect.objectContaining({ readable: 'true', editable: 'true', field: `${api}.Email__c` }),
                 expect.objectContaining({ readable: 'true', editable: 'true', field: `${api}.Text_Area_Field__c` }),
                 expect.objectContaining({ readable: 'true', editable: 'true', field: `${api}.Phone__c` }),
-                expect.objectContaining({ readable: 'true', editable: 'true', field: `${api}.Checkbox_Field__c` })
+                expect.objectContaining({ readable: 'true', editable: 'true', field: `${api}.Checkbox_Field__c` }),
+                expect.objectContaining({ readable: 'true', editable: 'true', field: `${api}.Account__c` })
             ])
         );
 

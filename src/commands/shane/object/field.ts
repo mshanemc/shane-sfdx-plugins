@@ -23,9 +23,12 @@ const SupportedTypesC = [
     'Currency',
     'Picklist',
     'Html',
-    'Location'
+    'Location',
+    'Lookup'
 ];
 const SupportedTypesMDT = ['Text', 'LongTextArea', 'Number', 'DateTime', 'Date', 'Checkbox', 'Url', 'Email', 'Phone', 'Picklist'];
+
+const deleteConstraintOptions = ['SetNull', 'Restrict', 'Cascade'];
 
 export default class FieldCreate extends SfdxCommand {
     public static description = 'create or add fields to an existing object';
@@ -72,10 +75,13 @@ export default class FieldCreate extends SfdxCommand {
         precision: flags.integer({ description: 'maximum allowed digits of a number, including whole and decimal places' }),
 
         lookupobject: flags.string({ description: 'API name of the object the lookup goes to' }),
-        relname: flags.string({ description: 'API name for the lookup relationship' }),
+        relname: flags.string({ description: 'API name for the child relationship' }),
+        rellabel: flags.string({ description: 'label for the child relationship (appears on related lists)' }),
+        deleteconstraint: flags.string({ description: 'delete behavior', options: deleteConstraintOptions }),
 
         picklistvalues: flags.array({ description: 'values for the picklist' }),
         picklistdefaultfirst: flags.boolean({ description: 'use the first value in the picklist as the default' }),
+
         // big object index handling
         indexposition: flags.integer({
             description:
@@ -181,7 +187,14 @@ export default class FieldCreate extends SfdxCommand {
         if (this.flags.type === 'Lookup') {
             outputJSON.referenceTo = this.flags.lookupobject || (await cli.prompt('What object for Lookup field? ex: Account, Something__c'));
             outputJSON.relationshipName = this.flags.relname || (await cli.prompt('relationship api name?'));
-            outputJSON.relationshipLabel = outputJSON.relationshipName;
+            outputJSON.relationshipLabel = this.flags.rellabel || (await cli.prompt('relationship label?', { default: outputJSON.relationshipName }));
+            if (this.flags.object.endsWith('__c')) {
+                outputJSON.deleteConstraint =
+                    this.flags.deleteconstraint ||
+                    (await cli.prompt(`What should happen to this field when the parent is deleted? (${deleteConstraintOptions.join(',')})`, {
+                        default: 'SetNull'
+                    }));
+            }
         }
 
         if (this.flags.type === 'Number' || this.flags.type === 'Currency') {
