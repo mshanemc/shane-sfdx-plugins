@@ -42,7 +42,10 @@ interface FieldMeta {
     visibleLines?: number;
     valueSet?: { valueSetDefinition?: ValueSetDefinition };
     displayLocationInDecimal?: boolean;
-    deleteConstraint: boolean;
+    deleteConstraint?: boolean;
+    writeRequiresMasterRead?: boolean;
+    reparentableMasterDetail?: boolean;
+    relationshipOrder?: number;
 }
 
 interface ValueSetDefinition {

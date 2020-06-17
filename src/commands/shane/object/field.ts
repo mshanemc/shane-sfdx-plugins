@@ -24,7 +24,8 @@ const SupportedTypesC = [
     'Picklist',
     'Html',
     'Location',
-    'Lookup'
+    'Lookup',
+    'MasterDetail'
 ];
 const SupportedTypesMDT = ['Text', 'LongTextArea', 'Number', 'DateTime', 'Date', 'Checkbox', 'Url', 'Email', 'Phone', 'Picklist'];
 
@@ -77,7 +78,11 @@ export default class FieldCreate extends SfdxCommand {
         lookupobject: flags.string({ description: 'API name of the object the lookup goes to' }),
         relname: flags.string({ description: 'API name for the child relationship' }),
         rellabel: flags.string({ description: 'label for the child relationship (appears on related lists)' }),
+
         deleteconstraint: flags.string({ description: 'delete behavior', options: deleteConstraintOptions }),
+
+        reparentable: flags.boolean({ description: 'the master detail is parentable' }),
+        writerequiresmasterread: flags.boolean({ description: 'the master detail is parentable' }),
 
         picklistvalues: flags.array({ description: 'values for the picklist' }),
         picklistdefaultfirst: flags.boolean({ description: 'use the first value in the picklist as the default' }),
@@ -184,17 +189,28 @@ export default class FieldCreate extends SfdxCommand {
             outputJSON.visibleLines = 5;
         }
 
-        if (this.flags.type === 'Lookup') {
-            outputJSON.referenceTo = this.flags.lookupobject || (await cli.prompt('What object for Lookup field? ex: Account, Something__c'));
-            outputJSON.relationshipName = this.flags.relname || (await cli.prompt('relationship api name?'));
-            outputJSON.relationshipLabel = this.flags.rellabel || (await cli.prompt('relationship label?', { default: outputJSON.relationshipName }));
-            if (this.flags.object.endsWith('__c')) {
-                outputJSON.deleteConstraint =
-                    this.flags.deleteconstraint ||
-                    (await cli.prompt(`What should happen to this field when the parent is deleted? (${deleteConstraintOptions.join(',')})`, {
-                        default: 'SetNull'
-                    }));
-            }
+        if (this.flags.type === 'Lookup' || this.flags.type === 'MasterDetail') {
+            outputJSON.referenceTo = this.flags.lookupobject || (await cli.prompt('API name of the parent object ex: Account, Something__c'));
+            outputJSON.relationshipName = this.flags.relname || (await cli.prompt('Child relationship api name?'));
+            outputJSON.relationshipLabel =
+                this.flags.rellabel || (await cli.prompt('Child relationship label?', { default: outputJSON.relationshipName }));
+        }
+        if (this.flags.type === 'Lookup' && this.flags.object.endsWith('__c')) {
+            outputJSON.deleteConstraint = this.flags.interactive
+                ? this.flags.deleteconstraint ||
+                  (await cli.prompt(`What should happen to this field when the parent is deleted? (${deleteConstraintOptions.join(',')})`, {
+                      default: 'SetNull'
+                  }))
+                : 'SetNull';
+        }
+        if (this.flags.type === 'MasterDetail') {
+            outputJSON.reparentableMasterDetail = this.flags.interactive
+                ? this.flags.reparentable || (await cli.confirm('Allow reparenting? (y/n)'))
+                : this.flags.reparentable ?? false;
+            outputJSON.writeRequiresMasterRead = this.flags.interactive
+                ? this.flags.writerequiresmasterread || (await cli.confirm('Allow write access if parent is readable (y/n)'))
+                : this.flags.writerequiresmasterread ?? false;
+            outputJSON.relationshipOrder = (await masterDetailExists(fieldsFolderPath)) ? 1 : 0; // default, unless we find another one in the files
         }
 
         if (this.flags.type === 'Number' || this.flags.type === 'Currency') {
@@ -295,8 +311,7 @@ export default class FieldCreate extends SfdxCommand {
 
         // dealing with big object indexes
         if (this.flags.object.includes('__b') && !this.flags.noindex) {
-            const filePath = `${this.flags.directory}/objects/${this.flags.object}/${this.flags.object}.object-meta.xml`;
-            const fileRead = await getParsed(await fs.readFile(filePath), true);
+            const fileRead = await getParsed(await fs.readFile(objectMetaPath), true);
 
             this.ux.logJson(fileRead);
             let existing = fileRead.CustomObject;
@@ -354,7 +369,7 @@ export default class FieldCreate extends SfdxCommand {
             // convert to xml and write out the file
             await writeJSONasXML({
                 type: 'CustomObject',
-                path: filePath,
+                path: objectMetaPath,
                 json: existing
             });
 
@@ -368,11 +383,32 @@ export default class FieldCreate extends SfdxCommand {
             path: fieldMetaPath,
             json: outputJSON
         });
-
         this.ux.log(
             `Created ${chalk.green(fieldMetaPath)}.  Add perms with ${chalk.cyan(
                 `sfdx shane:permset:create -o ${this.flags.object} -f ${this.flags.api} -n yourPermSetName`
             )}`
         );
+
+        if (this.flags.type === 'MasterDetail') {
+            // modify sharing on existing object
+            const existingObject = (await getParsed(await fs.readFile(objectMetaPath), true)).CustomObject;
+            existingObject.externalSharingModel = 'ControlledByParent';
+            existingObject.sharingModel = 'ControlledByParent';
+            await writeJSONasXML({
+                type: 'CustomObject',
+                path: objectMetaPath,
+                json: await fixExistingDollarSign(existingObject)
+            });
+            this.ux.log(`Modified sharing model on ${objectMetaPath}.`);
+        }
     }
 }
+
+const masterDetailExists = async fieldsFolderPath => {
+    return (
+        await Promise.all(
+            (await fs.readdir(fieldsFolderPath)) // returns list of filenames
+                .map(async fieldFile => getParsed(await fs.readFile(`${fieldsFolderPath}/${fieldFile}`), false)) // returns json objects
+        )
+    ).some(fileAsJSON => fileAsJSON.CustomField.type === 'MasterDetail'); // there is already some master-detail
+};
