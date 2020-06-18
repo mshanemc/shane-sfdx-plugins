@@ -95,7 +95,7 @@ export default class HerokuRepoDeploy extends SfdxCommand {
         if (this.flags.name) {
             body.app.organization = this.flags.team;
         }
-
+        this.ux.startSpinner('asking heroku to deploy the app');
         const result = await request.post({
             url: herokuAPIendpoint,
             headers,
@@ -107,6 +107,7 @@ export default class HerokuRepoDeploy extends SfdxCommand {
         let statusResult;
 
         while (status === 'pending') {
+            this.ux.setSpinnerStatus('waiting for the app to deploy');
             statusResult = await request.get({
                 url: `${herokuAPIendpoint}/${result.id}`,
                 json: true,
@@ -115,7 +116,7 @@ export default class HerokuRepoDeploy extends SfdxCommand {
             status = statusResult.status;
             sleep(pollingInterval);
         }
-
+        this.ux.stopSpinner();
         // if error
         if (status === 'failed') {
             this.ux.log(chalk.red('Error deploying the app'));
