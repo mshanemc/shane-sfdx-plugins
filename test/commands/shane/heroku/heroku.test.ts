@@ -7,7 +7,7 @@ import testutils = require('../../../helpers/testutils');
 
 const testProjectName = 'mshanemc-custexp-1234567890';
 
-describe('shane:heroku:connect', () => {
+describe.skip('shane:heroku:connect', () => {
     jest.setTimeout(testutils.remoteTimeout);
 
     if (!process.env.LOCALONLY) {
