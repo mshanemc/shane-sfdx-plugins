@@ -9,7 +9,7 @@ import { exec2JSON } from '../../../shared/execProm';
 import request = require('request-promise-native');
 
 // const herokuAPIendpoint = 'https://api.heroku.com';
-const HC_DiscoveryServiceEndpoint = 'https://hc-central.heroku.com';
+const hcDiscoveryServiceEndpoint = 'https://hc-central.heroku.com';
 
 export default class HerokuConnect extends SfdxCommand {
     public static description = 'set up heroku connect on an existing app to an existing org (that you may have just created)';
@@ -53,6 +53,11 @@ export default class HerokuConnect extends SfdxCommand {
                 'This requires a valid HEROKU_API_KEY in the environment.  heroku auth:token will get you temporary one, or use the heroku web gui to get a permanent one'
             );
         }
+        if (!process.env.HEROKU_USERNAME || !process.env.HEROKU_PASSWORD) {
+            throw new Error(
+                'Heroku Connect API now requires signing into both heroku and a salesforce org, so both HEROKU_USERNAME and HEROKU_PASSWORD variables must be set'
+            );
+        }
         // you didn't set it so we're going to get it from orgDisplay
         if (!this.flags.password) {
             const displayResponse = await exec2JSON(`sfdx force:org:display --json -u ${this.org.getUsername()}`);
@@ -64,8 +69,7 @@ export default class HerokuConnect extends SfdxCommand {
             throw new Error('There is password set.  Use sfdx force:user:password:generate to make one');
         }
 
-        this.ux.log(`using password ${this.flags.password}`);
-        this.ux.log(`using domain ${this.flags.instance}`);
+        this.ux.log(`using password ${this.flags.password} on domain ${this.flags.instance}`);
 
         // get the apps region to use the correct connect api endpoint
         const defaultHerokuRequest = {
@@ -74,11 +78,10 @@ export default class HerokuConnect extends SfdxCommand {
             },
             json: true
         };
-
-        this.ux.log(`getting connections url from ${HC_DiscoveryServiceEndpoint}/auth/${this.flags.app}`);
+        this.ux.startSpinner(`getting connections url from ${hcDiscoveryServiceEndpoint}/auth/${this.flags.app}`);
         const discoveryResult = await request.post({
             ...defaultHerokuRequest,
-            url: `${HC_DiscoveryServiceEndpoint}/auth/${this.flags.app}`
+            url: `${hcDiscoveryServiceEndpoint}/auth/${this.flags.app}`
         });
 
         if (!this.flags.json && this.flags.verbose) {
@@ -131,7 +134,7 @@ export default class HerokuConnect extends SfdxCommand {
 
         // const theConnection = connectionInfo.results.find( conn => conn.app_name === this.flags.app );
         // this.ux.log(`found connection with id ${theConnection.id}`);
-
+        this.ux.setSpinnerStatus('updating the heroku connect database url');
         const patchResults = await request.patch({
             ...defaultHerokuRequest,
             uri: matchingApp.detail_url,
@@ -144,6 +147,7 @@ export default class HerokuConnect extends SfdxCommand {
         if (!this.flags.json && this.flags.verbose) this.ux.logJson(patchResults);
 
         // let's find out where to authenticate
+        this.ux.setSpinnerStatus('getting the auth url');
 
         const sfdcAuthUrlResp = await request.post({
             ...defaultHerokuRequest,
@@ -157,11 +161,22 @@ export default class HerokuConnect extends SfdxCommand {
         if (!this.flags.json && this.flags.verbose) this.ux.logJson(sfdcAuthUrlResp);
         const sfdcAuthUrl = sfdcAuthUrlResp.redirect;
 
+        this.ux.setSpinnerStatus('authorizing heroku via browser');
+
         const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
         const page = await browser.newPage();
         await page.goto(sfdcAuthUrl, {
             waitUntil: 'networkidle2'
         });
+
+        // heroku login page
+        await page.waitForSelector('input#email');
+        await page.type('input#email', process.env.HEROKU_USERNAME);
+        await page.type('input#password', process.env.HEROKU_PASSWORD);
+        await page.click('button');
+        await page.waitFor(3000);
+
+        this.ux.setSpinnerStatus('authorizing the org via browser');
 
         // login page
         await page.waitForSelector('input#username');
@@ -175,11 +190,13 @@ export default class HerokuConnect extends SfdxCommand {
             await page.waitForSelector('input#oaapprove');
             await page.click('input#oaapprove');
             await page.waitFor(1000);
-        } catch (e) {
+        } catch (error) {
             this.ux.log('no connection approval page');
         }
 
         await browser.close();
+
+        this.ux.setSpinnerStatus('applying the heroku connect config file');
 
         const fileResult = await request.post({
             headers: {
@@ -194,8 +211,8 @@ export default class HerokuConnect extends SfdxCommand {
             this.ux.error(fileResult);
             throw new Error(`file upload error: ${fileResult}`);
         }
+        this.ux.stopSpinner(`set up Heroku Connect for ${this.flags.app}`);
 
-        this.ux.log(`set up Heroku Connect for ${this.flags.app}`);
         return `set up Heroku Connect for ${this.flags.app}`;
     }
 }
