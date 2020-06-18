@@ -40,7 +40,7 @@ export default class HerokuConnect extends SfdxCommand {
         }),
         configfile: flags.filepath({ char: 'f', description: 'path to the json file exported from Heroku Connect', required: true }),
         showbrowser: flags.boolean({ char: 'b', description: 'show the browser...useful for local debugging' }),
-        instance: flags.boolean({
+        instance: flags.string({
             char: 'i',
             description: 'salesforce instance for making login easier.  Will be read from org:display if exists...this is the override'
         }),
@@ -62,7 +62,8 @@ export default class HerokuConnect extends SfdxCommand {
         if (!this.flags.password) {
             const displayResponse = await exec2JSON(`sfdx force:org:display --json -u ${this.org.getUsername()}`);
             this.flags.password = displayResponse.result.password;
-            this.flags.instance = displayResponse.result.instanceUrl.replace('https://', '');
+            this.flags.instance = this.flags.instance ?? displayResponse.result.instanceUrl.replace('https://', '').replace('.com/', '.com');
+            // this.flags.instance = displayResponse.result.instanceUrl;
         }
 
         if (!this.flags.password) {
