@@ -3,6 +3,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 
 import * as fs from 'fs-extra';
 import * as puppeteer from 'puppeteer';
+import { retry } from '@lifeomic/attempt';
 
 import { exec2JSON } from '../../../shared/execProm';
 
@@ -177,14 +178,27 @@ export default class HerokuConnect extends SfdxCommand {
         await page.click('button');
         await page.waitFor(3000);
 
-        this.ux.setSpinnerStatus('authorizing the org via browser');
+        // while (await page.$(selector))
+        await retry(
+            async () => {
+                this.ux.setSpinnerStatus('authorizing the org via browser');
+                // salesforce org login page
+                await page.waitForSelector('input#username');
+                await page.type('input#username', this.org.getUsername());
+                await page.type('input#password', this.flags.password);
+                await page.click('input#Login');
+                await page.waitFor(3000);
 
-        // login page
-        await page.waitForSelector('input#username');
-        await page.type('input#username', this.org.getUsername());
-        await page.type('input#password', this.flags.password);
-        await page.click('input#Login');
-        await page.waitFor(3000);
+                if (await page.$('input#username')) {
+                    this.ux.setSpinnerStatus('auth to the org failed.  Login might not be read.  Waiting one minute before retrying');
+                    throw new Error('auth failed');
+                }
+            },
+            {
+                maxAttempts: 10,
+                delay: 60 * 1000
+            }
+        );
 
         // mostly happens on new scratch orgs, but not if you've previously auth'd it
         try {
