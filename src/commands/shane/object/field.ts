@@ -15,6 +15,7 @@ const SupportedTypesC = [
     'Number',
     'DateTime',
     'Date',
+    'Time',
     'LongTextArea',
     'Checkbox',
     'Url',
