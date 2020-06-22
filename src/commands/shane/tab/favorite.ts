@@ -1,6 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { FavoriteRequestBody } from '../../../shared/typeDefs';
-import { saveFavorite } from '../../../shared/uiApiFavorites';
+import { saveFavorite, favoriteFlagsName, favoriteFlagsStart } from '../../../shared/uiApiFavorites';
 
 export default class Favorite extends SfdxCommand {
     public static description = 'favorite a tab';
@@ -17,9 +17,9 @@ export default class Favorite extends SfdxCommand {
     ];
 
     protected static flagsConfig = {
-        name: flags.string({ char: 'l', description: 'the label you want to appear in the favorites menu' }),
+        name: favoriteFlagsName,
         target: flags.string({ char: 't', required: true, description: 'API name of the tab you want to favorite' }),
-        start: flags.boolean({ description: 'add the favorite at the beginning of the menu' })
+        start: favoriteFlagsStart
     };
 
     protected static requiresUsername = true;

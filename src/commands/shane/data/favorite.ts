@@ -1,6 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { singleRecordQuery } from '../../../shared/queries';
-import { saveFavorite } from '../../../shared/uiApiFavorites';
+import { saveFavorite, favoriteFlagsName, favoriteFlagsStart, favoriteFlagsObject } from '../../../shared/uiApiFavorites';
 import { FavoriteRequestBody } from '../../../shared/typeDefs';
 
 export default class Favorite extends SfdxCommand {
@@ -15,9 +15,10 @@ export default class Favorite extends SfdxCommand {
     ];
 
     protected static flagsConfig = {
+        name: favoriteFlagsName,
         where: flags.string({ char: 'w', required: true, description: 'SOQL where clause to match a single record' }),
-        object: flags.string({ char: 'o', required: true, description: 'object API name (including __c if custom)' }),
-        start: flags.boolean({ description: 'add the favorite at the beginning of the menu' })
+        object: favoriteFlagsObject,
+        start: favoriteFlagsStart
     };
 
     protected static requiresUsername = true;

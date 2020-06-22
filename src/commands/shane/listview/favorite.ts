@@ -2,7 +2,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { FavoriteRequestBody } from '../../../shared/typeDefs';
 import { singleRecordQuery } from '../../../shared/queries';
-import { saveFavorite } from '../../../shared/uiApiFavorites';
+import { saveFavorite, favoriteFlagsName, favoriteFlagsStart, favoriteFlagsObject } from '../../../shared/uiApiFavorites';
 
 export default class Favorite extends SfdxCommand {
     public static description = 'favorite a listview';
@@ -16,10 +16,10 @@ export default class Favorite extends SfdxCommand {
     ];
 
     protected static flagsConfig = {
-        name: flags.string({ char: 'l', description: 'the label you want to appear in the favorites menu' }),
+        name: favoriteFlagsName,
         target: flags.string({ char: 't', required: true, description: 'API name of the list view you want to favorite' }),
-        object: flags.string({ char: 'o', required: true, description: 'object API name (including __c if custom)' }),
-        start: flags.boolean({ description: 'add the favorite at the beginning of the menu' })
+        object: favoriteFlagsObject,
+        start: favoriteFlagsStart
     };
 
     protected static requiresUsername = true;
