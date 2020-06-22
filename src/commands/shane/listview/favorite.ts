@@ -5,7 +5,7 @@ import { singleRecordQuery } from '../../../shared/queries';
 import { saveFavorite } from '../../../shared/uiApiFavorites';
 
 export default class Favorite extends SfdxCommand {
-    public static description = 'query records and set the match as a favorite';
+    public static description = 'favorite a listview';
 
     public static aliases = ['shane:listview:favourite'];
 
