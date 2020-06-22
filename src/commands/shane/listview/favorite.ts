@@ -1,21 +1,23 @@
+// https://developer.salesforce.com/docs/atlas.en-us.uiapi.meta/uiapi/ui_api_features_favorites.htm
 import { flags, SfdxCommand } from '@salesforce/command';
+import { FavoriteRequestBody } from '../../../shared/typeDefs';
 import { singleRecordQuery } from '../../../shared/queries';
 import { saveFavorite } from '../../../shared/uiApiFavorites';
-import { FavoriteRequestBody } from '../../../shared/typeDefs';
 
 export default class Favorite extends SfdxCommand {
     public static description = 'query records and set the match as a favorite';
 
-    public static aliases = ['shane:data:favourite'];
+    public static aliases = ['shane:listview:favourite'];
 
     public static examples = [
-        `sfdx shane:data:favorite -o Account -w "name='Salesforce.com'"
-// finds the matching record and adds it to the end of the favorites menu
+        `sfdx shane:listview:favorite -o Account -t Awesome_Accounts
+// finds the matching listview and adds it to the end of the favorites menu
 `
     ];
 
     protected static flagsConfig = {
-        where: flags.string({ char: 'w', required: true, description: 'SOQL where clause to match a single record' }),
+        name: flags.string({ char: 'l', description: 'the label you want to appear in the favorites menu' }),
+        target: flags.string({ char: 't', required: true, description: 'API name of the list view you want to favorite' }),
         object: flags.string({ char: 'o', required: true, description: 'object API name (including __c if custom)' }),
         start: flags.boolean({ description: 'add the favorite at the beginning of the menu' })
     };
@@ -27,13 +29,13 @@ export default class Favorite extends SfdxCommand {
 
         const matchedRecord = await singleRecordQuery({
             conn,
-            query: `select id from ${this.flags.object} where ${this.flags.where}`
+            query: `select id,Name from ListView where DEVELOPERNAME = '${this.flags.target}' AND SOBJECTTYPE = '${this.flags.object}'`
         });
 
         const body: FavoriteRequestBody = {
-            targetType: 'Record',
+            targetType: 'ListView',
             target: matchedRecord.Id,
-            name: this.flags.name ?? matchedRecord.Name ?? this.flags.object
+            name: this.flags.name ?? matchedRecord.Name
         };
 
         if (this.flags.start) {

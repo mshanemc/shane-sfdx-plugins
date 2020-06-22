@@ -213,6 +213,13 @@ interface AiAuthResponse {
     refresh_token?: string;
 }
 
+interface FavoriteRequestBody {
+    targetType: string;
+    target: string;
+    sortOrder?: number;
+    name?: string;
+}
+
 export {
     Record,
     ContentVersion,
@@ -231,5 +238,6 @@ export {
     FieldMeta,
     ContentVersionCreateRequest,
     User,
-    AiAuthResponse
+    AiAuthResponse,
+    FavoriteRequestBody
 };
