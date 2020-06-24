@@ -25,7 +25,10 @@ export default class GithubAction extends SfdxCommand {
     };
 
     public async run(): Promise<any> {
-        await fs.outputFile(`.github/workflows/deployer.yml`, dump(this.testyaml(), { indent: 4, noCompatMode: true })); // yaml for github actions
+        const outputFilename = `.github/workflows/deployer.yml`;
+        await fs.outputFile(outputFilename, dump(this.testyaml(), { indent: 4, noCompatMode: true })); // yaml for github actions
+        this.ux.log(`created ${outputFilename}`);
+        return outputFilename;
     }
 
     public testyaml() {
