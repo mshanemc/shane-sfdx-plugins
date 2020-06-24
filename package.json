@@ -21,6 +21,7 @@
         "cli-ux": "^5.2.0",
         "csv-parse": "^4.9.0",
         "fs-extra": "^7.0.1",
+        "js-yaml": "^3.14.0",
         "js2xmlparser": "^3.0.0",
         "json2csv": "^4.3.5",
         "jsonwebtoken": "^8.5.1",

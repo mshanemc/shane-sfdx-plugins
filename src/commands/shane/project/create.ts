@@ -44,7 +44,6 @@ export default class ProjectCreate extends SfdxCommand {
             fs.ensureDir(`${this.flags.name}/force-app/main/default/classes`), // you'll probably use apex!
             fs.ensureDir(`${this.flags.name}/config/userDef`), // a place to put userDef files
 
-            fs.outputFile(`${this.flags.name}/.github/workflows/deployer.yml`, testyaml()), // yaml for github actions
             fs.writeFile(`${this.flags.name}/orgInit.sh`, orgInit()), // basic init script
             fs.writeFile(`${this.flags.name}/README.md`, ''), // blank the standard sfdx readme
             fs.writeFile(`${this.flags.name}/package.json`, await this.packageJSON()), // modify default packageJSON
@@ -145,40 +144,4 @@ const orgInit = (): string => {
     return `sfdx force:org:create -f config/project-scratch-def.json -d 1 -s
 sfdx force:source:push
 sfdx force:org:open`;
-};
-
-const getRandomInt = (min, max) => {
-    const roundedMin = Math.ceil(min);
-    const roundedMax = Math.floor(max);
-    return Math.floor(Math.random() * (roundedMax - roundedMin)) + roundedMin; // The maximum is exclusive and the minimum is inclusive
-};
-
-const testyaml = (): string => {
-    return `name: 'deployer-test'
-on: # rebuild any PRs and main branch changes
-    pull_request:
-    push:
-        branches:
-            - master
-    schedule:
-        # * is a special character in YAML so you have to quote this string
-        - cron: '${getRandomInt(0, 60)} ${getRandomInt(0, 24)} * * ${getRandomInt(0, 7)}'
-jobs:
-    production:
-        runs-on: ubuntu-latest
-        name: production deployer end-to-end test
-        steps:
-            - name: production
-              id: production
-              uses: mshanemc/deployer-check-javascript-action@master
-    prerelease:
-        runs-on: ubuntu-latest
-        name: prerelease deployer end-to-end test
-        steps:
-            - name: prerelease
-              id: prerelease
-              uses: mshanemc/deployer-check-javascript-action@master
-              with:
-                  deployer-url: https://deployer-prerelease.herokuapp.com
-`;
 };
