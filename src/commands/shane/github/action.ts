@@ -62,7 +62,7 @@ export default class GithubAction extends SfdxCommand {
                 push: { branches: ['master'] },
 
                 // schedule: [{ cron: `"${getRandomInt(0, 60)} ${getRandomInt(0, 24)} * * ${getRandomInt(0, 7)}"` }]
-                schedule: [{ cron: `* ${getRandomInt(0, 24)} * * ${getRandomInt(0, 7)}` }]
+                schedule: [{ cron: `*/31 ${getRandomInt(0, 24)} * * ${getRandomInt(0, 7)}` }]
             },
             jobs: {}
         };
