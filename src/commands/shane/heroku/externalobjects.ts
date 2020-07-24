@@ -10,20 +10,12 @@ import { exec2JSON } from '../../../shared/execProm';
 
 import request = require('request-promise-native');
 
-// const herokuAPIendpoint = 'https://api.heroku.com';
 const hcDiscoveryServiceEndpoint = 'https://hc-central.heroku.com';
 
-export default class HerokuConnect extends SfdxCommand {
-    public static description = 'set up heroku connect on an existing app to an existing org (that you may have just created)';
+export default class HerokuExternalObjects extends SfdxCommand {
+    public static description = 'set up heroku connect on an existing app with external objects';
 
-    public static examples = [
-        `sfdx shane:heroku:connect -a prosaic-samurai-4564 -f assets/myConfig.json
-// auth the heroku app to the current default org, assuming password is available from force:org:display, then import the json config file
-`,
-        `sfdx shane:heroku:connect -a prosaic-samurai-4564 -f assets/myConfig.json -p p455w0rd -u myother@scratch.org
-// same, but not the default org, with a specified password
-`
-    ];
+    public static examples = [];
 
     protected static supportsUsername = true;
 
@@ -51,7 +43,6 @@ export default class HerokuConnect extends SfdxCommand {
 
     public async run(): Promise<any> {
         checkHerokuEnvironmentVariables();
-
         // you didn't set it so we're going to get it from orgDisplay
         if (!this.flags.password) {
             const displayResponse = await exec2JSON(`sfdx force:org:display --json -u ${this.org.getUsername()}`);
@@ -61,7 +52,7 @@ export default class HerokuConnect extends SfdxCommand {
         }
 
         if (!this.flags.password) {
-            throw new Error('There is no password set.  Use sfdx force:user:password:generate to make one');
+            throw new Error('There is password set.  Use sfdx force:user:password:generate to make one');
         }
 
         this.ux.log(`using password ${this.flags.password} on domain ${this.flags.instance}`);
