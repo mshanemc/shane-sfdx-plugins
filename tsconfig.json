@@ -12,6 +12,6 @@
         "types": ["node", "jest", "fs-extra", "moment", "request", "request-promise-native", "js2xmlparser", "@types/jsforce/describe-result"],
         "target": "ES6"
     },
-    "include": ["./src/**/*"],
+    "include": ["./src/**/*", "test/unit/herokuCredentialParsing.test.ts"],
     "exclude": ["./test/**", "./testProject*/**/*", "./test/**/*", "./mshanemc-*/**/*"]
 }

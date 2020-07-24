@@ -6,12 +6,11 @@ import * as puppeteer from 'puppeteer';
 import { retry } from '@lifeomic/attempt';
 
 import { checkHerokuEnvironmentVariables } from '../../../shared/herokuCheck';
+import { getMatchingApp, patchApp, defaultHerokuRequest } from '../../../shared/herokuConnectApi';
+
 import { exec2JSON } from '../../../shared/execProm';
 
 import request = require('request-promise-native');
-
-// const herokuAPIendpoint = 'https://api.heroku.com';
-const hcDiscoveryServiceEndpoint = 'https://hc-central.heroku.com';
 
 export default class HerokuConnect extends SfdxCommand {
     public static description = 'set up heroku connect on an existing app to an existing org (that you may have just created)';
@@ -51,6 +50,7 @@ export default class HerokuConnect extends SfdxCommand {
 
     public async run(): Promise<any> {
         checkHerokuEnvironmentVariables();
+        const logVerbosely = !this.flags.json && this.flags.verbose;
 
         // you didn't set it so we're going to get it from orgDisplay
         if (!this.flags.password) {
@@ -66,80 +66,8 @@ export default class HerokuConnect extends SfdxCommand {
 
         this.ux.log(`using password ${this.flags.password} on domain ${this.flags.instance}`);
 
-        // get the apps region to use the correct connect api endpoint
-        const defaultHerokuRequest = {
-            headers: {
-                Authorization: `Bearer ${process.env.HEROKU_API_KEY}`
-            },
-            json: true
-        };
-        this.ux.startSpinner(`getting connections url from ${hcDiscoveryServiceEndpoint}/auth/${this.flags.app}`);
-        const discoveryResult = await request.post({
-            ...defaultHerokuRequest,
-            url: `${hcDiscoveryServiceEndpoint}/auth/${this.flags.app}`
-        });
-
-        if (!this.flags.json && this.flags.verbose) {
-            this.ux.log('this is the discoveryResult');
-            this.ux.logJson(discoveryResult);
-        }
-
-        const matchingApp = discoveryResult.connections.find(app => app.app_name === this.flags.app && app.resource_name);
-
-        if (!this.flags.json && this.flags.verbose) {
-            this.ux.log('this is the matching app');
-            this.ux.logJson(matchingApp);
-        }
-
-        // const connectAPIendpoint = `${app.region_url}/api/v3`;
-
-        // // verify the app has connect add-on installed
-        // const addons = await request.get({ ...defaultHerokuRequest,
-        //   url: `${herokuAPIendpoint}/apps/${this.flags.app}/addons`
-        // });
-
-        // if ( !this.flags.json && this.flags.verbose) {
-        //   this.ux.log('addons: ');
-        //   this.ux.logJson(addons);
-        // }
-
-        // if (
-        //   !addons.some( addon => addon.addon_service.name === 'herokuconnect' ) ||
-        //   !addons.some( addon => addon.addon_service.name === 'heroku-postgresql')
-        // ) {
-        //   throw new Error('the app needs to have both Postgres and Heroku Connect addons already installed');
-        // }
-
-        // if ( this.flags.verbose ) {
-        //   this.ux.log(`calling endpoint: ${connectAPIendpoint}/users/me/apps/${this.flags.app}/auth`);
-        // }
-        // const postResult = await request.post({headers: defaultHerokuConnectRequest.headers, url: `${connectAPIendpoint}/users/me/apps/${this.flags.app}/auth`});
-
-        // if ( !this.flags.json && this.flags.verbose) {
-        //   this.ux.log('postResult from creating Auth');
-        //   this.ux.log(postResult);
-        // }
-
-        // const connectionInfo = await request.get({ ...defaultHerokuConnectRequest, url: `${connectAPIendpoint}/connections?app=${this.flags.app}`});
-
-        // if ( !this.flags.json && this.flags.verbose) {
-        //   this.ux.log('connectionInfo');
-        //   this.ux.logJson(connectionInfo);
-        // }
-
-        // const theConnection = connectionInfo.results.find( conn => conn.app_name === this.flags.app );
-        // this.ux.log(`found connection with id ${theConnection.id}`);
-        this.ux.setSpinnerStatus('updating the heroku connect database url');
-        const patchResults = await request.patch({
-            ...defaultHerokuRequest,
-            uri: matchingApp.detail_url,
-            body: {
-                schema_name: 'salesforce',
-                db_key: 'DATABASE_URL'
-            }
-        });
-
-        if (!this.flags.json && this.flags.verbose) this.ux.logJson(patchResults);
+        const matchingApp = await getMatchingApp(this.flags.app, logVerbosely);
+        await patchApp(matchingApp, logVerbosely);
 
         // let's find out where to authenticate
         this.ux.setSpinnerStatus('getting the auth url');
