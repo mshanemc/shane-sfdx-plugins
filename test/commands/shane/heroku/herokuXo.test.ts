@@ -6,9 +6,13 @@ import fs = require('fs-extra');
 import testutils = require('../../../helpers/testutils');
 
 const testProjectName = 'mshanemc-heroku-xo-1234567890';
+const xdsFolderPath = 'force-app/main/default/dataSources';
+const xdsFileLabel = 'myXds';
+const xdsFileName = `${xdsFileLabel}.dataSource-meta.xml`;
+const xdsFilePath = `${xdsFolderPath}/${xdsFileName}`;
 
-describe.skip('shane:heroku:connect', () => {
-    jest.setTimeout(testutils.remoteTimeout);
+describe('shane:heroku:externalobjects', () => {
+    jest.setTimeout(testutils.remoteTimeout * 2); // heroku apps take a long time to deploy
 
     if (!process.env.LOCALONLY) {
         // create an org
@@ -18,12 +22,11 @@ describe.skip('shane:heroku:connect', () => {
 
             await testutils.orgCreate(testProjectName);
             await exec('sfdx shane:profile:whitelist -n Admin', { cwd: testProjectName });
-
             // await exec('sfdx force:source:push', { cwd: testProjectName });
             // create our test file
 
             try {
-                await exec('heroku destroy -a `basename "${PWD/mshanemc-/}"` -c `basename "${PWD/mshanemc-/}"`', {
+                await exec(`heroku destroy -a ${testProjectName} -c ${testProjectName}`, {
                     cwd: testProjectName,
                     shell: '/bin/bash'
                 });
@@ -34,17 +37,7 @@ describe.skip('shane:heroku:connect', () => {
 
         it('sets up a heroku app with deploy', async () => {
             // sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t ci-tests
-            const results = await exec2JSON(
-                'sfdx shane:heroku:repo:deploy -g mshanemc -r heroku-external-objects -n `basename "${PWD/mshanemc-/}"` --json',
-                { cwd: testProjectName, shell: '/bin/bash' }
-            );
-
-            expect(results).toEqual(expect.objectContaining({ status: 0 }));
-        });
-
-        it('configures external objects with json response', async () => {
-            // sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f assets/herokuConnect/electron-web.json
-            const results = await exec2JSON('sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f mapping.json -e custom --json', {
+            const results = await exec2JSON(`sfdx shane:heroku:repo:deploy -g mshanemc -r heroku-external-objects -n ${testProjectName} --json`, {
                 cwd: testProjectName,
                 shell: '/bin/bash'
             });
@@ -52,61 +45,60 @@ describe.skip('shane:heroku:connect', () => {
             expect(results).toEqual(expect.objectContaining({ status: 0 }));
         });
 
+        it('configures external objects by creating an external data source', async () => {
+            // sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f assets/herokuConnect/electron-web.json
+            const results = await exec2JSON(`sfdx shane:heroku:externalobjects -a ${testProjectName} -l ${xdsFileLabel} -c ${xdsFolderPath} --json`, {
+                cwd: testProjectName,
+                shell: '/bin/bash'
+            });
+            expect(fs.existsSync(`${testProjectName}/${xdsFilePath}`));
+            expect(results).toEqual(expect.objectContaining({ status: 0 }));
+        });
+
+        it('deploys the newly created app', async () => {
+            const deployResult = await testutils.itDeploys(testProjectName);
+            expect(deployResult).toBe(true);
+        });
+
+        it('deletes the original heroku app', async () => {
+            await exec(`heroku destroy -a ${testProjectName} -c ${testProjectName}`, {
+                cwd: testProjectName,
+                shell: '/bin/bash'
+            });
+        });
+
+        it('sets up a 2nd heroku app with deploy', async () => {
+            // sfdx shane:heroku:repo:deploy -g mshanemc -r electron-web-app -n `basename "${PWD/mshanemc-/}"` -t ci-tests
+            const results = await exec2JSON(`sfdx shane:heroku:repo:deploy -g mshanemc -r heroku-external-objects -n ${testProjectName} --json`, {
+                cwd: testProjectName,
+                shell: '/bin/bash'
+            });
+
+            expect(results).toEqual(expect.objectContaining({ status: 0 }));
+        });
+
+        it('updates an external data source with a new heroku app', async () => {
+            // sfdx shane:heroku:connect -a `basename "${PWD/mshanemc-/}"` -f assets/herokuConnect/electron-web.json
+            const results = await exec2JSON(`sfdx shane:heroku:externalobjects -a ${testProjectName} -f ${xdsFilePath} --json`, {
+                cwd: testProjectName,
+                shell: '/bin/bash'
+            });
+
+            expect(results).toEqual(expect.objectContaining({ status: 0 }));
+        });
+
+        it('deploys the modified app', async () => {
+            const deployResult = await testutils.itDeploys(testProjectName);
+            expect(deployResult).toBe(true);
+        });
+
         afterAll(async () => {
             await testutils.orgDelete(testProjectName);
-            await exec('heroku destroy -a `basename "${PWD/mshanemc-/}"` -c `basename "${PWD/mshanemc-/}"`', {
+            await exec(`heroku destroy -a ${testProjectName} -c ${testProjectName}`, {
                 cwd: testProjectName,
                 shell: '/bin/bash'
             });
             await fs.remove(testProjectName);
         });
-
-        const testMapping = {
-            mappings: [
-                {
-                    object_name: 'Contact',
-                    config: {
-                        access: 'read_only',
-                        sf_notify_enabled: true,
-                        sf_polling_seconds: 600,
-                        sf_max_daily_api_calls: 30000,
-                        fields: {
-                            LastName: {},
-                            AccountId: {},
-                            Name: {},
-                            MobilePhone: {},
-                            Phone: {},
-                            IsDeleted: {},
-                            SystemModstamp: {},
-                            CreatedDate: {},
-                            Id: {},
-                            FirstName: {}
-                        },
-                        indexes: {
-                            SystemModstamp: {
-                                unique: false
-                            },
-                            Id: {
-                                unique: true
-                            }
-                        }
-                    }
-                }
-            ],
-            connection: {
-                app_name: 'custexp-1554380996614',
-                organization_id: '00D0R000000DHZVUA4',
-                exported_at: '2019-04-04T13:25:57.541610+00:00',
-                features: {
-                    poll_db_no_merge: true,
-                    poll_external_ids: false,
-                    rest_count_only: false
-                },
-                api_version: '45.0',
-                name: 'custexp-1554380996614',
-                logplex_log_enabled: false
-            },
-            version: 1
-        };
     }
 });

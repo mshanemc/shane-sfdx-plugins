@@ -7,8 +7,8 @@ import testutils = require('../../../helpers/testutils');
 
 const testProjectName = 'mshanemc-custexp-1234567890';
 
-describe.skip('shane:heroku:connect', () => {
-    jest.setTimeout(testutils.remoteTimeout);
+describe('shane:heroku:connect', () => {
+    jest.setTimeout(testutils.remoteTimeout * 2);
 
     if (!process.env.LOCALONLY) {
         // create an org
