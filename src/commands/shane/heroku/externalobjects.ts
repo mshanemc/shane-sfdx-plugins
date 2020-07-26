@@ -2,14 +2,11 @@ import { flags, SfdxCommand } from '@salesforce/command';
 
 import * as fs from 'fs-extra';
 import * as puppeteer from 'puppeteer';
-// import { retry } from '@lifeomic/attempt';
 
 import { getMatchingApp, patchApp, defaultHerokuRequest, credentialParser } from '../../../shared/herokuConnectApi';
 import { checkHerokuEnvironmentVariables } from '../../../shared/herokuCheck';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 import { getExisting } from '../../../shared/getExisting';
-
-// import { exec2JSON } from '../../../shared/execProm';
 
 import request = require('request-promise-native');
 
@@ -60,9 +57,10 @@ export default class HerokuExternalObjects extends SfdxCommand {
     public async run(): Promise<any> {
         // validations
         checkHerokuEnvironmentVariables();
-        if (this.flags.createdir && !(await fs.pathExists(this.flags.createdir))) {
-            throw new Error(`path not found ${this.flags.createdir}`);
+        if (this.flags.createdir) {
+            await fs.ensureDir(this.flags.createdir);
         }
+
         if (this.flags.updatefile && !fs.existsSync(this.flags.updatefile)) {
             throw new Error(`file not found ${this.flags.updatefile}`);
         }
@@ -125,6 +123,7 @@ export default class HerokuExternalObjects extends SfdxCommand {
         await page.waitForSelector(dataSourceTableSelector);
         const tableBodyRows = await page.$$(dataSourceTableSelector);
         // iterate each row.  If the name column matches the tables flag OR there isn't a tables flag, then check the box
+        // eslint-disable-next-line no-restricted-syntax
         for (const row of tableBodyRows) {
             const databaseTableName = await row.$eval('td:nth-child(2)', el => el.textContent);
             if (!this.flags.tables || this.flags.tables.includes(databaseTableName)) {
