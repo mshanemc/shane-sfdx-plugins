@@ -18,7 +18,17 @@ const metadataTypeName = 'ExternalDataSource';
 export default class HerokuExternalObjects extends SfdxCommand {
     public static description = 'set up heroku connect on an existing app with external objects';
 
-    public static examples = [];
+    public static examples = [
+        `sfdx shane:heroku:externalobjects -a sneaky-platypus
+        // enables external objects on all tables
+        `,
+        `sfdx shane:heroku:externalobjects -a sneak-platypus -t corgis -c force-app/main/default/dataSources -l theDataSource
+        // enables external objects on the postgres table called corgis and creates an external data source locally
+        `,
+        `sfdx shane:heroku:externalobjects -a sneak-platypus -f force-app/main/default/dataSources/existingXDS.dataSource-meta.xml
+        // enables external objects on all tables and modifies the local file specified
+        `
+    ];
 
     protected static supportsUsername = true;
 
@@ -36,11 +46,10 @@ export default class HerokuExternalObjects extends SfdxCommand {
         updatefile: flags.filepath({
             char: 'f',
             description: 'updates an existing external data source with username/password/url',
-            exclusive: ['createdir'],
-            default: 'force-app/main/default/dataSources'
+            exclusive: ['createdir']
         }),
         label: flags.string({
-            char: 'c',
+            char: 'l',
             description: 'label that will appear for the external data source you create',
             exclusive: ['updatefile']
         }),
@@ -123,7 +132,7 @@ export default class HerokuExternalObjects extends SfdxCommand {
             }
         }
 
-        // await browser.close();
+        await browser.close();
         this.ux.stopSpinner();
         if (logVerbosely) {
             this.ux.logJson(finalOutput);
