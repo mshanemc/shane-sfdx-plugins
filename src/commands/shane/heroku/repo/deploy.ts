@@ -3,6 +3,7 @@ import { sleep } from '@salesforce/kit';
 import chalk from 'chalk';
 
 import { exec2JSON } from '../../../../shared/execProm';
+import { herokuAppNameValidator } from '../../../../shared/flagParsing';
 
 import request = require('request-promise-native');
 
@@ -23,7 +24,11 @@ export default class HerokuRepoDeploy extends SfdxCommand {
     protected static flagsConfig = {
         githubuser: flags.string({ required: true, char: 'g', description: 'github username where the app lives' }),
         repo: flags.string({ required: true, char: 'r', description: 'repo where the app lives' }),
-        name: flags.string({ char: 'n', description: 'what do you want to Heroku app to be named' }),
+        name: flags.string({
+            char: 'n',
+            description: 'what do you want to Heroku app to be named',
+            parse: input => herokuAppNameValidator(input)
+        }),
         overrides: flags.array({
             char: 'o',
             description: 'an array of key-value pairs, like SOME_VAR="some Value" (use quotes where string have spaces!)'
@@ -31,7 +36,13 @@ export default class HerokuRepoDeploy extends SfdxCommand {
         envuser: flags.string({ description: 'grab the default scratch org username and set it to this Heroku environment var' }),
         envpassword: flags.string({ description: 'grab the default scratch org password and set it to this Heroku environment var' }),
         team: flags.string({ char: 't', description: 'assign this new app to an existing heroku team' }),
-        days: flags.integer({ char: 'd', description: 'days you want the heroku app to live (does nothing locally)', min: 1, max: 30, default: 1 })
+        days: flags.integer({
+            char: 'd',
+            description: 'days you want the heroku app to live (does nothing locally)',
+            min: 1,
+            max: 30,
+            default: 1
+        })
         // branch: flags.string({char: 'b', description: 'optional branch' }
     };
 

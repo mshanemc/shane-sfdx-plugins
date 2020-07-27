@@ -7,6 +7,7 @@ import { getMatchingApp, patchApp, defaultHerokuRequest, credentialParser } from
 import { checkHerokuEnvironmentVariables } from '../../../shared/herokuCheck';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 import { getExisting } from '../../../shared/getExisting';
+import { herokuAppNameValidator } from '../../../shared/flagParsing';
 
 import request = require('request-promise-native');
 
@@ -30,7 +31,12 @@ export default class HerokuExternalObjects extends SfdxCommand {
     protected static supportsUsername = true;
 
     protected static flagsConfig = {
-        app: flags.string({ char: 'a', description: 'name of the heroku app', required: true }),
+        app: flags.string({
+            char: 'a',
+            description: 'name of the heroku app',
+            required: true,
+            parse: input => herokuAppNameValidator(input)
+        }),
         tables: flags.array({
             char: 't',
             description: 'comma separated list of postgres table names to share.  If omitted, you want them all!'

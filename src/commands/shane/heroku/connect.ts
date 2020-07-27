@@ -9,6 +9,7 @@ import { checkHerokuEnvironmentVariables } from '../../../shared/herokuCheck';
 import { getMatchingApp, patchApp, defaultHerokuRequest } from '../../../shared/herokuConnectApi';
 
 import { exec2JSON } from '../../../shared/execProm';
+import { herokuAppNameValidator } from '../../../shared/flagParsing';
 
 import request = require('request-promise-native');
 
@@ -27,7 +28,12 @@ export default class HerokuConnect extends SfdxCommand {
     protected static supportsUsername = true;
 
     protected static flagsConfig = {
-        app: flags.string({ char: 'a', description: 'name of the heroku app', required: true }),
+        app: flags.string({
+            char: 'a',
+            description: 'name of the heroku app',
+            required: true,
+            parse: input => herokuAppNameValidator(input)
+        }),
         environment: flags.string({
             char: 'e',
             description: 'environment of the salesforce org',

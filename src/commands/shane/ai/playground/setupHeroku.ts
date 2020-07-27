@@ -5,6 +5,7 @@ import * as fs from 'fs-extra';
 import { PlaygroundSetup } from '../../../../shared/ai/aiPlaygroundSetup';
 import { authJwt } from '../../../../shared/ai/aiAuth';
 import { ShaneAIConfig, convertEmailToFilename } from '../../../../shared/ai/aiConstants';
+import { herokuAppNameValidator } from '../../../../shared/flagParsing';
 
 import crypto = require('crypto');
 import aesjs = require('aes-js');
@@ -39,9 +40,16 @@ export default class AIPlaygroundSetupHeroku extends SfdxCommand {
     ];
 
     protected static flagsConfig = {
-        app: flags.string({ char: 'a', description: 'name of the heroku app that we attach add-ons to' }),
+        app: flags.string({
+            char: 'a',
+            description: 'name of the heroku app that we attach add-ons to',
+            parse: input => herokuAppNameValidator(input)
+        }),
         create: flags.boolean({ char: 'c', description: 'create the app' }),
-        keepauth: flags.boolean({ char: 'k', description: 'save the refresh token for einstein.ai to the local sfdx store for future cli use' }),
+        keepauth: flags.boolean({
+            char: 'k',
+            description: 'save the refresh token for einstein.ai to the local sfdx store for future cli use'
+        }),
         verbose: flags.builtin()
     };
 
