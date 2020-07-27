@@ -3,7 +3,7 @@ import { StreamingClient } from '@salesforce/core';
 import * as fs from 'fs-extra';
 import { PlatformEvent } from '../../../shared/typeDefs';
 
-import { replay } from '../../../shared/flags';
+import { replay, dir } from '../../../shared/flags';
 
 const writeJSONOptions = {
     spaces: 2
@@ -17,7 +17,7 @@ export default class EventStream extends SfdxCommand {
 
     protected static flagsConfig = {
         event: flags.string({ char: 'e', description: `the platform event's api name` }),
-        dir: flags.directory({ char: 'd', description: 'stream the events to a folder instead of the console' }),
+        dir,
         replay
     };
 

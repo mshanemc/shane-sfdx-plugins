@@ -2,7 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { StreamingClient } from '@salesforce/core';
 import * as fs from 'fs-extra';
 import { CDCEvent } from '../../../shared/typeDefs';
-import { replay } from '../../../shared/flags';
+import { replay, dir } from '../../../shared/flags';
 
 const writeJSONOptions = {
     spaces: 2
@@ -20,7 +20,7 @@ export default class CDCStream extends SfdxCommand {
             char: 'o',
             description: 'subscribe to change events for only a single object (api name, including __c)'
         }),
-        dir: flags.directory({ char: 'd', description: 'stream the events to a folder instead of the console' }),
+        dir,
         replay
     };
 
