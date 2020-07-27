@@ -5,7 +5,7 @@ import { exec, exec2JSON } from '../../../../src/shared/execProm';
 import fs = require('fs-extra');
 import testutils = require('../../../helpers/testutils');
 
-const testProjectName = 'mshanemc-heroku-xo-1234567890';
+const testProjectName = 'heroku-xo-1234567890';
 const xdsFolderPath = 'force-app/main/default/dataSources';
 const xdsFileLabel = 'myXds';
 const xdsFileName = `${xdsFileLabel}.dataSource-meta.xml`;
