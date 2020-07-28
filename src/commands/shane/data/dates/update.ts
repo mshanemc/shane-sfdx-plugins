@@ -47,6 +47,10 @@ export default class DateUpdate extends SfdxCommand {
                     `${record
                         .map(field => {
                             if (field && typeof field === 'string') {
+                                if (!field.includes('-')) {
+                                    return field;
+                                }
+                                // if (parseInt(field))
                                 const csvDate = moment.utc(field, moment.ISO_8601);
                                 if (csvDate.isValid()) {
                                     return csvDate.add(moment.utc().diff(moment.utc(this.flags.relative))).format();
