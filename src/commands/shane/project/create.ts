@@ -48,7 +48,8 @@ export default class ProjectCreate extends SfdxCommand {
             fs.writeFile(`${this.flags.name}/README.md`, ''), // blank the standard sfdx readme
             fs.writeFile(`${this.flags.name}/package.json`, await this.packageJSON()), // modify default packageJSON
             fs.writeFile(`${this.flags.name}/.prettierrc`, await this.prettier()), // modify default prettier (ex: singleQuote)
-            fs.writeFile(`${this.flags.name}/config/project-scratch-def.json`, this.scratchJSON()) // basic git ignore
+            fs.writeFile(`${this.flags.name}/config/project-scratch-def.json`, this.scratchJSON()), // basic git ignore
+            fs.appendFile(`${this.flags.name}/.forceignore`, forceIgnoreAdditions()) // add to the .forceignore file
         ]);
 
         this.ux.startSpinner('modifying admin profile and orgInit.sh');
@@ -144,4 +145,11 @@ const orgInit = (): string => {
     return `sfdx force:org:create -f config/project-scratch-def.json -d 1 -s
 sfdx force:source:push
 sfdx force:org:open`;
+};
+
+const forceIgnoreAdditions = (): string => {
+    return `
+# ignore profiles changes in org
+Admin.profile
+*.profile`;
 };
