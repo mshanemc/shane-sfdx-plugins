@@ -149,7 +149,8 @@ sfdx force:org:open`;
 
 const forceIgnoreAdditions = (): string => {
     return `
-# ignore profiles changes in org
+
+# ignore profiles changes in org (shane:project:create)
 Admin.profile
 *.profile`;
 };
