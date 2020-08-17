@@ -131,6 +131,7 @@ export default class HerokuExternalObjects extends SfdxCommand {
         // iterate each row.  If the name column matches the tables flag OR there isn't a tables flag, then check the box
         // eslint-disable-next-line no-restricted-syntax
         for (const row of tableBodyRows) {
+            await page.waitFor(2000);
             const databaseTableName = await row.$eval('td:nth-child(2)', el => el.textContent);
             if (!this.flags.tables || this.flags.tables.includes(databaseTableName)) {
                 await (await row.$('td input')).click();
