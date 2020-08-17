@@ -137,7 +137,9 @@ export default class HerokuExternalObjects extends SfdxCommand {
             }
         }
 
-        await browser.close();
+        if (!this.flags.showbrowser) {
+            await browser.close();
+        }
         this.ux.stopSpinner();
         if (logVerbosely) {
             this.ux.logJson(finalOutput);
