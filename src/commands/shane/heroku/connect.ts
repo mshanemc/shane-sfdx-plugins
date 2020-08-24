@@ -92,7 +92,10 @@ export default class HerokuConnect extends SfdxCommand {
 
         this.ux.setSpinnerStatus('authorizing heroku via browser');
 
-        const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
+        const browser = await puppeteer.launch({
+            headless: !this.flags.showbrowser,
+            args: ['--no-sandbox', '--disable-web-security', '--disable-features=IsolateOrigins,site-per-process']
+        });
         const page = await browser.newPage();
         await page.goto(sfdcAuthUrl, {
             waitUntil: 'networkidle2'

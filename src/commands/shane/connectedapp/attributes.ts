@@ -30,7 +30,7 @@ export default class ConnectedAppAttributes extends SfdxCommand {
 
         const browser = await puppeteer.launch({
             headless: !this.flags.showbrowser,
-            args: ['--no-sandbox', '--disable-features=site-per-process']
+            args: ['--no-sandbox', '--disable-web-security', '--disable-features=IsolateOrigins,site-per-process']
         });
         const context = browser.defaultBrowserContext();
 

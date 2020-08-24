@@ -29,7 +29,10 @@ export default class CommunityEnable extends SfdxCommand {
     public async run(): Promise<any> {
         // this.ux.startSpinner('starting headless browser');
 
-        const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
+        const browser = await puppeteer.launch({
+            headless: !this.flags.showbrowser,
+            args: ['--no-sandbox', '--disable-web-security', '--disable-features=IsolateOrigins,site-per-process']
+        });
         const context = browser.defaultBrowserContext();
 
         // // get the force-org-open url for your scratch org

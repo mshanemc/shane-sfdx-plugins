@@ -79,7 +79,10 @@ export default class HerokuExternalObjects extends SfdxCommand {
 
         this.ux.setSpinnerStatus('logging into heroku');
 
-        const browser = await puppeteer.launch({ headless: !this.flags.showbrowser, args: ['--no-sandbox'] });
+        const browser = await puppeteer.launch({
+            headless: !this.flags.showbrowser,
+            args: ['--no-sandbox', '--disable-web-security', '--disable-features=IsolateOrigins,site-per-process']
+        });
         const page = await browser.newPage();
         await page.goto(`https://connect.heroku.com/sync/${matchingApp.id}/external`, {
             waitUntil: 'networkidle2'
