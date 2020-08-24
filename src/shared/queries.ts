@@ -32,7 +32,7 @@ const singleRecordQuery = async ({
     )) as QueryResult;
 
     if (result.totalSize === 0) {
-        throw new Error('no records found');
+        throw new Error(`no records found for ${query}`);
     }
     if (result.totalSize > 1) {
         if (returnChoices) {
