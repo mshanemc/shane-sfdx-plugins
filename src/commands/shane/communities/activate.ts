@@ -36,8 +36,9 @@ export default class CommunityActivate extends SfdxCommand {
         await page.goto(url, {
             waitUntil: 'networkidle2'
         });
+        await page.waitFor(1500);
         this.ux.setSpinnerStatus(`waiting for selector iframe[title="${iframeTitle}"]`);
-        await page.waitForSelector(`iframe[title="${iframeTitle}"]`);
+        await page.waitForSelector(`iframe[title="${iframeTitle}"]`, { timeout: 20000 });
         this.ux.stopSpinner('communities list loaded');
         // this.ux.log(page.frames().toString());
         this.ux.startSpinner(`iterating ${page.frames().length} frames on the page to find the workspace`);
@@ -57,6 +58,7 @@ export default class CommunityActivate extends SfdxCommand {
 
                 await newtab.waitForSelector('a.js-workspace-administration');
                 await newtab.click('a.js-workspace-administration');
+                await newtab.waitFor(1500);
 
                 this.ux.setSpinnerStatus('administration page loaded.  Waiting for iFrames');
                 // it's in another stupid iframe!!
@@ -85,6 +87,7 @@ export default class CommunityActivate extends SfdxCommand {
 
                         await innerFrame.waitForSelector('input[value="Activate Community"]');
                         await innerFrame.click('input[value="Activate Community"]');
+                        break;
                     }
                 }
             }
