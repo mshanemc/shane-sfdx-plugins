@@ -220,7 +220,22 @@ interface FavoriteRequestBody {
     name?: string;
 }
 
+interface PushTopic {
+    Id: string;
+    Name: string;
+    Description: string;
+    Query: string;
+    NotifyForOperationUpdate: boolean;
+    NotifyForOperationUndelete: boolean;
+    NotifyForOperationDelete: boolean;
+    NotifyForOperationCreate: boolean;
+    NotifyForFields: string;
+    IsActive: boolean;
+    ApiVersion: number;
+}
+
 export {
+    PushTopic,
     Record,
     ContentVersion,
     ContentDocument,
