@@ -1,5 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { singleRecordQuery } from '../../../../shared/queries';
+import { PushTopic } from '../../../../shared/typeDefs';
 
 export default class PushTopicUpsert extends SfdxCommand {
     public static description = 'Upsert push topics';
@@ -29,22 +30,16 @@ export default class PushTopicUpsert extends SfdxCommand {
         notifyforfields: flags.string({
             char: 'f',
             description: 'Specifies which fields are evaluated to generate a notification',
-            options: ['All', 'Referenced', 'Select', 'Where'],
-            default: 'Referenced'
+            options: ['All', 'Referenced', 'Select', 'Where']
         }),
         operations: flags.array({
             char: 'o',
             description: 'which operations should produce a notification',
-            options: ['create', 'update', 'delete', 'undelete'],
-            default: ['create', 'update', 'delete', 'undelete']
+            options: ['create', 'update', 'delete', 'undelete']
         }),
         query: flags.string({
             char: 'q',
-            required: true,
             description: 'The SOQL query statement that determines which record changes trigger events to be sent to the channel.'
-        }),
-        deactivate: flags.boolean({
-            description: 'deactivate the existing topic'
         })
     };
 
@@ -52,36 +47,29 @@ export default class PushTopicUpsert extends SfdxCommand {
 
     public async run(): Promise<any> {
         const conn = this.org.getConnection();
-        const builtObject = {
-            Query: this.flags.query,
-            Name: this.flags.name,
-            Description: this.flags.description,
-            NotifyForOperationUpdate: this.flags.operations.includes('update'),
-            NotifyForOperationUndelete: this.flags.operations.includes('undelete'),
-            NotifyForOperationDelete: this.flags.operations.includes('delete'),
-            NotifyForOperationCreate: this.flags.operations.includes('create'),
-            NotifyForFields: this.flags.notifyforfields,
-            IsActive: !this.flags.deactivate,
-            ApiVersion: await this.org.retrieveMaxApiVersion()
-        };
+        const existing = ((await singleRecordQuery({
+            conn,
+            query: `Select Id, Query, Description, NotifyForOperationUpdate,NotifyForOperationUndelete,NotifyForOperationDelete, NotifyForOperationCreate, NotifyForFields, IsActive, ApiVersion from PushTopic where Name='${this.flags.name}'`
+        })) as unknown) as PushTopic;
 
-        let output;
-
-        // verify that the topic doesn't already exist
-        try {
-            const existing = await singleRecordQuery({ conn, query: `Select Id from PushTopic where Name='${this.flags.name}'` });
-            output = await conn.sobject('PushTopic').update({ Id: existing.Id, ...builtObject });
-        } catch {
-            // there is no existing record, so create
-            output = await conn.sobject('PushTopic').create(builtObject);
-        }
+        existing.Description = this.flags.description || existing.Description;
+        existing.Query = this.flags.query || existing.Query;
+        existing.ApiVersion = this.flags.apiversion || existing.ApiVersion;
+        existing.NotifyForFields = this.flags.notifyforfields || existing.NotifyForFields;
+        existing.NotifyForOperationCreate = this.flags.operations ? this.flags.operations.includes('create') : existing.NotifyForOperationCreate;
+        existing.NotifyForOperationUpdate = this.flags.operations ? this.flags.operations.includes('update') : existing.NotifyForOperationUpdate;
+        existing.NotifyForOperationDelete = this.flags.operations ? this.flags.operations.includes('delete') : existing.NotifyForOperationDelete;
+        existing.NotifyForOperationUndelete = this.flags.operations
+            ? this.flags.operations.includes('undelete')
+            : existing.NotifyForOperationUndelete;
+        await conn.sobject('PushTopic').update(existing);
 
         // tell the user how to subscribe to it
         const subscribeCommand = `sfdx streaming:subscribe -t topic -n ${this.flags.name}`;
         this.ux.log(`Subscribe to your topic via ${subscribeCommand}`);
 
         return {
-            object: { Id: output.id, ...builtObject },
+            object: existing,
             subscribeCommand
         };
     }
