@@ -44,26 +44,6 @@ export default class DateUpdate extends SfdxCommand {
             const output = fs.createWriteStream(`${this.flags.outputfolder}/${dataFileName}`, { encoding: 'utf-8' });
             for await (const record of parser) {
                 this.ux.startSpinner(`starting ${this.flags.datafolder}/${dataFileName}`);
-                // this.ux.log(
-                //     stringify(
-                //         [
-                //             record.map(field => {
-                //                 if (field && typeof field === 'string') {
-                //                     if (!field.includes('-')) {
-                //                         return field;
-                //                     }
-                //                     // if (parseInt(field))
-                //                     const csvDate = moment.utc(field, moment.ISO_8601);
-                //                     if (csvDate.isValid()) {
-                //                         return csvDate.add(moment.utc().diff(moment.utc(this.flags.relative))).format();
-                //                     }
-                //                 }
-                //                 return field;
-                //             })
-                //         ],
-                //         { quoted_match: ',' }
-                //     )
-                // );
                 output.write(
                     stringify(
                         [
