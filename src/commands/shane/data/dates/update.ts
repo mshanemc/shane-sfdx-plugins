@@ -5,6 +5,7 @@ import * as moment from 'moment';
 
 import fs = require('fs-extra');
 import parse = require('csv-parse');
+import stringify = require('csv-stringify/lib/sync');
 
 export default class DateUpdate extends SfdxCommand {
     public static description = 'go through a folder of csv files and modify all the dates relative to a given date';
@@ -43,22 +44,45 @@ export default class DateUpdate extends SfdxCommand {
             const output = fs.createWriteStream(`${this.flags.outputfolder}/${dataFileName}`, { encoding: 'utf-8' });
             for await (const record of parser) {
                 this.ux.startSpinner(`starting ${this.flags.datafolder}/${dataFileName}`);
+                // this.ux.log(
+                //     stringify(
+                //         [
+                //             record.map(field => {
+                //                 if (field && typeof field === 'string') {
+                //                     if (!field.includes('-')) {
+                //                         return field;
+                //                     }
+                //                     // if (parseInt(field))
+                //                     const csvDate = moment.utc(field, moment.ISO_8601);
+                //                     if (csvDate.isValid()) {
+                //                         return csvDate.add(moment.utc().diff(moment.utc(this.flags.relative))).format();
+                //                     }
+                //                 }
+                //                 return field;
+                //             })
+                //         ],
+                //         { quoted_match: ',' }
+                //     )
+                // );
                 output.write(
-                    `${record
-                        .map(field => {
-                            if (field && typeof field === 'string') {
-                                if (!field.includes('-')) {
-                                    return field;
+                    stringify(
+                        [
+                            record.map(field => {
+                                if (field && typeof field === 'string') {
+                                    if (!field.includes('-')) {
+                                        return field;
+                                    }
+                                    // if (parseInt(field))
+                                    const csvDate = moment.utc(field, moment.ISO_8601);
+                                    if (csvDate.isValid()) {
+                                        return csvDate.add(moment.utc().diff(moment.utc(this.flags.relative))).format();
+                                    }
                                 }
-                                // if (parseInt(field))
-                                const csvDate = moment.utc(field, moment.ISO_8601);
-                                if (csvDate.isValid()) {
-                                    return csvDate.add(moment.utc().diff(moment.utc(this.flags.relative))).format();
-                                }
-                            }
-                            return field;
-                        })
-                        .join(',')}\n`
+                                return field;
+                            })
+                        ],
+                        { quoted_match: ',' }
+                    )
                 );
             }
             output.end();
