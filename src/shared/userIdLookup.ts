@@ -1,5 +1,5 @@
 // eslint-disable-next-line unicorn/filename-case
-import { Connection } from '@salesforce/command/node_modules/@salesforce/core/lib/connection';
+import { Connection } from '@salesforce/core';
 import { singleRecordQuery } from '@mshanemc/plugin-helpers/dist/queries';
 import { User } from './typeDefs';
 

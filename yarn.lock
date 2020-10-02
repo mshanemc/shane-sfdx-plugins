@@ -900,10 +900,10 @@
     strip-color "^0.1.0"
     xml2js "^0.4.23"
 
-"@mshanemc/plugin-helpers@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@mshanemc/plugin-helpers/-/plugin-helpers-2.0.4.tgz#58fe1406367d2859f7313f676336b221cc4bb6ea"
-  integrity sha512-LzL4kFD01DeChjmJGyo5zuc2F+1R+bNdofOu0q+EkY8h9jTZr6S+5YKHZOZVP4b+cJuJyFepC0T6+87a/FK9rQ==
+"@mshanemc/plugin-helpers@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@mshanemc/plugin-helpers/-/plugin-helpers-2.0.5.tgz#b4e5e6c6c36902ba6663dd238b8a11583fdfb10a"
+  integrity sha512-j9qHCQBnrT3OLD9exHbIzng4ePPCd52kZPOU62PGC/Ygci4jlK2Yq3IELwJZ5g+Jiwtt3lqYIDBOh0sdpawWrg==
   dependencies:
     "@lifeomic/attempt" "^3.0.0"
     "@salesforce/command" "^3.0.3"
