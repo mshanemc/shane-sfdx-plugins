@@ -1,5 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { Connection, SfdxError } from '@salesforce/core';
+import { Connection } from '@salesforce/command/node_modules/@salesforce/core/lib/connection';
+
+import { SfdxError } from '@salesforce/core';
 import chalk from 'chalk';
 import { Field } from 'jsforce/describe-result';
 

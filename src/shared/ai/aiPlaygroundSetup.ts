@@ -1,5 +1,5 @@
 import { UX } from '@salesforce/command';
-import { Connection } from '@salesforce/core';
+import { Connection } from '@salesforce/command/node_modules/@salesforce/core/lib/connection';
 import { file2CV } from '@mshanemc/plugin-helpers/dist/localFile2CV';
 import { ContentVersion, CreateResult } from '../typeDefs';
 

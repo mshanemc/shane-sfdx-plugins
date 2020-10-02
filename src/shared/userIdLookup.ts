@@ -1,6 +1,6 @@
 // eslint-disable-next-line unicorn/filename-case
-import { Connection } from '@salesforce/core';
-import { singleRecordQuery } from './queries';
+import { Connection } from '@salesforce/command/node_modules/@salesforce/core/lib/connection';
+import { singleRecordQuery } from '@mshanemc/plugin-helpers/dist/queries';
 import { User } from './typeDefs';
 
 export async function getUserId(conn: Connection, lastname: string, firstname?: string): Promise<User> {

@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as fs from 'fs-extra';
 import { componentFinder, getByAddress, replaceProperty } from '../../../../shared/jsonSearch';
-import { singleRecordQuery } from '../../../../shared/queries';
+import { singleRecordQuery } from '@mshanemc/plugin-helpers/dist/queries';
 
 export default class CommunityJSONModify extends SfdxCommand {
     public static description = 'Manipulate community ExperienceBundle JSON files, using REST or Tooling queries to an org to get metadata IDs';

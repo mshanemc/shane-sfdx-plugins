@@ -1,5 +1,5 @@
 // https://developer.salesforce.com/docs/atlas.en-us.uiapi.meta/uiapi/ui_api_features_favorites.htm
-import { Connection } from '@salesforce/core';
+import { Connection } from '@salesforce/command/node_modules/@salesforce/core/lib/connection';
 
 import { flags } from '@salesforce/command';
 import { FavoriteRequestBody } from './typeDefs';

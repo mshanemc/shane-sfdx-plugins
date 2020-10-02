@@ -1,4 +1,4 @@
-import { Connection } from '@salesforce/core';
+import { Connection } from '@salesforce/command/node_modules/@salesforce/core/lib/connection';
 
 interface ExternalAppsJSON {
     domain: string;

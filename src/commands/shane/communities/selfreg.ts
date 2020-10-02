@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { singleRecordQuery } from '../../../shared/queries';
+import { singleRecordQuery } from '@mshanemc/plugin-helpers/dist/queries';
 
 export default class CommunitySelfReg extends SfdxCommand {
     public static description = 'set the self-registration account for a community';

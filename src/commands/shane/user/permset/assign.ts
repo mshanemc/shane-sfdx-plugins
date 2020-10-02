@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { singleRecordQuery } from '../../../../shared/queries';
+import { singleRecordQuery } from '@mshanemc/plugin-helpers/dist/queries';
 
 import userIdLookup = require('../../../../shared/userIdLookup');
 

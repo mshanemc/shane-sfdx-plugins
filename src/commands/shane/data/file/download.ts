@@ -1,6 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as fs from 'fs-extra';
-import { singleRecordQuery } from '../../../../shared/queries';
+import { singleRecordQuery } from '@mshanemc/plugin-helpers/dist/queries';
 import { ContentVersion, ContentDocument } from '../../../../shared/typeDefs';
 
 export default class DataFileDownload extends SfdxCommand {

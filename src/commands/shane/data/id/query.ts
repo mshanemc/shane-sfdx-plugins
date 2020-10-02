@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { singleRecordQuery } from '../../../../shared/queries';
+import { singleRecordQuery } from '@mshanemc/plugin-helpers/dist/queries';
 
 export default class IdQuery extends SfdxCommand {
     public static description = 'query some object and get back the id of the matching record';
