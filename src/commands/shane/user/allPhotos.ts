@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { URL } from 'url';
 
-import { exec } from '../../../shared/execProm';
+import { exec } from '@mshanemc/plugin-helpers';
 import { QueryResult } from '../../../shared/typeDefs';
 import { savePhotoForUserOrGroup } from '../../../shared/userPhoto';
 

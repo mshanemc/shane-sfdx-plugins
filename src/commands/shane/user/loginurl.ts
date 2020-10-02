@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as assert from 'assert';
 
-import { exec2JSON } from '../../../shared/execProm';
+import { exec2JSON } from '@mshanemc/plugin-helpers';
 
 export default class LoginURL extends SfdxCommand {
     public static description = 'generate a long-lived shareable login url for the org';

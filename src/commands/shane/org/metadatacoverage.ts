@@ -1,6 +1,6 @@
 import { SfdxCommand } from '@salesforce/command';
 
-import { exec2JSON } from '../../../shared/execProm';
+import { exec2JSON } from '@mshanemc/plugin-helpers';
 
 export default class MetadataCoverage extends SfdxCommand {
     public static description = 'opens the metadata coverage report page';

@@ -1,7 +1,7 @@
 import { SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 
-import { exec2JSON } from '../../../shared/execProm';
+import { exec2JSON } from '@mshanemc/plugin-helpers';
 
 export default class Delete extends SfdxCommand {
     public static description = "delete the default scratch org.  Won't prompt you for confirmation";

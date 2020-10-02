@@ -3,7 +3,7 @@ import { AuthInfo } from '@salesforce/core';
 import * as assert from 'assert';
 import * as stripcolor from 'strip-color';
 
-import { exec } from '../../../shared/execProm';
+import { exec } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
 

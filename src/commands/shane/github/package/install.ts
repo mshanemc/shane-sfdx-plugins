@@ -1,6 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 
-import { exec2JSON } from '../../../../shared/execProm';
+import { exec2JSON } from '@mshanemc/plugin-helpers';
 
 import request = require('request-promise-native');
 

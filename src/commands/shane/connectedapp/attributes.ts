@@ -2,7 +2,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as puppeteer from 'puppeteer';
 
-import { exec2JSON } from '../../../shared/execProm';
+import { exec2JSON } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
 

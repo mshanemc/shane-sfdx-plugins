@@ -1,6 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { retry } from '@lifeomic/attempt';
-import { exec } from '../../../shared/execProm';
+import { exec } from '@mshanemc/plugin-helpers';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 import fs = require('fs-extra');

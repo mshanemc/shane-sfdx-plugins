@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { exec2JSON } from '../../../shared/execProm';
+import { exec2JSON } from '@mshanemc/plugin-helpers';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 import fs = require('fs-extra');

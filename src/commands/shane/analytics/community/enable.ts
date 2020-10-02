@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import * as puppeteer from 'puppeteer';
 
-import { exec2JSON } from '../../../../shared/execProm';
+import { exec2JSON } from '@mshanemc/plugin-helpers';
 
 export default class CommunityEnable extends SfdxCommand {
     public static description = 'Activate a community using a headless browser';

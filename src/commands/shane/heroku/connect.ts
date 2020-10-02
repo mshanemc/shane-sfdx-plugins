@@ -8,7 +8,7 @@ import { retry } from '@lifeomic/attempt';
 import { checkHerokuEnvironmentVariables } from '../../../shared/herokuCheck';
 import { getMatchingApp, patchApp, defaultHerokuRequest } from '../../../shared/herokuConnectApi';
 
-import { exec2JSON } from '../../../shared/execProm';
+import { exec2JSON } from '@mshanemc/plugin-helpers';
 import { herokuAppNameValidator } from '../../../shared/flagParsing';
 
 import request = require('request-promise-native');

@@ -1,6 +1,6 @@
 import { SfdxCommand } from '@salesforce/command';
 
-import { exec2JSON } from '../../../shared/execProm';
+import { exec2JSON } from '@mshanemc/plugin-helpers';
 
 export default class ComponentLibrary extends SfdxCommand {
     public static description = 'opens the lightning component library for the specified org';

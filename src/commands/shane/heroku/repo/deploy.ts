@@ -2,7 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { sleep } from '@salesforce/kit';
 import chalk from 'chalk';
 
-import { exec2JSON } from '../../../../shared/execProm';
+import { exec2JSON } from '@mshanemc/plugin-helpers';
 import { herokuAppNameValidator } from '../../../../shared/flagParsing';
 
 import request = require('request-promise-native');
