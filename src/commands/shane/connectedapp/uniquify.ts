@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 
-import { writeJSONasXML } from '../../../shared/JSONXMLtools';
+import { writeJSONasXML } from '@mshanemc/plugin-helpers/dist/JSONXMLtools';
 import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
 
 import fs = require('fs-extra');

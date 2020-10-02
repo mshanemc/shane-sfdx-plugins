@@ -1,9 +1,9 @@
 /* eslint-disable no-template-curly-in-string */
 /* tslint:disable:no-unused-expression */
-import { exec, exec2JSON } from '../../../../src/shared/execProm';
+import { exec, exec2JSON } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
-import testutils = require('../../../helpers/testutils');
+import testutils = require('@mshanemc/plugin-helpers/dist/testutils');
 
 const testProjectName = 'mshanemc-custexp-1234567890';
 
@@ -19,7 +19,7 @@ describe('shane:heroku:connect', () => {
             await testutils.orgCreate(testProjectName);
             await Promise.all([
                 exec('sfdx force:user:password:generate', { cwd: testProjectName }),
-                exec('sfdx shane:profile:whitelist -n Admin', { cwd: testProjectName }), // we can't handle 2FA challenges in a headless browser!
+                exec('sfdx shane:profile:allowip -n Admin', { cwd: testProjectName }), // we can't handle 2FA challenges in a headless browser!
                 fs.writeJSON(`${testProjectName}/mapping.json`, testMapping)
             ]);
 

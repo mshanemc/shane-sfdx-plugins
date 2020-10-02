@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-expression */
-import { exec, exec2JSON, exec2String } from '../../../../src/shared/execProm';
+import { exec, exec2JSON, exec2String } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
-import testutils = require('../../../helpers/testutils');
+import testutils = require('@mshanemc/plugin-helpers/dist/testutils');
 
 const testProjectName = 'testProjectFileDownload';
 const fileContents = 'hello, world';

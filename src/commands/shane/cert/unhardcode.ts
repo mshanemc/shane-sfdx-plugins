@@ -1,8 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 
 import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
+import { writeJSONasXML } from '@mshanemc/plugin-helpers/dist/JSONXMLtools';
 import { QueryResult } from '../../../shared/typeDefs';
-import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 export default class CertUnHardCode extends SfdxCommand {
     public static description = 'modify local xml files with data from org to work around hardcoded metadata issues';

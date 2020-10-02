@@ -51,7 +51,7 @@
         "@types/aes-js": "^3.1.0",
         "@types/fs-extra": "^5.0.5",
         "@types/jest": "^24.0.11",
-        "@types/jsforce": "^1.9.5",
+        "@types/jsforce": "^1.9.23",
         "@types/lodash": "^4.14.121",
         "@types/moment": "^2.13.0",
         "@types/node": "^10.12.27",

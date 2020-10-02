@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 
 import { AnyJson } from '@salesforce/ts-types';
-import { writeJSONasXML } from '../../../shared/JSONXMLtools';
+import { writeJSONasXML } from '@mshanemc/plugin-helpers/dist/JSONXMLtools';
 import { removeTrailingSlash } from '../../../shared/flagParsing';
 
 import fs = require('fs-extra');

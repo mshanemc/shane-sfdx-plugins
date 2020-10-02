@@ -1,8 +1,7 @@
 import { UX } from '@salesforce/command';
 import { Connection } from '@salesforce/core';
+import { file2CV } from '@mshanemc/plugin-helpers/dist/localFile2CV';
 import { ContentVersion, CreateResult } from '../typeDefs';
-
-import localFile2CV = require('../localFile2CV');
 
 const FILENAME = 'einstein_platform';
 
@@ -10,7 +9,7 @@ const PlaygroundSetup = async ({ conn, filepath, email, key }: PlaygroundSetupPa
     const ux = await UX.create();
 
     ux.startSpinner('uploading the pem file');
-    const CV = (await localFile2CV.file2CV(conn, filepath, FILENAME)) as ContentVersion;
+    const CV = (await file2CV(conn, filepath, FILENAME)) as ContentVersion;
     ux.setSpinnerStatus('modifying your custom setting');
 
     const createResult = (await conn.sobject('einsteinplay__Einstein_Settings__c').create({

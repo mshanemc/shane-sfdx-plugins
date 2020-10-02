@@ -3,9 +3,9 @@ import chalk from 'chalk';
 import { unionBy } from 'lodash';
 
 import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
+import { setupArray } from '@mshanemc/plugin-helpers/dist/setupArray';
+import { writeJSONasXML } from '@mshanemc/plugin-helpers/dist/JSONXMLtools';
 import { thingsThatMigrate } from '../../../shared/permsetProfileMetadata';
-import { setupArray } from '../../../shared/setupArray';
-import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 import fs = require('fs-extra');
 

@@ -54,13 +54,13 @@ export default class ProjectCreate extends SfdxCommand {
 
         this.ux.startSpinner('modifying admin profile and orgInit.sh');
         await Promise.all([
-            exec('sfdx shane:profile:whitelist -n Admin', { cwd: this.flags.name }), // whitelist the admin profile for everyone
+            exec('sfdx shane:profile:allowip -n Admin', { cwd: this.flags.name }), // allow the admin profile for everyone
             exec('chmod +x orgInit.sh', { cwd: this.flags.name }) // make orgInit executable
         ]);
 
         // commands to run
         this.ux.startSpinner('installing dependencies');
-        await exec('yarn install', { cwd: this.flags.name }); // whitelist the admin profile for everyone
+        await exec('yarn install', { cwd: this.flags.name });
 
         this.ux.startSpinner('first git commit');
 

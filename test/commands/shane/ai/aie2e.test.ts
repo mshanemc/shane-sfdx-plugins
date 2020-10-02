@@ -1,10 +1,10 @@
 /* eslint-disable no-template-curly-in-string */
 /* tslint:disable:no-unused-expression */
 import { retry } from '@lifeomic/attempt';
-import { exec, exec2JSON } from '../../../../src/shared/execProm';
+import { exec, exec2JSON } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
-import testutils = require('../../../helpers/testutils');
+import testutils = require('@mshanemc/plugin-helpers/dist/testutils');
 
 const testProjectName = 'testProjectEndToEndAI';
 const EVLPGPackageVersionId = '04t0b000001oXug';

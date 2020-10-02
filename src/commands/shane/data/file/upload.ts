@@ -1,7 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { CreateResult, Record } from '../../../../shared/typeDefs';
-
-import localFile2CV = require('../../../../shared/localFile2CV');
+import { file2CV } from '@mshanemc/plugin-helpers/dist/localFile2CV';
+import { CreateResult, Record } from '@mshanemc/plugin-helpers/dist/typeDefs';
 
 export default class Upload extends SfdxCommand {
     public static description = 'upload a file from local resources, optionally as a chatter post or attached file on a record';
@@ -40,7 +39,7 @@ export default class Upload extends SfdxCommand {
             ShareType: string;
         }
 
-        const CV = (await localFile2CV.file2CV(conn, this.flags.file, this.flags.name)) as Record;
+        const CV = (await file2CV(conn, this.flags.file, this.flags.name)) as Record;
 
         if (!this.flags.parentid) {
             this.ux.log(`created file with content document id ${CV.ContentDocumentId}`);

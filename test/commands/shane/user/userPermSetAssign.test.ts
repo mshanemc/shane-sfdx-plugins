@@ -1,9 +1,9 @@
-import { exec, exec2JSON } from '../../../../src/shared/execProm';
+import { exec, exec2JSON } from '@mshanemc/plugin-helpers';
 import * as options from '../../../../src/shared/js2xmlStandardOptions';
 
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
-import testutils = require('../../../helpers/testutils');
+import testutils = require('@mshanemc/plugin-helpers/dist/testutils');
 
 const testProjectName = 'testProjectUserPermsetAssign';
 const maxBuffer = 1000 * 1024;
