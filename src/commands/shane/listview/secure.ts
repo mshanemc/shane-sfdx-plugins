@@ -2,7 +2,7 @@
 /* eslint-disable no-await-in-loop */
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
-import { getExisting } from '../../../shared/getExisting';
+import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 import fs = require('fs-extra');

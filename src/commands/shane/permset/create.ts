@@ -3,7 +3,7 @@ import { Connection, SfdxError } from '@salesforce/core';
 import chalk from 'chalk';
 import { Field } from 'jsforce/describe-result';
 
-import { getExisting } from '../../../shared/getExisting';
+import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
 import { setupArray } from '../../../shared/setupArray';
 import { getParsed } from '../../../shared/xml2jsAsync';
 

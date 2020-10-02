@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 
+import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
 import { QueryResult } from '../../../shared/typeDefs';
-import { getExisting } from '../../../shared/getExisting';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 export default class CertUnHardCode extends SfdxCommand {

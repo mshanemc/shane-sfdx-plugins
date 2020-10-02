@@ -2,7 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import { unionBy } from 'lodash';
 
-import { getExisting } from '../../../shared/getExisting';
+import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
 import { thingsThatMigrate } from '../../../shared/permsetProfileMetadata';
 import { setupArray } from '../../../shared/setupArray';
 import { writeJSONasXML } from '../../../shared/JSONXMLtools';
