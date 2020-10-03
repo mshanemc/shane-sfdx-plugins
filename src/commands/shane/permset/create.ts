@@ -219,7 +219,7 @@ export default class PermSetCreate extends SfdxCommand {
     public async addObjectPerms(existing, objectName: string) {
         // make sure it the parent level objectPermissions[] exists
 
-        const existingClone = await setupArray(setupArray(existing, 'objectPermissions'), 'customMetadataTypeAccesses');
+        const existingClone = await setupArray(await setupArray(existing, 'objectPermissions'), 'customMetadataTypeAccesses');
 
         if (
             existingClone.objectPermissions.find(e => e.object === objectName) ||
