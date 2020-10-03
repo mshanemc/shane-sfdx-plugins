@@ -66,10 +66,10 @@ export default class PermSetConvert extends SfdxCommand {
 
         let profile = await getExisting(targetProfile, 'Profile');
 
-        thingsThatMigrate.forEach(item => {
+        for (const item of thingsThatMigrate) {
             if (profile[item.profileType]) {
-                profile = setupArray(profile, item.profileType);
-                existing = setupArray(existing, item.permSetType);
+                profile = await setupArray(profile, item.profileType);
+                existing = await setupArray(existing, item.permSetType);
 
                 this.ux.log(`copying ${item.profileType} to perm set`);
                 existing[item.permSetType] = unionBy(existing[item.permSetType], profile[item.profileType], item.key); // merge profile with existing permset array
@@ -90,7 +90,10 @@ export default class PermSetConvert extends SfdxCommand {
                 }
 
                 if (item.permSetType === 'tabSettings') {
-                    existing.tabSettings = existing.tabSettings.map(tV => ({ ...tV, visibility: translateTabTypes(tV.visibility) }));
+                    existing.tabSettings = existing.tabSettings.map(tV => ({
+                        ...tV,
+                        visibility: translateTabTypes(tV.visibility)
+                    }));
                 }
 
                 if (this.flags.editprofile) {
@@ -99,7 +102,7 @@ export default class PermSetConvert extends SfdxCommand {
             } else {
                 this.ux.log(`found no ${item.profileType} on the profile`);
             }
-        });
+        }
 
         await fs.ensureDir(`${this.flags.directory}/permissionsets`);
 

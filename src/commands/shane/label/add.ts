@@ -48,7 +48,7 @@ export default class LabelAdd extends SfdxCommand {
             labels: []
         });
 
-        existing = setupArray(existing, 'labels');
+        existing = await setupArray(existing, 'labels');
 
         const newLabel: CustomLabel = {
             fullName:

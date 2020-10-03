@@ -54,11 +54,11 @@ export default class UnPerm extends SfdxCommand {
     public async removePerms(targetFilename: string, metadataType: string): Promise<void> {
         let existing = await getExisting(targetFilename, metadataType);
 
-        existing = setupArray(existing, 'objectPermissions');
-        existing = setupArray(existing, 'fieldPermissions');
-        existing = setupArray(existing, 'layoutAssignments');
-        existing = setupArray(existing, 'recordTypes');
-        existing = setupArray(existing, 'tabSettings');
+        existing = await setupArray(existing, 'objectPermissions');
+        existing = await setupArray(existing, 'fieldPermissions');
+        existing = await setupArray(existing, 'layoutAssignments');
+        existing = await setupArray(existing, 'recordTypes');
+        existing = await setupArray(existing, 'tabSettings');
         // this.ux.logJson(existing.objectPermissions);
         // this.ux.logJson(existing.fieldPermissions);
 
