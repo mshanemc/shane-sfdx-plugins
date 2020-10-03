@@ -2,6 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { Connection, SfdxError } from '@salesforce/core';
 
 import chalk from 'chalk';
+// eslint-disable-next-line import/no-unresolved
 import { Field } from 'jsforce/describe-result';
 
 import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
