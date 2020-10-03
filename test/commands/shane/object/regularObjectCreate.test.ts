@@ -327,7 +327,7 @@ describe('shane:object:create (regular object flavor)', () => {
 
         expect(parsed.PermissionSet.fieldPermissions).toHaveLength(8);
 
-        // verify all the fields so far.  Required fields, and fileds required because they're indexed, shouldn't be included
+        // verify all the fields so far.  Required fields, and fields required because they're indexed, shouldn't be included
 
         expect(parsed.PermissionSet.fieldPermissions).toEqual(
             expect.arrayContaining([
