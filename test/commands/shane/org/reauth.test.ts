@@ -7,7 +7,7 @@ import testutils = require('@mshanemc/plugin-helpers/dist/testutils');
 
 const testProjectName = 'testProjectOrgReauth';
 
-describe('shane:org:reauth', () => {
+describe.skip('shane:org:reauth', () => {
     if (!process.env.LOCALONLY) {
         jest.setTimeout(testutils.remoteTimeout * 4); // reauth can really slow things down
 
