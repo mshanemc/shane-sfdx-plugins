@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 import { exec } from '@mshanemc/plugin-helpers';
-import { getExisting } from '../../../../src/shared/getExisting';
-import { setupArray } from '../../../../src/shared/setupArray';
+import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
+import { setupArray } from '@mshanemc/plugin-helpers/dist/setupArray';
 
 import fs = require('fs-extra');
 import testutils = require('@mshanemc/plugin-helpers/dist/testutils');
@@ -86,7 +86,10 @@ describe('profile convert (just create a permset from a profile)', () => {
     test('creates a permset from an object, then removes a field and verifies not on permset', async () => {
         await exec(`sfdx shane:permset:create -n ${permsetName} -o ${objectName}`, { cwd: testProjectName });
 
-        const existingPermSet = setupArray(setupArray(await getExisting(permsetFullPath, 'PermissionSet'), 'objectPermissions'), 'fieldPermissions');
+        const existingPermSet = await setupArray(
+            await setupArray(await getExisting(permsetFullPath, 'PermissionSet'), 'objectPermissions'),
+            'fieldPermissions'
+        );
 
         expect(fs.existsSync(permsetFullPath)).toBe(true);
 
@@ -98,7 +101,10 @@ describe('profile convert (just create a permset from a profile)', () => {
         expect(fs.existsSync(`${testProjectName}/${defaultPath}/${fieldPath}`)).toBe(false);
         await exec(`sfdx shane:object:perms:align`, { cwd: testProjectName });
 
-        const modifiedPermset = setupArray(setupArray(await getExisting(permsetFullPath, 'PermissionSet'), 'objectPermissions'), 'fieldPermissions');
+        const modifiedPermset = await setupArray(
+            await setupArray(await getExisting(permsetFullPath, 'PermissionSet'), 'objectPermissions'),
+            'fieldPermissions'
+        );
         expect(modifiedPermset.objectPermissions.find(item => item.object === objectName)).toBeTruthy();
         expect(modifiedPermset.fieldPermissions.find(item => item.field === `${objectName}.${fieldName}`)).toBeFalsy();
 
@@ -107,7 +113,10 @@ describe('profile convert (just create a permset from a profile)', () => {
         expect(fs.existsSync(`${testProjectName}/${defaultPath}/${objectPath}`)).toBe(false);
         await exec(`sfdx shane:object:perms:align`, { cwd: testProjectName });
 
-        const modifiedPermset2 = setupArray(setupArray(await getExisting(permsetFullPath, 'PermissionSet'), 'objectPermissions'), 'fieldPermissions');
+        const modifiedPermset2 = await setupArray(
+            await setupArray(await getExisting(permsetFullPath, 'PermissionSet'), 'objectPermissions'),
+            'fieldPermissions'
+        );
         expect(modifiedPermset2.objectPermissions.find(item => item.object === objectName)).toBeFalsy();
         expect(modifiedPermset2.fieldPermissions.find(item => item.field === `${objectName}.${fieldName}`)).toBeFalsy();
     });

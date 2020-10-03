@@ -1,4 +1,4 @@
-import { exec } from '../../src/shared/execProm';
+import { exec } from '@mshanemc/plugin-helpers';
 
 import { convertEmailToFilename, ShaneAIConfig } from '../../src/shared/ai/aiConstants';
 

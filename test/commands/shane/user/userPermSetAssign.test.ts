@@ -1,5 +1,4 @@
-import { exec, exec2JSON } from '@mshanemc/plugin-helpers';
-import * as options from '../../../../src/shared/js2xmlStandardOptions';
+import { exec, exec2JSON, standardOptions } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
 import jsToXml = require('js2xmlparser');
@@ -33,7 +32,7 @@ describe('shane:user:permset:assign', () => {
             await Promise.all([testutils.orgCreate(testProjectName), fs.ensureDir(`${testProjectName}/force-app/main/default/permissionsets`)]);
 
             // convert to xml and write out the file
-            const xml = jsToXml.parse('PermissionSet', permsetMeta, options.js2xmlStandardOptions);
+            const xml = jsToXml.parse('PermissionSet', permsetMeta, standardOptions);
             await fs.writeFile(`${testProjectName}/force-app/main/default/permissionsets/${permsetName}.permissionset-meta.xml`, xml);
             await exec(`sfdx force:source:push`, { cwd: testProjectName });
         });

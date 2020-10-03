@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-expression */
 import { exec } from '@mshanemc/plugin-helpers';
-import { getExisting } from '../../../../src/shared/getExisting';
+import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
 
 import fs = require('fs-extra');
 import testutils = require('@mshanemc/plugin-helpers/dist/testutils');
