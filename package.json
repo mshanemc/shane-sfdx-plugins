@@ -144,7 +144,7 @@
     "repository": "mshanemc/shane-sfdx-plugins",
     "scripts": {
         "build": "rimraf lib && tsc",
-        "clean": "rimraf .oclif.manifest.json",
+        "clean": "rimraf .oclif.manifest.json; rimraf yarn-error.log; rimraf package-lock.json",
         "postpublish": "yarn run clean; git push; git push --tags",
         "posttest": "test:clean",
         "prepare": "yarn run build && oclif-dev manifest && yarn test:clean",
