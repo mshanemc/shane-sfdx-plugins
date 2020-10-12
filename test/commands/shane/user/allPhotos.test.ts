@@ -1,7 +1,7 @@
-import { exec, exec2JSON } from '../../../../src/shared/execProm';
+import { exec, exec2JSON } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
-import testutils = require('../../../helpers/testutils');
+import testutils = require('@mshanemc/plugin-helpers/dist/testutils');
 
 const testProjectName = 'testProjectUserAllPhotos';
 // const filepath = '../test/helpers/shane.png';

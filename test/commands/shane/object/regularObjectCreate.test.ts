@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-expression */
-import { exec } from '../../../../src/shared/execProm';
+import { exec } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
-import testutils = require('../../../helpers/testutils');
+import testutils = require('@mshanemc/plugin-helpers/dist/testutils');
 
 const testProjectName = 'testProjectRegularObjectCreate';
 const api = 'Corgi__c';
@@ -327,7 +327,7 @@ describe('shane:object:create (regular object flavor)', () => {
 
         expect(parsed.PermissionSet.fieldPermissions).toHaveLength(8);
 
-        // verify all the fields so far.  Required fields, and fileds required because they're indexed, shouldn't be included
+        // verify all the fields so far.  Required fields, and fields required because they're indexed, shouldn't be included
 
         expect(parsed.PermissionSet.fieldPermissions).toEqual(
             expect.arrayContaining([

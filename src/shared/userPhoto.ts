@@ -1,6 +1,7 @@
 import { Connection } from '@salesforce/core';
 
-import localFile2CV = require('./localFile2CV');
+import * as localFile2CV from '@mshanemc/plugin-helpers/dist/localFile2CV';
+
 import request = require('request-promise-native');
 
 const savePhotoForUserOrGroup = async ({ conn, userOrGroupId, filePath, isBanner, isGroup }: PhotoSaveInput) => {

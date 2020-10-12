@@ -1,7 +1,7 @@
 // https://developer.salesforce.com/docs/atlas.en-us.uiapi.meta/uiapi/ui_api_features_favorites.htm
 import { flags, SfdxCommand } from '@salesforce/command';
+import { singleRecordQuery } from '@mshanemc/plugin-helpers/dist/queries';
 import { FavoriteRequestBody } from '../../../shared/typeDefs';
-import { singleRecordQuery } from '../../../shared/queries';
 import { saveFavorite, favoriteFlagsName, favoriteFlagsStart, favoriteFlagsObject } from '../../../shared/uiApiFavorites';
 
 export default class Favorite extends SfdxCommand {

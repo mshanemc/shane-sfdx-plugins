@@ -1,7 +1,7 @@
 {
     "name": "shane-sfdx-plugins",
     "description": "sfdx plugins by Shane McLaughlin",
-    "version": "4.40.0",
+    "version": "4.41.0",
     "author": "@mshanemc",
     "bugs": "https://github.com/mshanemc/shane-sfdx-plugins/issues",
     "engines": {
@@ -9,10 +9,13 @@
     },
     "dependencies": {
         "@lifeomic/attempt": "^3.0.0",
+        "@mshanemc/plugin-helpers": "^2.0.5",
+        "@mshanemc/plugin-streaming": "^1.1.6",
+        "@mshanemc/sfdx-sosl": "^1.1.0",
         "@oclif/command": "^1.5.12",
         "@oclif/config": "^1.13.3",
         "@oclif/errors": "^1.2.2",
-        "@salesforce/command": "2.1.0",
+        "@salesforce/command": "^3.0.3",
         "@salesforce/core": "^2.1.6",
         "@salesforce/kit": "^1.2.1",
         "@salesforce/ts-types": "^1.2.1",
@@ -49,7 +52,7 @@
         "@types/aes-js": "^3.1.0",
         "@types/fs-extra": "^5.0.5",
         "@types/jest": "^24.0.11",
-        "@types/jsforce": "^1.9.5",
+        "@types/jsforce": "^1.9.23",
         "@types/lodash": "^4.14.121",
         "@types/moment": "^2.13.0",
         "@types/node": "^10.12.27",
@@ -132,6 +135,10 @@
             }
         },
         "bin": "sfdx",
+        "plugins": [
+            "@mshanemc/plugin-streaming",
+            "@mshanemc/sfdx-sosl"
+        ],
         "devPlugins": [
             "@oclif/plugin-help"
         ]
@@ -139,16 +146,16 @@
     "repository": "mshanemc/shane-sfdx-plugins",
     "scripts": {
         "build": "rimraf lib && tsc",
-        "clean": "rimraf .oclif.manifest.json",
+        "clean": "rimraf .oclif.manifest.json; rimraf yarn-error.log; rimraf package-lock.json",
         "postpublish": "yarn run clean; git push; git push --tags",
-        "posttest": "",
+        "posttest": "test:clean",
         "prepare": "yarn run build && oclif-dev manifest && yarn test:clean",
         "prepublishOnly": "yarn run build && oclif-dev manifest",
         "preversion": "yarn run clean",
         "test": "yarn run prepare && jest --runInBand",
-        "test:clean": "rimraf testProject*",
-        "test:local": "LOCALONLY='true' yarn run prepare && jest --runInBand",
-        "test:parallel": "yarn run prepare && jest",
+        "test:clean": "rimraf testProject*; rimraf heroku-xo-*",
+        "test:local": "LOCALONLY='true' yarn run prepare && jest --runInBand; yarn test:clean",
+        "test:parallel": "yarn run prepare && jest; yarn test:clean",
         "test:watch": "yarn run prepare && jest --watch --runInBand",
         "version": "oclif-dev readme && git add README.md",
         "prettier": "prettier --write src/**/**/*.ts && prettier --write src/**/*.ts && prettier --write src/*.ts && prettier --write test/**/*.ts && prettier --write test/**/**/*.ts"

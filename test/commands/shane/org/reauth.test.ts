@@ -1,13 +1,13 @@
 /* tslint:disable:no-unused-expression */
 
-import { exec } from '../../../../src/shared/execProm';
+import { exec } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
-import testutils = require('../../../helpers/testutils');
+import testutils = require('@mshanemc/plugin-helpers/dist/testutils');
 
 const testProjectName = 'testProjectOrgReauth';
 
-describe('shane:org:reauth', () => {
+describe.skip('shane:org:reauth', () => {
     if (!process.env.LOCALONLY) {
         jest.setTimeout(testutils.remoteTimeout * 4); // reauth can really slow things down
 

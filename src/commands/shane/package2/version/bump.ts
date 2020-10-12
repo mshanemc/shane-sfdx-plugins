@@ -2,7 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import cli from 'cli-ux';
 
-import { exec, exec2JSON } from '../../../../shared/execProm';
+import { exec, exec2JSON } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
 

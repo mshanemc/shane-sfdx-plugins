@@ -1,6 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 
-import { exec, exec2JSON } from '../../../../shared/execProm';
+import { exec, exec2JSON } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
 

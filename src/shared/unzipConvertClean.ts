@@ -1,6 +1,6 @@
 import { UX } from '@salesforce/command';
 
-import { exec } from './execProm';
+import { exec } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
 import unzipper = require('unzipper');

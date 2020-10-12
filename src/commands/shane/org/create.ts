@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 
-import { exec2JSON } from '../../../shared/execProm';
+import { exec2JSON } from '@mshanemc/plugin-helpers';
 
 import request = require('request-promise-native');
 

@@ -1,9 +1,9 @@
 /* eslint-disable no-template-curly-in-string */
 /* tslint:disable:no-unused-expression */
-import { exec, exec2JSON } from '../../../../src/shared/execProm';
+import { exec, exec2JSON } from '@mshanemc/plugin-helpers';
 
 import fs = require('fs-extra');
-import testutils = require('../../../helpers/testutils');
+import testutils = require('@mshanemc/plugin-helpers/dist/testutils');
 
 const testProjectName = 'heroku-xo-1234567890';
 const xdsFolderPath = 'force-app/main/default/dataSources';
@@ -21,7 +21,7 @@ describe('shane:heroku:externalobjects', () => {
             await exec(`sfdx force:project:create -n ${testProjectName}`);
 
             await testutils.orgCreate(testProjectName);
-            await exec('sfdx shane:profile:whitelist -n Admin', { cwd: testProjectName });
+            await exec('sfdx shane:profile:allowip -n Admin', { cwd: testProjectName });
             // await exec('sfdx force:source:push', { cwd: testProjectName });
             // create our test file
 

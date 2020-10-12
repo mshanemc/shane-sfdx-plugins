@@ -1,10 +1,10 @@
 /* tslint:disable:no-unused-expression */
-import { exec } from '../../../../src/shared/execProm';
+import { exec } from '@mshanemc/plugin-helpers';
 
 import { FieldMeta } from '../../../../src/shared/typeDefs';
 
 import fs = require('fs-extra');
-import testutils = require('../../../helpers/testutils');
+import testutils = require('@mshanemc/plugin-helpers/dist/testutils');
 
 const testProjectName = 'testProjectRelationshipFields';
 const api = 'Corgi__c';

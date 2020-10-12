@@ -1,10 +1,10 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 
-import { getExisting } from '../../../../shared/getExisting';
+import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
+import { setupArray } from '@mshanemc/plugin-helpers/dist/setupArray';
+import { writeJSONasXML } from '@mshanemc/plugin-helpers/dist/JSONXMLtools';
 import { metadataTypes } from '../../../../shared/permsetProfileMetadata';
-import { setupArray } from '../../../../shared/setupArray';
-import { writeJSONasXML } from '../../../../shared/JSONXMLtools';
 
 import fs = require('fs-extra');
 
@@ -76,7 +76,7 @@ export default class PermAlign extends SfdxCommand {
 
         // only use types with matching typekeys
         for (const mdType of metadataTypes.filter(item => item[typeKey])) {
-            existing = setupArray(existing, mdType[typeKey]);
+            existing = await setupArray(existing, mdType[typeKey]);
 
             if (mdType.key === 'object') {
                 // objects exist as folders, so they don't have file extensions, just the object name

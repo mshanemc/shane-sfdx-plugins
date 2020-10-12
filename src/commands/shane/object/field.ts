@@ -2,8 +2,8 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import chalk from 'chalk';
 import cli from 'cli-ux';
 
-import { fixExistingDollarSign, writeJSONasXML } from '../../../shared/JSONXMLtools';
-import { getParsed } from '../../../shared/xml2jsAsync';
+import { fixExistingDollarSign, writeJSONasXML } from '@mshanemc/plugin-helpers/dist/JSONXMLtools';
+import { getParsed } from '@mshanemc/plugin-helpers/dist/xml2jsAsync';
 import { FieldMeta } from '../../../shared/typeDefs';
 
 import fs = require('fs-extra');

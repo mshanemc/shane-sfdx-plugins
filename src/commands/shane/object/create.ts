@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import cli from 'cli-ux';
 
 import { ObjectConfig } from '../../../shared/typeDefs';
-import { writeJSONasXML } from '../../../shared/JSONXMLtools';
+import { writeJSONasXML } from '@mshanemc/plugin-helpers/dist/JSONXMLtools';
 import { removeTrailingSlash } from '../../../shared/flagParsing';
 
 import fs = require('fs-extra');

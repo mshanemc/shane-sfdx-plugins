@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { singleRecordQuery } from '../../../shared/queries';
+import { singleRecordQuery } from '@mshanemc/plugin-helpers/dist/queries';
 import { saveFavorite, favoriteFlagsName, favoriteFlagsStart, favoriteFlagsObject } from '../../../shared/uiApiFavorites';
 import { FavoriteRequestBody } from '../../../shared/typeDefs';
 

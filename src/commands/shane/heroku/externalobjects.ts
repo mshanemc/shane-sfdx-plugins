@@ -5,8 +5,8 @@ import * as puppeteer from 'puppeteer';
 
 import { getMatchingApp, patchApp, defaultHerokuRequest, credentialParser } from '../../../shared/herokuConnectApi';
 import { checkHerokuEnvironmentVariables } from '../../../shared/herokuCheck';
-import { writeJSONasXML } from '../../../shared/JSONXMLtools';
-import { getExisting } from '../../../shared/getExisting';
+import { writeJSONasXML } from '@mshanemc/plugin-helpers/dist/JSONXMLtools';
+import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
 import { herokuAppNameValidator } from '../../../shared/flagParsing';
 
 import request = require('request-promise-native');

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { Field } from 'jsforce/describe-result';
 
 // import {Field } from '@'

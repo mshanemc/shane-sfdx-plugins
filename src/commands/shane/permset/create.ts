@@ -1,14 +1,16 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { Connection, SfdxError } from '@salesforce/core';
+
 import chalk from 'chalk';
+// eslint-disable-next-line import/no-unresolved
 import { Field } from 'jsforce/describe-result';
 
-import { getExisting } from '../../../shared/getExisting';
-import { setupArray } from '../../../shared/setupArray';
-import { getParsed } from '../../../shared/xml2jsAsync';
+import { getExisting } from '@mshanemc/plugin-helpers/dist/getExisting';
+import { writeJSONasXML } from '@mshanemc/plugin-helpers/dist/JSONXMLtools';
+import { setupArray } from '@mshanemc/plugin-helpers/dist/setupArray';
+import { getParsed } from '@mshanemc/plugin-helpers/dist/xml2jsAsync';
 
 import { ToolingAPIDescribeQueryResult } from '../../../shared/typeDefs';
-import { writeJSONasXML } from '../../../shared/JSONXMLtools';
 
 import fs = require('fs-extra');
 
@@ -178,7 +180,7 @@ export default class PermSetCreate extends SfdxCommand {
         // do the objects
         for (const obj of objectList) {
             if (fs.existsSync(`${targetLocationObjects}/${obj}`)) {
-                existing = this.addObjectPerms(existing, obj);
+                existing = await this.addObjectPerms(existing, obj);
 
                 if (this.flags.field) {
                     existing = await this.addFieldPerms(existing, this.flags.object, this.flags.field);
@@ -214,10 +216,10 @@ export default class PermSetCreate extends SfdxCommand {
         return existing; // for someone who wants the JSON?
     }
 
-    public addObjectPerms(existing, objectName: string) {
+    public async addObjectPerms(existing, objectName: string) {
         // make sure it the parent level objectPermissions[] exists
 
-        const existingClone = setupArray(setupArray(existing, 'objectPermissions'), 'customMetadataTypeAccesses');
+        const existingClone = await setupArray(await setupArray(existing, 'objectPermissions'), 'customMetadataTypeAccesses');
 
         if (
             existingClone.objectPermissions.find(e => e.object === objectName) ||
@@ -265,7 +267,7 @@ export default class PermSetCreate extends SfdxCommand {
         // make sure it the parent level objectPermissions[] exists
         const targetLocationObjects = `${this.flags.directory}/objects`;
 
-        const existingClone = setupArray(existing, 'fieldPermissions');
+        const existingClone = await setupArray(existing, 'fieldPermissions');
 
         if (
             existingClone.fieldPermissions.find(e => {
@@ -349,15 +351,16 @@ export default class PermSetCreate extends SfdxCommand {
         const fields = fs.readdirSync(fieldsLocation);
 
         // iterate through the field builder thing
+        let output = existing;
         for (const fieldFileName of fields) {
-            existing = await this.addFieldPerms(existing, objectName, fieldFileName.split('.')[0]);
+            output = await this.addFieldPerms(output, objectName, fieldFileName.split('.')[0]);
         }
 
-        return existing;
+        return output;
     }
 
     public async addRecordTypePerms(existing, objectName: string, recordTypeName: string) {
-        const existingClone = setupArray(existing, 'recordTypeVisibilities');
+        const existingClone = await setupArray(existing, 'recordTypeVisibilities');
 
         if (
             existingClone.recordTypeVisibilities.find(e => {
@@ -400,26 +403,26 @@ export default class PermSetCreate extends SfdxCommand {
     }
 
     public async addApplicationPerms(existing, applicationName: string) {
-        existing = setupArray(existing, 'applicationVisibilities');
+        let output = await setupArray(existing, 'applicationVisibilities');
 
         if (
-            existing.applicationVisibilities.find(e => {
+            output.applicationVisibilities.find(e => {
                 return e.application === `${applicationName}`;
             })
         ) {
             this.ux.log(`Application Permission already exists: ${applicationName}.  Nothing to add.`);
-            return existing;
+            return output;
         }
-        existing = setupArray(existing, 'applicationVisibilities');
+        output = await setupArray(output, 'applicationVisibilities');
 
-        existing.applicationVisibilities.push({
+        output.applicationVisibilities.push({
             application: `${applicationName}`,
             visible: true
         });
 
         this.ux.log(`added application permission for ${applicationName}`);
 
-        return existing;
+        return output;
     }
 
     public async addAllApplicationPermissions(existing) {
@@ -435,14 +438,15 @@ export default class PermSetCreate extends SfdxCommand {
         const applications = fs.readdirSync(applicationsLocation);
 
         // iterate through the applications
+        let output = existing;
         for (const application of applications) {
-            existing = await this.addApplicationPerms(existing, application.replace('.app-meta.xml', ''));
+            output = await this.addApplicationPerms(output, application.replace('.app-meta.xml', ''));
         }
 
-        return existing;
+        return output;
     }
 
-    public addTab(existing, objectName: string) {
+    public async addTab(existing, objectName: string) {
         // only __c and __x
 
         // this.ux.log(`doing tab for ${objectName}`);
@@ -452,18 +456,18 @@ export default class PermSetCreate extends SfdxCommand {
             return existing;
         }
 
-        existing = setupArray(existing, 'tabSettings');
+        const output = await setupArray(existing, 'tabSettings');
 
-        existing.tabSettings.push({
+        output.tabSettings.push({
             tab: objectName,
             visibility: 'Visible'
         });
 
         this.ux.log(`added tab permission for ${objectName}`);
 
-        // this.ux.log('existing, after all modification is');
-        // this.ux.logJson(existing);
-        return existing;
+        // this.ux.log('output, after all modification is');
+        // this.ux.logJson(output);
+        return output;
     }
 
     public async getFieldsPermissions(objectName: string) {
