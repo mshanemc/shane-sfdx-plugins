@@ -5,6 +5,11 @@ import chalk from 'chalk';
 import request = require('request-promise-native');
 
 export default class Activation extends SfdxCommand {
+    protected static deprecated = {
+        version: 48,
+        message: `This command is no longer used.  Use flows instead of orchestrations for IoT use cases`
+    };
+
     public static description = 'Activate an iot orchestration by name';
 
     public static examples = [
