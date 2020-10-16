@@ -38,16 +38,28 @@ export default class ThemeActivate extends SfdxCommand {
         });
 
         this.ux.setSpinnerStatus('pushing to org');
+
+        // get the projectConfig
+        const projectOriginal = await fs.readFile('sfdx-project.json');
+        const projectOriginalJSON = await fs.readJSON('sfdx-project.json');
+        const projectModified = {
+            ...projectOriginalJSON,
+            packageDirectories: [...projectOriginalJSON.packageDirectories, { path: tempDir }]
+        };
+        // update project with our tempfile
+        await fs.writeJSON('sfdx-project.json', projectModified);
         // deploy that to the org
         const deployResults = await exec2JSON(`sfdx force:source:deploy -p ${tempDir} --json`);
 
         // clean up local fs
-        if (deployResults.status === 0) {
+        if (deployResults.status === 0 && deployResults.result.deployedSource.length === 1) {
             this.ux.stopSpinner('theme activated in org');
         } else if (!this.flags.json) {
             this.ux.logJson(deployResults);
         }
+        // put the project back the way it was
+        await fs.writeFile('sfdx-project.json', projectOriginal);
         await fs.remove(tempDir);
-        return deployResults;
+        return deployResults.result;
     }
 }
