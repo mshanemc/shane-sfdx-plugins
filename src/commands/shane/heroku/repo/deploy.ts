@@ -24,6 +24,7 @@ export default class HerokuRepoDeploy extends SfdxCommand {
     protected static flagsConfig = {
         githubuser: flags.string({ required: true, char: 'g', description: 'github username where the app lives' }),
         repo: flags.string({ required: true, char: 'r', description: 'repo where the app lives' }),
+        branch: flags.string({ description: 'heroku branch to deploy', default: 'master', char: 'b' }),
         name: flags.string({
             char: 'n',
             description: 'what do you want to Heroku app to be named',
@@ -64,7 +65,7 @@ export default class HerokuRepoDeploy extends SfdxCommand {
 
         const body: HerokuAppSetup = {
             source_blob: {
-                url: `https://github.com/${this.flags.githubuser}/${this.flags.repo}/tarball/master/`
+                url: `https://github.com/${this.flags.githubuser}/${this.flags.repo}/tarball/${this.flags.branch}/`
             },
             app: {},
             overrides: {
