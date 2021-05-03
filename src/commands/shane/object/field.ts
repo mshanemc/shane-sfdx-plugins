@@ -197,12 +197,12 @@ export default class FieldCreate extends SfdxCommand {
                 this.flags.rellabel || (await cli.prompt('Child relationship label?', { default: outputJSON.relationshipName }));
         }
         if (this.flags.type === 'Lookup' && this.flags.object.endsWith('__c')) {
-            outputJSON.deleteConstraint = this.flags.interactive
-                ? this.flags.deleteconstraint ||
-                  (await cli.prompt(`What should happen to this field when the parent is deleted? (${deleteConstraintOptions.join(',')})`, {
-                      default: 'SetNull'
-                  }))
-                : 'SetNull';
+            outputJSON.deleteConstraint =
+                this.flags.deleteconstraint || this.flags.interactive
+                    ? await cli.prompt(`What should happen to this field when the parent is deleted? (${deleteConstraintOptions.join(',')})`, {
+                          default: 'SetNull'
+                      })
+                    : 'SetNull';
         }
         if (this.flags.type === 'MasterDetail') {
             outputJSON.reparentableMasterDetail = this.flags.interactive
