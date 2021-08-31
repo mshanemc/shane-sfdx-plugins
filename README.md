@@ -22,7 +22,7 @@ Way, way down [at the bottom](#How-to-Contribute).
 
 check out [this repo](https://github.com/mshanemc/awesome-sfdx-plugins) for other people's plugins (and share via PR if you've created one)
 
-# Usage
+## Usage
 
 <!-- usage -->
 
@@ -40,7 +40,7 @@ USAGE
 
 <!-- usagestop -->
 
-# Commands
+## Commands
 
 <!-- commands -->
 
