@@ -95,6 +95,8 @@ export default class PermAlign extends SfdxCommand {
                     const fieldName = `${item.field.split('.')[1]}.field-meta.xml`;
                     if (objects.includes(objectName) && fs.readdirSync(`${objDir}/${objectName}/fields`).includes(fieldName)) {
                         return true;
+                    } else if ((objectName == 'Task' || objectName == 'Event') && fs.readdirSync(`${objDir}/Activity/fields`).includes(fieldName)) {
+                        return true;
                     }
                     this.ux.log(`${chalk.cyan(targetFilename)}: removing field perm for ${item.field}`);
                     return false;
