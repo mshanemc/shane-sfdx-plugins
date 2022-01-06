@@ -108,6 +108,8 @@ export default class PermAlign extends SfdxCommand {
                     const objectName = item.layout.split('-')[0];
                     if (objects.includes(objectName) && layouts.includes(`${item.layout}.layout-meta.xml`)) {
                         return true;
+                    } else if (objectName == 'Global' && layouts.includes(`${item.layout}.layout-meta.xml`)) {
+                        return true;
                     }
                     this.ux.log(`${chalk.cyan(targetFilename)}: removing layout assignment for ${item.layout}`);
                     return false;
