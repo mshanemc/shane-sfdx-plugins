@@ -27,7 +27,7 @@
         "js-yaml": "^3.14.0",
         "js2xmlparser": "^3.0.0",
         "json2csv": "^4.3.5",
-        "jsonwebtoken": "^8.5.1",
+        "jsonwebtoken": "^9.0.0",
         "lodash": "^4.17.11",
         "moment": "^2.24.0",
         "npm": "^6.8.0",
